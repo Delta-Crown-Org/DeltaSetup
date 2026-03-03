@@ -26,7 +26,12 @@ Write-Host "`n=== Cross-Tenant Sync Configuration ===" -ForegroundColor Cyan
 
 # Connect to HTT Brands (source) tenant
 Write-Host "Connecting to $($sourceTenant.name)..." -ForegroundColor Yellow
-Connect-MgGraph -TenantId $sourceTenant.tenantId -Scopes "Group.ReadWrite.All", "User.Read.All" -NoWelcome
+try {
+    Connect-MgGraph -TenantId $sourceTenant.tenantId -Scopes "Group.ReadWrite.All", "User.Read.All" -NoWelcome -ErrorAction Stop
+} catch {
+    Write-Host "[FAIL] Graph connection failed: $_" -ForegroundColor Red
+    exit 1
+}
 Write-Host "[OK] Connected to $($sourceTenant.name)" -ForegroundColor Green
 
 try {

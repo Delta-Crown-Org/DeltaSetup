@@ -25,7 +25,7 @@ $allResults = @()
 # ---- Test 1: Synced Users in DCE Tenant ----
 Write-Host "=== Test 1: Cross-Tenant Synced Users ===" -ForegroundColor Yellow
 try {
-    Connect-MgGraph -TenantId $targetTenant.tenantId -Scopes "User.Read.All" -NoWelcome
+    Connect-MgGraph -TenantId $targetTenant.tenantId -Scopes "User.Read.All" -NoWelcome -ErrorAction Stop
     $syncedUsers = Get-MgUser -Filter "creationType eq 'Invitation' and userType eq 'Member'" -Property DisplayName, UserPrincipalName, UserType, CreationType -All
 
     if ($syncedUsers.Count -gt 0) {
@@ -39,16 +39,17 @@ try {
         Write-Host "  → Run cross-tenant sync configuration (Phase 2)" -ForegroundColor Gray
         $allResults += [PSCustomObject]@{ Test = "Synced Users"; Result = "FAIL"; Detail = "No synced users" }
     }
-    Disconnect-MgGraph -ErrorAction SilentlyContinue
 } catch {
     Write-Host "[ERROR] Could not check users: $_" -ForegroundColor Red
     $allResults += [PSCustomObject]@{ Test = "Synced Users"; Result = "ERROR"; Detail = "$_" }
+} finally {
+    Disconnect-MgGraph -ErrorAction SilentlyContinue
 }
 
 # ---- Test 2: Shared Mailboxes ----
 Write-Host "`n=== Test 2: Shared Mailboxes ===" -ForegroundColor Yellow
 try {
-    Connect-ExchangeOnline -Organization $targetTenant.domain -ShowBanner:$false
+    Connect-ExchangeOnline -Organization $targetTenant.domain -ShowBanner:$false -ErrorAction Stop
     $sharedMailboxes = Get-Mailbox -RecipientTypeDetails SharedMailbox -ResultSize Unlimited
 
     if ($sharedMailboxes.Count -gt 0) {
@@ -71,16 +72,17 @@ try {
         Write-Host "[FAIL] No shared mailboxes found" -ForegroundColor Red
         $allResults += [PSCustomObject]@{ Test = "Shared Mailboxes"; Result = "FAIL"; Detail = "None found" }
     }
-    Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
 } catch {
     Write-Host "[ERROR] Could not check mailboxes: $_" -ForegroundColor Red
     $allResults += [PSCustomObject]@{ Test = "Shared Mailboxes"; Result = "ERROR"; Detail = "$_" }
+} finally {
+    Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
 }
 
 # ---- Test 3: M365 Groups ----
 Write-Host "`n=== Test 3: Microsoft 365 Groups ===" -ForegroundColor Yellow
 try {
-    Connect-MgGraph -TenantId $targetTenant.tenantId -Scopes "Group.Read.All" -NoWelcome
+    Connect-MgGraph -TenantId $targetTenant.tenantId -Scopes "Group.Read.All" -NoWelcome -ErrorAction Stop
 
     foreach ($grp in $config.groups) {
         $existing = Get-MgGroup -Filter "mailNickname eq '$($grp.mailNickname)'" -ErrorAction SilentlyContinue
@@ -93,10 +95,11 @@ try {
             $allResults += [PSCustomObject]@{ Test = "Group: $($grp.displayName)"; Result = "FAIL"; Detail = "Not created" }
         }
     }
-    Disconnect-MgGraph -ErrorAction SilentlyContinue
 } catch {
     Write-Host "[ERROR] Could not check groups: $_" -ForegroundColor Red
     $allResults += [PSCustomObject]@{ Test = "M365 Groups"; Result = "ERROR"; Detail = "$_" }
+} finally {
+    Disconnect-MgGraph -ErrorAction SilentlyContinue
 }
 
 # ---- Test 4: DNS Records ----

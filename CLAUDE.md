@@ -11,7 +11,7 @@ Two tenants: source (HTT Brands / httbrands.com) → target (DCE / deltacrown.co
 - `templates/` — CSV templates for mailboxes, groups
 
 ## Script Conventions
-- Scripts 04, 05, 06 support `-WhatIf` — always suggest dry runs
+- Scripts 02–06 support `-WhatIf` — always suggest dry runs
 - Script 01 must run first to establish tenant connections
 - All scripts load config from `config/tenant-config.json` via `$PSScriptRoot`
 - PowerShell 7.0+ required (`#Requires -Version 7.0`)

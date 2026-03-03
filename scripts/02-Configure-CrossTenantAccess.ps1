@@ -30,7 +30,12 @@ Write-Host "Target: $($targetTenant.name) ($($targetTenant.tenantId))" -Foregrou
 # ============================================================
 Write-Host "`n--- Part 1: DCE Tenant (Inbound Access) ---" -ForegroundColor Yellow
 Write-Host "Connecting to DCE tenant..." -ForegroundColor Yellow
-Connect-MgGraph -TenantId $targetTenant.tenantId -Scopes "Policy.ReadWrite.CrossTenantAccess" -NoWelcome
+try {
+    Connect-MgGraph -TenantId $targetTenant.tenantId -Scopes "Policy.ReadWrite.CrossTenantAccess" -NoWelcome -ErrorAction Stop
+} catch {
+    Write-Host "[FAIL] DCE Graph connection failed: $_" -ForegroundColor Red
+    exit 1
+}
 Write-Host "[OK] Connected to $($targetTenant.name)" -ForegroundColor Green
 
 try {
@@ -113,7 +118,12 @@ try {
 # ============================================================
 Write-Host "`n--- Part 2: HTT Brands Tenant (Outbound Access) ---" -ForegroundColor Yellow
 Write-Host "Connecting to HTT Brands tenant..." -ForegroundColor Yellow
-Connect-MgGraph -TenantId $sourceTenant.tenantId -Scopes "Policy.ReadWrite.CrossTenantAccess" -NoWelcome
+try {
+    Connect-MgGraph -TenantId $sourceTenant.tenantId -Scopes "Policy.ReadWrite.CrossTenantAccess" -NoWelcome -ErrorAction Stop
+} catch {
+    Write-Host "[FAIL] HTT Brands Graph connection failed: $_" -ForegroundColor Red
+    exit 1
+}
 Write-Host "[OK] Connected to $($sourceTenant.name)" -ForegroundColor Green
 
 try {
