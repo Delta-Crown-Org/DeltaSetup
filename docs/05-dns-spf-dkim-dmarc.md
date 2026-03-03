@@ -14,15 +14,17 @@ Configure email authentication DNS records for `deltacrown.com` to ensure emails
 
 SPF tells receiving mail servers which servers are authorized to send email for `deltacrown.com`.
 
-### DNS Record:
+### DNS Record (current live state):
 | Type | Host/Name | Value | TTL |
 |------|-----------|-------|-----|
-| TXT | `@` | `v=spf1 include:spf.protection.outlook.com -all` | 3600 |
+| TXT | `@` | `v=spf1 include:spf.protection.outlook.com include:21313054.spf04.hubspotemail.net include:sendgrid.net ~all` | 3600 |
 
 ### Notes:
 - `include:spf.protection.outlook.com` authorizes Microsoft 365
-- `-all` = hard fail (reject unauthorized senders). Use `~all` (soft fail) initially if testing
-- If deltacrown.com already has an SPF record, **merge** — don't create a second TXT record
+- `include:21313054.spf04.hubspotemail.net` authorizes HubSpot marketing emails
+- `include:sendgrid.net` authorizes SendGrid transactional emails
+- Currently using `~all` (soft fail) — plan to harden to `-all` (hard fail) once all senders are confirmed
+- If adding new senders, **merge** into the existing TXT record — never create a second SPF record
 
 ## Step 2: DKIM (DomainKeys Identified Mail)
 
@@ -62,26 +64,19 @@ Set-DkimSigningConfig -Identity deltacrown.com -Enabled $true
 
 DMARC ties SPF and DKIM together and tells receiving servers what to do with failures.
 
-### DNS Record:
+### DNS Record (current live state):
 | Type | Host/Name | Value | TTL |
 |------|-----------|-------|-----|
-| TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:dmarc-reports@deltacrown.com; ruf=mailto:dmarc-reports@deltacrown.com; pct=100` | 3600 |
+| TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:dmarc@deltacrown.com; pct=100;` | 3600 |
 
 ### DMARC Policy Rollout:
-1. **Start with `p=none`** (monitor only) — collect reports for 2-4 weeks
-2. **Move to `p=quarantine`** — suspicious emails go to spam
+1. ~~**Start with `p=none`** (monitor only) — collect reports for 2-4 weeks~~ ✅ Done
+2. **`p=quarantine`** — suspicious emails go to spam ← **current state**
 3. **Final: `p=reject`** — unauthorized emails are rejected
 
-Update the DNS record as you progress:
+When ready to harden to reject:
 ```
-# Phase 1 (monitoring):
-v=DMARC1; p=none; rua=mailto:dmarc-reports@deltacrown.com; pct=100
-
-# Phase 2 (quarantine):
-v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@deltacrown.com; pct=100
-
-# Phase 3 (reject - full protection):
-v=DMARC1; p=reject; rua=mailto:dmarc-reports@deltacrown.com; pct=100
+v=DMARC1; p=reject; rua=mailto:dmarc@deltacrown.com; pct=100
 ```
 
 ## Step 4: Validate DNS Records
@@ -111,20 +106,27 @@ Resolve-DnsName -Name "_dmarc.deltacrown.com" -Type TXT
    - `DKIM: PASS`
    - `DMARC: PASS`
 
-## Summary of All DNS Records
+## Summary of All DNS Records (live as of March 2026)
 
-| # | Type | Host | Value |
-|---|------|------|-------|
-| 1 | TXT | `@` | `v=spf1 include:spf.protection.outlook.com -all` |
-| 2 | CNAME | `selector1._domainkey` | `selector1-deltacrown-com._domainkey.deltacrown.onmicrosoft.com` |
-| 3 | CNAME | `selector2._domainkey` | `selector2-deltacrown-com._domainkey.deltacrown.onmicrosoft.com` |
-| 4 | TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:dmarc-reports@deltacrown.com; pct=100` |
+| # | Type | Host | Value | Status |
+|---|------|------|-------|--------|
+| 1 | TXT | `@` | `v=spf1 include:spf.protection.outlook.com include:21313054.spf04.hubspotemail.net include:sendgrid.net ~all` | ✅ Live |
+| 2 | CNAME | `selector1._domainkey` | `selector1-deltacrown-com._domainkey.deltacrown.onmicrosoft.com` | ✅ Live |
+| 3 | CNAME | `selector2._domainkey` | `selector2-deltacrown-com._domainkey.deltacrown.onmicrosoft.com` | ✅ Live |
+| 4 | TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:dmarc@deltacrown.com; pct=100;` | ✅ Live |
+| 5 | MX | `@` | `deltacrown-com.mail.protection.outlook.com` (priority 0) | ✅ Live |
+
+## Remaining Hardening Steps
+
+- [ ] Harden SPF from `~all` (soft fail) to `-all` (hard fail) once all senders confirmed
+- [ ] Advance DMARC from `p=quarantine` to `p=reject` after monitoring reports
+- [ ] Verify test email to external Gmail passes SPF/DKIM/DMARC
 
 ## Validation Checklist
 
-- [ ] SPF TXT record added and resolves correctly
-- [ ] DKIM CNAME records added and propagated
-- [ ] DKIM signing enabled in Exchange Admin Center
-- [ ] DMARC TXT record added (starting with `p=none`)
+- [x] SPF TXT record added and resolves correctly
+- [x] DKIM CNAME records added and propagated
+- [x] DKIM signing enabled in Exchange Admin Center
+- [x] DMARC TXT record added (now at `p=quarantine`)
 - [ ] Test email to external Gmail passes SPF/DKIM/DMARC
 - [ ] MXToolbox shows all green for deltacrown.com

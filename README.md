@@ -25,7 +25,7 @@
 | 2 | Cross-Tenant Sync Configuration | ⬜ Not Started | [docs/02-cross-tenant-sync-setup.md](docs/02-cross-tenant-sync-setup.md) |
 | 3 | SharePoint, Teams & Groups | ⬜ Not Started | [docs/03-sharepoint-teams-groups.md](docs/03-sharepoint-teams-groups.md) |
 | 4 | Email — Shared Mailboxes & Send-As | ⬜ Not Started | [docs/04-email-shared-mailboxes.md](docs/04-email-shared-mailboxes.md) |
-| 5 | DNS — SPF/DKIM/DMARC | ⬜ Not Started | [docs/05-dns-spf-dkim-dmarc.md](docs/05-dns-spf-dkim-dmarc.md) |
+| 5 | DNS — SPF/DKIM/DMARC | ✅ Live (hardening remaining) | [docs/05-dns-spf-dkim-dmarc.md](docs/05-dns-spf-dkim-dmarc.md) |
 | 6 | Conditional Access & Security | ⬜ Not Started | [docs/06-conditional-access-security.md](docs/06-conditional-access-security.md) |
 | 7 | Validation & UAT | ⬜ Not Started | [docs/07-validation-checklist.md](docs/07-validation-checklist.md) |
 

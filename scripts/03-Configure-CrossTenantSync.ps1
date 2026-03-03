@@ -29,46 +29,53 @@ Write-Host "Connecting to $($sourceTenant.name)..." -ForegroundColor Yellow
 Connect-MgGraph -TenantId $sourceTenant.tenantId -Scopes "Group.ReadWrite.All", "User.Read.All" -NoWelcome
 Write-Host "[OK] Connected to $($sourceTenant.name)" -ForegroundColor Green
 
-# Check if sync group already exists
-$existingGroup = Get-MgGroup -Filter "displayName eq '$($syncConfig.securityGroupName)'" -ErrorAction SilentlyContinue
+try {
+    # Check if sync group already exists
+    $existingGroup = Get-MgGroup -Filter "displayName eq '$($syncConfig.securityGroupName)'" -ErrorAction SilentlyContinue
 
-if ($existingGroup) {
-    Write-Host "[INFO] Security group '$($syncConfig.securityGroupName)' already exists (ID: $($existingGroup.Id))" -ForegroundColor Cyan
-    $groupId = $existingGroup.Id
-} else {
-    Write-Host "Creating security group '$($syncConfig.securityGroupName)'..." -ForegroundColor Yellow
-    if (-not $WhatIf) {
-        $groupParams = @{
-            DisplayName     = $syncConfig.securityGroupName
-            Description     = "Users synchronized to the Delta Crown Extensions tenant via cross-tenant sync"
-            MailEnabled     = $false
-            SecurityEnabled = $true
-            MailNickname    = "sg-dce-sync-users"
-        }
-        $newGroup = New-MgGroup -BodyParameter $groupParams
-        $groupId = $newGroup.Id
-        Write-Host "[OK] Security group created (ID: $groupId)" -ForegroundColor Green
+    if ($existingGroup) {
+        Write-Host "[INFO] Security group '$($syncConfig.securityGroupName)' already exists (ID: $($existingGroup.Id))" -ForegroundColor Cyan
+        $groupId = $existingGroup.Id
     } else {
-        Write-Host "[WHATIF] Would create security group '$($syncConfig.securityGroupName)'" -ForegroundColor Magenta
-        $groupId = "<pending>"
-    }
-}
-
-# Show current members
-if ($groupId -and $groupId -ne "<pending>") {
-    $members = Get-MgGroupMember -GroupId $groupId -ErrorAction SilentlyContinue
-    if ($members) {
-        Write-Host "`nCurrent members of $($syncConfig.securityGroupName):" -ForegroundColor Cyan
-        foreach ($member in $members) {
-            $user = Get-MgUser -UserId $member.Id -Property DisplayName, UserPrincipalName
-            Write-Host "  - $($user.DisplayName) ($($user.UserPrincipalName))" -ForegroundColor Gray
+        Write-Host "Creating security group '$($syncConfig.securityGroupName)'..." -ForegroundColor Yellow
+        if (-not $WhatIf) {
+            try {
+                $groupParams = @{
+                    DisplayName     = $syncConfig.securityGroupName
+                    Description     = "Users synchronized to the Delta Crown Extensions tenant via cross-tenant sync"
+                    MailEnabled     = $false
+                    SecurityEnabled = $true
+                    MailNickname    = "sg-dce-sync-users"
+                }
+                $newGroup = New-MgGroup -BodyParameter $groupParams -ErrorAction Stop
+                $groupId = $newGroup.Id
+                Write-Host "[OK] Security group created (ID: $groupId)" -ForegroundColor Green
+            } catch {
+                Write-Host "[FAIL] Failed to create security group: $_" -ForegroundColor Red
+                throw
+            }
+        } else {
+            Write-Host "[WHATIF] Would create security group '$($syncConfig.securityGroupName)'" -ForegroundColor Magenta
+            $groupId = "<pending>"
         }
-    } else {
-        Write-Host "`n[WARN] Group has no members yet. Add users before starting sync." -ForegroundColor Yellow
     }
-}
 
-Disconnect-MgGraph -ErrorAction SilentlyContinue
+    # Show current members
+    if ($groupId -and $groupId -ne "<pending>") {
+        $members = Get-MgGroupMember -GroupId $groupId -ErrorAction SilentlyContinue
+        if ($members) {
+            Write-Host "`nCurrent members of $($syncConfig.securityGroupName):" -ForegroundColor Cyan
+            foreach ($member in $members) {
+                $user = Get-MgUser -UserId $member.Id -Property DisplayName, UserPrincipalName
+                Write-Host "  - $($user.DisplayName) ($($user.UserPrincipalName))" -ForegroundColor Gray
+            }
+        } else {
+            Write-Host "`n[WARN] Group has no members yet. Add users before starting sync." -ForegroundColor Yellow
+        }
+    }
+} finally {
+    Disconnect-MgGraph -ErrorAction SilentlyContinue
+}
 
 # Output manual portal instructions
 Write-Host "`n============================================" -ForegroundColor Cyan
