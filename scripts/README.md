@@ -28,16 +28,36 @@
 - All authentication is **interactive** (no stored credentials)
 - Tenant config is read from `config/tenant-config.json`
 
+## Helper Scripts
+
+| Script | Purpose |
+|--------|---------|
+| helpers/Export-HTTUsers.ps1 | Export HTT Brands user list; with `-GenerateMailboxCSV` generates the provisioning CSV from synced DCE users |
+| helpers/Add-SyncGroupMembers.ps1 | Bulk-add users to SG-DCE-Sync-Users; use `-TestOnly` for initial testing or no flag for all users |
+
 ## Usage
 
 ```powershell
 # First time setup
 .\scripts\00-Install-Prerequisites.ps1
 
-# Then dot-source the connection helper
-. .\scripts\01-Connect-Tenants.ps1
-Connect-DCETenant
+# Export user list (before sync)
+.\scripts\helpers\Export-HTTUsers.ps1
 
-# Run individual scripts as needed
+# Run cross-tenant setup
+.\scripts\02-Configure-CrossTenantAccess.ps1 -WhatIf
+.\scripts\03-Configure-CrossTenantSync.ps1
+
+# Add test users to sync group
+.\scripts\helpers\Add-SyncGroupMembers.ps1 -TestOnly
+
+# After sync completes, generate mailbox CSV
+.\scripts\helpers\Export-HTTUsers.ps1 -GenerateMailboxCSV
+
+# Create mailboxes and grant permissions
 .\scripts\04-Create-SharedMailboxes.ps1 -WhatIf
+.\scripts\05-Grant-SendAs-Permissions.ps1 -WhatIf
+
+# Create groups
+.\scripts\06-Create-Groups.ps1 -WhatIf
 ```
