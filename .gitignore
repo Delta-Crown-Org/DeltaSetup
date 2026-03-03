@@ -1,32 +1,34 @@
-# Credentials & secrets
-*.pfx
-*.cer
-*.key
-*.pem
-.env
-.env.*
-secrets/
-credentials/
-
-# PowerShell
-*.ps1xml
-PSScriptAnalyzerResults.*
-
-# Windows
+# OS files
 Thumbs.db
-desktop.ini
-$RECYCLE.BIN/
-
-# macOS
+Desktop.ini
 .DS_Store
-._*
 
-# IDE
+# Editor / IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# Local config overrides
-config/local-*.json
-config/*.local.json
+# PowerShell
+PSModulePath/
+ModuleAnalysisCache
+
+# Secrets / environment
+.env
+.env.*
+*.pfx
+*.pem
+*.key
+
+# Node (just in case)
+node_modules/
+
+# Logs and temp
+*.log
+*.tmp
+*.temp
+
+# Build output
+bin/
+obj/
