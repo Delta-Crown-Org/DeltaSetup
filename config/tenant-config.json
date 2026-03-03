@@ -1,0 +1,33 @@
+{
+  "tenants": {
+    "source": {
+      "name": "Head to Toe Brands",
+      "domain": "httbrands.com",
+      "tenantId": "0c0e35dc-188a-4eb3-b8ba-61752154b407",
+      "onmicrosoftDomain": "httbrands.onmicrosoft.com",
+      "role": "source"
+    },
+    "target": {
+      "name": "Delta Crown Extensions",
+      "domain": "deltacrown.com",
+      "tenantId": "ce62e17d-2feb-4e67-a115-8ea4af68da30",
+      "onmicrosoftDomain": "deltacrown.onmicrosoft.com",
+      "role": "target"
+    }
+  },
+  "azure": {
+    "subscriptionName": "DCE-CORE",
+    "resourceGroupName": "rg-dce-core-001",
+    "location": "centralus"
+  },
+  "syncConfig": {
+    "securityGroupName": "SG-DCE-Sync-Users",
+    "configurationName": "HTT-to-DCE-User-Sync",
+    "userType": "Member"
+  },
+  "groups": [
+    { "displayName": "Delta Crown All Staff", "mailNickname": "all-staff", "description": "Company-wide communications" },
+    { "displayName": "DCE Operations", "mailNickname": "operations", "description": "Operations team" },
+    { "displayName": "DCE Leadership", "mailNickname": "leadership", "description": "Leadership team" }
+  ]
+}

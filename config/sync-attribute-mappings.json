@@ -1,0 +1,14 @@
+{
+  "description": "Entra ID Cross-Tenant Sync attribute mappings (HTT Brands → DCE)",
+  "mappings": [
+    { "source": "userPrincipalName", "target": "userPrincipalName", "type": "Direct" },
+    { "source": "displayName", "target": "displayName", "type": "Direct" },
+    { "source": "mail", "target": "mail", "type": "Direct" },
+    { "source": "givenName", "target": "givenName", "type": "Direct" },
+    { "source": "surname", "target": "surname", "type": "Direct" },
+    { "source": "jobTitle", "target": "jobTitle", "type": "Direct" },
+    { "source": "department", "target": "department", "type": "Direct" },
+    { "source": "\"Member\"", "target": "userType", "type": "Constant", "critical": true, "note": "MUST be Member, not Guest" },
+    { "source": "true", "target": "showInAddressList", "type": "Constant" }
+  ]
+}

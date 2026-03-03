@@ -1,0 +1,32 @@
+# Credentials & secrets
+*.pfx
+*.cer
+*.key
+*.pem
+.env
+.env.*
+secrets/
+credentials/
+
+# PowerShell
+*.ps1xml
+PSScriptAnalyzerResults.*
+
+# Windows
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+._*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local config overrides
+config/local-*.json
+config/*.local.json

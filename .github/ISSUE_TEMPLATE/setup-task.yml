@@ -1,0 +1,49 @@
+name: Setup Task
+description: Track an infrastructure setup task for Delta Crown Extensions
+title: "[SETUP] "
+labels: ["setup", "infrastructure"]
+assignees:
+  - t-granlund
+body:
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      options:
+        - "Phase 1: Azure Subscription (Pax8)"
+        - "Phase 2: Cross-Tenant Sync"
+        - "Phase 3: SharePoint & Teams"
+        - "Phase 4: Email & Shared Mailboxes"
+        - "Phase 5: DNS (SPF/DKIM/DMARC)"
+        - "Phase 6: Security & Conditional Access"
+        - "Phase 7: Validation"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Task Description
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Complete
+      value: |
+        - [ ] Step 1
+        - [ ] Step 2
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation Criteria
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true

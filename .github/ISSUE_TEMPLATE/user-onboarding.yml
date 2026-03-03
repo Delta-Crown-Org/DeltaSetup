@@ -1,0 +1,51 @@
+name: User Onboarding
+description: Onboard a user from HTT Brands to Delta Crown Extensions
+title: "[ONBOARDING] "
+labels: ["onboarding", "user-management"]
+assignees:
+  - t-granlund
+body:
+  - type: input
+    id: user_name
+    attributes:
+      label: User Full Name
+      placeholder: "John Smith"
+    validations:
+      required: true
+  - type: input
+    id: htt_email
+    attributes:
+      label: HTT Brands Email
+      placeholder: "john.smith@httbrands.com"
+    validations:
+      required: true
+  - type: input
+    id: dce_email
+    attributes:
+      label: DCE Shared Mailbox Email
+      placeholder: "john.smith@deltacrown.com"
+    validations:
+      required: true
+  - type: checkboxes
+    id: access
+    attributes:
+      label: Access Required
+      options:
+        - label: SharePoint
+        - label: Microsoft Teams
+        - label: Send-As @deltacrown.com
+        - label: Distribution groups
+        - label: M365 Group membership
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Onboarding Checklist
+      options:
+        - label: User added to SG-DCE-Sync-Users
+        - label: User synced to DCE tenant
+        - label: Shared mailbox created
+        - label: Send-As permission granted
+        - label: Full Access permission granted
+        - label: Added to M365 Groups / Teams
+        - label: Welcome email sent
+        - label: User confirmed all access
