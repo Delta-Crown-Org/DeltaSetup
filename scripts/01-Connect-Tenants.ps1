@@ -39,15 +39,25 @@ function Connect-HTTBrandsTenant {
 
     if (-not $ExchangeOnly) {
         Write-Host "Connecting to Microsoft Graph..." -ForegroundColor Yellow
-        Connect-MgGraph -TenantId $tenant.tenantId -Scopes $GraphScopes -NoWelcome
-        $ctx = Get-MgContext
-        Write-Host "[OK] Graph connected: $($ctx.Account) → $($ctx.TenantId)" -ForegroundColor Green
+        try {
+            Connect-MgGraph -TenantId $tenant.tenantId -Scopes $GraphScopes -NoWelcome -ErrorAction Stop
+            $ctx = Get-MgContext
+            Write-Host "[OK] Graph connected: $($ctx.Account) → $($ctx.TenantId)" -ForegroundColor Green
+        } catch {
+            Write-Host "[FAIL] Graph connection failed: $_" -ForegroundColor Red
+            throw
+        }
     }
 
     if (-not $GraphOnly) {
         Write-Host "Connecting to Exchange Online..." -ForegroundColor Yellow
-        Connect-ExchangeOnline -Organization $tenant.domain -ShowBanner:$false
-        Write-Host "[OK] Exchange Online connected: $($tenant.domain)" -ForegroundColor Green
+        try {
+            Connect-ExchangeOnline -Organization $tenant.domain -ShowBanner:$false -ErrorAction Stop
+            Write-Host "[OK] Exchange Online connected: $($tenant.domain)" -ForegroundColor Green
+        } catch {
+            Write-Host "[FAIL] Exchange Online connection failed: $_" -ForegroundColor Red
+            throw
+        }
     }
 
     Write-Host ""
@@ -65,15 +75,25 @@ function Connect-DCETenant {
 
     if (-not $ExchangeOnly) {
         Write-Host "Connecting to Microsoft Graph..." -ForegroundColor Yellow
-        Connect-MgGraph -TenantId $tenant.tenantId -Scopes $GraphScopes -NoWelcome
-        $ctx = Get-MgContext
-        Write-Host "[OK] Graph connected: $($ctx.Account) → $($ctx.TenantId)" -ForegroundColor Green
+        try {
+            Connect-MgGraph -TenantId $tenant.tenantId -Scopes $GraphScopes -NoWelcome -ErrorAction Stop
+            $ctx = Get-MgContext
+            Write-Host "[OK] Graph connected: $($ctx.Account) → $($ctx.TenantId)" -ForegroundColor Green
+        } catch {
+            Write-Host "[FAIL] Graph connection failed: $_" -ForegroundColor Red
+            throw
+        }
     }
 
     if (-not $GraphOnly) {
         Write-Host "Connecting to Exchange Online..." -ForegroundColor Yellow
-        Connect-ExchangeOnline -Organization $tenant.domain -ShowBanner:$false
-        Write-Host "[OK] Exchange Online connected: $($tenant.domain)" -ForegroundColor Green
+        try {
+            Connect-ExchangeOnline -Organization $tenant.domain -ShowBanner:$false -ErrorAction Stop
+            Write-Host "[OK] Exchange Online connected: $($tenant.domain)" -ForegroundColor Green
+        } catch {
+            Write-Host "[FAIL] Exchange Online connection failed: $_" -ForegroundColor Red
+            throw
+        }
     }
 
     Write-Host ""
