@@ -30,6 +30,7 @@ Write-Host "Target: $($targetTenant.name) ($($targetTenant.tenantId))" -Foregrou
 # ============================================================
 Write-Host "`n--- Part 1: DCE Tenant (Inbound Access) ---" -ForegroundColor Yellow
 Write-Host "Connecting to DCE tenant..." -ForegroundColor Yellow
+Disconnect-MgGraph -ErrorAction SilentlyContinue | Out-Null
 try {
     Connect-MgGraph -TenantId $targetTenant.tenantId -Scopes "Policy.ReadWrite.CrossTenantAccess" -NoWelcome -ErrorAction Stop
 } catch {
@@ -65,20 +66,29 @@ try {
         }
     }
 
-    # Enable inbound user sync
+    # Enable inbound user sync (uses dedicated Set- cmdlet; no Update- exists)
     Write-Host "Enabling inbound cross-tenant sync..." -ForegroundColor Yellow
     if (-not $WhatIf) {
         try {
-            $syncParams = @{
-                CrossTenantAccessPolicyConfigurationPartnerTenantId = $sourceTenant.tenantId
-                IdentitySynchronization = @{
+            # Check if identity sync is already configured
+            $existingSync = $null
+            try {
+                $existingSync = Get-MgPolicyCrossTenantAccessPolicyPartnerIdentitySynchronization `
+                    -CrossTenantAccessPolicyConfigurationPartnerTenantId $sourceTenant.tenantId -ErrorAction SilentlyContinue
+            } catch {}
+
+            if ($existingSync -and $existingSync.UserSyncInbound.IsSyncAllowed) {
+                Write-Host "[INFO] Inbound user sync already enabled — skipping" -ForegroundColor Cyan
+            } else {
+                $syncParams = @{
+                    CrossTenantAccessPolicyConfigurationPartnerTenantId = $sourceTenant.tenantId
                     UserSyncInbound = @{
                         IsSyncAllowed = $true
                     }
                 }
+                Set-MgPolicyCrossTenantAccessPolicyPartnerIdentitySynchronization @syncParams -ErrorAction Stop
+                Write-Host "[OK] Inbound user sync enabled" -ForegroundColor Green
             }
-            Update-MgPolicyCrossTenantAccessPolicyPartner @syncParams -ErrorAction Stop
-            Write-Host "[OK] Inbound user sync enabled" -ForegroundColor Green
         } catch {
             Write-Host "[FAIL] Failed to enable inbound user sync: $_" -ForegroundColor Red
             throw
@@ -87,27 +97,56 @@ try {
         Write-Host "[WHATIF] Would enable inbound user sync" -ForegroundColor Magenta
     }
 
-    # Enable automatic redemption (suppresses consent prompts)
-    Write-Host "Enabling automatic redemption..." -ForegroundColor Yellow
+    # Enable MFA trust (accept MFA claims from source tenant) — requires Entra ID P1
+    Write-Host "Enabling MFA trust..." -ForegroundColor Yellow
     if (-not $WhatIf) {
         try {
-            $redemptionParams = @{
+            $trustParams = @{
                 CrossTenantAccessPolicyConfigurationPartnerTenantId = $sourceTenant.tenantId
                 InboundTrust = @{
-                    IsAutoRedeemEnabled = $true
                     IsMfaAccepted = $true
                     IsCompliantDeviceAccepted = $true
                     IsHybridAzureADJoinedDeviceAccepted = $true
                 }
             }
-            Update-MgPolicyCrossTenantAccessPolicyPartner @redemptionParams -ErrorAction Stop
-            Write-Host "[OK] Automatic redemption and MFA trust enabled" -ForegroundColor Green
+            Update-MgPolicyCrossTenantAccessPolicyPartner @trustParams -ErrorAction Stop
+            Write-Host "[OK] MFA and device trust enabled" -ForegroundColor Green
         } catch {
-            Write-Host "[FAIL] Failed to enable automatic redemption: $_" -ForegroundColor Red
-            throw
+            if ($_ -match "Premium P1") {
+                Write-Host "[WARN] MFA trust requires Entra ID P1 on target tenant — skipping for now" -ForegroundColor Yellow
+                Write-Host "       Re-run this script after Pax8 CSP setup assigns P1 licenses to DCE" -ForegroundColor Gray
+            } else {
+                Write-Host "[FAIL] Failed to enable MFA trust: $_" -ForegroundColor Red
+                throw
+            }
         }
     } else {
-        Write-Host "[WHATIF] Would enable automatic redemption and MFA trust" -ForegroundColor Magenta
+        Write-Host "[WHATIF] Would enable MFA and device trust" -ForegroundColor Magenta
+    }
+
+    # Enable automatic redemption (suppresses consent prompts) — may require Entra ID P1
+    Write-Host "Enabling automatic user consent (inbound)..." -ForegroundColor Yellow
+    if (-not $WhatIf) {
+        try {
+            $consentParams = @{
+                CrossTenantAccessPolicyConfigurationPartnerTenantId = $sourceTenant.tenantId
+                AutomaticUserConsentSettings = @{
+                    InboundAllowed = $true
+                }
+            }
+            Update-MgPolicyCrossTenantAccessPolicyPartner @consentParams -ErrorAction Stop
+            Write-Host "[OK] Automatic user consent (inbound) enabled" -ForegroundColor Green
+        } catch {
+            if ($_ -match "Premium P1") {
+                Write-Host "[WARN] Auto-consent requires Entra ID P1 on target tenant — skipping for now" -ForegroundColor Yellow
+                Write-Host "       Re-run this script after Pax8 CSP setup assigns P1 licenses to DCE" -ForegroundColor Gray
+            } else {
+                Write-Host "[FAIL] Failed to enable automatic user consent: $_" -ForegroundColor Red
+                throw
+            }
+        }
+    } else {
+        Write-Host "[WHATIF] Would enable automatic user consent (inbound)" -ForegroundColor Magenta
     }
 } finally {
     Disconnect-MgGraph -ErrorAction SilentlyContinue
@@ -118,6 +157,7 @@ try {
 # ============================================================
 Write-Host "`n--- Part 2: HTT Brands Tenant (Outbound Access) ---" -ForegroundColor Yellow
 Write-Host "Connecting to HTT Brands tenant..." -ForegroundColor Yellow
+Disconnect-MgGraph -ErrorAction SilentlyContinue | Out-Null
 try {
     Connect-MgGraph -TenantId $sourceTenant.tenantId -Scopes "Policy.ReadWrite.CrossTenantAccess" -NoWelcome -ErrorAction Stop
 } catch {
