@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delta Crown Extensions - Executive Presentation</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Tenor+Sans&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       DELTA CROWN DESIGN SYSTEM
+       Brand Colors & Typography
+       ============================================ */
+    :root {
+      /* Brand Colors */
+      --dce-royal-gold: #C9A962;
+      --dce-royal-gold-light: #D4B978;
+      --dce-royal-gold-dark: #A68B4B;
+      --dce-black: #1A1A1A;
+      --dce-charcoal: #2D2D2D;
+      --dce-gray-dark: #4A4A4A;
+      --dce-gray: #6B6B6B;
+      --dce-gray-light: #B0B0B0;
+      --dce-white: #FFFFFF;
+      --dce-cream: #FAF8F5;
+      --dce-success: #2D7D32;
+      --dce-warning: #F57C00;
+      --dce-danger: #C62828;
+      --dce-info: #1565C0;
+      
+      /* Typography */
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Tenor Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      
+      /* Spacing */
+      --spacing-xs: 0.5rem;
+      --spacing-sm: 1rem;
+      --spacing-md: 1.5rem;
+      --spacing-lg: 2.5rem;
+      --spacing-xl: 4rem;
+      
+      /* Shadows */
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
+      
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    /* ============================================
+       BASE STYLES
+       ============================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--dce-cream);
+      color: var(--dce-charcoal);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ============================================
+       PRESENTATION CONTAINER
+       ============================================ */
+    .presentation {
+      width: 100%;
+    }
+
+    /* ============================================
+       SLIDE STYLES
+       ============================================ */
+    .slide {
+      min-height: 100vh;
+      padding: var(--spacing-xl);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      page-break-after: always;
+    }
+
+    .slide:nth-child(odd) {
+      background: var(--dce-cream);
+    }
+
+    .slide:nth-child(even) {
+      background: linear-gradient(135deg, var(--dce-white) 0%, var(--dce-cream) 100%);
+    }
+
+    .slide-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--dce-black);
+      margin-bottom: var(--spacing-md);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      color: var(--dce-royal-gold-dark);
+      border-bottom: 3px solid var(--dce-royal-gold);
+      padding-bottom: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    h3 {
+      font-size: clamp(1.25rem, 3vw, 1.5rem);
+      color: var(--dce-charcoal);
+    }
+
+    h4 {
+      font-size: 1.125rem;
+      color: var(--dce-gray-dark);
+    }
+
+    p {
+      margin-bottom: var(--spacing-md);
+      font-size: 1.125rem;
+      color: var(--dce-gray-dark);
+    }
+
+    /* ============================================
+       TITLE SLIDE SPECIFIC
+       ============================================ */
+    .title-slide {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, var(--dce-black) 0%, var(--dce-charcoal) 50%, #1a1520 100%) !important;
+      color: var(--dce-white);
+    }
+
+    .title-slide .logo-container {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .title-slide .logo-container img {
+      max-width: 400px;
+      width: 100%;
+      height: auto;
+      filter: brightness(1.1);
+    }
+
+    .title-slide h1 {
+      color: var(--dce-royal-gold);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .title-slide .subtitle {
+      font-family: var(--font-body);
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      color: var(--dce-gray-light);
+      margin-bottom: var(--spacing-xl);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .title-slide .meta {
+      font-size: 1rem;
+      color: var(--dce-gray-light);
+      margin-top: auto;
+      padding-top: var(--spacing-xl);
+    }
+
+    .title-slide .meta p {
+      color: var(--dce-gray-light);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    /* ============================================
+       METRICS GRID
+       ============================================ */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--spacing-md);
+      margin: var(--spacing-lg) 0;
+    }
+
+    .metric-card {
+      background: var(--dce-white);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      border-top: 4px solid var(--dce-royal-gold);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .metric-value {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--dce-royal-gold-dark);
+      line-height: 1;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .metric-label {
+      font-size: 1rem;
+      color: var(--dce-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ============================================
+       INFO CARDS
+       ============================================ */
+    .info-card {
+      background: var(--dce-white);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid var(--dce-royal-gold);
+    }
+
+    .info-card h3 {
+      color: var(--dce-royal-gold-dark);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    /* ============================================
+       ARCHITECTURE DIAGRAMS
+       ============================================ */
+    .architecture-diagram {
+      background: var(--dce-white);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      margin: var(--spacing-lg) 0;
+      box-shadow: var(--shadow-md);
+    }
+
+    .tenant-box {
+      border: 2px solid var(--dce-royal-gold);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-md);
+      background: linear-gradient(135deg, var(--dce-white) 0%, var(--dce-cream) 100%);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .tenant-box.source {
+      border-color: var(--dce-info);
+    }
+
+    .tenant-box.target {
+      border-color: var(--dce-success);
+    }
+
+    .tenant-header {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--dce-black);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .tenant-domain {
+      font-size: 0.875rem;
+      color: var(--dce-gray);
+      font-family: monospace;
+      background: var(--dce-cream);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+    }
+
+    .sync-connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-md);
+      position: relative;
+    }
+
+    .sync-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--dce-royal-gold-dark);
+    }
+
+    .sync-arrow .arrow-line {
+      width: 3px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--dce-royal-gold), var(--dce-royal-gold-dark));
+      position: relative;
+    }
+
+    .sync-arrow .arrow-head {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 15px solid var(--dce-royal-gold-dark);
+    }
+
+    .sync-label {
+      font-size: 0.875rem;
+      color: var(--dce-gray-dark);
+      text-align: center;
+      margin-top: var(--spacing-xs);
+      font-style: italic;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-md);
+    }
+
+    .component-box {
+      background: var(--dce-white);
+      border: 2px solid var(--dce-gray-light);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      text-align: center;
+    }
+
+    .component-box.primary {
+      border-color: var(--dce-royal-gold);
+      background: linear-gradient(135deg, var(--dce-white) 0%, #fefcf8 100%);
+    }
+
+    .component-icon {
+      font-size: 2rem;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .component-title {
+      font-weight: 600;
+      color: var(--dce-charcoal);
+      margin-bottom: 0.25rem;
+    }
+
+    .component-desc {
+      font-size: 0.875rem;
+      color: var(--dce-gray);
+    }
+
+    /* ============================================
+       TABLES
+       ============================================ */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--spacing-lg) 0;
+      background: var(--dce-white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .data-table th {
+      background: var(--dce-black);
+      color: var(--dce-royal-gold);
+      font-family: var(--font-display);
+      font-weight: 600;
+      padding: var(--spacing-md);
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.875rem;
+    }
+
+    .data-table td {
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--dce-cream);
+      color: var(--dce-charcoal);
+    }
+
+    .data-table tr:hover {
+      background: var(--dce-cream);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-not-started {
+      background: #E3F2FD;
+      color: var(--dce-info);
+    }
+
+    .status-live {
+      background: #E8F5E9;
+      color: var(--dce-success);
+    }
+
+    .status-in-progress {
+      background: #FFF3E0;
+      color: var(--dce-warning);
+    }
+
+    .cost-highlight {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dce-success);
+    }
+
+    /* ============================================
+       RISK MATRIX
+       ============================================ */
+    .risk-matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-md);
+      margin: var(--spacing-lg) 0;
+    }
+
+    .risk-quadrant {
+      background: var(--dce-white);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .risk-quadrant h4 {
+      font-size: 1rem;
+      margin-bottom: var(--spacing-sm);
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid;
+    }
+
+    .risk-quadrant.hh {
+      border-top: 4px solid var(--dce-danger);
+    }
+
+    .risk-quadrant.hh h4 {
+      color: var(--dce-danger);
+      border-color: var(--dce-danger);
+    }
+
+    .risk-quadrant.hl {
+      border-top: 4px solid var(--dce-warning);
+    }
+
+    .risk-quadrant.hl h4 {
+      color: var(--dce-warning);
+      border-color: var(--dce-warning);
+    }
+
+    .risk-quadrant.lh {
+      border-top: 4px solid var(--dce-info);
+    }
+
+    .risk-quadrant.lh h4 {
+      color: var(--dce-info);
+      border-color: var(--dce-info);
+    }
+
+    .risk-quadrant.ll {
+      border-top: 4px solid var(--dce-gray);
+    }
+
+    .risk-quadrant.ll h4 {
+      color: var(--dce-gray);
+      border-color: var(--dce-gray);
+    }
+
+    .risk-list {
+      list-style: none;
+      margin: 0;
+    }
+
+    .risk-list li {
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+      color: var(--dce-gray-dark);
+      border-bottom: 1px dashed var(--dce-cream);
+    }
+
+    .risk-list li:last-child {
+      border-bottom: none;
+    }
+
+    .mitigation {
+      font-size: 0.8rem;
+      color: var(--dce-gray);
+      font-style: italic;
+      margin-top: 0.25rem;
+    }
+
+    /* ============================================
+       TIMELINE
+       ============================================ */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      margin: var(--spacing-lg) 0;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--dce-royal-gold), var(--dce-royal-gold-dark));
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+      position: relative;
+      padding-left: var(--spacing-lg);
+    }
+
+    .timeline-marker {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--dce-white);
+      border: 3px solid var(--dce-royal-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--dce-royal-gold-dark);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-marker.completed {
+      background: var(--dce-success);
+      border-color: var(--dce-success);
+      color: var(--dce-white);
+    }
+
+    .timeline-content {
+      background: var(--dce-white);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      flex: 1;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .timeline-content h4 {
+      margin-bottom: 0.25rem;
+      color: var(--dce-charcoal);
+    }
+
+    .timeline-content p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--dce-gray);
+    }
+
+    /* ============================================
+       SUCCESS METRICS
+       ============================================ */
+    .metrics-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-md);
+      margin: var(--spacing-lg) 0;
+    }
+
+    .metric-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      background: var(--dce-white);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .metric-check {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--dce-royal-gold), var(--dce-royal-gold-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dce-white);
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .metric-text h4 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .metric-text p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--dce-gray);
+    }
+
+    /* ============================================
+       NEXT STEPS
+       ============================================ */
+    .action-list {
+      list-style: none;
+      margin: var(--spacing-lg) 0;
+    }
+
+    .action-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+      background: var(--dce-white);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-sm);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border-left: 4px solid var(--dce-royal-gold);
+    }
+
+    .action-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--dce-black);
+      color: var(--dce-royal-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .action-content h4 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.1rem;
+    }
+
+    .action-content p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--dce-gray);
+    }
+
+    .owner-tag {
+      display: inline-block;
+      background: var(--dce-cream);
+      color: var(--dce-gray-dark);
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ============================================
+       Q&A SECTION
+       ============================================ */
+    .qa-section {
+      background: var(--dce-white);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      text-align: center;
+      margin-top: var(--spacing-xl);
+      box-shadow: var(--shadow-md);
+    }
+
+    .qa-section h3 {
+      font-size: 2rem;
+      color: var(--dce-royal-gold-dark);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-xl);
+      flex-wrap: wrap;
+      margin-top: var(--spacing-lg);
+    }
+
+    .contact-item {
+      text-align: center;
+    }
+
+    .contact-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dce-gray);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-value {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--dce-charcoal);
+    }
+
+    /* ============================================
+       SLIDE NUMBER
+       ============================================ */
+    .slide-number {
+      position: absolute;
+      bottom: var(--spacing-md);
+      right: var(--spacing-md);
+      font-size: 0.875rem;
+      color: var(--dce-gray-light);
+      font-family: var(--font-display);
+    }
+
+    .title-slide .slide-number {
+      color: var(--dce-gray);
+    }
+
+    /* ============================================
+       FLOW DIAGRAM
+       ============================================ */
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+      margin: var(--spacing-lg) 0;
+    }
+
+    .flow-box {
+      background: var(--dce-white);
+      border: 2px solid var(--dce-royal-gold);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-md) var(--spacing-lg);
+      text-align: center;
+      min-width: 200px;
+    }
+
+    .flow-box h4 {
+      margin: 0;
+      color: var(--dce-royal-gold-dark);
+    }
+
+    .flow-box p {
+      margin: 0.25rem 0 0 0;
+      font-size: 0.85rem;
+      color: var(--dce-gray);
+    }
+
+    .flow-arrow {
+      font-size: 2rem;
+      color: var(--dce-royal-gold);
+    }
+
+    /* ============================================
+       RESPONSIVE DESIGN
+       ============================================ */
+    @media (max-width: 768px) {
+      .slide {
+        padding: var(--spacing-md);
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .risk-matrix {
+        grid-template-columns: 1fr;
+      }
+
+      .component-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-diagram {
+        flex-direction: column;
+      }
+
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
+
+      .contact-info {
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+    }
+
+    @media print {
+      .slide {
+        page-break-after: always;
+        min-height: 100vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="presentation">
+
+    <!-- ============================================
+         SLIDE 1: TITLE SLIDE
+         ============================================ -->
+    <div class="slide title-slide" id="slide-1">
+      <div class="slide-content">
+        <div class="logo-container">
+          <img src="../assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_royal-gold.png" 
+             alt="Delta Crown Extensions" 
+             style="max-width: 400px; height: auto; margin-bottom: 2rem;">
+        </div>
+        
+        <h1>Executive Presentation</h1>
+        <p class="subtitle">Tenant Setup &amp; Onboarding Strategy</p>
+        
+        <div class="meta">
+          <p><strong>Project:</strong> Delta Crown Extensions Microsoft 365 Tenant Setup</p>
+          <p><strong>Source Tenant:</strong> Head to Toe Brands (httbrands.com)</p>
+          <p><strong>Target Tenant:</strong> Delta Crown Extensions (deltacrown.com)</p>
+          <p style="margin-top: 1rem;">Presented by: [Presenter Name]</p>
+          <p>Date: [Presentation Date]</p>
+        </div>
+      </div>
+      <span class="slide-number">1 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 2: EXECUTIVE SUMMARY
+         ============================================ -->
+    <div class="slide" id="slide-2">
+      <div class="slide-content">
+        <h2>Executive Summary</h2>
+        
+        <p style="font-size: 1.25rem; margin-bottom: var(--spacing-xl);">
+          A strategic approach to enabling Delta Crown Extensions operational independence while maintaining 
+          seamless collaboration with Head to Toe Brands—achieving zero additional per-user licensing costs.
+        </p>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-value">2</div>
+            <div class="metric-label">Tenants</div>
+            <p style="font-size: 0.85rem; color: var(--dce-gray); margin-top: 0.5rem;">Source &amp; Target</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">8</div>
+            <div class="metric-label">Implementation Phases</div>
+            <p style="font-size: 0.85rem; color: var(--dce-gray); margin-top: 0.5rem;">Structured Rollout</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">$0</div>
+            <div class="metric-label">Additional Cost</div>
+            <p style="font-size: 0.85rem; color: var(--dce-gray); margin-top: 0.5rem;">Zero Per-User Licensing</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">Pax8</div>
+            <div class="metric-label">CSP Partnership</div>
+            <p style="font-size: 0.85rem; color: var(--dce-gray); margin-top: 0.5rem;">Azure Subscription</p>
+          </div>
+        </div>
+
+        <div class="info-card" style="margin-top: var(--spacing-xl);">
+          <h3>Key Value Propositions</h3>
+          <ul style="margin-left: 1.5rem; color: var(--dce-gray-dark);">
+            <li><strong>Brand Separation:</strong> Delta Crown Extensions gains independent identity and operational autonomy</li>
+            <li><strong>Seamless Integration:</strong> Users maintain access to both environments without friction</li>
+            <li><strong>Cost Optimization:</strong> Leverages existing Business Premium licensing with no additional per-user costs</li>
+            <li><strong>Enterprise Security:</strong> Full Conditional Access, MFA trust, and email authentication (SPF/DKIM/DMARC)</li>
+          </ul>
+        </div>
+      </div>
+      <span class="slide-number">2 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 3: BUSINESS CONTEXT
+         ============================================ -->
+    <div class="slide" id="slide-3">
+      <div class="slide-content">
+        <h2>Business Context</h2>
+
+        <div class="info-card">
+          <h3>🎯 Why This Matters</h3>
+          <p>
+            Delta Crown Extensions requires operational independence as a distinct brand under the Head to Toe Brands 
+            umbrella. This initiative enables DCE to function as a fully autonomous entity while maintaining 
+            collaborative ties with the parent organization.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>⚠️ Current Challenge</h3>
+          <p>
+            Users currently operate solely within the Head to Toe Brands tenant (httbrands.com) and lack 
+            the ability to send or receive email using @deltacrown.com addresses. This creates brand 
+            inconsistency and operational limitations for DCE-specific communications.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>💡 Solution Approach</h3>
+          <p>
+            <strong>Cross-Tenant Synchronization</strong> combined with <strong>Shared Mailboxes</strong> delivers:
+          </p>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--dce-gray-dark);">
+            <li>Member-type account synchronization (not guest accounts) for full M365 access</li>
+            <li>Free shared mailboxes enabling @deltacrown.com email sending capability</li>
+            <li>Send-As permissions allowing seamless email origination from DCE domain</li>
+            <li>Full SharePoint and Teams integration for DCE-specific collaboration spaces</li>
+          </ul>
+        </div>
+
+        <div style="background: linear-gradient(135deg, var(--dce-royal-gold-light), var(--dce-royal-gold)); color: var(--dce-black); padding: var(--spacing-md); border-radius: var(--radius-md); margin-top: var(--spacing-lg);">
+          <p style="margin: 0; font-weight: 600; text-align: center;">
+            ✦ Result: Delta Crown Extensions achieves brand autonomy with zero licensing overhead ✦
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">3 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 4: CURRENT STATE
+         ============================================ -->
+    <div class="slide" id="slide-4">
+      <div class="slide-content">
+        <h2>Current State</h2>
+
+        <div class="architecture-diagram">
+          <div class="tenant-box source">
+            <div class="tenant-header">🏢 Head to Toe Brands (Source Tenant)</div>
+            <div class="tenant-domain">httbrands.com | Org ID: 0c0e35dc-188a-4eb3-b8ba-61752154b407</div>
+            <div class="component-grid" style="margin-top: var(--spacing-sm);">
+              <div class="component-box primary">
+                <div class="component-icon">👥</div>
+                <div class="component-title">Users</div>
+                <div class="component-desc">Member accounts with M365 Business Premium</div>
+              </div>
+              <div class="component-box primary">
+                <div class="component-icon">📧</div>
+                <div class="component-title">Exchange Online</div>
+                <div class="component-desc">Email @httbrands.com</div>
+              </div>
+              <div class="component-box primary">
+                <div class="component-icon">💼</div>
+                <div class="component-title">M365 Services</div>
+                <div class="component-desc">SharePoint, Teams, Groups</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sync-connector">
+            <div style="text-align: center; color: var(--dce-gray);">
+              <div style="font-size: 2rem;">⚡</div>
+              <div style="font-style: italic; margin-top: 0.5rem;">No Connection Established</div>
+            </div>
+          </div>
+
+          <div class="tenant-box target" style="opacity: 0.7;">
+            <div class="tenant-header">🎯 Delta Crown Extensions (Target Tenant)</div>
+            <div class="tenant-domain">deltacrown.com | Org ID: ce62e17d-2feb-4e67-a115-8ea4af68da30</div>
+            <div class="component-grid" style="margin-top: var(--spacing-sm);">
+              <div class="component-box" style="border-style: dashed;">
+                <div class="component-icon" style="opacity: 0.5;">👤</div>
+                <div class="component-title" style="color: var(--dce-gray);">No Users</div>
+                <div class="component-desc">Waiting for sync</div>
+              </div>
+              <div class="component-box" style="border-style: dashed;">
+                <div class="component-icon" style="opacity: 0.5;">📭</div>
+                <div class="component-title" style="color: var(--dce-gray);">No Mailboxes</div>
+                <div class="component-desc">To be provisioned</div>
+              </div>
+              <div class="component-box" style="border-style: dashed;">
+                <div class="component-icon" style="opacity: 0.5;">🔧</div>
+                <div class="component-title" style="color: var(--dce-gray);">Minimal Config</div>
+                <div class="component-desc">DNS partially configured</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #FFEBEE; border-left: 4px solid var(--dce-danger); padding: var(--spacing-md); border-radius: var(--radius-md);">
+          <h4 style="color: var(--dce-danger); margin-bottom: 0.5rem;">⚠️ Identified Gap</h4>
+          <p style="margin: 0; color: var(--dce-charcoal);">
+            Users require @deltacrown.com email capability but cannot access DCE resources. 
+            The target tenant exists but lacks user accounts and shared mailbox infrastructure.
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">4 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 5: SOLUTION OVERVIEW
+         ============================================ -->
+    <div class="slide" id="slide-5">
+      <div class="slide-content">
+        <h2>Solution Overview</h2>
+
+        <div class="architecture-diagram">
+          <div class="flow-diagram">
+            <div class="flow-box" style="border-color: var(--dce-info);">
+              <h4 style="color: var(--dce-info);">Head to Toe Brands</h4>
+              <p>Source Users</p>
+              <p style="font-size: 0.75rem; font-family: monospace;">httbrands.com</p>
+            </div>
+            
+            <div class="flow-arrow">→</div>
+            
+            <div class="flow-box" style="background: linear-gradient(135deg, var(--dce-royal-gold-light), var(--dce-royal-gold)); border-color: var(--dce-royal-gold-dark);">
+              <h4 style="color: var(--dce-black);">Entra ID Sync</h4>
+              <p>Cross-Tenant</p>
+              <p style="font-size: 0.75rem;">Member Accounts</p>
+            </div>
+            
+            <div class="flow-arrow">→</div>
+            
+            <div class="flow-box" style="border-color: var(--dce-success);">
+              <h4 style="color: var(--dce-success);">Delta Crown Extensions</h4>
+              <p>Synced Users</p>
+              <p style="font-size: 0.75rem; font-family: monospace;">deltacrown.com</p>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-xl); border-top: 2px dashed var(--dce-gray-light);">
+            <h3 style="text-align: center; margin-bottom: var(--spacing-lg);">Email Flow Architecture</h3>
+            
+            <div class="flow-diagram">
+              <div class="flow-box" style="flex: 1;">
+                <h4>HTT User</h4>
+                <p>Opens Outlook</p>
+              </div>
+              
+              <div class="flow-arrow">→</div>
+              
+              <div class="flow-box" style="flex: 1; background: #E8F5E9; border-color: var(--dce-success);">
+                <h4 style="color: var(--dce-success);">Shared Mailbox</h4>
+                <p>@deltacrown.com</p>
+                <p style="font-size: 0.75rem;">Auto-mapped, Free</p>
+              </div>
+              
+              <div class="flow-arrow">→</div>
+              
+              <div class="flow-box" style="flex: 1;">
+                <h4>Send-As</h4>
+                <p>Send Email</p>
+                <p style="font-size: 0.75rem;">From: @deltacrown.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="metrics-grid" style="margin-top: var(--spacing-lg);">
+          <div class="info-card" style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔄</div>
+            <h4 style="margin-bottom: 0.25rem;">Cross-Tenant Sync</h4>
+            <p style="font-size: 0.9rem; margin: 0;">Member-type accounts (not guests) for full M365 access</p>
+          </div>
+          <div class="info-card" style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📬</div>
+            <h4 style="margin-bottom: 0.25rem;">Shared Mailboxes</h4>
+            <p style="font-size: 0.9rem; margin: 0;">Free mailboxes (up to 50GB) for @deltacrown.com</p>
+          </div>
+          <div class="info-card" style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">✉️</div>
+            <h4 style="margin-bottom: 0.25rem;">Send-As Permissions</h4>
+            <p style="font-size: 0.9rem; margin: 0;">Seamless sending from DCE domain addresses</p>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">5 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 6: TECHNICAL ARCHITECTURE
+         ============================================ -->
+    <div class="slide" id="slide-6">
+      <div class="slide-content">
+        <h2>Technical Architecture</h2>
+
+        <div class="component-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="component-box primary" style="padding: var(--spacing-lg);">
+            <div class="component-icon" style="font-size: 3rem;">🔄</div>
+            <div class="component-title" style="font-size: 1.25rem;">Entra ID Cross-Tenant Sync</div>
+            <div class="component-desc" style="margin-top: var(--spacing-sm);">
+              <ul style="text-align: left; margin-left: 1rem; color: var(--dce-gray-dark);">
+                <li>Member-type accounts (NOT guests)</li>
+                <li>Full SharePoint/Teams access</li>
+                <li>Automated attribute mapping</li>
+                <li>Security group-based scoping</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="component-box primary" style="padding: var(--spacing-lg);">
+            <div class="component-icon" style="font-size: 3rem;">📧</div>
+            <div class="component-title" style="font-size: 1.25rem;">Exchange Online Shared Mailboxes</div>
+            <div class="component-desc" style="margin-top: var(--spacing-sm);">
+              <ul style="text-align: left; margin-left: 1rem; color: var(--dce-gray-dark);">
+                <li>Zero licensing cost (up to 50GB)</li>
+                <li>Auto-mapping to Outlook</li>
+                <li>Send-As permissions configured</li>
+                <li>Separate @deltacrown.com identity</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="component-box primary" style="padding: var(--spacing-lg);">
+            <div class="component-icon" style="font-size: 3rem;">👥</div>
+            <div class="component-title" style="font-size: 1.25rem;">SharePoint &amp; Teams Integration</div>
+            <div class="component-desc" style="margin-top: var(--spacing-sm);">
+              <ul style="text-align: left; margin-left: 1rem; color: var(--dce-gray-dark);">
+                <li>DCE-specific SharePoint sites</li>
+                <li>Microsoft 365 Groups provisioning</li>
+                <li>Teams workspace creation</li>
+                <li>Synced user access enabled</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="component-box primary" style="padding: var(--spacing-lg);">
+            <div class="component-icon" style="font-size: 3rem;">🔒</div>
+            <div class="component-title" style="font-size: 1.25rem;">Conditional Access &amp; Security</div>
+            <div class="component-desc" style="margin-top: var(--spacing-sm);">
+              <ul style="text-align: left; margin-left: 1rem; color: var(--dce-gray-dark);">
+                <li>MFA trust between tenants</li>
+                <li>Baseline CA policies applied</li>
+                <li>SPF/DKIM/DMARC configured</li>
+                <li>Security hardening standards</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card" style="margin-top: var(--spacing-lg); background: linear-gradient(135deg, #E3F2FD, #BBDEFB); border-left-color: var(--dce-info);">
+          <h3 style="color: var(--dce-info);">Key Design Decision: Member vs Guest Accounts</h3>
+          <p style="margin-bottom: 0;">
+            <strong>Member-type accounts</strong> provide full access to SharePoint, Teams, and other M365 services 
+            without the limitations of guest accounts (no "External" badges, full search capabilities, complete Teams features). 
+            This is essential for DCE users who need to function as full members of the target tenant.
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">6 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 7: PHASE ROADMAP
+         ============================================ -->
+    <div class="slide" id="slide-7">
+      <div class="slide-content">
+        <h2>Phase Roadmap</h2>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 80px;">Phase</th>
+              <th>Description</th>
+              <th style="width: 150px;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700; color: var(--dce-royal-gold-dark);">1</td>
+              <td>
+                <strong>Pax8 CSP — Azure Subscription</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Establish DCE-CORE subscription via Pax8 CSP partnership</span>
+              </td>
+              <td><span class="status-badge status-not-started">Not Started</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--dce-royal-gold-dark);">2</td>
+              <td>
+                <strong>Cross-Tenant Sync Configuration</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Configure Entra ID sync: HTT Brands → DCE</span>
+              </td>
+              <td><span class="status-badge status-not-started">Not Started</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--dce-royal-gold-dark);">3</td>
+              <td>
+                <strong>SharePoint, Teams &amp; Groups</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Provision collaboration spaces for DCE</span>
+              </td>
+              <td><span class="status-badge status-not-started">Not Started</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--dce-royal-gold-dark);">4</td>
+              <td>
+                <strong>Email — Shared Mailboxes &amp; Send-As</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Create shared mailboxes, configure Send-As permissions</span>
+              </td>
+              <td><span class="status-badge status-not-started">Not Started</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--dce-royal-gold-dark);">5</td>
+              <td>
+                <strong>DNS — SPF/DKIM/DMARC</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Email authentication and deliverability</span>
+              </td>
+              <td><span class="status-badge status-live">✓ Live</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--dce-royal-gold-dark);">6</td>
+              <td>
+                <strong>Conditional Access &amp; Security</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">MFA trust, baseline policies, security configuration</span>
+              </td>
+              <td><span class="status-badge status-not-started">Not Started</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--dce-royal-gold-dark);">7</td>
+              <td>
+                <strong>Security Hardening</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Advanced security policies and monitoring</span>
+              </td>
+              <td><span class="status-badge status-not-started">Not Started</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--dce-royal-gold-dark);">8</td>
+              <td>
+                <strong>Validation &amp; UAT</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">End-to-end testing and user acceptance</span>
+              </td>
+              <td><span class="status-badge status-not-started">Not Started</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+          <div style="text-align: center; padding: var(--spacing-md); background: #E8F5E9; border-radius: var(--radius-md);">
+            <div style="font-size: 2rem; font-weight: 700; color: var(--dce-success);">1</div>
+            <div style="font-size: 0.875rem; color: var(--dce-gray-dark);">Phase Complete</div>
+          </div>
+          <div style="text-align: center; padding: var(--spacing-md); background: #E3F2FD; border-radius: var(--radius-md);">
+            <div style="font-size: 2rem; font-weight: 700; color: var(--dce-info);">7</div>
+            <div style="font-size: 0.875rem; color: var(--dce-gray-dark);">Phases Remaining</div>
+          </div>
+          <div style="text-align: center; padding: var(--spacing-md); background: #FFF3E0; border-radius: var(--radius-md);">
+            <div style="font-size: 2rem; font-weight: 700; color: var(--dce-warning);">12.5%</div>
+            <div style="font-size: 0.875rem; color: var(--dce-gray-dark);">Overall Progress</div>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">7 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 8: COST ANALYSIS
+         ============================================ -->
+    <div class="slide" id="slide-8">
+      <div class="slide-content">
+        <h2>Cost Analysis — $0 Strategy</h2>
+
+        <div style="background: linear-gradient(135deg, var(--dce-black), var(--dce-charcoal)); color: var(--dce-white); padding: var(--spacing-xl); border-radius: var(--radius-lg); margin-bottom: var(--spacing-xl);">
+          <h3 style="color: var(--dce-royal-gold); text-align: center; border: none; margin-bottom: var(--spacing-lg);">Zero Additional Per-User Licensing</h3>
+          <p style="text-align: center; color: var(--dce-gray-light); font-size: 1.1rem;">
+            Leveraging existing M365 Business Premium licenses to deliver full DCE capability
+          </p>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th style="width: 200px;">Cost</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Cross-Tenant Sync</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Entra ID Cross-Tenant Synchronization</span>
+              </td>
+              <td class="cost-highlight">$0</td>
+              <td>Included with Entra ID P1 (bundled in M365 Business Premium)</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Shared Mailboxes</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Exchange Online Shared Mailboxes</span>
+              </td>
+              <td class="cost-highlight">$0</td>
+              <td>Free up to 50GB per mailbox, no license required</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Send-As Permissions</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Exchange Online Send-As configuration</span>
+              </td>
+              <td class="cost-highlight">$0</td>
+              <td>Built-in Exchange Online feature</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>SPF/DKIM/DMARC</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Email authentication DNS records</span>
+              </td>
+              <td class="cost-highlight">$0</td>
+              <td>DNS record changes only, no service cost</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Azure Subscription (DCE-CORE)</strong>
+                <br><span style="font-size: 0.875rem; color: var(--dce-gray);">Pay-as-you-go via Pax8 CSP</span>
+              </td>
+              <td style="color: var(--dce-warning); font-weight: 700;">Variable</td>
+              <td>Only for Azure resources actually provisioned</td>
+            </tr>
+            <tr style="background: linear-gradient(135deg, #E8F5E9, #C8E6C9);">
+              <td style="font-weight: 700; font-size: 1.1rem;">Total Additional Per-User Cost</td>
+              <td style="font-size: 2rem; font-weight: 700; color: var(--dce-success);">$0</td>
+              <td style="font-weight: 600;">Zero additional licensing per user</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="info-card" style="background: linear-gradient(135deg, #E8F5E9, #C8E6C9); border-left-color: var(--dce-success);">
+          <h3 style="color: var(--dce-success);">💡 Cost Optimization Strategy</h3>
+          <p>
+            By utilizing <strong>shared mailboxes</strong> instead of licensed user mailboxes, and leveraging 
+            the <strong>cross-tenant sync</strong> feature included with Entra ID P1, we achieve full DCE email 
+            capability without purchasing additional Exchange Online licenses. Users continue using their existing 
+            M365 Business Premium licenses while gaining the ability to send from @deltacrown.com addresses.
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">8 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 9: RISK ASSESSMENT MATRIX
+         ============================================ -->
+    <div class="slide" id="slide-9">
+      <div class="slide-content">
+        <h2>Risk Assessment Matrix</h2>
+
+        <div class="risk-matrix">
+          <div class="risk-quadrant hh">
+            <h4>🔴 High Impact / High Probability</h4>
+            <ul class="risk-list">
+              <li>
+                <strong>Email Delivery Issues</strong>
+                <div class="mitigation">Mitigation: Full SPF/DKIM/DMARC already live; validation testing in Phase 8</div>
+              </li>
+              <li>
+                <strong>Sync Configuration Errors</strong>
+                <div class="mitigation">Mitigation: Automated scripts with validation checks; phased rollout</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="risk-quadrant hl">
+            <h4>🟡 High Impact / Low Probability</h4>
+            <ul class="risk-list">
+              <li>
+                <strong>Cross-Tenant Sync Failure</strong>
+                <div class="mitigation">Monitor: Entra ID sync logs; fallback to manual user creation</div>
+              </li>
+              <li>
+                <strong>SharePoint/Teams Access Issues</strong>
+                <div class="mitigation">Monitor: Member-type account verification; permission inheritance</div>
+              </li>
+              <li>
+                <strong>Security Policy Conflicts</strong>
+                <div class="mitigation">Monitor: Conditional Access policy testing; staged enforcement</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="risk-quadrant lh">
+            <h4>🟠 Low Impact / High Probability</h4>
+            <ul class="risk-list">
+              <li>
+                <strong>User Confusion with Multiple Mailboxes</strong>
+                <div class="mitigation">Accept: Training documentation; clear naming conventions</div>
+              </li>
+              <li>
+                <strong>Sync Delays</strong>
+                <div class="mitigation">Accept: Typical sync time 5-10 minutes; communicate to users</div>
+              </li>
+              <li>
+                <strong>Outlook Auto-Mapping Delays</strong>
+                <div class="mitigation">Accept: Manual mailbox addition available as workaround</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="risk-quadrant ll">
+            <h4>⚪ Low Impact / Low Probability</h4>
+            <ul class="risk-list">
+              <li>
+                <strong>Minor DNS Propagation Delays</strong>
+                <div class="mitigation">Ignore: Standard internet behavior; TTL-optimized</div>
+              </li>
+              <li>
+                <strong>User Interface Preferences</strong>
+                <div class="mitigation">Ignore: Individual Outlook customization; not blocking</div>
+              </li>
+              <li>
+                <strong>Documentation Updates</strong>
+                <div class="mitigation">Ignore: Post-implementation maintenance; not project risk</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-card" style="background: linear-gradient(135deg, #FFF3E0, #FFE0B2); border-left-color: var(--dce-warning);">
+          <h3 style="color: var(--dce-warning);">⚠️ Primary Risk: User Experience During Transition</h3>
+          <p style="margin-bottom: 0;">
+            The most significant operational risk is user confusion when adapting to multiple mailboxes. 
+            <strong>Mitigation strategy:</strong> Comprehensive training materials, clear SOP documentation, 
+            and dedicated support during the first 30 days post-rollout.
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">9 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 10: TIMELINE VISUALIZATION
+         ============================================ -->
+    <div class="slide" id="slide-10">
+      <div class="slide-content">
+        <h2>Implementation Timeline</h2>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-marker" style="background: var(--dce-success); border-color: var(--dce-success); color: var(--dce-white);">✓</div>
+            <div class="timeline-content">
+              <h4>Phase 5: DNS Configuration</h4>
+              <p>SPF/DKIM/DMARC records configured and live</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+              <h4>Phase 1: Pax8 CSP Setup</h4>
+              <p>Azure subscription provisioning | <em>Week 1</em></p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">2</div>
+            <div class="timeline-content">
+              <h4>Phase 2: Cross-Tenant Sync</h4>
+              <p>Entra ID sync configuration and initial user sync | <em>Week 1-2</em></p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">3</div>
+            <div class="timeline-content">
+              <h4>Phase 3: Collaboration Spaces</h4>
+              <p>SharePoint, Teams, and Groups provisioning | <em>Week 2-3</em></p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">4</div>
+            <div class="timeline-content">
+              <h4>Phase 4: Email Configuration</h4>
+              <p>Shared mailboxes and Send-As permissions | <em>Week 3</em></p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">6</div>
+            <div class="timeline-content">
+              <h4>Phase 6: Conditional Access</h4>
+              <p>Security policies and MFA trust | <em>Week 4</em></p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">7</div>
+            <div class="timeline-content">
+              <h4>Phase 7: Security Hardening</h4>
+              <p>Advanced security configuration | <em>Week 4-5</em></p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker" style="background: var(--dce-royal-gold); border-color: var(--dce-royal-gold-dark); color: var(--dce-black);">★</div>
+            <div class="timeline-content" style="background: linear-gradient(135deg, #FFF8E1, #FFECB3);">
+              <h4>Phase 8: Validation &amp; UAT</h4>
+              <p>End-to-end testing and user acceptance | <em>Week 5-6</em></p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-md); margin-top: var(--spacing-xl);">
+          <div class="metric-card" style="border-top-color: var(--dce-success);">
+            <div class="metric-value" style="font-size: 2rem; color: var(--dce-success);">1</div>
+            <div class="metric-label">Phase Complete</div>
+          </div>
+          <div class="metric-card" style="border-top-color: var(--dce-warning);">
+            <div class="metric-value" style="font-size: 2rem; color: var(--dce-warning);">7</div>
+            <div class="metric-label">Phases Remaining</div>
+          </div>
+          <div class="metric-card" style="border-top-color: var(--dce-royal-gold);">
+            <div class="metric-value" style="font-size: 2rem;">~6</div>
+            <div class="metric-label">Weeks Estimated</div>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">10 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 11: SUCCESS METRICS
+         ============================================ -->
+    <div class="slide" id="slide-11">
+      <div class="slide-content">
+        <h2>Success Metrics</h2>
+
+        <p style="font-size: 1.25rem; margin-bottom: var(--spacing-xl);">
+          Clear, measurable criteria to validate successful implementation and ongoing operational health.
+        </p>
+
+        <div class="metrics-list">
+          <div class="metric-item">
+            <div class="metric-check">✓</div>
+            <div class="metric-text">
+              <h4>User Sync Completion Rate</h4>
+              <p>100% of designated users successfully synced from HTT to DCE tenant</p>
+            </div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-check">✓</div>
+            <div class="metric-text">
+              <h4>Email Send Capability</h4>
+              <p>All users can successfully send email from @deltacrown.com addresses</p>
+            </div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-check">✓</div>
+            <div class="metric-text">
+              <h4>SharePoint Access Verified</h4>
+              <p>Synced users have full access to DCE SharePoint sites without "External" labels</p>
+            </div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-check">✓</div>
+            <div class="metric-text">
+              <h4>Teams Integration Confirmed</h4>
+              <p>Users can access and participate in DCE Teams with full functionality</p>
+            </div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-check">✓</div>
+            <div class="metric-text">
+              <h4>Security Compliance Score</h4>
+              <p>Microsoft Secure Score meets or exceeds baseline target for tenant type</p>
+            </div>
+          </div>
+
+          <div class="metric-item">
+            <div class="metric-check">✓</div>
+            <div class="metric-text">
+              <h4>Zero Unplanned Downtime</h4>
+              <p>No service interruptions during implementation or cutover periods</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); margin-top: var(--spacing-xl);">
+          <div class="info-card" style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯</div>
+            <h4 style="margin-bottom: 0.25rem;">Validation Criteria</h4>
+            <p style="font-size: 0.9rem; margin: 0;">All metrics verified through automated testing and UAT sign-off</p>
+          </div>
+          <div class="info-card" style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📊</div>
+            <h4 style="margin-bottom: 0.25rem;">Ongoing Monitoring</h4>
+            <p style="font-size: 0.9rem; margin: 0;">Continuous tracking via Azure Monitor and M365 admin center</p>
+          </div>
+        </div>
+      </div>
+      <span class="slide-number">11 / 12</span>
+    </div>
+
+    <!-- ============================================
+         SLIDE 12: NEXT STEPS + Q&A
+         ============================================ -->
+    <div class="slide" id="slide-12">
+      <div class="slide-content">
+        <h2>Next Steps</h2>
+
+        <ul class="action-list">
+          <li class="action-item">
+            <div class="action-number">1</div>
+            <div class="action-content">
+              <h4>Submit Pax8 CSP Request</h4>
+              <p>Initiate Azure subscription provisioning for DCE-CORE</p>
+              <span class="owner-tag">Owner: [IT Lead]</span>
+              <span class="owner-tag">Timeline: Immediate</span>
+            </div>
+          </li>
+          <li class="action-item">
+            <div class="action-number">2</div>
+            <div class="action-content">
+              <h4>Finalize User Sync Scope</h4>
+              <p>Confirm user list and security group membership for cross-tenant sync</p>
+              <span class="owner-tag">Owner: [Identity Team]</span>
+              <span class="owner-tag">Timeline: Week 1</span>
+            </div>
+          </li>
+          <li class="action-item">
+            <div class="action-number">3</div>
+            <div class="action-content">
+              <h4>Schedule Implementation Kickoff</h4>
+              <p>Coordinate with stakeholders for Phase 1-2 execution</p>
+              <span class="owner-tag">Owner: [Project Manager]</span>
+              <span class="owner-tag">Timeline: Week 1</span>
+            </div>
+          </li>
+          <li class="action-item">
+            <div class="action-number">4</div>
+            <div class="action-content">
+              <h4>Prepare User Communications</h4>
+              <p>Draft and schedule onboarding notifications and training materials</p>
+              <span class="owner-tag">Owner: [Change Management]</span>
+              <span class="owner-tag">Timeline: Week 1-2</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="qa-section">
+          <h3>Questions &amp; Discussion</h3>
+          <p style="color: var(--dce-gray); margin-bottom: var(--spacing-lg);">
+            Thank you for your attention. Let's discuss any questions or concerns.
+          </p>
+          
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-label">Project Owner</div>
+              <div class="contact-value">[Name]</div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Technical Lead</div>
+              <div class="contact-value">[Name]</div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Email</div>
+              <div class="contact-value">[email@deltacrown.com]</div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-label">Project Reference</div>
+              <div class="contact-value">DeltaSetup-1hk</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--dce-gray-light);">
+          <p style="font-family: var(--font-display); font-size: 1.5rem; color: var(--dce-royal-gold-dark);">
+            ✦ Delta Crown Extensions ✦
+          </p>
+          <p style="font-size: 0.9rem; color: var(--dce-gray);">
+            Tenant Setup &amp; Onboarding Strategy | Executive Presentation
+          </p>
+        </div>
+      </div>
+      <span class="slide-number">12 / 12</span>
+    </div>
+
+  </div>
+
+  <script src="js/presentation.js"></script>
+</body>
+</html>
