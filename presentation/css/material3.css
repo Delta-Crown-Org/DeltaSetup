@@ -108,6 +108,20 @@
   --md-sys-color-on-info-container: #01579B;
   
   /* ----------------------------------------
+     Inverse Colors (Material 3 required)
+     ---------------------------------------- */
+  --md-sys-color-inverse-surface: #2D3130;
+  --md-sys-color-inverse-on-surface: #EFF1F0;
+  --md-sys-color-inverse-primary: #80D8C9;
+  
+  /* ----------------------------------------
+     RGB versions for opacity manipulation
+     ---------------------------------------- */
+  --md-sys-color-primary-rgb: 0, 107, 94;
+  --md-sys-color-on-surface-variant-rgb: 63, 73, 70;
+  --md-sys-color-on-surface-rgb: 26, 28, 27;
+  
+  /* ----------------------------------------
      Elevation (Shadows)
      ---------------------------------------- */
   --md-sys-elevation-level0: none;
@@ -211,7 +225,6 @@
   --md-sys-breakpoint-mobile: 0px;
   --md-sys-breakpoint-tablet: 600px;
   --md-sys-breakpoint-desktop: 1240px;
-  --md-sys-breakpoint-large: 1440px;
   
   /* ----------------------------------------
      Opacity States
@@ -307,11 +320,11 @@ body {
 }
 
 .md-icon-btn:hover {
-  background-color: rgba(var(--md-sys-color-on-surface-variant), var(--md-sys-state-hover-opacity));
+  background-color: rgba(var(--md-sys-color-on-surface-variant-rgb), var(--md-sys-state-hover-opacity));
 }
 
 .md-icon-btn:focus {
-  background-color: rgba(var(--md-sys-color-on-surface-variant), var(--md-sys-state-focus-opacity));
+  background-color: rgba(var(--md-sys-color-on-surface-variant-rgb), var(--md-sys-state-focus-opacity));
   outline: none;
 }
 
@@ -1887,6 +1900,12 @@ body {
   color: var(--md-sys-color-on-surface);
 }
 
+.md-nav-rail__item:focus-visible,
+.md-nav-bar__item:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
 .md-nav-bar__item--active {
   color: var(--md-sys-color-on-primary-container);
 }
@@ -2065,6 +2084,14 @@ body {
 
 .md-radio__input:checked ~ .md-radio__dot {
   transform: translate(-50%, -50%) scale(1);
+}
+
+/* Form Control Focus States */
+.md-switch__input:focus-visible + .md-switch__track,
+.md-checkbox__input:focus-visible + .md-checkbox__box,
+.md-radio__input:focus-visible + .md-radio__circle {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 /* ============================================
