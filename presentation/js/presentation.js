@@ -13,7 +13,7 @@ class PresentationController {
   constructor() {
     // Slide tracking
     this.currentSlide = 0;
-    this.totalSlides = 12;
+    this.totalSlides = 13;
     
     // Mode states
     this.isFullscreen = false;
