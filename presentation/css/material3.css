@@ -60,15 +60,15 @@
      ---------------------------------------- */
   --md-sys-color-primary: var(--dce-deep-teal);
   --md-sys-color-on-primary: #FFFFFF;
-  --md-sys-color-primary-container: #E8F5F2;
-  --md-sys-color-on-primary-container: var(--dce-deep-teal-dark);
+  --md-sys-color-primary-container: #C8EDE7;
+  --md-sys-color-on-primary-container: #00352E;
   
   /* ----------------------------------------
      Secondary Colors (Royal Gold)
      ---------------------------------------- */
   --md-sys-color-secondary: var(--dce-royal-gold);
   --md-sys-color-on-secondary: var(--dce-dark-navy);
-  --md-sys-color-secondary-container: #FFF8E7;
+  --md-sys-color-secondary-container: #FFF0CC;
   --md-sys-color-on-secondary-container: var(--dce-royal-gold-dark);
   
   /* ----------------------------------------
@@ -97,8 +97,8 @@
   --md-sys-color-surface-container-lowest: #FFFFFF;
   --md-sys-color-surface-container-low: var(--dce-cream);
   --md-sys-color-surface-container: var(--dce-warm-beige);
-  --md-sys-color-surface-container-high: #E0DCD4;
-  --md-sys-color-surface-container-highest: #D8D4CC;
+  --md-sys-color-surface-container-high: #D4CFC5;
+  --md-sys-color-surface-container-highest: #C8C3BB;
   
   /* ----------------------------------------
      Outline Colors
@@ -141,8 +141,8 @@
   /* ----------------------------------------
      Inverse Colors (Material 3 required)
      ---------------------------------------- */
-  --md-sys-color-inverse-surface: #2D3130;
-  --md-sys-color-inverse-on-surface: #EFF1F0;
+  --md-sys-color-inverse-surface: #0A1F1C;
+  --md-sys-color-inverse-on-surface: #F5F5F3;
   --md-sys-color-inverse-primary: #80D8C9;
   
   /* ----------------------------------------
@@ -156,9 +156,9 @@
      Elevation (Shadows)
      ---------------------------------------- */
   --md-sys-elevation-level0: none;
-  --md-sys-elevation-level1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  --md-sys-elevation-level2: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
-  --md-sys-elevation-level3: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+  --md-sys-elevation-level1: 0 1px 4px rgba(0, 40, 35, 0.08), 0 1px 2px rgba(0, 40, 35, 0.16);
+  --md-sys-elevation-level2: 0 3px 8px rgba(0, 40, 35, 0.10), 0 2px 4px rgba(0, 40, 35, 0.14);
+  --md-sys-elevation-level3: 0 8px 24px rgba(0, 40, 35, 0.12), 0 4px 8px rgba(0, 40, 35, 0.10);
   --md-sys-elevation-level4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   --md-sys-elevation-level5: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   
@@ -166,12 +166,12 @@
      Shape (Corner Radius) - Square for Delta Crown Luxury Feel
      ---------------------------------------- */
   --md-sys-shape-corner-none: 0px;
-  --md-sys-shape-corner-extra-small: 0px;
-  --md-sys-shape-corner-small: 0px;
-  --md-sys-shape-corner-medium: 0px;
-  --md-sys-shape-corner-large: 0px;
-  --md-sys-shape-corner-extra-large: 0px;
-  --md-sys-shape-corner-full: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 24px;
+  --md-sys-shape-corner-full: 9999px;
   
   /* ----------------------------------------
      Typography Scale (Delta Crown)
@@ -267,6 +267,28 @@
   --md-sys-state-pressed-opacity: 0.12;
   --md-sys-state-dragged-opacity: 0.16;
   --md-sys-state-disabled-opacity: 0.38;
+  
+  /* ----------------------------------------
+     Delta Crown Premium Visual Tokens
+     ---------------------------------------- */
+  /* Gradients */
+  --dce-gradient-hero: linear-gradient(135deg, #003D35 0%, #001A17 40%, #0A0A0A 100%);
+  --dce-gradient-dark-slide: linear-gradient(160deg, #002A24 0%, #001410 100%);
+  --dce-gradient-gold-text: linear-gradient(135deg, #D4A84B, #F0D88A, #D4A84B);
+  --dce-gradient-teal-text: linear-gradient(135deg, #006B5E, #4A9B8E, #006B5E);
+  --dce-gradient-gold-line: linear-gradient(90deg, transparent, #D4A84B, transparent);
+  --dce-gradient-card-shine: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+
+  /* Glass Effects */
+  --dce-glass-bg: rgba(255, 255, 255, 0.06);
+  --dce-glass-border: rgba(255, 255, 255, 0.12);
+  --dce-glass-bg-light: rgba(255, 255, 255, 0.7);
+  --dce-glass-blur: 20px;
+
+  /* Gold Accent */
+  --dce-gold-glow: 0 0 20px rgba(212, 168, 75, 0.15);
+  --dce-gold-border: 1px solid rgba(212, 168, 75, 0.3);
+  --dce-gold-border-strong: 2px solid rgba(212, 168, 75, 0.5);
 }
 
 /* ============================================
