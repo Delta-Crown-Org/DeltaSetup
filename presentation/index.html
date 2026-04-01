@@ -134,12 +134,12 @@
     }
 
     .md-slide--dark .md-card--elevated .md-metric-card__label {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.8);
     }
 
     .md-slide--dark .md-card--outlined {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: var(--dce-glass-border);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: #F5F5F3;
     }
 
@@ -156,15 +156,97 @@
     .md-slide--dark p,
     .md-slide--dark li,
     .md-slide--dark span:not(.material-symbols-outlined):not(.md-chip__label):not(.md-metric-card__value) {
-      color: rgba(255, 255, 255, 0.85);
+      color: rgba(255, 255, 255, 0.93);
     }
 
     .md-slide--dark .md-list-item {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .md-slide--dark .md-card--filled {
       border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Dark mode: brighten icons that use primary/tertiary (too dark on dark bg) */
+    .md-slide--dark .material-symbols-outlined[style*="color: var(--md-sys-color-primary)"] {
+      color: var(--dce-deep-teal-light) !important;
+    }
+
+    .md-slide--dark .material-symbols-outlined[style*="color: var(--md-sys-color-tertiary)"] {
+      color: #A5C5B5 !important;
+    }
+
+    /* Dark mode: override light-mode colored containers */
+    .md-slide--dark .md-card--filled[style*="success-container"] {
+      background: rgba(46, 125, 50, 0.2) !important;
+      border: 1px solid rgba(46, 125, 50, 0.4) !important;
+    }
+
+    .md-slide--dark .md-card--filled[style*="warning-container"] {
+      background: rgba(237, 108, 2, 0.15) !important;
+      border: 1px solid rgba(237, 108, 2, 0.35) !important;
+    }
+
+    .md-slide--dark .md-card--filled[style*="primary-container"] {
+      background: rgba(0, 107, 94, 0.2) !important;
+      border: 1px solid rgba(0, 107, 94, 0.35) !important;
+    }
+
+    .md-slide--dark .md-card--filled[style*="tertiary-container"] {
+      background: rgba(122, 155, 138, 0.15) !important;
+      border: 1px solid rgba(122, 155, 138, 0.3) !important;
+    }
+
+    .md-slide--dark .md-card--filled[style*="secondary-container"] {
+      background: rgba(212, 168, 75, 0.12) !important;
+      border: 1px solid rgba(212, 168, 75, 0.3) !important;
+    }
+
+    /* Dark mode: risk quadrants need semi-transparent backgrounds */
+    .md-slide--dark .md-risk-quadrant--high {
+      background: rgba(186, 26, 26, 0.15) !important;
+      border-color: rgba(186, 26, 26, 0.5) !important;
+    }
+
+    .md-slide--dark .md-risk-quadrant--medium {
+      background: rgba(237, 108, 2, 0.12) !important;
+      border-color: rgba(237, 108, 2, 0.4) !important;
+    }
+
+    .md-slide--dark .md-risk-quadrant--low {
+      background: rgba(46, 125, 50, 0.12) !important;
+      border-color: rgba(46, 125, 50, 0.4) !important;
+    }
+
+    /* Dark mode: risk quadrant text to white */
+    .md-slide--dark .md-risk-quadrant h4 {
+      color: #FFFFFF !important;
+    }
+
+    .md-slide--dark .md-risk-quadrant ul {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .md-slide--dark .md-risk-quadrant li {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    /* Dark mode: colored container text overrides */
+    .md-slide--dark [style*="color: var(--md-sys-color-on-success-container)"] {
+      color: #A5D6A7 !important;
+    }
+
+    .md-slide--dark [style*="color: var(--md-sys-color-on-warning-container)"] {
+      color: #FFCC80 !important;
+    }
+
+    .md-slide--dark [style*="color: var(--md-sys-color-on-error-container)"] {
+      color: #EF9A9A !important;
+    }
+
+    .md-slide--dark [style*="color: var(--md-sys-color-on-primary-container)"] {
+      color: #A0D5CB !important;
     }
 
     /* ---- Slide Header ---- */
@@ -524,7 +606,7 @@
               <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">savings</span>
               <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Cost Optimization</h3>
             </div>
-            <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.7);">
+            <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-surface-variant);">
               <li style="margin-bottom: 8px;">$0 per-user licensing impact</li>
               <li style="margin-bottom: 8px;">Leverage existing Business Premium investments</li>
               <li style="margin-bottom: 8px;">Shared resource model across brands</li>
@@ -539,7 +621,7 @@
               <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">speed</span>
               <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Deployment Velocity</h3>
             </div>
-            <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.7);">
+            <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-surface-variant);">
               <li style="margin-bottom: 8px;">75% reduction in deployment time</li>
               <li style="margin-bottom: 8px;">2 weeks vs. 2 months per brand</li>
               <li style="margin-bottom: 8px;">Automated provisioning workflows</li>
@@ -554,7 +636,7 @@
               <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-tertiary);">trending_up</span>
               <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Operational Scale</h3>
             </div>
-            <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.7);">
+            <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-surface-variant);">
               <li style="margin-bottom: 8px;">One playbook, unlimited deployments</li>
               <li style="margin-bottom: 8px;">Standardized governance framework</li>
               <li style="margin-bottom: 8px;">Repeatable operational model</li>
@@ -569,7 +651,7 @@
               <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">security</span>
               <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Risk Mitigation</h3>
             </div>
-            <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.7);">
+            <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-surface-variant);">
               <li style="margin-bottom: 8px;">Standardized security posture</li>
               <li style="margin-bottom: 8px;">Consistent compliance baseline</li>
               <li style="margin-bottom: 8px;">Automated validation checks</li>
@@ -607,60 +689,60 @@
     
     <div class="md-slide__content">
       <div class="md-before-after" style="margin-bottom: 32px;">
-        <div class="md-before-after__section md-before-after__section--before" style="background: rgba(255,255,255,0.04);">
+        <div class="md-before-after__section md-before-after__section--before" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.10);">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
             <span class="material-symbols-outlined" style="color: var(--md-sys-color-error);">cancel</span>
             <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Current State</h3>
           </div>
           <ul style="list-style: none; padding: 0; margin: 0;">
-            <li class="md-list-item" style="background: rgba(255,255,255,0.06);">
+            <li class="md-list-item" style="background: rgba(255,255,255,0.10);">
               <span class="material-symbols-outlined" style="color: var(--md-sys-color-error);">warning</span>
               <span>Ad-hoc operational setup with inconsistent processes</span>
             </li>
-            <li class="md-list-item" style="background: rgba(255,255,255,0.06);">
+            <li class="md-list-item" style="background: rgba(255,255,255,0.10);">
               <span class="material-symbols-outlined" style="color: var(--md-sys-color-error);">warning</span>
               <span>2-3 months per brand deployment</span>
             </li>
-            <li class="md-list-item" style="background: rgba(255,255,255,0.06);">
+            <li class="md-list-item" style="background: rgba(255,255,255,0.10);">
               <span class="material-symbols-outlined" style="color: var(--md-sys-color-error);">warning</span>
               <span>Variable quality and security posture</span>
             </li>
-            <li class="md-list-item" style="background: rgba(255,255,255,0.06);">
+            <li class="md-list-item" style="background: rgba(255,255,255,0.10);">
               <span class="material-symbols-outlined" style="color: var(--md-sys-color-error);">warning</span>
               <span>High operational overhead per deployment</span>
             </li>
           </ul>
         </div>
         
-        <div class="md-before-after__section md-before-after__section--after" style="color: var(--md-sys-color-on-primary-container);">
+        <div class="md-before-after__section md-before-after__section--after" style="background: rgba(0, 107, 94, 0.25); border: 1px solid rgba(0, 107, 94, 0.35);">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
             <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">check_circle</span>
-            <h3 style="font: var(--md-sys-typescale-title-large); margin: 0; color: var(--md-sys-color-on-primary-container);">Future State</h3>
+            <h3 style="font: var(--md-sys-typescale-title-large); margin: 0; color: #FFFFFF;">Future State</h3>
           </div>
           <ul style="list-style: none; padding: 0; margin: 0;">
-            <li class="md-list-item" style="background: rgba(255,255,255,0.5);">
+            <li class="md-list-item" style="background: rgba(255,255,255,0.10);">
               <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">check</span>
-              <span style="color: var(--md-sys-color-on-primary-container);">Standardized operational playbook</span>
+              <span style="color: rgba(255, 255, 255, 0.95);">Standardized operational playbook</span>
             </li>
-            <li class="md-list-item" style="background: rgba(255,255,255,0.5);">
+            <li class="md-list-item" style="background: rgba(255,255,255,0.10);">
               <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">check</span>
-              <span style="color: var(--md-sys-color-on-primary-container);">2 weeks per brand deployment</span>
+              <span style="color: rgba(255, 255, 255, 0.95);">2 weeks per brand deployment</span>
             </li>
-            <li class="md-list-item" style="background: rgba(255,255,255,0.5);">
+            <li class="md-list-item" style="background: rgba(255,255,255,0.10);">
               <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">check</span>
-              <span style="color: var(--md-sys-color-on-primary-container);">Consistent governance and compliance</span>
+              <span style="color: rgba(255, 255, 255, 0.95);">Consistent governance and compliance</span>
             </li>
-            <li class="md-list-item" style="background: rgba(255,255,255,0.5);">
+            <li class="md-list-item" style="background: rgba(255,255,255,0.10);">
               <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">check</span>
-              <span style="color: var(--md-sys-color-on-primary-container);">Single team manages all operations</span>
+              <span style="color: rgba(255, 255, 255, 0.95);">Single team manages all operations</span>
             </li>
           </ul>
         </div>
       </div>
 
-      <div class="md-card md-card--filled" style="background: var(--md-sys-color-success-container); margin-bottom: 24px;">
+      <div class="md-card md-card--filled" style="background: rgba(46, 125, 50, 0.2); border: 1px solid rgba(46, 125, 50, 0.4); margin-bottom: 24px;">
         <div class="md-card__content" style="padding: 16px;">
-          <p style="font: var(--md-sys-typescale-body-large); color: var(--md-sys-color-on-success-container); margin: 0;">
+          <p style="font: var(--md-sys-typescale-body-large); color: rgba(255,255,255,0.93); margin: 0;">
             <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 8px;">verified</span>
             The Delta Crown Model transforms multi-brand operations from a cost center to a competitive advantage
           </p>
@@ -668,26 +750,26 @@
       </div>
 
       <div class="md-grid--3-col">
-        <div class="md-card md-card--outlined" style="text-align: center;">
+        <div class="md-card md-card--outlined" style="text-align: center; background: rgba(255,255,255,0.08);">
           <div class="md-card__content" style="padding: 24px;">
             <span class="material-symbols-outlined" style="font-size: 48px; color: var(--md-sys-color-error);">timer</span>
-            <div style="font: var(--md-sys-typescale-headline-small); margin: 8px 0;">2-3 mo</div>
+            <div style="font: var(--md-sys-typescale-headline-small); margin: 8px 0; color: #FFFFFF; font-weight: 600;">2-3 mo</div>
             <div style="font: var(--md-sys-typescale-body-medium); color: rgba(255,255,255,0.7);">Current Deployment Time</div>
           </div>
         </div>
         
-        <div class="md-card md-card--outlined" style="text-align: center;">
+        <div class="md-card md-card--outlined" style="text-align: center; background: rgba(255,255,255,0.08);">
           <div class="md-card__content" style="padding: 24px;">
             <span class="material-symbols-outlined" style="font-size: 48px; color: var(--md-sys-color-success);">timer_off</span>
-            <div style="font: var(--md-sys-typescale-headline-small); margin: 8px 0;">2 wk</div>
+            <div style="font: var(--md-sys-typescale-headline-small); margin: 8px 0; color: #FFFFFF; font-weight: 600;">2 wk</div>
             <div style="font: var(--md-sys-typescale-body-medium); color: rgba(255,255,255,0.7);">Future Deployment Time</div>
           </div>
         </div>
         
-        <div class="md-card md-card--outlined" style="text-align: center;">
+        <div class="md-card md-card--outlined" style="text-align: center; background: rgba(255,255,255,0.08);">
           <div class="md-card__content" style="padding: 24px;">
             <span class="material-symbols-outlined" style="font-size: 48px; color: var(--md-sys-color-primary);">percent</span>
-            <div style="font: var(--md-sys-typescale-headline-small); margin: 8px 0;">75%</div>
+            <div style="font: var(--md-sys-typescale-headline-small); margin: 8px 0; color: #FFFFFF; font-weight: 600;">75%</div>
             <div style="font: var(--md-sys-typescale-body-medium); color: rgba(255,255,255,0.7);">Time Reduction</div>
           </div>
         </div>
@@ -719,15 +801,15 @@
               <p style="font: var(--md-sys-typescale-body-small); color: rgba(255,255,255,0.7); margin: 0;">Parent Organization<br>Existing Infrastructure</p>
             </div>
             
-            <span class="material-symbols-outlined" style="font-size: 48px; color: var(--md-sys-color-primary);">arrow_forward</span>
+            <span class="material-symbols-outlined" style="font-size: 48px; color: var(--dce-royal-gold);">arrow_forward</span>
             
-            <div style="text-align: center; padding: 24px; background: var(--md-sys-color-primary-container); border-radius: var(--md-sys-shape-corner-large);">
+            <div style="text-align: center; padding: 24px; background: rgba(0, 107, 94, 0.25); border: 1px solid rgba(0, 107, 94, 0.4); border-radius: var(--md-sys-shape-corner-large);">
               <span class="material-symbols-outlined" style="font-size: 48px; color: var(--md-sys-color-primary);">autorenew</span>
-              <h4 style="font: var(--md-sys-typescale-title-medium); margin: 8px 0; color: var(--md-sys-color-on-primary-container);">The 8-Phase Framework</h4>
-              <p style="font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-primary-container); margin: 0;">Automated Brand Onboarding<br>Proven, Repeatable Process</p>
+              <h4 style="font: var(--md-sys-typescale-title-medium); margin: 8px 0; color: #FFFFFF;">The 8-Phase Framework</h4>
+              <p style="font: var(--md-sys-typescale-body-small); color: rgba(255,255,255,0.8); margin: 0;">Automated Brand Onboarding<br>Proven, Repeatable Process</p>
             </div>
             
-            <span class="material-symbols-outlined" style="font-size: 48px; color: var(--md-sys-color-primary);">arrow_forward</span>
+            <span class="material-symbols-outlined" style="font-size: 48px; color: var(--dce-royal-gold);">arrow_forward</span>
             
             <div style="text-align: center; padding: 24px; background: rgba(255,255,255,0.06); border-radius: var(--md-sys-shape-corner-large);">
               <img src="../assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_royal-gold.png" 
@@ -751,17 +833,17 @@
           </div>
         </div>
         
-        <span class="material-symbols-outlined" style="color: var(--md-sys-color-outline);">arrow_forward</span>
+        <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.4);">arrow_forward</span>
         
-        <div class="md-card md-card--filled" style="flex: 1; min-width: 200px; background: var(--md-sys-color-primary-container);">
+        <div class="md-card md-card--filled" style="flex: 1; min-width: 200px; background: rgba(0, 107, 94, 0.25); border: 1px solid rgba(0, 107, 94, 0.4);">
           <div class="md-card__content" style="padding: 16px; text-align: center;">
             <span class="material-symbols-outlined" style="font-size: 32px; color: var(--md-sys-color-primary);">badge</span>
-            <h4 style="font: var(--md-sys-typescale-title-small); margin: 8px 0; color: var(--md-sys-color-on-primary-container);">Brand Resources</h4>
-            <p style="font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-primary-container); margin: 0;">@deltacrown.com Identity<br>Zero Additional Cost</p>
+            <h4 style="font: var(--md-sys-typescale-title-small); margin: 8px 0; color: #FFFFFF;">Brand Resources</h4>
+            <p style="font: var(--md-sys-typescale-body-small); color: rgba(255,255,255,0.8); margin: 0;">@deltacrown.com Identity<br>Zero Additional Cost</p>
           </div>
         </div>
         
-        <span class="material-symbols-outlined" style="color: var(--md-sys-color-outline);">arrow_forward</span>
+        <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.4);">arrow_forward</span>
         
         <div class="md-card md-card--filled" style="flex: 1; min-width: 200px; background: rgba(255,255,255,0.06);">
           <div class="md-card__content" style="padding: 16px; text-align: center;">
@@ -822,7 +904,7 @@
               <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">sync</span>
               <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Automated User Provisioning</h3>
             </div>
-            <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.7);">
+            <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-surface-variant);">
               <li style="margin-bottom: 8px;">Zero manual user configuration</li>
               <li style="margin-bottom: 8px;">Seamless access across brand environments</li>
               <li style="margin-bottom: 8px;">Automated synchronization framework</li>
@@ -837,7 +919,7 @@
               <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">inventory_2</span>
               <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Resource Optimization</h3>
             </div>
-            <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.7);">
+            <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-surface-variant);">
               <li style="margin-bottom: 8px;">Shared resource model eliminates per-user costs</li>
               <li style="margin-bottom: 8px;">Automated resource provisioning</li>
               <li style="margin-bottom: 8px;">Professional brand identity setup</li>
@@ -852,7 +934,7 @@
               <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-tertiary);">groups</span>
               <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Collaboration Infrastructure</h3>
             </div>
-            <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.7);">
+            <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-surface-variant);">
               <li style="margin-bottom: 8px;">Brand-specific collaboration spaces</li>
               <li style="margin-bottom: 8px;">Template-driven provisioning</li>
               <li style="margin-bottom: 8px;">Standardized workspace creation</li>
@@ -867,7 +949,7 @@
               <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">verified_user</span>
               <h3 style="font: var(--md-sys-typescale-title-large); margin: 0;">Governance & Compliance</h3>
             </div>
-            <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.7);">
+            <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-surface-variant);">
               <li style="margin-bottom: 8px;">Standardized authentication trust</li>
               <li style="margin-bottom: 8px;">Baseline security policies applied</li>
               <li style="margin-bottom: 8px;">Email deliverability standards</li>
@@ -1133,9 +1215,9 @@
         <div class="md-risk-quadrant md-risk-quadrant--high">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
             <span class="material-symbols-outlined" style="color: var(--md-sys-color-error);">warning</span>
-            <h4 style="font: var(--md-sys-typescale-title-large); margin: 0; color: var(--md-sys-color-on-error-container);">High Impact / High Probability</h4>
+            <h4 style="font: var(--md-sys-typescale-title-large); margin: 0; color: #FFFFFF;">High Impact / High Probability</h4>
           </div>
-          <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-error-container);">
+          <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.9);">
             <li style="margin-bottom: 8px;"><strong>Email Deliverability</strong> - Authentication framework already live; validation in final phase</li>
             <li><strong>Identity Sync Errors</strong> - Automated validation checks; phased deployment approach</li>
           </ul>
@@ -1144,9 +1226,9 @@
         <div class="md-risk-quadrant md-risk-quadrant--medium">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
             <span class="material-symbols-outlined" style="color: var(--md-sys-color-warning);">error</span>
-            <h4 style="font: var(--md-sys-typescale-title-large); margin: 0; color: var(--md-sys-color-on-warning-container);">High Impact / Low Probability</h4>
+            <h4 style="font: var(--md-sys-typescale-title-large); margin: 0; color: #FFFFFF;">High Impact / Low Probability</h4>
           </div>
-          <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-warning-container);">
+          <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.9);">
             <li style="margin-bottom: 8px;"><strong>User Sync Failure</strong> - Monitor sync logs; fallback procedures in place</li>
             <li style="margin-bottom: 8px;"><strong>Collaboration Access Issues</strong> - Full access verification framework</li>
             <li><strong>Governance Policy Conflicts</strong> - Staged enforcement approach</li>
@@ -1156,9 +1238,9 @@
         <div class="md-risk-quadrant md-risk-quadrant--low">
           <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
             <span class="material-symbols-outlined" style="color: var(--md-sys-color-success);">check_circle</span>
-            <h4 style="font: var(--md-sys-typescale-title-large); margin: 0; color: var(--md-sys-color-on-success-container);">Low Impact / High Probability</h4>
+            <h4 style="font: var(--md-sys-typescale-title-large); margin: 0; color: #FFFFFF;">Low Impact / High Probability</h4>
           </div>
-          <ul style="margin: 0; padding-left: 20px; color: var(--md-sys-color-on-success-container);">
+          <ul style="margin: 0; padding-left: 20px; color: rgba(255,255,255,0.9);">
             <li style="margin-bottom: 8px;"><strong>User Adaptation</strong> - Training documentation; clear naming conventions</li>
             <li style="margin-bottom: 8px;"><strong>Sync Delays</strong> - Typical 5-10 minutes; communicate to users</li>
             <li><strong>Outlook Auto-Mapping</strong> - Manual mailbox addition available</li>
@@ -1178,13 +1260,13 @@
         </div>
       </div>
 
-      <div class="md-card md-card--filled" style="background: var(--md-sys-color-warning-container);">
+      <div class="md-card md-card--filled" style="background: rgba(237, 108, 2, 0.15); border: 1px solid rgba(237, 108, 2, 0.35);">
         <div class="md-card__content" style="padding: 20px;">
-          <h3 style="font: var(--md-sys-typescale-title-large); margin-bottom: 12px; color: var(--md-sys-color-on-warning-container); display: flex; align-items: center; gap: 12px;">
+          <h3 style="font: var(--md-sys-typescale-title-large); margin-bottom: 12px; color: #FFCC80; display: flex; align-items: center; gap: 12px;">
             <span class="material-symbols-outlined">notification_important</span>
             Primary Risk: User Experience During Transition
           </h3>
-          <p style="font: var(--md-sys-typescale-body-medium); color: var(--md-sys-color-on-warning-container); margin: 0;">
+          <p style="font: var(--md-sys-typescale-body-medium); color: rgba(255,255,255,0.9); margin: 0;">
             The most significant operational risk is user adaptation when accessing multiple brand environments. 
             <strong>Mitigation strategy:</strong> Comprehensive training materials, clear operational documentation, 
             and dedicated support during the first 30 days post-rollout.
@@ -1456,9 +1538,9 @@
     </div>
     
     <div class="md-slide__content">
-      <div class="md-card md-card--filled" style="background: var(--md-sys-color-success-container); margin-bottom: 24px;">
+      <div class="md-card md-card--filled" style="background: rgba(46, 125, 50, 0.2); border: 1px solid rgba(46, 125, 50, 0.4); margin-bottom: 24px;">
         <div class="md-card__content" style="padding: 24px;">
-          <h3 style="font: var(--md-sys-typescale-title-large); margin-bottom: 12px; color: var(--md-sys-color-on-success-container); display: flex; align-items: center; gap: 12px;">
+          <h3 style="font: var(--md-sys-typescale-title-large); margin-bottom: 12px; color: #A5D6A7; display: flex; align-items: center; gap: 12px;">
             <span class="material-symbols-outlined">verified</span>
             Executive Recommendation
           </h3>
@@ -1548,7 +1630,7 @@
         </div>
       </div>
 
-      <div class="md-card md-card--filled" style="background: rgba(255,255,255,0.06); margin-bottom: 24px;">
+      <div class="md-card md-card--filled" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); margin-bottom: 24px;">
         <div class="md-card__content" style="padding: 24px; text-align: center;">
           <h3 style="font: var(--md-sys-typescale-title-large); margin-bottom: 16px; color: var(--dce-royal-gold);">
             <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 8px;">forum</span>
@@ -1570,7 +1652,7 @@
         </div>
       </div>
 
-      <div style="text-align: center; padding-top: 16px; border-top: 1px solid rgba(212, 168, 75, 0.2);">
+      <div style="text-align: center; padding-top: 16px; border-top: 1px solid rgba(212, 168, 75, 0.25);">
         <p style="font: var(--md-sys-typescale-title-large); color: var(--dce-royal-gold); margin: 0;">
           <span class="material-symbols-outlined" style="vertical-align: middle;">stars</span>
           Delta Crown Extensions

@@ -280,8 +280,8 @@
   --dce-gradient-card-shine: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
 
   /* Glass Effects */
-  --dce-glass-bg: rgba(255, 255, 255, 0.06);
-  --dce-glass-border: rgba(255, 255, 255, 0.12);
+  --dce-glass-bg: rgba(255, 255, 255, 0.10);
+  --dce-glass-border: rgba(255, 255, 255, 0.18);
   --dce-glass-bg-light: rgba(255, 255, 255, 0.7);
   --dce-glass-blur: 20px;
 
