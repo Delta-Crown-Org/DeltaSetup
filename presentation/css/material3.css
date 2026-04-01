@@ -17,63 +17,94 @@
    1. MATERIAL SYMBOLS FONT IMPORT
    ============================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Tenor+Sans&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
 
 /* ============================================
    2. DESIGN TOKENS - CSS CUSTOM PROPERTIES
    ============================================ */
 
 :root {
+  /* ============================================
+     DELTA CROWN BRAND TOKENS
+     ============================================ */
+  
+  /* Primary - Deep Teal */
+  --dce-deep-teal: #006B5E;
+  --dce-deep-teal-light: #4A9B8E;
+  --dce-deep-teal-dark: #004D44;
+  
+  /* Secondary - Royal Gold */
+  --dce-royal-gold: #D4A84B;
+  --dce-royal-gold-light: #E8C989;
+  --dce-royal-gold-dark: #B8943F;
+  
+  /* Backgrounds */
+  --dce-cream: #F5F3EF;
+  --dce-cream-light: #FAF8F5;
+  --dce-white: #FFFFFF;
+  
+  /* Text */
+  --dce-dark-navy: #1A2A3A;
+  --dce-text-secondary: #4A5A6A;
+  --dce-text-muted: #7A8A9A;
+  
+  /* Accents */
+  --dce-sage: #7A9B8A;
+  --dce-warm-beige: #E8E4DC;
+  
+  /* Typography */
+  --dce-font-heading: 'Playfair Display', Georgia, serif;
+  --dce-font-body: 'Tenor Sans', -apple-system, sans-serif;
   /* ----------------------------------------
      Primary Colors (Deep Teal)
      ---------------------------------------- */
-  --md-sys-color-primary: #006B5E;
+  --md-sys-color-primary: var(--dce-deep-teal);
   --md-sys-color-on-primary: #FFFFFF;
-  --md-sys-color-primary-container: #B3E5D9;
-  --md-sys-color-on-primary-container: #003D34;
+  --md-sys-color-primary-container: #E8F5F2;
+  --md-sys-color-on-primary-container: var(--dce-deep-teal-dark);
   
   /* ----------------------------------------
      Secondary Colors (Royal Gold)
      ---------------------------------------- */
-  --md-sys-color-secondary: #D4A84B;
-  --md-sys-color-on-secondary: #1A1A1A;
-  --md-sys-color-secondary-container: #FFF3D4;
-  --md-sys-color-on-secondary-container: #4A3D00;
+  --md-sys-color-secondary: var(--dce-royal-gold);
+  --md-sys-color-on-secondary: var(--dce-dark-navy);
+  --md-sys-color-secondary-container: #FFF8E7;
+  --md-sys-color-on-secondary-container: var(--dce-royal-gold-dark);
   
   /* ----------------------------------------
      Tertiary Colors (Sage)
      ---------------------------------------- */
-  --md-sys-color-tertiary: #7A9B8A;
+  --md-sys-color-tertiary: var(--dce-sage);
   --md-sys-color-on-tertiary: #FFFFFF;
-  --md-sys-color-tertiary-container: #E4F5EB;
-  --md-sys-color-on-tertiary-container: #1A3329;
+  --md-sys-color-tertiary-container: #F0F5F2;
+  --md-sys-color-on-tertiary-container: #2D4A3C;
   
   /* ----------------------------------------
-     Surface Colors
+     Surface Colors (Cream-based)
      ---------------------------------------- */
-  --md-sys-color-surface: #FAFDFB;
-  --md-sys-color-surface-variant: #E7F0ED;
-  --md-sys-color-on-surface: #1A1C1B;
-  --md-sys-color-on-surface-variant: #3F4946;
-  --md-sys-color-background: #FAFDFB;
-  --md-sys-color-on-background: #1A1C1B;
+  --md-sys-color-surface: var(--dce-cream-light);
+  --md-sys-color-surface-variant: var(--dce-cream);
+  --md-sys-color-on-surface: var(--dce-dark-navy);
+  --md-sys-color-on-surface-variant: var(--dce-text-secondary);
+  --md-sys-color-background: var(--dce-cream-light);
+  --md-sys-color-on-background: var(--dce-dark-navy);
   
   /* ----------------------------------------
      Additional Surface Colors
      ---------------------------------------- */
-  --md-sys-color-surface-dim: #D7DBD9;
-  --md-sys-color-surface-bright: #FAFDFB;
+  --md-sys-color-surface-dim: var(--dce-warm-beige);
+  --md-sys-color-surface-bright: var(--dce-cream-light);
   --md-sys-color-surface-container-lowest: #FFFFFF;
-  --md-sys-color-surface-container-low: #F4F7F6;
-  --md-sys-color-surface-container: #EEF2F0;
-  --md-sys-color-surface-container-high: #E8ECEA;
-  --md-sys-color-surface-container-highest: #E3E7E5;
+  --md-sys-color-surface-container-low: var(--dce-cream);
+  --md-sys-color-surface-container: var(--dce-warm-beige);
+  --md-sys-color-surface-container-high: #E0DCD4;
+  --md-sys-color-surface-container-highest: #D8D4CC;
   
   /* ----------------------------------------
      Outline Colors
      ---------------------------------------- */
-  --md-sys-color-outline: #6F7975;
-  --md-sys-color-outline-variant: #BFC9C5;
+  --md-sys-color-outline: var(--dce-text-muted);
+  --md-sys-color-outline-variant: var(--dce-warm-beige);
   
   /* ----------------------------------------
      Error Colors
@@ -132,34 +163,36 @@
   --md-sys-elevation-level5: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   
   /* ----------------------------------------
-     Shape (Corner Radius)
+     Shape (Corner Radius) - Square for Delta Crown Luxury Feel
      ---------------------------------------- */
   --md-sys-shape-corner-none: 0px;
-  --md-sys-shape-corner-extra-small: 4px;
-  --md-sys-shape-corner-small: 8px;
-  --md-sys-shape-corner-medium: 12px;
-  --md-sys-shape-corner-large: 16px;
-  --md-sys-shape-corner-extra-large: 28px;
-  --md-sys-shape-corner-full: 50%;
+  --md-sys-shape-corner-extra-small: 0px;
+  --md-sys-shape-corner-small: 0px;
+  --md-sys-shape-corner-medium: 0px;
+  --md-sys-shape-corner-large: 0px;
+  --md-sys-shape-corner-extra-large: 0px;
+  --md-sys-shape-corner-full: 0px;
   
   /* ----------------------------------------
-     Typography Scale
+     Typography Scale (Delta Crown)
      ---------------------------------------- */
-  --md-sys-typescale-display-large: 400 57px/64px 'Roboto', sans-serif;
-  --md-sys-typescale-display-medium: 400 45px/52px 'Roboto', sans-serif;
-  --md-sys-typescale-display-small: 400 36px/44px 'Roboto', sans-serif;
-  --md-sys-typescale-headline-large: 400 32px/40px 'Roboto', sans-serif;
-  --md-sys-typescale-headline-medium: 400 28px/36px 'Roboto', sans-serif;
-  --md-sys-typescale-headline-small: 400 24px/32px 'Roboto', sans-serif;
-  --md-sys-typescale-title-large: 500 22px/28px 'Roboto', sans-serif;
-  --md-sys-typescale-title-medium: 500 16px/24px 'Roboto', sans-serif;
-  --md-sys-typescale-title-small: 500 14px/20px 'Roboto', sans-serif;
-  --md-sys-typescale-body-large: 400 16px/24px 'Roboto', sans-serif;
-  --md-sys-typescale-body-medium: 400 14px/20px 'Roboto', sans-serif;
-  --md-sys-typescale-body-small: 400 12px/16px 'Roboto', sans-serif;
-  --md-sys-typescale-label-large: 500 14px/20px 'Roboto', sans-serif;
-  --md-sys-typescale-label-medium: 500 12px/16px 'Roboto', sans-serif;
-  --md-sys-typescale-label-small: 500 11px/16px 'Roboto', sans-serif;
+  /* Headings: Playfair Display */
+  --md-sys-typescale-display-large: 600 57px/64px 'Playfair Display', Georgia, serif;
+  --md-sys-typescale-display-medium: 600 45px/52px 'Playfair Display', Georgia, serif;
+  --md-sys-typescale-display-small: 600 36px/44px 'Playfair Display', Georgia, serif;
+  --md-sys-typescale-headline-large: 600 32px/40px 'Playfair Display', Georgia, serif;
+  --md-sys-typescale-headline-medium: 600 28px/36px 'Playfair Display', Georgia, serif;
+  --md-sys-typescale-headline-small: 600 24px/32px 'Playfair Display', Georgia, serif;
+  /* Body: Tenor Sans */
+  --md-sys-typescale-title-large: 400 22px/28px 'Tenor Sans', -apple-system, sans-serif;
+  --md-sys-typescale-title-medium: 400 16px/24px 'Tenor Sans', -apple-system, sans-serif;
+  --md-sys-typescale-title-small: 400 14px/20px 'Tenor Sans', -apple-system, sans-serif;
+  --md-sys-typescale-body-large: 400 16px/24px 'Tenor Sans', -apple-system, sans-serif;
+  --md-sys-typescale-body-medium: 400 14px/20px 'Tenor Sans', -apple-system, sans-serif;
+  --md-sys-typescale-body-small: 400 12px/16px 'Tenor Sans', -apple-system, sans-serif;
+  --md-sys-typescale-label-large: 500 14px/20px 'Tenor Sans', -apple-system, sans-serif;
+  --md-sys-typescale-label-medium: 500 12px/16px 'Tenor Sans', -apple-system, sans-serif;
+  --md-sys-typescale-label-small: 500 11px/16px 'Tenor Sans', -apple-system, sans-serif;
   
   /* ----------------------------------------
      Spacing Scale (4dp grid)
@@ -439,10 +472,10 @@ body {
   padding: 0 var(--md-sys-spacing-6);
   height: 40px;
   border: none;
-  border-radius: var(--md-sys-shape-corner-full);
+  border-radius: var(--md-sys-shape-corner-medium);
   font: var(--md-sys-typescale-label-large);
-  text-transform: none;
-  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   cursor: pointer;
   overflow: hidden;
   transition: 
@@ -461,15 +494,15 @@ body {
   cursor: not-allowed;
 }
 
-/* Filled Button */
+/* Filled Button - Gold for CTA */
 .md-btn--filled {
-  background-color: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
   box-shadow: var(--md-sys-elevation-level0);
 }
 
 .md-btn--filled:hover {
-  background-color: var(--md-sys-color-primary);
+  background-color: var(--dce-royal-gold-dark);
   box-shadow: var(--md-sys-elevation-level1);
 }
 
@@ -477,7 +510,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-color: var(--md-sys-color-on-primary);
+  background-color: var(--md-sys-color-on-secondary);
   opacity: var(--md-sys-state-hover-opacity);
 }
 
@@ -486,26 +519,26 @@ body {
 }
 
 .md-btn--filled:focus {
-  background-color: var(--md-sys-color-primary);
+  background-color: var(--md-sys-color-secondary);
 }
 
 .md-btn--filled:focus::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-color: var(--md-sys-color-on-primary);
+  background-color: var(--md-sys-color-on-secondary);
   opacity: var(--md-sys-state-focus-opacity);
 }
 
-/* Tonal Button */
+/* Tonal Button - Deep Teal */
 .md-btn--tonal {
-  background-color: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
   box-shadow: var(--md-sys-elevation-level0);
 }
 
 .md-btn--tonal:hover {
-  background-color: var(--md-sys-color-secondary-container);
+  background-color: var(--md-sys-color-primary-container);
   box-shadow: var(--md-sys-elevation-level1);
 }
 
@@ -513,7 +546,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-color: var(--md-sys-color-on-secondary-container);
+  background-color: var(--md-sys-color-on-primary-container);
   opacity: var(--md-sys-state-hover-opacity);
 }
 
