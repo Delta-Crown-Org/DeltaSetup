@@ -1,2 +1,13 @@
 UserPrincipalName,DisplayName,CurrentCompanyName,NewCompanyName,CurrentJobTitle,NewJobTitle,CurrentDepartment,NewDepartment,TargetGroups,Notes
-tyler.granlund@deltacrownext.onmicrosoft.com,Tyler Granlund,,Delta Crown Extensions,,Operations Director,,Operations,"SG-DCE-AllStaff,SG-DCE-Leadership",Admin/Owner
+tyler.granlund@deltacrownext.onmicrosoft.com,Tyler Granlund,,Delta Crown Extensions,,IT Director,,IT,"SG-DCE-AllStaff,SG-DCE-Leadership",VERIFY UPN — Owner/Admin. httbrands: tyler.granlund@httbrands.com
+kristin.kidd@deltacrownext.onmicrosoft.com,Kristin Kidd,,Delta Crown Extensions,,CEO,,Executive,"SG-DCE-AllStaff,SG-DCE-Leadership",VERIFY UPN + TITLE — Access to 16+ HTTHQ folders. httbrands: Kristin.Kidd@httbrands.com
+joe.honkala@deltacrownext.onmicrosoft.com,Joe Honkala,,Delta Crown Extensions,,CFO,,Finance,"SG-DCE-AllStaff,SG-DCE-Leadership",VERIFY UPN + TITLE — Finance Owner on HTTHQ. httbrands: Joe.Honkala@httbrands.com
+meg.roberts@deltacrownext.onmicrosoft.com,Meg Roberts,,Delta Crown Extensions,,VP Operations,,Operations,"SG-DCE-AllStaff,SG-DCE-Leadership",VERIFY UPN + TITLE — Access to 15+ HTTHQ folders. httbrands: Meg.Roberts@httbrands.com
+karen.meek@deltacrownext.onmicrosoft.com,Karen Meek,,Delta Crown Extensions,,VP,,Executive,"SG-DCE-AllStaff,SG-DCE-Leadership",VERIFY UPN + TITLE — Access to 14+ HTTHQ folders. httbrands: Karen.Meek@httbrands.com
+erica.upshur@deltacrownext.onmicrosoft.com,Erica Upshur,,Delta Crown Extensions,,Director,,Operations,"SG-DCE-AllStaff,SG-DCE-Leadership",VERIFY UPN + TITLE. httbrands: Erica.Upshur@httbrands.com
+keith.becker@deltacrownext.onmicrosoft.com,Keith Becker,,Delta Crown Extensions,,Finance Manager,,Finance,"SG-DCE-AllStaff,SG-DCE-Leadership",VERIFY UPN + TITLE — Finance co-owner + IT access. httbrands: Keith.Becker@httbrands.com
+allison.steimel@deltacrownext.onmicrosoft.com,Allison Steimel,,Delta Crown Extensions,,,,"SG-DCE-AllStaff",VERIFY UPN + TITLE + DEPT — Brand Leads access. httbrands: Allison.Steimel@httbrands.com
+john.babcock@deltacrownext.onmicrosoft.com,John Babcock,,Delta Crown Extensions,,,,"SG-DCE-AllStaff",VERIFY UPN + TITLE + DEPT — Brand Leads access. httbrands: John.Babcock@httbrands.com
+noelle.peter@deltacrownext.onmicrosoft.com,Noelle Peter,,Delta Crown Extensions,,,,,"SG-DCE-AllStaff",VERIFY UPN + TITLE + DEPT — Education/Fran Dev. httbrands: Noelle.Peter@httbrands.com
+scot.cannon@deltacrownext.onmicrosoft.com,Scot Cannon,,Delta Crown Extensions,,,,"SG-DCE-AllStaff",VERIFY UPN + TITLE + DEPT — Brand Leads. httbrands: Scot.Cannon@httbrands.com
+kelli.kline@deltacrownext.onmicrosoft.com,Kelli Kline,,Delta Crown Extensions,,,,"SG-DCE-AllStaff",VERIFY UPN + TITLE + DEPT — Fran Dev. httbrands: Kelli.Kline@httbrands.com
