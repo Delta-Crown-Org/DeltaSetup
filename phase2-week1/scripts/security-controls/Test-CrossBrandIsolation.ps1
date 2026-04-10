@@ -8,7 +8,7 @@
 # REQUIRED: PnP.PowerShell module, test accounts for each brand
 # ============================================================================
 
-#Requires -Modules PnP.PowerShell
+#Requires -Modules @{ModuleName="PnP.PowerShell";ModuleVersion="2.0.0"}
 
 [CmdletBinding()]
 param(

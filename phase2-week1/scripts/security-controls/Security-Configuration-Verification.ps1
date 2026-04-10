@@ -8,7 +8,7 @@
 # REQUIRED: PnP.PowerShell, Microsoft.Graph.Groups
 # ============================================================================
 
-#Requires -Modules PnP.PowerShell, Microsoft.Graph.Groups
+#Requires -Modules @{ModuleName="PnP.PowerShell";ModuleVersion="2.0.0"}, @{ModuleName="Microsoft.Graph.Groups";ModuleVersion="2.0.0"}
 
 [CmdletBinding()]
 param(

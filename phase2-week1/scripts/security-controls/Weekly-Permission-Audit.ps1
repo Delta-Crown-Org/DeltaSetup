@@ -12,7 +12,7 @@
 # REQUIRED ROLE: SharePoint Admin or Global Reader
 # ============================================================================
 
-#Requires -Modules PnP.PowerShell
+#Requires -Modules @{ModuleName="PnP.PowerShell";ModuleVersion="2.0.0"}
 
 [CmdletBinding()]
 param(
