@@ -196,7 +196,7 @@ Write-DeltaCrownLog "Environment: $Environment" "INFO"
 # Connect to Microsoft Graph
 try {
     $authConfig = Import-DeltaCrownAuthConfig -Environment $Environment
-    Connect-DeltaCrownGraph -AuthConfig $authConfig -Scopes @(
+    Connect-DeltaCrownGraph -AuthConfig $authConfig -RequiredScopes @(
         "User.Read.All",
         "Group.Read.All",
         "Directory.Read.All"

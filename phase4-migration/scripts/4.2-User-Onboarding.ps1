@@ -323,7 +323,7 @@ if ($WhatIfPreference) {
 # Connect to Microsoft Graph
 try {
     $authConfig = Import-DeltaCrownAuthConfig -Environment $Environment
-    Connect-DeltaCrownGraph -AuthConfig $authConfig -Scopes @(
+    Connect-DeltaCrownGraph -AuthConfig $authConfig -RequiredScopes @(
         "User.ReadWrite.All",
         "Group.Read.All",
         "Directory.ReadWrite.All"
