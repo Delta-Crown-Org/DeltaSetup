@@ -1,0 +1,192 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/site-design-script-actions.schema.json",
+  "templates": {
+    "displayName": "Delta Crown Extensions Hub Template",
+    "description": "Template for DCE branded hub with gold/black theme",
+    "id": "dce-hub-template-v1",
+    "version": "1.0.0",
+    "sites": {
+      "brandHub": {
+        "title": "Delta Crown Extensions Hub",
+        "description": "Delta Crown Extensions operational hub",
+        "url": "sites/dce-hub",
+        "template": "SITEPAGEPUBLISHING#0",
+        "timeZone": 10,
+        "lcid": 1033,
+        "isHub": true,
+        "parentHub": "sites/corp-hub",
+        "branding": {
+          "themeName": "Delta Crown Extensions Theme",
+          "colors": {
+            "primary": "#C9A227",
+            "secondary": "#1A1A1A",
+            "accent": "#D4B43F",
+            "textOnDark": "#FFFFFF",
+            "textOnLight": "#1A1A1A"
+          },
+          "logo": {
+            "description": "DCE Logo - Gold crown on black background"
+          },
+          "header": {
+            "layout": "Standard",
+            "emphasis": "Strong",
+            "background": "#1A1A1A"
+          }
+        },
+        "navigation": {
+          "type": "HubNavigation",
+          "inheritFromParent": true,
+          "nodes": [
+            {
+              "title": "Home",
+              "url": "sites/dce-hub",
+              "isHome": true
+            },
+            {
+              "title": "Operations",
+              "url": "sites/dce-hub/SitePages/Operations.aspx",
+              "isHome": false
+            },
+            {
+              "title": "Client Services",
+              "url": "sites/dce-hub/SitePages/Client-Services.aspx",
+              "isHome": false
+            },
+            {
+              "title": "Marketing",
+              "url": "sites/dce-hub/SitePages/Marketing.aspx",
+              "isHome": false
+            },
+            {
+              "title": "Document Center",
+              "url": "sites/dce-hub/SitePages/Document-Center.aspx",
+              "isHome": false
+            }
+          ]
+        },
+        "features": {
+          "enableExternalSharing": false,
+          "enableAppInstall": true,
+          "enableCustomScripts": false
+        },
+        "security": {
+          "breakInheritance": false,
+          "owners": ["SG-DCE-Leadership"],
+          "members": ["SG-DCE-AllStaff"],
+          "visitors": []
+        },
+        "lists": [
+          {
+            "title": "Announcements",
+            "template": 104,
+            "description": "DCE announcements and updates",
+            "contentTypesEnabled": true,
+            "versioningEnabled": true
+          },
+          {
+            "title": "Policies and Procedures",
+            "template": 101,
+            "description": "DCE operational policies",
+            "folderStructure": [
+              "Operations",
+              "Client Services",
+              "Marketing",
+              "HR"
+            ]
+          },
+          {
+            "title": "Resource Library",
+            "template": 101,
+            "description": "Templates, guides, and resources",
+            "contentTypes": ["Document", "Link"]
+          }
+        ]
+      }
+    },
+    "themes": {
+      "deltaCrownExtensions": {
+        "name": "Delta Crown Extensions Theme",
+        "isInverted": false,
+        "palette": {
+          "themePrimary": "#C9A227",
+          "themeLighterAlt": "#FBF7EA",
+          "themeLighter": "#F2E8C4",
+          "themeLight": "#E8D798",
+          "themeTertiary": "#D4B44F",
+          "themeSecondary": "#C9A227",
+          "themeDarkAlt": "#B08D1F",
+          "themeDark": "#947719",
+          "themeDarker": "#6D5813",
+          "neutralLighterAlt": "#F8F8F8",
+          "neutralLighter": "#F4F4F4",
+          "neutralLight": "#EAEAEA",
+          "neutralQuaternaryAlt": "#DADADA",
+          "neutralQuaternary": "#D0D0D0",
+          "neutralTertiaryAlt": "#C8C8C8",
+          "neutralTertiary": "#A19F9D",
+          "neutralSecondary": "#605E5C",
+          "neutralSecondaryAlt": "#8A8886",
+          "neutralPrimaryAlt": "#3B3A39",
+          "neutralPrimary": "#1A1A1A",
+          "neutralDark": "#201F1E",
+          "black": "#1A1A1A",
+          "white": "#FFFFFF",
+          "bodyBackground": "#FFFFFF",
+          "bodyText": "#1A1A1A"
+        }
+      }
+    },
+    "siteScripts": {
+      "createPageStructure": {
+        "actions": [
+          {
+            "verb": "createSPList",
+            "listName": "Announcements",
+            "templateType": 104,
+            "subactions": [
+              {
+                "verb": "setDescription",
+                "description": "DCE announcements and updates"
+              }
+            ]
+          },
+          {
+            "verb": "addNavLink",
+            "url": "sites/dce-hub/SitePages/Operations.aspx",
+            "displayName": "Operations",
+            "isWebRelative": true
+          },
+          {
+            "verb": "addNavLink",
+            "url": "sites/dce-hub/SitePages/Client-Services.aspx",
+            "displayName": "Client Services",
+            "isWebRelative": true
+          },
+          {
+            "verb": "addNavLink",
+            "url": "sites/dce-hub/SitePages/Marketing.aspx",
+            "displayName": "Marketing",
+            "isWebRelative": true
+          },
+          {
+            "verb": "addNavLink",
+            "url": "sites/dce-hub/SitePages/Document-Center.aspx",
+            "displayName": "Document Center",
+            "isWebRelative": true
+          },
+          {
+            "verb": "applyTheme",
+            "themeName": "Delta Crown Extensions Theme"
+          }
+        ]
+      }
+    }
+  },
+  "metadata": {
+    "author": "Delta Crown Extensions IT",
+    "created": "2025-01-20",
+    "version": "1.0.0",
+    "brand": "Delta Crown Extensions",
+    "tags": ["dce", "brand-hub", "franchise", "gold-theme"]
+  }
+}

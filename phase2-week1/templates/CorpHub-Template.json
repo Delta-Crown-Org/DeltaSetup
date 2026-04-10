@@ -1,0 +1,201 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/site-design-script-actions.schema.json",
+  "templates": {
+    "displayName": "Corporate Shared Services Hub Template",
+    "description": "Template for Corporate Hub and associated service sites",
+    "id": "corporate-hub-template-v1",
+    "version": "1.0.0",
+    "sites": {
+      "corporateHub": {
+        "title": "Corporate Shared Services",
+        "description": "Central hub for shared franchise resources",
+        "url": "sites/corp-hub",
+        "template": "SITEPAGEPUBLISHING#0",
+        "timeZone": 10,
+        "lcid": 1033,
+        "isHub": true,
+        "navigation": {
+          "type": "HubNavigation",
+          "nodes": [
+            {
+              "title": "Home",
+              "url": "sites/corp-hub",
+              "isHome": true
+            },
+            {
+              "title": "HR Resources",
+              "url": "sites/corp-hr",
+              "isHome": false
+            },
+            {
+              "title": "IT Support",
+              "url": "sites/corp-it",
+              "isHome": false
+            },
+            {
+              "title": "Finance",
+              "url": "sites/corp-finance",
+              "isHome": false
+            },
+            {
+              "title": "Training",
+              "url": "sites/corp-training",
+              "isHome": false
+            }
+          ]
+        },
+        "features": {
+          "enableExternalSharing": false,
+          "enableAppInstall": true,
+          "enableCustomScripts": false
+        },
+        "security": {
+          "breakInheritance": false,
+          "owners": [],
+          "members": [],
+          "visitors": []
+        },
+        "lists": [
+          {
+            "title": "Announcements",
+            "template": 104,
+            "description": "Corporate announcements and news",
+            "contentTypesEnabled": true,
+            "versioningEnabled": true,
+            "majorVersions": 50,
+            "minorVersions": 10
+          },
+          {
+            "title": "Documents",
+            "template": 101,
+            "description": "Shared corporate documents",
+            "contentTypesEnabled": true,
+            "versioningEnabled": true,
+            "requireCheckout": true
+          },
+          {
+            "title": "Links",
+            "template": 103,
+            "description": "Important corporate links and resources"
+          }
+        ]
+      },
+      "associatedSites": [
+        {
+          "title": "Corporate HR",
+          "description": "Human Resources shared services",
+          "url": "sites/corp-hr",
+          "template": "SITEPAGEPUBLISHING#0",
+          "hubAssociation": "sites/corp-hub",
+          "lists": [
+            {
+              "title": "Policies",
+              "template": 101,
+              "description": "HR policies and procedures"
+            },
+            {
+              "title": "Forms",
+              "template": 101,
+              "description": "Employee forms and documents"
+            }
+          ]
+        },
+        {
+          "title": "Corporate IT",
+          "description": "IT support and infrastructure services",
+          "url": "sites/corp-it",
+          "template": "SITEPAGEPUBLISHING#0",
+          "hubAssociation": "sites/corp-hub",
+          "lists": [
+            {
+              "title": "Knowledge Base",
+              "template": 100,
+              "description": "IT support articles"
+            },
+            {
+              "title": "Service Requests",
+              "template": 100,
+              "description": "IT service request tracking"
+            }
+          ]
+        },
+        {
+          "title": "Corporate Finance",
+          "description": "Financial services and reporting",
+          "url": "sites/corp-finance",
+          "template": "SITEPAGEPUBLISHING#0",
+          "hubAssociation": "sites/corp-hub",
+          "security": {
+            "sensitivityLabel": "Confidential"
+          },
+          "lists": [
+            {
+              "title": "Reports",
+              "template": 101,
+              "description": "Financial reports and statements"
+            },
+            {
+              "title": "Budgets",
+              "template": 101,
+              "description": "Budget documents and planning"
+            }
+          ]
+        },
+        {
+          "title": "Corporate Training",
+          "description": "Training and development resources",
+          "url": "sites/corp-training",
+          "template": "SITEPAGEPUBLISHING#0",
+          "hubAssociation": "sites/corp-hub",
+          "lists": [
+            {
+              "title": "Course Catalog",
+              "template": 100,
+              "description": "Available training courses"
+            },
+            {
+              "title": "Certifications",
+              "template": 100,
+              "description": "Certification tracking"
+            }
+          ]
+        }
+      ]
+    },
+    "themes": {
+      "corporate": {
+        "name": "Corporate Theme",
+        "palette": {
+          "themePrimary": "#0078D4",
+          "themeLighterAlt": "#EFF6FC",
+          "themeLighter": "#DEECF9",
+          "themeLight": "#C7E0F4",
+          "themeTertiary": "#71AFE5",
+          "themeSecondary": "#2B88D8",
+          "themeDarkAlt": "#106EBE",
+          "themeDark": "#005A9E",
+          "themeDarker": "#004578",
+          "neutralLighterAlt": "#F8F8F8",
+          "neutralLighter": "#F4F4F4",
+          "neutralLight": "#EAEAEA",
+          "neutralQuaternaryAlt": "#DADADA",
+          "neutralQuaternary": "#D0D0D0",
+          "neutralTertiaryAlt": "#C8C8C8",
+          "neutralTertiary": "#A19F9D",
+          "neutralSecondary": "#605E5C",
+          "neutralPrimaryAlt": "#3B3A39",
+          "neutralPrimary": "#323130",
+          "neutralDark": "#201F1E",
+          "black": "#000000",
+          "white": "#FFFFFF"
+        }
+      }
+    }
+  },
+  "metadata": {
+    "author": "Delta Crown Extensions IT",
+    "created": "2025-01-20",
+    "version": "1.0.0",
+    "tags": ["corporate", "hub", "shared-services", "franchise"]
+  }
+}
