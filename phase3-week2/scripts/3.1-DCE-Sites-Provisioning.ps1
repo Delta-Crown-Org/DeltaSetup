@@ -2,11 +2,13 @@
 # PHASE 3.1: DCE SharePoint Sites Provisioning
 # Delta Crown Extensions — Brand Sites, Lists, Libraries, Columns
 # ============================================================================
-# VERSION: 1.0.0
+# VERSION: 1.1.0
 # DESCRIPTION: Creates 4 DCE SharePoint sites with full schema:
 #              DCE-Operations, DCE-ClientServices, DCE-Marketing, DCE-Docs
 # DEPENDS ON: Phase 2 complete (DCE Hub exists, Azure AD groups exist)
 # ADR: ADR-002 Phase 3 SharePoint Sites + Teams Collaboration
+# FIXES: A3 (connection ownership), B7 (path separators),
+#        Read-Host removal (automation-safe)
 # ============================================================================
 
 #Requires -Version 5.1
@@ -42,10 +44,10 @@ param(
 
 # Error handling
 $ErrorActionPreference = "Stop"
-$scriptVersion = "1.0.0"
+$scriptVersion = "1.1.0"
 
 # ============================================================================
-# PATH RESOLUTION
+# PATH RESOLUTION (B7: Join-Path everywhere)
 # ============================================================================
 $ScriptRoot = $PSScriptRoot
 if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -54,7 +56,7 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 # ============================================================================
 # MODULE IMPORT
 # ============================================================================
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot (Join-Path "phase2-week1" "modules")
 
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
@@ -66,11 +68,16 @@ $Config = Import-PowerShellDataFile -Path $ConfigPath
 # ============================================================================
 # LOGGING SETUP
 # ============================================================================
-$LogPath = Join-Path $ProjectRoot "phase3-week2\logs"
+$LogPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "logs")
 if (!(Test-Path $LogPath)) {
     New-Item -ItemType Directory -Path $LogPath -Force | Out-Null
 }
 $LogFile = Join-Path $LogPath "3.1-Sites-Provisioning-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+
+# ============================================================================
+# CONNECTION OWNERSHIP (A3: track who owns the connection)
+# ============================================================================
+$script:OwnsPnPConnection = $false
 
 # ============================================================================
 # BRANDING CONFIGURATION (from Config)
@@ -197,7 +204,7 @@ $SiteSchemas = @{
             @{
                 Title = "Calendar"
                 Description = "Team calendar — syncs to Outlook"
-                TemplateType = 106   # Events list template
+                TemplateType = 106   # Events list template (B2: confirmed correct)
                 Columns = @()
                 Views = @()
             }
@@ -333,10 +340,14 @@ $SiteSchemas = @{
 }
 
 # ============================================================================
-# HELPER FUNCTIONS
+# HELPER FUNCTIONS (no connection management — caller owns the connection)
 # ============================================================================
 
 function New-DCESiteCollection {
+    <#
+    .SYNOPSIS
+        Creates a site collection. Assumes admin PnP context is active.
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [hashtable]$SiteConfig,
@@ -356,6 +367,7 @@ function New-DCESiteCollection {
     if ($PSCmdlet.ShouldProcess($siteUrl, "Create site collection")) {
         Write-DeltaCrownLog "Creating site: $($SiteConfig.Title) ($siteUrl)" "INFO"
 
+        # B1: CommunicationSite expects full URL — confirmed correct
         if ($SiteConfig.Type -eq "CommunicationSite") {
             New-PnPSite -Type CommunicationSite `
                 -Title $SiteConfig.Title `
@@ -386,6 +398,10 @@ function New-DCESiteCollection {
 }
 
 function Add-DCEDocumentLibrary {
+    <#
+    .SYNOPSIS
+        Creates a document library. Assumes site PnP context is active.
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [string]$Title,
@@ -407,6 +423,10 @@ function Add-DCEDocumentLibrary {
 }
 
 function Add-DCESharePointList {
+    <#
+    .SYNOPSIS
+        Creates a list with columns and views. Assumes site PnP context is active.
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [hashtable]$ListConfig
@@ -419,7 +439,7 @@ function Add-DCESharePointList {
     }
 
     if ($PSCmdlet.ShouldProcess($ListConfig.Title, "Create SharePoint list")) {
-        # Use template type if specified (e.g., 106 for Calendar)
+        # B2: TemplateType 106 = Events list — confirmed correct for Calendar
         if ($ListConfig.ContainsKey("TemplateType")) {
             $list = New-PnPList -Title $ListConfig.Title -Template $ListConfig.TemplateType -ErrorAction Stop
         }
@@ -466,33 +486,15 @@ function Add-DCEListColumn {
     }
 
     switch ($ColumnConfig.Type) {
-        "Text" {
-            Add-PnPField @fieldParams -Type Text
-        }
-        "Note" {
-            Add-PnPField @fieldParams -Type Note
-        }
-        "Choice" {
-            Add-PnPField @fieldParams -Type Choice -Choices $ColumnConfig.Choices
-        }
-        "DateTime" {
-            Add-PnPField @fieldParams -Type DateTime
-        }
-        "User" {
-            Add-PnPField @fieldParams -Type User
-        }
-        "Number" {
-            Add-PnPField @fieldParams -Type Number
-        }
-        "Currency" {
-            Add-PnPField @fieldParams -Type Currency
-        }
-        "Boolean" {
-            Add-PnPField @fieldParams -Type Boolean
-        }
-        default {
-            Write-DeltaCrownLog "    Unknown column type: $($ColumnConfig.Type) for $($ColumnConfig.DisplayName)" "WARNING"
-        }
+        "Text"     { Add-PnPField @fieldParams -Type Text }
+        "Note"     { Add-PnPField @fieldParams -Type Note }
+        "Choice"   { Add-PnPField @fieldParams -Type Choice -Choices $ColumnConfig.Choices }
+        "DateTime" { Add-PnPField @fieldParams -Type DateTime }
+        "User"     { Add-PnPField @fieldParams -Type User }
+        "Number"   { Add-PnPField @fieldParams -Type Number }
+        "Currency" { Add-PnPField @fieldParams -Type Currency }
+        "Boolean"  { Add-PnPField @fieldParams -Type Boolean }
+        default    { Write-DeltaCrownLog "    Unknown column type: $($ColumnConfig.Type) for $($ColumnConfig.DisplayName)" "WARNING" }
     }
 
     Write-DeltaCrownLog "    Added column: $($ColumnConfig.DisplayName) ($($ColumnConfig.Type))" "DEBUG"
@@ -560,13 +562,26 @@ try {
     Write-DeltaCrownLog "Log file: $LogFile" "INFO"
 
     # ------------------------------------------------------------------
+    # CONNECTION SETUP (A3: check if Master pre-authed)
+    # ------------------------------------------------------------------
+    $existingCtx = Get-PnPContext -ErrorAction SilentlyContinue
+    if (!$existingCtx) {
+        Connect-DeltaCrownSharePoint -Url $AdminUrl
+        $script:OwnsPnPConnection = $true
+    }
+    else {
+        Write-DeltaCrownLog "Using pre-established SharePoint connection" "INFO"
+    }
+
+    # ------------------------------------------------------------------
     # PRE-FLIGHT: Validate Phase 2 prerequisites
     # ------------------------------------------------------------------
     Write-DeltaCrownLog "=== Pre-Flight Checks ===" "STAGE"
 
     $dceHubFullUrl = "https://$TenantName.sharepoint.com$DCEHubUrl"
 
-    Connect-DeltaCrownSharePoint -Url $AdminUrl -Environment $Environment
+    # Ensure we're on admin context for tenant operations
+    Connect-DeltaCrownSharePoint -Url $AdminUrl
     Write-DeltaCrownLog "Connected to SharePoint Admin" "SUCCESS"
 
     # Verify DCE Hub exists
@@ -576,20 +591,21 @@ try {
     }
     Write-DeltaCrownLog "DCE Hub verified: $dceHubFullUrl" "SUCCESS"
 
-    # Get owner
+    # Get owner (no Read-Host — fail clearly if not provided)
     if (!$OwnerEmail) {
-        do {
-            $OwnerEmail = Read-Host "Enter admin email for site ownership"
-        } until (Test-DeltaCrownEmailFormat $OwnerEmail)
+        $OwnerEmail = $env:DCE_ADMIN_EMAIL
+        if (!$OwnerEmail) {
+            throw "OwnerEmail is required. Pass -OwnerEmail or set DCE_ADMIN_EMAIL environment variable."
+        }
     }
 
     # Track results
     $results = @{
-        SitesCreated   = @()
-        ListsCreated   = @()
+        SitesCreated     = @()
+        ListsCreated     = @()
         LibrariesCreated = @()
-        Errors         = @()
-        StartTime      = Get-Date
+        Errors           = @()
+        StartTime        = Get-Date
     }
 
     # ------------------------------------------------------------------
@@ -657,7 +673,7 @@ try {
         foreach ($siteUrl in $results.SitesCreated) {
             try {
                 $fullUrl = "https://$TenantName.sharepoint.com$siteUrl"
-                Connect-PnPOnline -Url $fullUrl -Interactive
+                Connect-DeltaCrownSharePoint -Url $fullUrl
                 Set-PnPWebTheme -Theme $ThemeName
                 Write-DeltaCrownLog "Applied theme to: $siteUrl" "SUCCESS"
             }
@@ -680,7 +696,7 @@ try {
         }
 
         $fullUrl = "https://$TenantName.sharepoint.com$siteUrl"
-        Connect-PnPOnline -Url $fullUrl -Interactive
+        Connect-DeltaCrownSharePoint -Url $fullUrl
 
         Write-DeltaCrownLog "Provisioning schema for: $siteUrl" "INFO"
 
@@ -727,7 +743,7 @@ try {
     # ------------------------------------------------------------------
     Write-DeltaCrownLog "=== Step 5: Update Hub Navigation ===" "STAGE"
 
-    Connect-PnPOnline -Url $dceHubFullUrl -Interactive
+    Connect-DeltaCrownSharePoint -Url $dceHubFullUrl
 
     $navItems = @(
         @{ Title = "Operations";     Url = "https://$TenantName.sharepoint.com/sites/dce-operations" }
@@ -762,7 +778,7 @@ try {
     Write-DeltaCrownLog "Log file:           $LogFile" "INFO"
 
     # Export results
-    $resultsPath = Join-Path $ProjectRoot "phase3-week2\docs\3.1-provisioning-results.json"
+    $resultsPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" (Join-Path "docs" "3.1-provisioning-results.json"))
     $results | ConvertTo-Json -Depth 5 | Out-File -FilePath $resultsPath -Force
     Write-DeltaCrownLog "Results exported: $resultsPath" "INFO"
 
@@ -798,6 +814,8 @@ catch {
     throw
 }
 finally {
-    Disconnect-PnPOnline -ErrorAction SilentlyContinue
+    if ($script:OwnsPnPConnection) {
+        Disconnect-PnPOnline -ErrorAction SilentlyContinue
+    }
     Write-DeltaCrownLog "Disconnected from SharePoint" "INFO"
 }

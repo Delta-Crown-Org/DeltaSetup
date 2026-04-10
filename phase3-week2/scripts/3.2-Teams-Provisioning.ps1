@@ -2,11 +2,12 @@
 # PHASE 3.2: Teams Workspace Provisioning
 # Delta Crown Extensions — Team, Channels, Tabs, Membership
 # ============================================================================
-# VERSION: 1.0.0
+# VERSION: 1.1.0
 # DESCRIPTION: Creates "Delta Crown Operations" team with 5 channels,
 #              configures tabs, sets membership from security groups
 # DEPENDS ON: 3.1 (DCE-Operations site must exist)
 # ADR: ADR-002 Phase 3 SharePoint Sites + Teams Collaboration
+# FIXES: B3 (Team creation API), A3 (connection ownership), B7 (path seps)
 # ============================================================================
 
 #Requires -Version 5.1
@@ -28,16 +29,16 @@ param(
 
 # Error handling
 $ErrorActionPreference = "Stop"
-$scriptVersion = "1.0.0"
+$scriptVersion = "1.1.0"
 
 # ============================================================================
-# PATH RESOLUTION & MODULE IMPORT
+# PATH RESOLUTION & MODULE IMPORT (B7: Join-Path everywhere)
 # ============================================================================
 $ScriptRoot = $PSScriptRoot
 if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot (Join-Path "phase2-week1" "modules")
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
 
@@ -47,9 +48,15 @@ $Config = Import-PowerShellDataFile -Path $ConfigPath
 # ============================================================================
 # LOGGING
 # ============================================================================
-$LogPath = Join-Path $ProjectRoot "phase3-week2\logs"
+$LogPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "logs")
 if (!(Test-Path $LogPath)) { New-Item -ItemType Directory -Path $LogPath -Force | Out-Null }
 $LogFile = Join-Path $LogPath "3.2-Teams-Provisioning-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+
+# ============================================================================
+# CONNECTION OWNERSHIP (A3: track who owns each connection)
+# ============================================================================
+$script:OwnsGraphConnection = $false
+$script:OwnsPnPConnection = $false
 
 # ============================================================================
 # TEAM CONFIGURATION
@@ -109,10 +116,14 @@ $GeneralChannelTabs = @(
 )
 
 # ============================================================================
-# HELPER FUNCTIONS
+# HELPER FUNCTIONS (no connection management — caller owns the connection)
 # ============================================================================
 
 function Get-OrCreateTeam {
+    <#
+    .SYNOPSIS
+        Creates M365 Group + Team. Assumes Graph context is active.
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param([hashtable]$Config)
 
@@ -144,7 +155,7 @@ function Get-OrCreateTeam {
         # Wait for group provisioning
         Start-Sleep -Seconds 15
 
-        # Step 2: Team-enable the group
+        # Step 2: Team-enable the group (B3: use Graph REST, not New-MgTeam)
         Write-DeltaCrownLog "Enabling Teams on group..." "INFO"
 
         $teamBody = @{
@@ -174,7 +185,9 @@ function Get-OrCreateTeam {
         }
 
         Invoke-DeltaCrownWithRetry -ScriptBlock {
-            New-MgTeam -GroupId $group.Id -BodyParameter $teamBody
+            # B3 FIX: PUT to /groups/{id}/team enables Teams on existing group
+            $teamUri = "https://graph.microsoft.com/v1.0/groups/$($group.Id)/team"
+            Invoke-MgGraphRequest -Method PUT -Uri $teamUri -Body $teamBody
         } -OperationName "Team-enable group" -MaxRetries 5 -InitialDelaySeconds 10
 
         Write-DeltaCrownLog "Team enabled: $($Config.DisplayName)" "SUCCESS"
@@ -189,6 +202,10 @@ function Get-OrCreateTeam {
 }
 
 function Add-TeamChannel {
+    <#
+    .SYNOPSIS
+        Creates a team channel. Assumes Graph context is active.
+    #>
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [string]$TeamId,
@@ -225,6 +242,11 @@ function Add-TeamChannel {
 }
 
 function Add-ChannelTab {
+    <#
+    .SYNOPSIS
+        Adds a SharePoint list/library tab to a channel.
+        Assumes Graph context AND PnP context to TargetSite are managed by caller.
+    #>
     [CmdletBinding()]
     param(
         [string]$TeamId,
@@ -243,9 +265,9 @@ function Add-ChannelTab {
 
     $siteUrl = "https://$TenantName.sharepoint.com$($TabConfig.TargetSite)"
 
-    # Get the site and list/library IDs via PnP
     try {
-        Connect-PnPOnline -Url $siteUrl -Interactive -ErrorAction Stop
+        # Connect to the target site for list/library ID lookup
+        Connect-DeltaCrownSharePoint -Url $siteUrl
 
         if ($TabConfig.Type -eq "SharePointList") {
             $list = Get-PnPList -Identity $TabConfig.TargetList -ErrorAction Stop
@@ -278,8 +300,6 @@ function Add-ChannelTab {
             }
         }
 
-        Disconnect-PnPOnline
-
         New-MgTeamChannelTab -TeamId $TeamId -ChannelId $ChannelId -BodyParameter $tabBody
         Write-DeltaCrownLog "    Added tab: $($TabConfig.DisplayName) → $($TabConfig.TargetSite)" "SUCCESS"
     }
@@ -289,6 +309,10 @@ function Add-ChannelTab {
 }
 
 function Set-TeamMembership {
+    <#
+    .SYNOPSIS
+        Syncs team membership from a security group. Assumes Graph context is active.
+    #>
     [CmdletBinding()]
     param(
         [string]$GroupId,
@@ -351,23 +375,45 @@ try {
     }
 
     # ------------------------------------------------------------------
+    # CONNECTION SETUP (A3: check if Master pre-authed)
+    # ------------------------------------------------------------------
+    $existingGraph = Get-MgContext -ErrorAction SilentlyContinue
+    if (!$existingGraph) {
+        Connect-DeltaCrownGraph -RequiredScopes @(
+            "Group.ReadWrite.All",
+            "TeamSettings.ReadWrite.All",
+            "Channel.Create",
+            "TeamsTab.Create",
+            "GroupMember.ReadWrite.All"
+        )
+        $script:OwnsGraphConnection = $true
+    }
+    else {
+        Write-DeltaCrownLog "Using pre-established Graph connection" "INFO"
+    }
+    Write-DeltaCrownLog "Graph connection ready" "SUCCESS"
+
+    $existingPnP = Get-PnPContext -ErrorAction SilentlyContinue
+    if (!$existingPnP) {
+        Connect-DeltaCrownSharePoint -Url $AdminUrl
+        $script:OwnsPnPConnection = $true
+    }
+    else {
+        Write-DeltaCrownLog "Using pre-established SharePoint connection" "INFO"
+    }
+
+    # ------------------------------------------------------------------
     # PRE-FLIGHT: Verify DCE-Operations exists
     # ------------------------------------------------------------------
     Write-DeltaCrownLog "=== Pre-Flight Checks ===" "STAGE"
 
-    Connect-PnPOnline -Url $AdminUrl -Interactive
+    Connect-DeltaCrownSharePoint -Url $AdminUrl
     $opsUrl = "https://$TenantName.sharepoint.com/sites/dce-operations"
     $opsSite = Get-PnPTenantSite -Url $opsUrl -ErrorAction SilentlyContinue
     if (!$opsSite) {
         throw "DCE-Operations site not found at $opsUrl — Run 3.1-DCE-Sites-Provisioning.ps1 first."
     }
-    Disconnect-PnPOnline
     Write-DeltaCrownLog "DCE-Operations verified: $opsUrl" "SUCCESS"
-
-    # Connect to Microsoft Graph
-    Write-DeltaCrownLog "Connecting to Microsoft Graph..." "INFO"
-    Connect-MgGraph -Scopes "Group.ReadWrite.All", "TeamSettings.ReadWrite.All", "Channel.Create", "TeamsTab.Create", "GroupMember.ReadWrite.All" -NoWelcome
-    Write-DeltaCrownLog "Connected to Microsoft Graph" "SUCCESS"
 
     # ------------------------------------------------------------------
     # STEP 1: Create M365 Group + Team
@@ -434,7 +480,7 @@ try {
     Write-DeltaCrownLog "=== Step 5: Associate Leadership Channel SPO with DCE Hub ===" "STAGE"
 
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
+        Connect-DeltaCrownSharePoint -Url $AdminUrl
 
         # Find the auto-created private channel site
         $leadershipSites = Get-PnPTenantSite | Where-Object {
@@ -459,8 +505,6 @@ try {
         else {
             Write-DeltaCrownLog "Leadership private channel SPO site not found yet — may need manual association" "WARNING"
         }
-
-        Disconnect-PnPOnline
     }
     catch {
         Write-DeltaCrownLog "Failed to associate Leadership SPO with hub: $_" "WARNING"
@@ -480,7 +524,7 @@ try {
     Write-DeltaCrownLog "Errors:             $($results.Errors.Count)" $(if($results.Errors.Count -gt 0){"ERROR"}else{"SUCCESS"})
     Write-DeltaCrownLog "Duration:           $($duration.TotalMinutes.ToString('F1')) minutes" "INFO"
 
-    $resultsPath = Join-Path $ProjectRoot "phase3-week2\docs\3.2-teams-results.json"
+    $resultsPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" (Join-Path "docs" "3.2-teams-results.json"))
     $results | ConvertTo-Json -Depth 5 | Out-File -FilePath $resultsPath -Force
 
     Clear-DeltaCrownRollbackStack
@@ -505,7 +549,7 @@ catch {
     throw
 }
 finally {
-    Disconnect-MgGraph -ErrorAction SilentlyContinue
-    Disconnect-PnPOnline -ErrorAction SilentlyContinue
+    if ($script:OwnsGraphConnection) { Disconnect-MgGraph -ErrorAction SilentlyContinue }
+    if ($script:OwnsPnPConnection) { Disconnect-PnPOnline -ErrorAction SilentlyContinue }
     Write-DeltaCrownLog "Disconnected from Graph + SharePoint" "INFO"
 }

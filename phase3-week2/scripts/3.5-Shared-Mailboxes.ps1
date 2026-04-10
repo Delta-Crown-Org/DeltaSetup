@@ -2,11 +2,12 @@
 # PHASE 3.5: Shared Mailboxes Setup
 # Delta Crown Extensions — Brand Mailboxes + Teams Integration
 # ============================================================================
-# VERSION: 1.0.0
+# VERSION: 1.1.0
 # DESCRIPTION: Creates 3 DCE shared mailboxes, configures permissions,
 #              auto-replies, and Teams channel forwarding
 # DEPENDS ON: 3.2 (Teams team exists for channel email addresses)
 # ADR: ADR-002 Phase 3 — Shared Mailbox Integration
+# FIXES: A3 (connection ownership), B7 (path separators)
 # ============================================================================
 
 #Requires -Version 5.1
@@ -24,18 +25,27 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$scriptVersion = "1.0.0"
+$scriptVersion = "1.1.0"
 
+# ============================================================================
+# PATH RESOLUTION (B7: Join-Path everywhere)
+# ============================================================================
 $ScriptRoot = $PSScriptRoot
 if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot (Join-Path "phase2-week1" "modules")
+Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
 
-$LogPath = Join-Path $ProjectRoot "phase3-week2\logs"
+$LogPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "logs")
 if (!(Test-Path $LogPath)) { New-Item -ItemType Directory -Path $LogPath -Force | Out-Null }
 $LogFile = Join-Path $LogPath "3.5-Shared-Mailboxes-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+
+# ============================================================================
+# CONNECTION OWNERSHIP (A3)
+# ============================================================================
+$script:OwnsExchangeConnection = $false
 
 # ============================================================================
 # MAILBOX DEFINITIONS
@@ -84,9 +94,18 @@ try {
         StartTime           = Get-Date
     }
 
-    # Connect to Exchange Online
-    Write-DeltaCrownLog "Connecting to Exchange Online..." "INFO"
-    Connect-ExchangeOnline -ShowBanner:$false
+    # ------------------------------------------------------------------
+    # CONNECTION SETUP (A3: check if Master pre-authed)
+    # ------------------------------------------------------------------
+    $existingSession = Get-PSSession | Where-Object { $_.ComputerName -match "outlook" }
+    if (!$existingSession -or $existingSession.State -ne "Opened") {
+        Write-DeltaCrownLog "Connecting to Exchange Online..." "INFO"
+        Connect-DeltaCrownExchange
+        $script:OwnsExchangeConnection = $true
+    }
+    else {
+        Write-DeltaCrownLog "Using pre-established Exchange connection" "INFO"
+    }
     Write-DeltaCrownLog "Connected to Exchange Online" "SUCCESS"
 
     foreach ($mbx in $SharedMailboxes) {
@@ -174,7 +193,7 @@ try {
     Write-DeltaCrownLog "Auto-replies set:   $($results.AutoRepliesSet.Count)" "SUCCESS"
     Write-DeltaCrownLog "Errors:             $($results.Errors.Count)" $(if($results.Errors.Count -gt 0){"ERROR"}else{"SUCCESS"})
 
-    $resultsPath = Join-Path $ProjectRoot "phase3-week2\docs\3.5-mailbox-results.json"
+    $resultsPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" (Join-Path "docs" "3.5-mailbox-results.json"))
     $results | ConvertTo-Json -Depth 5 | Out-File -FilePath $resultsPath -Force
 
     Export-DeltaCrownLogBuffer -Path $LogFile
@@ -192,6 +211,8 @@ catch {
     throw
 }
 finally {
-    Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
+    if ($script:OwnsExchangeConnection) {
+        Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
+    }
     Write-DeltaCrownLog "Disconnected from Exchange Online" "INFO"
 }

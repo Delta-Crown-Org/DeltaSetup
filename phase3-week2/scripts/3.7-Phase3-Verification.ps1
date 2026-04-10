@@ -2,11 +2,13 @@
 # PHASE 3.7: Comprehensive Phase 3 Verification
 # Delta Crown Extensions — Validate All Phase 3 Components
 # ============================================================================
-# VERSION: 1.0.0
+# VERSION: 1.1.0
 # DESCRIPTION: Verifies all Phase 3 components: sites, lists, Teams,
-#              permissions, DLP, mailboxes, templates
+#              permissions, DLP, mailboxes, templates, schema
 # DEPENDS ON: All Phase 3 scripts (3.1–3.6) executed
 # EXIT CODES: 0 = all pass, 1 = warnings, 2 = critical failures
+# FIXES: A2 (connect churn), A3 (connection ownership), B7 (path seps),
+#        C1 (DLP verification), C2 (mailbox verification), C3 (schema checks)
 # ============================================================================
 
 #Requires -Version 5.1
@@ -24,22 +26,40 @@ param(
     [Parameter(Mandatory=$false)]
     [switch]$SkipTeamsChecks,
     [Parameter(Mandatory=$false)]
-    [switch]$SkipDLPChecks
+    [switch]$SkipDLPChecks,
+    [Parameter(Mandatory=$false)]
+    [switch]$SkipMailboxChecks
 )
 
 $ErrorActionPreference = "Stop"
-$scriptVersion = "1.0.0"
+$scriptVersion = "1.1.0"
 
+# ============================================================================
+# PATH RESOLUTION (B7: Join-Path everywhere)
+# ============================================================================
 $ScriptRoot = $PSScriptRoot
 if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot (Join-Path "phase2-week1" "modules")
+Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
 
-$LogPath = Join-Path $ProjectRoot "phase3-week2\logs"
+$LogPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "logs")
 if (!(Test-Path $LogPath)) { New-Item -ItemType Directory -Path $LogPath -Force | Out-Null }
 $LogFile = Join-Path $LogPath "3.7-Verification-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+
+# ============================================================================
+# CONNECTION OWNERSHIP (A3: track who owns each connection)
+# ============================================================================
+$script:OwnsPnPConnection = $false
+$script:OwnsGraphConnection = $false
+$script:OwnsIPPSConnection = $false
+$script:OwnsExchangeConnection = $false
+
+# Internal skip flags (set when connection fails for optional categories)
+$script:SkipDLP = $false
+$script:SkipMailboxes = $false
 
 # ============================================================================
 # EXPECTED STATE DEFINITIONS
@@ -64,6 +84,12 @@ $ExpectedLibraries = @{
     "/sites/dce-docs"           = @("Policies", "Training", "Forms", "Templates", "Archive")
 }
 
+# C3: Critical PII columns that MUST exist on Client Records
+$ClientRecordsPIIColumns = @("Email", "Phone", "AllergyNotes", "ServiceHistory")
+
+# C3: DCE-Docs library metadata columns
+$DocsMetadataColumns = @("DocType", "Department", "ReviewDate", "DocVersion", "DocStatus", "DocOwner")
+
 $ExpectedGroups = @("SG-DCE-AllStaff", "SG-DCE-Leadership", "SG-DCE-Marketing")
 
 $ForbiddenGroups = @("Everyone", "Everyone except external users", "All Users")
@@ -75,13 +101,13 @@ $ExpectedMailboxes = @("operations@deltacrown.com.au", "bookings@deltacrown.com.
 $ExpectedDLPPolicies = @("DCE-Data-Protection", "Corp-Data-Protection", "External-Sharing-Block")
 
 # ============================================================================
-# TEST RUNNER
+# TEST RUNNER (script scope — no global leaks)
 # ============================================================================
-$global:TestResults = @()
-$global:PassCount = 0
-$global:FailCount = 0
-$global:WarnCount = 0
-$global:SkipCount = 0
+$script:TestResults = @()
+$script:PassCount = 0
+$script:FailCount = 0
+$script:WarnCount = 0
+$script:SkipCount = 0
 
 function Test-Condition {
     param(
@@ -95,7 +121,7 @@ function Test-Condition {
 
     $status = if ($Condition) { "PASS" } else { $Severity }
 
-    $global:TestResults += [PSCustomObject]@{
+    $script:TestResults += [PSCustomObject]@{
         Category  = $Category
         Test      = $TestName
         Status    = $status
@@ -104,16 +130,16 @@ function Test-Condition {
     }
 
     switch ($status) {
-        "PASS" { $global:PassCount++; Write-DeltaCrownLog "  ✅ $TestName" "SUCCESS" }
-        "FAIL" { $global:FailCount++; Write-DeltaCrownLog "  ❌ $TestName — $FailureMsg" "ERROR" }
-        "WARN" { $global:WarnCount++; Write-DeltaCrownLog "  ⚠️ $TestName — $FailureMsg" "WARNING" }
+        "PASS" { $script:PassCount++; Write-DeltaCrownLog "  ✅ $TestName" "SUCCESS" }
+        "FAIL" { $script:FailCount++; Write-DeltaCrownLog "  ❌ $TestName — $FailureMsg" "ERROR" }
+        "WARN" { $script:WarnCount++; Write-DeltaCrownLog "  ⚠️ $TestName — $FailureMsg" "WARNING" }
     }
 }
 
 function Skip-Test {
     param([string]$Category, [string]$TestName, [string]$Reason)
-    $global:SkipCount++
-    $global:TestResults += [PSCustomObject]@{
+    $script:SkipCount++
+    $script:TestResults += [PSCustomObject]@{
         Category = $Category; Test = $TestName; Status = "SKIP"; Details = $Reason; Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     }
     Write-DeltaCrownLog "  ⏭️ $TestName — SKIPPED: $Reason" "WARNING"
@@ -126,15 +152,48 @@ function Skip-Test {
 try {
     Write-DeltaCrownBanner "PHASE 3.7: Comprehensive Verification"
     Write-DeltaCrownLog "Script Version: $scriptVersion" "INFO"
+    Write-DeltaCrownLog "Environment: $Environment" "INFO"
+    Write-DeltaCrownLog "Tenant: $TenantName" "INFO"
 
     $startTime = Get-Date
 
     # ------------------------------------------------------------------
+    # A2 FIX: Connect ALL services ONCE at the start
+    # ------------------------------------------------------------------
+    Write-DeltaCrownLog "=== Establishing Connections ===" "STAGE"
+
+    # PnP SharePoint (needed for Categories 1-4, 7)
+    $existingPnP = Get-PnPContext -ErrorAction SilentlyContinue
+    if (!$existingPnP) {
+        Connect-DeltaCrownSharePoint -Url $AdminUrl
+        $script:OwnsPnPConnection = $true
+    }
+    else {
+        Write-DeltaCrownLog "Using pre-established SharePoint connection" "INFO"
+    }
+    Write-DeltaCrownLog "SharePoint connection ready" "SUCCESS"
+
+    # Graph (needed for Categories 5, 6)
+    $existingGraph = Get-MgContext -ErrorAction SilentlyContinue
+    if (!$existingGraph) {
+        Connect-DeltaCrownGraph -RequiredScopes @(
+            "Group.Read.All",
+            "Team.ReadBasic.All",
+            "Channel.ReadBasic.All"
+        )
+        $script:OwnsGraphConnection = $true
+    }
+    else {
+        Write-DeltaCrownLog "Using pre-established Graph connection" "INFO"
+    }
+    Write-DeltaCrownLog "Graph connection ready" "SUCCESS"
+
+    # ------------------------------------------------------------------
     # CATEGORY 1: Site Existence
     # ------------------------------------------------------------------
-    Write-DeltaCrownLog "=== Sites ===" "STAGE"
+    Write-DeltaCrownLog "=== Category 1: Sites ===" "STAGE"
 
-    Connect-PnPOnline -Url $AdminUrl -Interactive
+    Connect-DeltaCrownSharePoint -Url $AdminUrl
 
     foreach ($siteUrl in $ExpectedSites) {
         $fullUrl = "https://$TenantName.sharepoint.com$siteUrl"
@@ -145,7 +204,7 @@ try {
     # ------------------------------------------------------------------
     # CATEGORY 2: Hub Association
     # ------------------------------------------------------------------
-    Write-DeltaCrownLog "=== Hub Association ===" "STAGE"
+    Write-DeltaCrownLog "=== Category 2: Hub Association ===" "STAGE"
 
     $dceHubUrl = "https://$TenantName.sharepoint.com/sites/dce-hub"
     $hubChildren = Get-PnPHubSiteChild -Identity $dceHubUrl -ErrorAction SilentlyContinue
@@ -156,22 +215,29 @@ try {
         Test-Condition "Hub" "Hub associated: $siteUrl" $isAssociated -FailureMsg "Not associated with DCE Hub"
     }
 
-    Disconnect-PnPOnline
-
     # ------------------------------------------------------------------
-    # CATEGORY 3: Lists & Libraries
+    # CATEGORY 3: Lists, Libraries & Schema
+    # A2 FIX: Switch site context without disconnect/reconnect
     # ------------------------------------------------------------------
-    Write-DeltaCrownLog "=== Lists & Libraries ===" "STAGE"
+    Write-DeltaCrownLog "=== Category 3: Lists, Libraries & Schema ===" "STAGE"
 
     foreach ($siteUrl in $ExpectedSites) {
         $fullUrl = "https://$TenantName.sharepoint.com$siteUrl"
-        Connect-PnPOnline -Url $fullUrl -Interactive
+        Connect-DeltaCrownSharePoint -Url $fullUrl
 
         # Check lists
         if ($ExpectedLists.ContainsKey($siteUrl)) {
             foreach ($listName in $ExpectedLists[$siteUrl]) {
                 $list = Get-PnPList -Identity $listName -ErrorAction SilentlyContinue
                 Test-Condition "Lists" "$siteUrl — List: $listName" ($list -ne $null) -FailureMsg "List not found"
+
+                # C3: Deep schema check for Client Records (PII-sensitive)
+                if ($listName -eq "Client Records" -and $list) {
+                    foreach ($col in $ClientRecordsPIIColumns) {
+                        $field = Get-PnPField -List "Client Records" -Identity $col -ErrorAction SilentlyContinue
+                        Test-Condition "Schema" "PII column exists: Client Records/$col" ($field -ne $null) -FailureMsg "PII column missing — security gap"
+                    }
+                }
             }
         }
 
@@ -180,20 +246,27 @@ try {
             foreach ($libName in $ExpectedLibraries[$siteUrl]) {
                 $lib = Get-PnPList -Identity $libName -ErrorAction SilentlyContinue
                 Test-Condition "Libraries" "$siteUrl — Library: $libName" ($lib -ne $null) -FailureMsg "Library not found"
+
+                # C3: Check DCE-Docs metadata columns on libraries
+                if ($siteUrl -eq "/sites/dce-docs" -and $lib) {
+                    foreach ($col in $DocsMetadataColumns) {
+                        $field = Get-PnPField -List $libName -Identity $col -ErrorAction SilentlyContinue
+                        Test-Condition "Schema" "Metadata column: $libName/$col" ($field -ne $null) -FailureMsg "Library metadata column missing" -Severity "WARN"
+                    }
+                }
             }
         }
-
-        Disconnect-PnPOnline
     }
 
     # ------------------------------------------------------------------
     # CATEGORY 4: Permissions
+    # A2 FIX: Reuse PnP connection, just switch context
     # ------------------------------------------------------------------
-    Write-DeltaCrownLog "=== Permissions ===" "STAGE"
+    Write-DeltaCrownLog "=== Category 4: Permissions ===" "STAGE"
 
     foreach ($siteUrl in $ExpectedSites) {
         $fullUrl = "https://$TenantName.sharepoint.com$siteUrl"
-        Connect-PnPOnline -Url $fullUrl -Interactive
+        Connect-DeltaCrownSharePoint -Url $fullUrl
 
         $web = Get-PnPWeb -Includes HasUniqueRoleAssignments
         Test-Condition "Permissions" "Unique permissions: $siteUrl" $web.HasUniqueRoleAssignments -FailureMsg "Inheriting permissions!"
@@ -205,19 +278,16 @@ try {
         }
 
         # Check external sharing
+        Connect-DeltaCrownSharePoint -Url $AdminUrl
         $site = Get-PnPTenantSite -Url $fullUrl -ErrorAction SilentlyContinue
         $sharingOff = ($site.SharingCapability -eq "Disabled")
         Test-Condition "Permissions" "External sharing disabled: $siteUrl" $sharingOff -FailureMsg "External sharing is ENABLED" -Severity "FAIL"
-
-        Disconnect-PnPOnline
     }
 
     # ------------------------------------------------------------------
-    # CATEGORY 5: Security Groups
+    # CATEGORY 5: Security Groups (uses Graph — already connected)
     # ------------------------------------------------------------------
-    Write-DeltaCrownLog "=== Security Groups ===" "STAGE"
-
-    Connect-MgGraph -Scopes "Group.Read.All" -NoWelcome
+    Write-DeltaCrownLog "=== Category 5: Security Groups ===" "STAGE"
 
     foreach ($groupName in $ExpectedGroups) {
         $group = Get-MgGroup -Filter "displayName eq '$groupName'" -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -229,15 +299,11 @@ try {
         }
     }
 
-    Disconnect-MgGraph
-
     # ------------------------------------------------------------------
-    # CATEGORY 6: Teams (optional)
+    # CATEGORY 6: Teams (uses Graph — already connected)
     # ------------------------------------------------------------------
     if (!$SkipTeamsChecks) {
-        Write-DeltaCrownLog "=== Teams ===" "STAGE"
-
-        Connect-MgGraph -Scopes "Team.ReadBasic.All", "Channel.ReadBasic.All" -NoWelcome
+        Write-DeltaCrownLog "=== Category 6: Teams ===" "STAGE"
 
         $team = Get-MgGroup -Filter "displayName eq 'Delta Crown Operations'" -ErrorAction SilentlyContinue |
             Where-Object { $_.ResourceProvisioningOptions -contains "Team" } | Select-Object -First 1
@@ -258,19 +324,17 @@ try {
                 Test-Condition "Teams" "Leadership is private" ($leadership.MembershipType -eq "Private") -FailureMsg "Leadership channel is not private!"
             }
         }
-
-        Disconnect-MgGraph
     }
     else {
         Skip-Test "Teams" "All Teams checks" "SkipTeamsChecks flag set"
     }
 
     # ------------------------------------------------------------------
-    # CATEGORY 7: Templates
+    # CATEGORY 7: Templates (filesystem only — no connection needed)
     # ------------------------------------------------------------------
-    Write-DeltaCrownLog "=== Templates ===" "STAGE"
+    Write-DeltaCrownLog "=== Category 7: Templates ===" "STAGE"
 
-    $templatePath = Join-Path $ProjectRoot "phase3-week2\templates"
+    $templatePath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "templates")
     $hashFile = Join-Path $templatePath "template-hashes.json"
 
     $expectedTemplates = @("DCE-Operations-Template.xml", "DCE-ClientServices-Template.xml", "DCE-Marketing-Template.xml", "DCE-Docs-Template.xml", "DCE-Hub-Theme.json")
@@ -282,6 +346,108 @@ try {
 
     Test-Condition "Templates" "Hash manifest exists" (Test-Path $hashFile) -FailureMsg "template-hashes.json not found" -Severity "WARN"
 
+    # Verify hash integrity if manifest exists
+    if (Test-Path $hashFile) {
+        $manifest = Get-Content $hashFile -Raw | ConvertFrom-Json
+        foreach ($tmpl in $expectedTemplates) {
+            $tmplPath = Join-Path $templatePath $tmpl
+            if (Test-Path $tmplPath) {
+                $currentHash = (Get-FileHash -Path $tmplPath -Algorithm SHA256).Hash
+                $expectedHash = $manifest.Hashes.$tmpl
+                if ($expectedHash) {
+                    Test-Condition "Templates" "Hash valid: $tmpl" ($currentHash -eq $expectedHash) -FailureMsg "Template modified since export!" -Severity "WARN"
+                }
+            }
+        }
+    }
+
+    # ------------------------------------------------------------------
+    # CATEGORY 8: DLP Policies (C1: was defined but never verified)
+    # ------------------------------------------------------------------
+    if (!$SkipDLPChecks) {
+        Write-DeltaCrownLog "=== Category 8: DLP Policies ===" "STAGE"
+
+        # Connect to IPPS if not already connected
+        $ippsSession = Get-PSSession | Where-Object { $_.ComputerName -match "compliance" -and $_.State -eq "Opened" }
+        if (!$ippsSession) {
+            try {
+                Connect-DeltaCrownIPPS
+                $script:OwnsIPPSConnection = $true
+            }
+            catch {
+                Write-DeltaCrownLog "Cannot connect to Security & Compliance Center: $_" "WARNING"
+                $script:SkipDLP = $true
+                Skip-Test "DLP" "All DLP checks" "Cannot connect to Security & Compliance Center"
+            }
+        }
+
+        if (!$script:SkipDLP) {
+            foreach ($policyName in $ExpectedDLPPolicies) {
+                $policy = Get-DlpCompliancePolicy -Identity $policyName -ErrorAction SilentlyContinue
+                Test-Condition "DLP" "Policy exists: $policyName" ($policy -ne $null) -FailureMsg "DLP policy not found"
+
+                if ($policy) {
+                    # Check mode — External-Sharing-Block should be enforced, others in test
+                    $isTestMode = ($policyName -ne "External-Sharing-Block")
+                    if ($isTestMode) {
+                        Test-Condition "DLP" "Test mode: $policyName" ($policy.Mode -eq "TestWithNotifications") -FailureMsg "Expected TestWithNotifications, got $($policy.Mode)" -Severity "WARN"
+                    }
+                    else {
+                        Test-Condition "DLP" "Enforce mode: $policyName" ($policy.Mode -eq "Enable") -FailureMsg "Expected Enable, got $($policy.Mode)"
+                    }
+
+                    # Check rules exist (B6 fix ensures they have conditions)
+                    $rules = Get-DlpComplianceRule -Policy $policyName -ErrorAction SilentlyContinue
+                    Test-Condition "DLP" "Has rules: $policyName" ($rules.Count -gt 0) -FailureMsg "No rules defined for policy"
+                }
+            }
+        }
+    }
+    else {
+        Skip-Test "DLP" "All DLP checks" "SkipDLPChecks flag set"
+    }
+
+    # ------------------------------------------------------------------
+    # CATEGORY 9: Shared Mailboxes (C2: was defined but never verified)
+    # ------------------------------------------------------------------
+    if (!$SkipMailboxChecks) {
+        Write-DeltaCrownLog "=== Category 9: Shared Mailboxes ===" "STAGE"
+
+        # Connect to Exchange if not already connected
+        $exoSession = Get-PSSession | Where-Object { $_.ComputerName -match "outlook" -and $_.State -eq "Opened" }
+        if (!$exoSession) {
+            try {
+                Connect-DeltaCrownExchange
+                $script:OwnsExchangeConnection = $true
+            }
+            catch {
+                Write-DeltaCrownLog "Cannot connect to Exchange Online: $_" "WARNING"
+                $script:SkipMailboxes = $true
+                Skip-Test "Mailboxes" "All mailbox checks" "Cannot connect to Exchange Online"
+            }
+        }
+
+        if (!$script:SkipMailboxes) {
+            foreach ($email in $ExpectedMailboxes) {
+                $mbx = Get-Mailbox -Identity $email -ErrorAction SilentlyContinue
+                Test-Condition "Mailboxes" "Mailbox exists: $email" ($mbx -ne $null) -FailureMsg "Shared mailbox not found"
+
+                if ($mbx) {
+                    Test-Condition "Mailboxes" "Is shared: $email" ($mbx.RecipientTypeDetails -eq "SharedMailbox") -FailureMsg "Not a shared mailbox: $($mbx.RecipientTypeDetails)"
+                }
+            }
+
+            # Check auto-reply on bookings
+            $bookingsReply = Get-MailboxAutoReplyConfiguration -Identity "bookings@deltacrown.com.au" -ErrorAction SilentlyContinue
+            if ($bookingsReply) {
+                Test-Condition "Mailboxes" "Auto-reply enabled: bookings" ($bookingsReply.AutoReplyState -eq "Enabled") -FailureMsg "Auto-reply not enabled"
+            }
+        }
+    }
+    else {
+        Skip-Test "Mailboxes" "All mailbox checks" "SkipMailboxChecks flag set"
+    }
+
     # ------------------------------------------------------------------
     # SUMMARY REPORT
     # ------------------------------------------------------------------
@@ -289,39 +455,42 @@ try {
     $duration = $endTime - $startTime
 
     Write-DeltaCrownBanner "VERIFICATION RESULTS"
-    Write-DeltaCrownLog "✅ Passed:   $global:PassCount" "SUCCESS"
-    Write-DeltaCrownLog "❌ Failed:   $global:FailCount" $(if($global:FailCount -gt 0){"ERROR"}else{"SUCCESS"})
-    Write-DeltaCrownLog "⚠️ Warnings: $global:WarnCount" $(if($global:WarnCount -gt 0){"WARNING"}else{"INFO"})
-    Write-DeltaCrownLog "⏭️ Skipped:  $global:SkipCount" "INFO"
+    Write-DeltaCrownLog "✅ Passed:   $($script:PassCount)" "SUCCESS"
+    Write-DeltaCrownLog "❌ Failed:   $($script:FailCount)" $(if($script:FailCount -gt 0){"ERROR"}else{"SUCCESS"})
+    Write-DeltaCrownLog "⚠️ Warnings: $($script:WarnCount)" $(if($script:WarnCount -gt 0){"WARNING"}else{"INFO"})
+    Write-DeltaCrownLog "⏭️ Skipped:  $($script:SkipCount)" "INFO"
     Write-DeltaCrownLog "Duration:    $($duration.TotalSeconds.ToString('F1'))s" "INFO"
 
     # Export JSON report
     $report = @{
         Summary = @{
-            Passed   = $global:PassCount
-            Failed   = $global:FailCount
-            Warnings = $global:WarnCount
-            Skipped  = $global:SkipCount
-            Total    = $global:TestResults.Count
-            Duration = $duration.TotalSeconds
-            Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            ScriptVersion = $scriptVersion
+            Environment   = $Environment
+            TenantName    = $TenantName
+            Passed        = $script:PassCount
+            Failed        = $script:FailCount
+            Warnings      = $script:WarnCount
+            Skipped       = $script:SkipCount
+            Total         = $script:TestResults.Count
+            Duration      = $duration.TotalSeconds
+            Timestamp     = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
         }
-        Results = $global:TestResults
+        Results = $script:TestResults
     }
 
-    $reportPath = Join-Path $ProjectRoot "phase3-week2\docs\3.7-verification-report.json"
+    $reportPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" (Join-Path "docs" "3.7-verification-report.json"))
     $report | ConvertTo-Json -Depth 5 | Out-File -FilePath $reportPath -Force
     Write-DeltaCrownLog "Report saved: $reportPath" "INFO"
 
     Export-DeltaCrownLogBuffer -Path $LogFile
 
     # Exit codes
-    if ($global:FailCount -gt 0) {
-        Write-DeltaCrownLog "VERIFICATION FAILED — $global:FailCount critical failures" "CRITICAL"
+    if ($script:FailCount -gt 0) {
+        Write-DeltaCrownLog "VERIFICATION FAILED — $($script:FailCount) critical failures" "CRITICAL"
         exit 2
     }
-    elseif ($global:WarnCount -gt 0) {
-        Write-DeltaCrownLog "VERIFICATION PASSED WITH WARNINGS — $global:WarnCount warnings" "WARNING"
+    elseif ($script:WarnCount -gt 0) {
+        Write-DeltaCrownLog "VERIFICATION PASSED WITH WARNINGS — $($script:WarnCount) warnings" "WARNING"
         exit 1
     }
     else {
@@ -335,6 +504,11 @@ catch {
     exit 2
 }
 finally {
-    Disconnect-PnPOnline -ErrorAction SilentlyContinue
-    Disconnect-MgGraph -ErrorAction SilentlyContinue
+    # A2/A3: Only disconnect services WE connected
+    if ($script:OwnsPnPConnection) { Disconnect-PnPOnline -ErrorAction SilentlyContinue }
+    if ($script:OwnsGraphConnection) { Disconnect-MgGraph -ErrorAction SilentlyContinue }
+    if ($script:OwnsIPPSConnection -or $script:OwnsExchangeConnection) {
+        Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
+    }
+    Write-DeltaCrownLog "Disconnected from all services" "INFO"
 }

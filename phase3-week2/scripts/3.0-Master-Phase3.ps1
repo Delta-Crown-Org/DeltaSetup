@@ -2,10 +2,12 @@
 # PHASE 3.0: Master Orchestrator
 # Delta Crown Extensions — Execute All Phase 3 Scripts in Dependency Order
 # ============================================================================
-# VERSION: 1.0.0
-# DESCRIPTION: Validates Phase 2 prerequisite, then executes Phase 3 scripts
-#              in correct dependency order with comprehensive logging
+# VERSION: 1.1.0
+# DESCRIPTION: Validates Phase 2 prerequisite, pre-authenticates ALL services,
+#              then executes Phase 3 scripts in dependency order (hands-free)
 # ADR: ADR-002 Phase 3 SharePoint Sites + Teams Collaboration
+# FIXES: A5 (pre-auth), B4 (AdminUrl pass-through), B5 (LASTEXITCODE),
+#        B7 (path separators)
 # ============================================================================
 
 #Requires -Version 5.1
@@ -37,16 +39,23 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$scriptVersion = "1.0.0"
+$scriptVersion = "1.1.0"
 
+# ============================================================================
+# PATH RESOLUTION (B7: Join-Path everywhere, no backslash literals)
+# ============================================================================
 $ScriptRoot = $PSScriptRoot
 if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+# ============================================================================
+# MODULE IMPORT (Auth + Common)
+# ============================================================================
+$ModulesPath = Join-Path $ProjectRoot (Join-Path "phase2-week1" "modules")
+Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
 
-$LogPath = Join-Path $ProjectRoot "phase3-week2\logs"
+$LogPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "logs")
 if (!(Test-Path $LogPath)) { New-Item -ItemType Directory -Path $LogPath -Force | Out-Null }
 $LogFile = Join-Path $LogPath "3.0-Master-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
 
@@ -82,31 +91,32 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # PRE-CHECK: Verify Phase 2 is deployed
+    # PRE-CHECK: Verify Phase 2 is deployed (B5: try/catch, not LASTEXITCODE)
     # ------------------------------------------------------------------
     if (!$SkipPreCheck) {
         Write-DeltaCrownLog "=== Pre-Check: Verifying Phase 2 ===" "STAGE"
 
-        $phase2VerifyScript = Join-Path $ProjectRoot "phase2-week1\scripts\2.7-Phase2-Verification.ps1"
+        $phase2VerifyScript = Join-Path $ProjectRoot (Join-Path "phase2-week1" (Join-Path "scripts" "2.7-Phase2-Verification.ps1"))
         if (Test-Path $phase2VerifyScript) {
             Write-DeltaCrownLog "Running Phase 2 verification..." "INFO"
 
-            $phase2Result = & $phase2VerifyScript -TenantName $TenantName -AdminUrl $AdminUrl -ErrorAction SilentlyContinue
-            if ($LASTEXITCODE -eq 2) {
-                throw "Phase 2 verification FAILED — Cannot proceed with Phase 3. Run Phase 2 first."
+            try {
+                $phase2Result = & $phase2VerifyScript -TenantName $TenantName -AdminUrl $AdminUrl
+                if ($phase2Result -and $phase2Result.Status -eq "PARTIAL") {
+                    Write-DeltaCrownLog "Phase 2 has warnings — proceeding with caution" "WARNING"
+                }
+                else {
+                    Write-DeltaCrownLog "Phase 2 verification passed" "SUCCESS"
+                }
             }
-            elseif ($LASTEXITCODE -eq 1) {
-                Write-DeltaCrownLog "Phase 2 has warnings — proceeding with caution" "WARNING"
-            }
-            else {
-                Write-DeltaCrownLog "Phase 2 verification passed" "SUCCESS"
+            catch {
+                throw "Phase 2 verification FAILED — Cannot proceed with Phase 3. Run Phase 2 first. Error: $_"
             }
         }
         else {
             Write-DeltaCrownLog "Phase 2 verification script not found — checking hub directly" "WARNING"
 
-            Import-Module PnP.PowerShell -MinimumVersion 2.0.0 -ErrorAction Stop
-            Connect-PnPOnline -Url $AdminUrl -Interactive
+            Connect-DeltaCrownSharePoint -Url $AdminUrl
 
             $dceHub = Get-PnPTenantSite -Url "https://$TenantName.sharepoint.com/sites/dce-hub" -ErrorAction SilentlyContinue
             if (!$dceHub) {
@@ -119,12 +129,56 @@ try {
             }
 
             Write-DeltaCrownLog "DCE Hub verified: $($dceHub.Url)" "SUCCESS"
-            Disconnect-PnPOnline
         }
     }
     else {
         Write-DeltaCrownLog "Skipping Phase 2 pre-check (SkipPreCheck flag)" "WARNING"
     }
+
+    # ------------------------------------------------------------------
+    # PRE-AUTHENTICATION (A5: connect all services ONCE upfront)
+    # Tyler approves auth prompts here, then everything runs hands-free
+    # ------------------------------------------------------------------
+    Write-DeltaCrownLog "=== Pre-Authentication ===" "STAGE"
+    Write-DeltaCrownLog "You will be prompted to authenticate to up to 4 services." "INFO"
+    Write-DeltaCrownLog "After approving, the rest of the execution is hands-free." "INFO"
+
+    $authConfig = Import-DeltaCrownAuthConfig -Environment $Environment
+
+    # 1. SharePoint (PnP) — needed by 3.1, 3.3, 3.6, 3.7
+    Write-DeltaCrownLog "Authenticating to SharePoint Online..." "INFO"
+    Connect-DeltaCrownSharePoint -Url $AdminUrl -AuthConfig $authConfig
+    Write-DeltaCrownLog "SharePoint: Connected ✓" "SUCCESS"
+
+    # 2. Microsoft Graph — needed by 3.2, 3.3, 3.7
+    $graphScopes = @(
+        "Group.ReadWrite.All",
+        "TeamSettings.ReadWrite.All",
+        "Channel.Create",
+        "TeamsTab.Create",
+        "GroupMember.ReadWrite.All",
+        "Team.ReadBasic.All",
+        "Channel.ReadBasic.All"
+    )
+    Write-DeltaCrownLog "Authenticating to Microsoft Graph..." "INFO"
+    Connect-DeltaCrownGraph -RequiredScopes $graphScopes -AuthConfig $authConfig
+    Write-DeltaCrownLog "Graph: Connected ✓" "SUCCESS"
+
+    # 3. Exchange Online — needed by 3.4 (IPPS), 3.5
+    if ($Phase -in @("All", "Mailboxes", "DLP")) {
+        Write-DeltaCrownLog "Authenticating to Exchange Online..." "INFO"
+        Connect-DeltaCrownExchange -AuthConfig $authConfig
+        Write-DeltaCrownLog "Exchange: Connected ✓" "SUCCESS"
+    }
+
+    # 4. Security & Compliance (IPPS) — needed by 3.4
+    if ($Phase -in @("All", "DLP")) {
+        Write-DeltaCrownLog "Authenticating to Security & Compliance..." "INFO"
+        Connect-DeltaCrownIPPS -AuthConfig $authConfig
+        Write-DeltaCrownLog "IPPS: Connected ✓" "SUCCESS"
+    }
+
+    Write-DeltaCrownLog "All services authenticated. Execution is now hands-free." "SUCCESS"
 
     # ------------------------------------------------------------------
     # DETERMINE WHICH STEPS TO RUN
@@ -161,7 +215,7 @@ try {
     }
 
     # ------------------------------------------------------------------
-    # EXECUTE EACH STEP
+    # EXECUTE EACH STEP (B4: pass AdminUrl to all scripts that accept it)
     # ------------------------------------------------------------------
     foreach ($step in $stepsToRun) {
         $scriptPath = Join-Path $ScriptRoot $step.Script
@@ -183,12 +237,17 @@ try {
                 Environment = $Environment
             }
 
-            # Add AdminUrl for scripts that need it
+            # Pass AdminUrl to scripts that accept it (B4: comprehensive list)
             if ($step.Id -in @("3.1", "3.3", "3.6", "3.7")) {
                 $commonParams.AdminUrl = $AdminUrl
             }
 
-            # Add WhatIf propagation
+            # Pass BrandDomain to 3.5 (Shared Mailboxes)
+            if ($step.Id -eq "3.5") {
+                $commonParams.BrandDomain = "deltacrown.com.au"
+            }
+
+            # Propagate WhatIf
             if ($WhatIfPreference) {
                 $commonParams.WhatIf = $true
             }
@@ -223,8 +282,8 @@ try {
                 Error    = $_.ToString()
             }
 
-            # Decide whether to continue or abort
-            if ($step.Id -in @("3.1")) {
+            # 3.1 is critical — sites must exist for everything else
+            if ($step.Id -eq "3.1") {
                 throw "Critical step $($step.Id) failed — cannot continue. Fix and retry."
             }
 
@@ -253,7 +312,7 @@ try {
     }
 
     # Save master results
-    $resultsPath = Join-Path $ProjectRoot "phase3-week2\docs\3.0-master-results.json"
+    $resultsPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" (Join-Path "docs" "3.0-master-results.json"))
     $masterResults | ConvertTo-Json -Depth 5 | Out-File -FilePath $resultsPath -Force
 
     Export-DeltaCrownLogBuffer -Path $LogFile
@@ -274,4 +333,8 @@ catch {
     Write-DeltaCrownLog "Stack Trace: $($_.ScriptStackTrace)" "ERROR"
     Export-DeltaCrownLogBuffer -Path $LogFile
     exit 2
+}
+finally {
+    Disconnect-DeltaCrownAll
+    Write-DeltaCrownLog "All services disconnected" "INFO"
 }

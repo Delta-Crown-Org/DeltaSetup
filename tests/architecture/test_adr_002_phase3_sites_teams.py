@@ -50,7 +50,7 @@ REQUIRED_DCE_SITES = {
 
 # Required SharePoint Lists per site
 REQUIRED_LISTS = {
-    "DCE-Operations": ["Bookings", "Staff Schedule", "Tasks", "Inventory"],
+    "DCE-Operations": ["Bookings", "Staff Schedule", "Tasks", "Inventory", "Calendar"],
     "DCE-ClientServices": ["Client Records", "Service Catalog", "Feedback"],
     "DCE-Marketing": ["Campaigns", "Social Calendar"],
     "DCE-Docs": [],  # Document center uses libraries only
@@ -217,7 +217,7 @@ class TestSiteArchitecture:
                 f"{site_name} should be Team Site"
 
     @pytest.mark.parametrize("site_name,expected_lists", [
-        ("DCE-Operations", ["Bookings", "Staff Schedule", "Tasks", "Inventory"]),
+        ("DCE-Operations", ["Bookings", "Staff Schedule", "Tasks", "Inventory", "Calendar"]),
         ("DCE-ClientServices", ["Client Records", "Service Catalog", "Feedback"]),
         ("DCE-Marketing", ["Campaigns", "Social Calendar"]),
     ])

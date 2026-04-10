@@ -2,12 +2,13 @@
 # PHASE 3.4: DLP Policy Creation
 # Delta Crown Extensions — Data Loss Prevention Policies
 # ============================================================================
-# VERSION: 1.0.0
+# VERSION: 1.1.0
 # DESCRIPTION: Creates 3 DLP policies for Phase 3 brand isolation.
 #              30-day test mode per Security Auditor condition SEC-002-1.
 # DEPENDS ON: 3.3 (security hardening complete, sites hub-associated)
 # ADR: ADR-002 Phase 3 — DLP Policy Coverage
 # SEC: SECURITY-COSIGN-ADR002.md — SEC-002-1 (30-day test period)
+# FIXES: A3 (connection ownership), B6 (no-op rules), B7 (path separators)
 # ============================================================================
 
 #Requires -Version 5.1
@@ -25,21 +26,31 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$scriptVersion = "1.0.0"
+$scriptVersion = "1.1.0"
 
+# ============================================================================
+# PATH RESOLUTION (B7: Join-Path everywhere)
+# ============================================================================
 $ScriptRoot = $PSScriptRoot
 if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot (Join-Path "phase2-week1" "modules")
+Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
 
-$LogPath = Join-Path $ProjectRoot "phase3-week2\logs"
+$LogPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "logs")
 if (!(Test-Path $LogPath)) { New-Item -ItemType Directory -Path $LogPath -Force | Out-Null }
 $LogFile = Join-Path $LogPath "3.4-DLP-Policies-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
 
 # ============================================================================
+# CONNECTION OWNERSHIP (A3)
+# ============================================================================
+$script:OwnsIPPSConnection = $false
+
+# ============================================================================
 # DLP POLICY DEFINITIONS (3 of 10 budget)
+# B6 FIX: Each rule now has proper content conditions
 # ============================================================================
 $DLPPolicies = @(
     @{
@@ -55,18 +66,20 @@ $DLPPolicies = @(
         )
         Rules       = @(
             @{
-                Name = "Block-Cross-Brand-Access"
+                Name        = "Block-Cross-Brand-Access"
                 Description = "Block DCE content sharing with non-DCE recipients"
                 BlockAccess = $true
-                Severity = "High"
-                PolicyTip = "This content is restricted to Delta Crown Extensions staff only."
+                AccessScope = "NotInOrganization"
+                Severity    = "High"
+                PolicyTip   = "This content is restricted to Delta Crown Extensions staff only."
             },
             @{
-                Name = "Warn-External-Sharing"
+                Name        = "Warn-External-Sharing"
                 Description = "Warn users when sharing DCE content externally"
                 BlockAccess = $false
-                Severity = "Medium"
-                PolicyTip = "WARNING: You are sharing Delta Crown Extensions content externally."
+                AccessScope = "NotInOrganization"
+                Severity    = "Medium"
+                PolicyTip   = "WARNING: You are sharing Delta Crown Extensions content externally."
             }
         )
     },
@@ -83,11 +96,17 @@ $DLPPolicies = @(
         )
         Rules       = @(
             @{
-                Name = "Block-External-Corp-Sharing"
+                Name        = "Block-External-Corp-Sharing"
                 Description = "Block external sharing of Corporate-Confidential content"
                 BlockAccess = $true
-                Severity = "High"
-                PolicyTip = "Corporate confidential content cannot be shared externally."
+                AccessScope = "NotInOrganization"
+                Severity    = "High"
+                PolicyTip   = "Corporate confidential content cannot be shared externally."
+                # B6: Include Australian sensitive info types for PII detection
+                SensitiveInfo = @(
+                    @{ Name = "Australia Tax File Number";       MinCount = 1; MaxConfidence = 100 }
+                    @{ Name = "Australia Medical Account Number"; MinCount = 1; MaxConfidence = 100 }
+                )
             }
         )
     },
@@ -98,18 +117,21 @@ $DLPPolicies = @(
         Locations   = @("All")
         Rules       = @(
             @{
-                Name = "Block-Anonymous-Links"
+                Name        = "Block-Anonymous-Links"
                 Description = "Block creation of anonymous sharing links"
                 BlockAccess = $true
-                Severity = "High"
-                PolicyTip = "Anonymous sharing links are not permitted."
+                AccessScope = "NotInOrganization"
+                BlockAccessScope = "All"
+                Severity    = "High"
+                PolicyTip   = "Anonymous sharing links are not permitted."
             },
             @{
-                Name = "Block-Personal-Email-Sharing"
+                Name        = "Block-Personal-Email-Sharing"
                 Description = "Block sharing with personal email domains"
                 BlockAccess = $true
-                Severity = "Medium"
-                PolicyTip = "Sharing with personal email addresses is not permitted."
+                AccessScope = "NotInOrganization"
+                Severity    = "Medium"
+                PolicyTip   = "Sharing with personal email addresses is not permitted."
             }
         )
     }
@@ -133,9 +155,18 @@ try {
         EnforcementDate = (Get-Date).AddDays($TestPeriodDays).ToString("yyyy-MM-dd")
     }
 
-    # Connect to Security & Compliance Center
-    Write-DeltaCrownLog "Connecting to Security & Compliance Center..." "INFO"
-    Connect-IPPSSession -ShowBanner:$false
+    # ------------------------------------------------------------------
+    # CONNECTION SETUP (A3: check if Master pre-authed)
+    # ------------------------------------------------------------------
+    $existingSession = Get-PSSession | Where-Object { $_.ComputerName -match "compliance" }
+    if (!$existingSession -or $existingSession.State -ne "Opened") {
+        Write-DeltaCrownLog "Connecting to Security & Compliance Center..." "INFO"
+        Connect-DeltaCrownIPPS
+        $script:OwnsIPPSConnection = $true
+    }
+    else {
+        Write-DeltaCrownLog "Using pre-established IPPS connection" "INFO"
+    }
     Write-DeltaCrownLog "Connected to SCC" "SUCCESS"
 
     foreach ($policy in $DLPPolicies) {
@@ -171,18 +202,33 @@ try {
                 Write-DeltaCrownLog "  Created policy: $($policy.Name) (Mode: $($policy.Mode))" "SUCCESS"
                 $results.PoliciesCreated += $policy.Name
 
-                # Create rules for this policy
+                # Create rules for this policy (B6: with proper conditions)
                 foreach ($rule in $policy.Rules) {
                     $ruleParams = @{
-                        Name       = $rule.Name
-                        Policy     = $policy.Name
+                        Name        = $rule.Name
+                        Policy      = $policy.Name
                         BlockAccess = $rule.BlockAccess
                         NotifyUser  = "SiteAdmin"
                         GenerateAlert = "SiteAdmin"
                     }
 
+                    # B6: Add AccessScope condition (prevents no-op rules)
+                    if ($rule.ContainsKey("AccessScope")) {
+                        $ruleParams.AccessScope = $rule.AccessScope
+                    }
+
+                    # B6: Add BlockAccessScope for anonymous link blocking
+                    if ($rule.ContainsKey("BlockAccessScope")) {
+                        $ruleParams.BlockAccessScope = $rule.BlockAccessScope
+                    }
+
+                    # B6: Add sensitive information type conditions
+                    if ($rule.ContainsKey("SensitiveInfo") -and $rule.SensitiveInfo.Count -gt 0) {
+                        $ruleParams.ContentContainsSensitiveInformation = $rule.SensitiveInfo
+                    }
+
                     New-DlpComplianceRule @ruleParams
-                    Write-DeltaCrownLog "    Created rule: $($rule.Name) (Block: $($rule.BlockAccess))" "SUCCESS"
+                    Write-DeltaCrownLog "    Created rule: $($rule.Name) (Block: $($rule.BlockAccess), Scope: $($rule.AccessScope))" "SUCCESS"
                     $results.RulesCreated += "$($policy.Name)/$($rule.Name)"
                 }
             }
@@ -206,7 +252,7 @@ try {
     Write-DeltaCrownLog "Remaining budget:    7 policies for future brands" "INFO"
     Write-DeltaCrownLog "Errors:              $($results.Errors.Count)" $(if($results.Errors.Count -gt 0){"ERROR"}else{"SUCCESS"})
 
-    $resultsPath = Join-Path $ProjectRoot "phase3-week2\docs\3.4-dlp-results.json"
+    $resultsPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" (Join-Path "docs" "3.4-dlp-results.json"))
     $results | ConvertTo-Json -Depth 5 | Out-File -FilePath $resultsPath -Force
 
     Export-DeltaCrownLogBuffer -Path $LogFile
@@ -225,5 +271,7 @@ catch {
     throw
 }
 finally {
-    Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
+    if ($script:OwnsIPPSConnection) {
+        Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
+    }
 }

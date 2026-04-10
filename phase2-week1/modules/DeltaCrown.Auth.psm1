@@ -352,6 +352,161 @@ function Connect-DeltaCrownGraph {
 
 #endregion
 
+
+#region Exchange Online Authentication
+
+<#
+.SYNOPSIS
+    Connects to Exchange Online with proper authentication.
+.DESCRIPTION
+    Supports certificate-based auth (production) and interactive (dev).
+    Implements retry logic and proper error handling.
+#>
+function Connect-DeltaCrownExchange {
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [hashtable]$AuthConfig = $null,
+        
+        [Parameter()]
+        [ValidateRange(1,5)]
+        [int]$RetryCount = 3
+    )
+    
+    if (!$AuthConfig) {
+        $AuthConfig = Import-DeltaCrownAuthConfig
+    }
+    
+    $attempt = 0
+    $connected = $false
+    $lastError = $null
+    
+    while ($attempt -lt $RetryCount -and !$connected) {
+        $attempt++
+        
+        try {
+            Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
+            
+            # Certificate-based authentication (Production)
+            if ($AuthConfig.CertificatePath -and (Test-Path $AuthConfig.CertificatePath)) {
+                Connect-ExchangeOnline -CertificateFilePath $AuthConfig.CertificatePath -AppId $AuthConfig.ClientId -Organization "$($AuthConfig.TenantId)" -ShowBanner:$false -ErrorAction Stop
+                Write-Verbose "Connected to Exchange Online using certificate"
+            }
+            elseif ($AuthConfig.Thumbprint) {
+                Connect-ExchangeOnline -CertificateThumbprint $AuthConfig.Thumbprint -AppId $AuthConfig.ClientId -Organization "$($AuthConfig.TenantId)" -ShowBanner:$false -ErrorAction Stop
+                Write-Verbose "Connected to Exchange Online using thumbprint"
+            }
+            elseif ($AuthConfig.Interactive -or $AuthConfig._Environment -eq "Development") {
+                if ($AuthConfig._Environment -eq "Production") {
+                    throw "Interactive authentication is NOT allowed in Production environment!"
+                }
+                Connect-ExchangeOnline -ShowBanner:$false -ErrorAction Stop
+                Write-Verbose "Connected to Exchange Online using interactive authentication"
+            }
+            else {
+                throw "No valid authentication method available for Exchange Online"
+            }
+            
+            $connected = $true
+            $script:AuthContext['Exchange'] = @{
+                ConnectedAt = Get-Date
+                Method = if ($AuthConfig.CertificatePath) { "Certificate" } elseif ($AuthConfig.Thumbprint) { "Thumbprint" } else { "Interactive" }
+            }
+        }
+        catch {
+            $lastError = $_
+            Write-Warning "Exchange connection attempt $attempt failed: $($_.Exception.Message)"
+            if ($attempt -lt $RetryCount) {
+                Start-Sleep -Seconds (2 * $attempt)
+            }
+        }
+    }
+    
+    if (!$connected) {
+        throw "Failed to connect to Exchange Online after $RetryCount attempts. Last error: $lastError"
+    }
+    
+    Write-Verbose "Successfully connected to Exchange Online"
+}
+
+#endregion
+
+#region Security & Compliance Authentication
+
+<#
+.SYNOPSIS
+    Connects to Security & Compliance Center (IPPS) with proper authentication.
+.DESCRIPTION
+    Supports certificate-based auth (production) and interactive (dev).
+    Used for DLP policy management.
+#>
+function Connect-DeltaCrownIPPS {
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [hashtable]$AuthConfig = $null,
+        
+        [Parameter()]
+        [ValidateRange(1,5)]
+        [int]$RetryCount = 3
+    )
+    
+    if (!$AuthConfig) {
+        $AuthConfig = Import-DeltaCrownAuthConfig
+    }
+    
+    $attempt = 0
+    $connected = $false
+    $lastError = $null
+    
+    while ($attempt -lt $RetryCount -and !$connected) {
+        $attempt++
+        
+        try {
+            # Certificate-based authentication (Production)
+            if ($AuthConfig.CertificatePath -and (Test-Path $AuthConfig.CertificatePath)) {
+                Connect-IPPSSession -CertificateFilePath $AuthConfig.CertificatePath -AppId $AuthConfig.ClientId -Organization "$($AuthConfig.TenantId)" -ShowBanner:$false -ErrorAction Stop
+                Write-Verbose "Connected to IPPS using certificate"
+            }
+            elseif ($AuthConfig.Thumbprint) {
+                Connect-IPPSSession -CertificateThumbprint $AuthConfig.Thumbprint -AppId $AuthConfig.ClientId -Organization "$($AuthConfig.TenantId)" -ShowBanner:$false -ErrorAction Stop
+                Write-Verbose "Connected to IPPS using thumbprint"
+            }
+            elseif ($AuthConfig.Interactive -or $AuthConfig._Environment -eq "Development") {
+                if ($AuthConfig._Environment -eq "Production") {
+                    throw "Interactive authentication is NOT allowed in Production environment!"
+                }
+                Connect-IPPSSession -ShowBanner:$false -ErrorAction Stop
+                Write-Verbose "Connected to IPPS using interactive authentication"
+            }
+            else {
+                throw "No valid authentication method available for IPPS"
+            }
+            
+            $connected = $true
+            $script:AuthContext['IPPS'] = @{
+                ConnectedAt = Get-Date
+                Method = if ($AuthConfig.CertificatePath) { "Certificate" } elseif ($AuthConfig.Thumbprint) { "Thumbprint" } else { "Interactive" }
+            }
+        }
+        catch {
+            $lastError = $_
+            Write-Warning "IPPS connection attempt $attempt failed: $($_.Exception.Message)"
+            if ($attempt -lt $RetryCount) {
+                Start-Sleep -Seconds (2 * $attempt)
+            }
+        }
+    }
+    
+    if (!$connected) {
+        throw "Failed to connect to IPPS after $RetryCount attempts. Last error: $lastError"
+    }
+    
+    Write-Verbose "Successfully connected to Security & Compliance Center"
+}
+
+#endregion
+
 #region Utility Functions
 
 <#
@@ -376,6 +531,14 @@ function Disconnect-DeltaCrownAll {
     }
     catch { }
     
+
+    try {
+        Disconnect-ExchangeOnline -Confirm:$false -ErrorAction SilentlyContinue
+        Write-Verbose "Disconnected Exchange Online"
+    }
+    catch { }
+    
+    # Note: IPPS sessions are disconnected via Disconnect-ExchangeOnline
     $script:AuthContext.Clear()
     Write-Verbose "Cleared authentication context"
 }
@@ -494,6 +657,8 @@ function Show-DeltaCrownBusinessPremiumWarning {
 Export-ModuleMember -Function @(
     'Connect-DeltaCrownSharePoint'
     'Connect-DeltaCrownGraph'
+    'Connect-DeltaCrownExchange'
+    'Connect-DeltaCrownIPPS'
     'Disconnect-DeltaCrownAll'
     'Get-DeltaCrownAuthStatus'
     'Import-DeltaCrownAuthConfig'

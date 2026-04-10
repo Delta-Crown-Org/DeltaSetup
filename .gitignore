@@ -28,3 +28,8 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Phase 3 runtime results (may contain tenant GUIDs — F7)
+phase3-week2/docs/*-results.json
+phase3-week2/logs/
+phase3-week2/templates/

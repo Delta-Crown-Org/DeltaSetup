@@ -2,11 +2,12 @@
 # PHASE 3.6: PnP Template Export
 # Delta Crown Extensions — Capture Sites as Reusable Templates
 # ============================================================================
-# VERSION: 1.0.0
+# VERSION: 1.1.0
 # DESCRIPTION: Exports all 4 DCE sites as PnP provisioning templates,
 #              parameterizes brand values, generates companion scripts
 # DEPENDS ON: ALL Phase 3 components deployed and verified
 # ADR: ADR-002 Phase 3 — Template Capture Strategy
+# FIXES: A3 (connection ownership), B7 (path separators)
 # ============================================================================
 
 #Requires -Version 5.1
@@ -26,23 +27,32 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$scriptVersion = "1.0.0"
+$scriptVersion = "1.1.0"
 
+# ============================================================================
+# PATH RESOLUTION (B7: Join-Path everywhere)
+# ============================================================================
 $ScriptRoot = $PSScriptRoot
 if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot (Join-Path "phase2-week1" "modules")
+Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
 
-$LogPath = Join-Path $ProjectRoot "phase3-week2\logs"
+$LogPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "logs")
 if (!(Test-Path $LogPath)) { New-Item -ItemType Directory -Path $LogPath -Force | Out-Null }
 $LogFile = Join-Path $LogPath "3.6-Template-Export-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
 
 if (!$OutputPath) {
-    $OutputPath = Join-Path $ProjectRoot "phase3-week2\templates"
+    $OutputPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" "templates")
 }
 if (!(Test-Path $OutputPath)) { New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null }
+
+# ============================================================================
+# CONNECTION OWNERSHIP (A3)
+# ============================================================================
+$script:OwnsPnPConnection = $false
 
 # ============================================================================
 # TEMPLATE DEFINITIONS
@@ -79,6 +89,18 @@ try {
     }
 
     # ------------------------------------------------------------------
+    # CONNECTION SETUP (A3: check if Master pre-authed)
+    # ------------------------------------------------------------------
+    $existingCtx = Get-PnPContext -ErrorAction SilentlyContinue
+    if (!$existingCtx) {
+        Connect-DeltaCrownSharePoint -Url $AdminUrl
+        $script:OwnsPnPConnection = $true
+    }
+    else {
+        Write-DeltaCrownLog "Using pre-established SharePoint connection" "INFO"
+    }
+
+    # ------------------------------------------------------------------
     # STEP 1: Export PnP templates from each site
     # ------------------------------------------------------------------
     Write-DeltaCrownLog "=== Step 1: Export Site Templates ===" "STAGE"
@@ -90,7 +112,7 @@ try {
         try {
             Write-DeltaCrownLog "Exporting: $($site.Url) → $($site.FileName)" "INFO"
 
-            Connect-PnPOnline -Url $fullUrl -Interactive
+            Connect-DeltaCrownSharePoint -Url $fullUrl
 
             if ($PSCmdlet.ShouldProcess($fullUrl, "Export PnP template")) {
                 Get-PnPSiteTemplate -Out $outFile `
@@ -106,8 +128,6 @@ try {
                 $results.Hashes[$site.FileName] = $hash
                 Write-DeltaCrownLog "  SHA-256: $hash" "DEBUG"
             }
-
-            Disconnect-PnPOnline
         }
         catch {
             Write-DeltaCrownLog "Failed to export $($site.Url): $_" "ERROR"
@@ -121,7 +141,7 @@ try {
     Write-DeltaCrownLog "=== Step 2: Export Hub Theme ===" "STAGE"
 
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
+        Connect-DeltaCrownSharePoint -Url $AdminUrl
         $theme = Get-PnPTenantTheme -Name "Delta Crown Extensions Theme" -ErrorAction Stop
 
         $themeFile = Join-Path $OutputPath "DCE-Hub-Theme.json"
@@ -132,7 +152,6 @@ try {
         $results.Hashes["DCE-Hub-Theme.json"] = $hash
 
         Write-DeltaCrownLog "Exported theme: DCE-Hub-Theme.json" "SUCCESS"
-        Disconnect-PnPOnline
     }
     catch {
         Write-DeltaCrownLog "Failed to export theme: $_" "ERROR"
@@ -220,7 +239,7 @@ try {
     Write-DeltaCrownLog "Brand config:        $brandConfigFile" "SUCCESS"
     Write-DeltaCrownLog "Errors:              $($results.Errors.Count)" $(if($results.Errors.Count -gt 0){"ERROR"}else{"SUCCESS"})
 
-    $resultsPath = Join-Path $ProjectRoot "phase3-week2\docs\3.6-template-results.json"
+    $resultsPath = Join-Path $ProjectRoot (Join-Path "phase3-week2" (Join-Path "docs" "3.6-template-results.json"))
     $results | ConvertTo-Json -Depth 5 | Out-File -FilePath $resultsPath -Force
 
     Export-DeltaCrownLogBuffer -Path $LogFile
@@ -238,5 +257,7 @@ catch {
     throw
 }
 finally {
-    Disconnect-PnPOnline -ErrorAction SilentlyContinue
+    if ($script:OwnsPnPConnection) {
+        Disconnect-PnPOnline -ErrorAction SilentlyContinue
+    }
 }
