@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Delta Crown Extensions — One Framework. Unlimited Brands.</title>
-  <meta name="description" content="A scalable operational template for multi-brand franchise operations. Zero incremental cost. 14-day deployment.">
+  <title>Delta Crown Extensions — Project Status & Architecture</title>
+  <meta name="description" content="SharePoint Hub & Spoke architecture for Delta Crown Extensions. Live progress dashboard, migration roadmap, and technical architecture.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,13 +24,13 @@
              alt="Delta Crown Extensions — Home" class="nav__logo">
       </a>
       <div class="nav__links">
-        <a href="#problem" class="nav__link">Challenge</a>
-        <a href="#solution" class="nav__link">Solution</a>
-        <a href="#proof" class="nav__link">Proof</a>
-        <a href="#numbers" class="nav__link">Numbers</a>
-        <a href="#plan" class="nav__link">Plan</a>
+        <a href="#status" class="nav__link">Status</a>
+        <a href="#problem" class="nav__link">Problem</a>
+        <a href="#architecture" class="nav__link">Architecture</a>
+        <a href="#migration" class="nav__link">Migration</a>
+        <a href="#users" class="nav__link">Users</a>
+        <a href="#progress" class="nav__link">Progress</a>
         <a href="#vision" class="nav__link">Vision</a>
-        <a href="#cta" class="nav__link">Get Started</a>
       </div>
       <div class="nav__progress" aria-hidden="true"></div>
     </div>
@@ -43,11 +43,25 @@
     <div class="hero__content">
       <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png"
            alt="Delta Crown Extensions" class="hero__logo reveal reveal--scale">
-      <h1 class="hero__title reveal">One Framework.<br>Unlimited Brands.</h1>
-      <p class="hero__subtitle reveal">The operational blueprint for multi-brand excellence</p>
-      <p class="reveal" style="margin-top: 32px; color: rgba(255,255,255,0.45); font-size: 0.9375rem; max-width: 440px; margin-left: auto; margin-right: auto;">
-        Building the template from scratch with Delta Crown —<br>
-        then deploying to every brand in the portfolio.
+      <h1 class="hero__title reveal">Building the<br>Brand Platform.</h1>
+      <p class="hero__subtitle reveal">SharePoint Hub & Spoke Architecture — Live Build</p>
+      <div class="reveal" style="margin-top: 40px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+        <span class="status status--done">
+          <span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+          Phase 1 — Email Trust
+        </span>
+        <span class="status status--done">
+          <span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+          Phase 2 — Code Complete
+        </span>
+        <span class="status status--active">
+          <span class="material-symbols-outlined" style="font-size: 14px;">rocket_launch</span>
+          Phase 3 — Ready to Deploy
+        </span>
+      </div>
+      <p class="reveal" style="margin-top: 24px; color: rgba(255,255,255,0.35); font-size: 0.875rem; max-width: 480px; margin-left: auto; margin-right: auto;">
+        18 PowerShell scripts. 7,848 lines. 150 tests passing.<br>
+        From a single shared folder to a secure, branded hub-and-spoke architecture.
       </p>
     </div>
     <div class="hero__scroll" aria-hidden="true">
@@ -56,307 +70,952 @@
     </div>
   </section>
 
-  <!-- ==================== PROBLEM ==================== -->
-  <section class="section" id="problem">
+  <!-- ==================== LIVE STATUS TICKER ==================== -->
+  <section class="section section--dark" id="status" style="padding: 48px 0;">
     <div class="container">
-      <p class="label mb-16 reveal">The Challenge</p>
-      <h2 class="mb-24 reveal" style="max-width: 650px;">Every new brand means starting from scratch.</h2>
-      <p class="text-muted mb-48 reveal" style="max-width: 560px; font-size: 1.0625rem;">
-        Custom infrastructure. Redundant licensing. Inconsistent security.
-        Multiply that by every brand in the portfolio — and the cost compounds fast.
+      <div class="ticker reveal">
+        <div class="ticker__item">
+          <div class="ticker__value" data-counter data-target="18">0</div>
+          <div class="ticker__label">Scripts Built</div>
+        </div>
+        <div class="ticker__item">
+          <div class="ticker__value" data-counter data-target="7848">0</div>
+          <div class="ticker__label">Lines of Code</div>
+        </div>
+        <div class="ticker__item">
+          <div class="ticker__value" data-counter data-target="150">0</div>
+          <div class="ticker__label">Tests Passing</div>
+        </div>
+        <div class="ticker__item">
+          <div class="ticker__value" data-counter data-target="42">0</div>
+          <div class="ticker__label">Issues Closed</div>
+        </div>
+        <div class="ticker__item">
+          <div class="ticker__value" data-counter data-prefix="$" data-target="0">$0</div>
+          <div class="ticker__label">License Cost</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== THE PROBLEM ==================== -->
+  <section class="section section--danger" id="problem">
+    <div class="container">
+      <p class="label mb-16 reveal">The Current Reality</p>
+      <h2 class="mb-16 reveal" style="max-width: 700px;">Everything lives in one folder.<br>Permissions are broken.</h2>
+      <p class="reveal mb-48" style="color: rgba(255,255,255,0.55); max-width: 580px; font-size: 1.0625rem;">
+        The <strong style="color: rgba(255,255,255,0.8);">HTT Headquarters</strong> SharePoint site has every brand's documents in a single Shared Documents library.
+        41 members. 17 folders. 16 with broken inheritance. Zero DLP policies.
       </p>
 
-      <div class="compare reveal">
-        <div class="compare__col compare__col--before">
-          <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="color: #EF5350;">cancel</span>
-            Today's Reality
-          </h3>
-          <div class="compare__row">
-            <span class="material-symbols-outlined" style="color: #EF5350; font-size: 20px;">close</span>
-            <span>Custom IT setup per brand — 2–3 months each</span>
+      <!-- Folder Chaos Grid -->
+      <div class="reveal mb-48">
+        <h3 class="mb-16" style="font-size: 1.125rem; display: flex; align-items: center; gap: 8px;">
+          <span class="material-symbols-outlined" style="color: #EF5350;">folder_off</span>
+          httbrands.sharepoint.com/sites/HTTHQ — Shared Documents
+        </h3>
+        <div class="chaos">
+          <div class="chaos__folder chaos__folder--danger">
+            <span class="chaos__folder-icon">📁</span>
+            C Suite
+            <div class="chaos__folder-perms">8 perms · broken</div>
           </div>
-          <div class="compare__row">
-            <span class="material-symbols-outlined" style="color: #EF5350; font-size: 20px;">close</span>
-            <span>Duplicate license spend, repeated manual work</span>
+          <div class="chaos__folder chaos__folder--danger">
+            <span class="chaos__folder-icon">📁</span>
+            Exec Leadership
+            <div class="chaos__folder-perms">11 perms · broken</div>
           </div>
-          <div class="compare__row">
-            <span class="material-symbols-outlined" style="color: #EF5350; font-size: 20px;">close</span>
-            <span>Inconsistent security posture across brands</span>
+          <div class="chaos__folder chaos__folder--warn">
+            <span class="chaos__folder-icon">📁</span>
+            Brand Leads
+            <div class="chaos__folder-perms">18 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--warn">
+            <span class="chaos__folder-icon">📁</span>
+            Employee Resources
+            <div class="chaos__folder-perms">11 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--danger">
+            <span class="chaos__folder-icon">📁</span>
+            Finance
+            <div class="chaos__folder-perms">11 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--warn">
+            <span class="chaos__folder-icon">📁</span>
+            Fran Dev
+            <div class="chaos__folder-perms">50 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--danger">
+            <span class="chaos__folder-icon">📁</span>
+            IT-Technology
+            <div class="chaos__folder-perms">17 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--danger">
+            <span class="chaos__folder-icon">📁</span>
+            Legal
+            <div class="chaos__folder-perms">13 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--warn">
+            <span class="chaos__folder-icon">📁</span>
+            Master BCC
+            <div class="chaos__folder-perms">41 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--warn">
+            <span class="chaos__folder-icon">📁</span>
+            Master DCE
+            <div class="chaos__folder-perms">? perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--warn">
+            <span class="chaos__folder-icon">📁</span>
+            Master FMN
+            <div class="chaos__folder-perms">39 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--danger">
+            <span class="chaos__folder-icon">📁</span>
+            Master TLL
+            <div class="chaos__folder-perms">52 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--ok">
+            <span class="chaos__folder-icon">📁</span>
+            Product
+            <div class="chaos__folder-perms">6 perms · inheriting</div>
+          </div>
+          <div class="chaos__folder chaos__folder--danger">
+            <span class="chaos__folder-icon">📁</span>
+            Real Estate
+            <div class="chaos__folder-perms">7 perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--warn">
+            <span class="chaos__folder-icon">📁</span>
+            Education
+            <div class="chaos__folder-perms">? perms · broken</div>
+          </div>
+          <div class="chaos__folder chaos__folder--warn">
+            <span class="chaos__folder-icon">📁</span>
+            Vendors
+            <div class="chaos__folder-perms">? perms · broken</div>
           </div>
         </div>
-        <div class="compare__col compare__col--after">
+      </div>
+
+      <!-- Before/After Security Comparison -->
+      <div class="transform-compare reveal">
+        <div class="transform-compare__col transform-compare__before">
           <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
-            With the Template
+            <span class="material-symbols-outlined" style="color: #EF5350;">gpp_bad</span>
+            Today's Security
           </h3>
-          <div class="compare__row">
-            <span class="material-symbols-outlined" style="color: #4CAF50; font-size: 20px;">check</span>
-            <span>Standardized playbook — 2 weeks per brand</span>
+          <div class="pain">
+            <div class="pain__icon pain__icon--bad"><span class="material-symbols-outlined" style="font-size: 20px;">close</span></div>
+            <div>
+              <strong style="color: rgba(255,255,255,0.9);">All brands in one library</strong>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45); margin-top: 2px;">DCE, TLL, BCC, FMN docs are sibling folders with no isolation</p>
+            </div>
           </div>
-          <div class="compare__row">
-            <span class="material-symbols-outlined" style="color: #4CAF50; font-size: 20px;">check</span>
-            <span>Shared license pool, automated provisioning</span>
+          <div class="pain">
+            <div class="pain__icon pain__icon--bad"><span class="material-symbols-outlined" style="font-size: 20px;">close</span></div>
+            <div>
+              <strong style="color: rgba(255,255,255,0.9);">16 of 17 folders with broken inheritance</strong>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45); margin-top: 2px;">Each folder manually permissioned — no consistency, no audit trail</p>
+            </div>
           </div>
-          <div class="compare__row">
-            <span class="material-symbols-outlined" style="color: #4CAF50; font-size: 20px;">check</span>
-            <span>Unified governance &amp; security from day one</span>
+          <div class="pain">
+            <div class="pain__icon pain__icon--bad"><span class="material-symbols-outlined" style="font-size: 20px;">close</span></div>
+            <div>
+              <strong style="color: rgba(255,255,255,0.9);">No DLP policies, no sensitivity labels</strong>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45); margin-top: 2px;">Financial data, client records, legal docs — all unprotected</p>
+            </div>
+          </div>
+          <div class="pain">
+            <div class="pain__icon pain__icon--bad"><span class="material-symbols-outlined" style="font-size: 20px;">close</span></div>
+            <div>
+              <strong style="color: rgba(255,255,255,0.9);">127 external sharing links without expiration</strong>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45); margin-top: 2px;">Unknown who has access to what externally</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="transform-compare__arrow">
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </div>
+
+        <div class="transform-compare__col transform-compare__after">
+          <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="color: #4CAF50;">verified_user</span>
+            After Deployment
+          </h3>
+          <div class="pain">
+            <div class="pain__icon pain__icon--good"><span class="material-symbols-outlined" style="font-size: 20px;">check</span></div>
+            <div>
+              <strong style="color: rgba(255,255,255,0.9);">Dedicated hub per brand with site-level isolation</strong>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45); margin-top: 2px;">DCE users see only DCE. No cross-brand data leakage.</p>
+            </div>
+          </div>
+          <div class="pain">
+            <div class="pain__icon pain__icon--good"><span class="material-symbols-outlined" style="font-size: 20px;">check</span></div>
+            <div>
+              <strong style="color: rgba(255,255,255,0.9);">Dynamic security groups from Azure AD properties</strong>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45); margin-top: 2px;">Automated: add user to tenant → auto-joins correct groups → sees correct sites</p>
+            </div>
+          </div>
+          <div class="pain">
+            <div class="pain__icon pain__icon--good"><span class="material-symbols-outlined" style="font-size: 20px;">check</span></div>
+            <div>
+              <strong style="color: rgba(255,255,255,0.9);">3 DLP policies enforcing data boundaries</strong>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45); margin-top: 2px;">Block external sharing, warn on cross-brand, enforce on anonymous links</p>
+            </div>
+          </div>
+          <div class="pain">
+            <div class="pain__icon pain__icon--good"><span class="material-symbols-outlined" style="font-size: 20px;">check</span></div>
+            <div>
+              <strong style="color: rgba(255,255,255,0.9);">External sharing disabled, guest access off</strong>
+              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45); margin-top: 2px;">Zero anonymous links. All access requires authenticated tenant identity.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== SOLUTION ==================== -->
-  <section class="section section--teal" id="solution">
-    <div class="container text-center">
-      <p class="label mb-16 reveal" style="color: var(--gold-light);">The Breakthrough</p>
-      <h2 class="reveal mb-24" style="max-width: 700px; margin-left: auto; margin-right: auto;">
-        What if every new brand could be operational in 14&nbsp;days — at zero incremental cost?
+  <!-- ==================== THE ARCHITECTURE ==================== -->
+  <section class="section section--teal" id="architecture">
+    <div class="container">
+      <p class="label mb-16 reveal" style="color: var(--gold-light);">The Architecture</p>
+      <h2 class="reveal mb-16" style="max-width: 700px; margin-left: auto; margin-right: auto; text-align: center;">
+        Hub & Spoke.<br>One Tenant. Brand Isolation.
       </h2>
-      <p class="reveal mb-64" style="color: rgba(255,255,255,0.6); max-width: 520px; margin-left: auto; margin-right: auto;">
-        Delta Crown is a new franchise — zero legacy systems.
-        The perfect clean slate for building the operational template
-        that every future brand will stand on.
+      <p class="reveal mb-48 text-center" style="color: rgba(255,255,255,0.5); max-width: 560px; margin-left: auto; margin-right: auto;">
+        Every brand gets its own hub with dedicated sites, Teams workspace, security groups, and DLP policies — all on the same M365 Business Premium tenant at zero additional cost.
       </p>
 
-      <!-- Architecture Flow -->
+      <!-- Architecture Diagram -->
+      <div class="arch reveal">
+        <div class="arch__tenant">
+          <div class="arch__tenant-label">M365 Tenant — deltacrownext (Business Premium)</div>
+
+          <div class="arch__hubs">
+            <!-- Corp Hub -->
+            <div class="arch__hub arch__hub--corp">
+              <div class="arch__hub-title">
+                <span class="material-symbols-outlined" style="font-size: 20px;">corporate_fare</span>
+                Corporate Shared Services Hub
+              </div>
+              <div class="arch__sites">
+                <div class="arch__site">
+                  <span class="material-symbols-outlined arch__site-icon" style="color: var(--teal-light);">groups</span>
+                  <span class="arch__site-name">Corp-HR</span>
+                  <span class="arch__site-type">Team Site</span>
+                </div>
+                <div class="arch__site">
+                  <span class="material-symbols-outlined arch__site-icon" style="color: var(--teal-light);">computer</span>
+                  <span class="arch__site-name">Corp-IT</span>
+                  <span class="arch__site-type">Team Site</span>
+                </div>
+                <div class="arch__site">
+                  <span class="material-symbols-outlined arch__site-icon" style="color: var(--teal-light);">payments</span>
+                  <span class="arch__site-name">Corp-Finance</span>
+                  <span class="arch__site-type">Team Site</span>
+                </div>
+                <div class="arch__site">
+                  <span class="material-symbols-outlined arch__site-icon" style="color: var(--teal-light);">school</span>
+                  <span class="arch__site-name">Corp-Training</span>
+                  <span class="arch__site-type">Team Site</span>
+                </div>
+              </div>
+              <div class="arch__connector">
+                <span class="material-symbols-outlined" style="font-size: 16px;">link</span>
+                <span>Hub-to-Hub Link</span>
+              </div>
+            </div>
+
+            <!-- DCE Hub -->
+            <div class="arch__hub arch__hub--brand">
+              <div class="arch__hub-title">
+                <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_royal-gold.png"
+                     alt="DCE" style="height: 18px; width: auto;">
+                Delta Crown Hub
+              </div>
+              <div class="arch__sites">
+                <div class="arch__site">
+                  <span class="material-symbols-outlined arch__site-icon" style="color: var(--gold);">dashboard</span>
+                  <span class="arch__site-name">DCE-Operations</span>
+                  <span class="arch__site-type">Team + Teams</span>
+                </div>
+                <div class="arch__site">
+                  <span class="material-symbols-outlined arch__site-icon" style="color: var(--gold);">person</span>
+                  <span class="arch__site-name">DCE-ClientServices</span>
+                  <span class="arch__site-type">Team Site</span>
+                </div>
+                <div class="arch__site">
+                  <span class="material-symbols-outlined arch__site-icon" style="color: var(--gold);">campaign</span>
+                  <span class="arch__site-name">DCE-Marketing</span>
+                  <span class="arch__site-type">Comm Site</span>
+                </div>
+                <div class="arch__site">
+                  <span class="material-symbols-outlined arch__site-icon" style="color: var(--gold);">description</span>
+                  <span class="arch__site-name">DCE-Docs</span>
+                  <span class="arch__site-type">Team Site</span>
+                </div>
+              </div>
+
+              <!-- Security Groups -->
+              <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(212,168,75,0.15);">
+                <div style="font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-bottom: 8px;">Dynamic Security Groups</div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <span style="padding: 3px 10px; border-radius: 6px; font-size: 0.6875rem; background: rgba(0,107,94,0.2); color: var(--teal-light);">SG-DCE-AllStaff</span>
+                  <span style="padding: 3px 10px; border-radius: 6px; font-size: 0.6875rem; background: rgba(212,168,75,0.15); color: var(--gold-light);">SG-DCE-Leadership</span>
+                  <span style="padding: 3px 10px; border-radius: 6px; font-size: 0.6875rem; background: rgba(212,168,75,0.1); color: var(--gold-light);">SG-DCE-Marketing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Future Brands Row -->
+          <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 10px 20px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.08); font-size: 0.8125rem; color: rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">store</span>
+              Bishops Hub <span style="font-size: 0.625rem; color: rgba(255,255,255,0.2);">Q3</span>
+            </div>
+            <div style="padding: 10px 20px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.08); font-size: 0.8125rem; color: rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">store</span>
+              Frenchies Hub <span style="font-size: 0.625rem; color: rgba(255,255,255,0.2);">Q3</span>
+            </div>
+            <div style="padding: 10px 20px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.08); font-size: 0.8125rem; color: rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">store</span>
+              TLL Hub <span style="font-size: 0.625rem; color: rgba(255,255,255,0.2);">Q4</span>
+            </div>
+            <div style="padding: 10px 20px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.08); font-size: 0.8125rem; color: rgba(255,255,255,0.3); display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">store</span>
+              HTT Hub <span style="font-size: 0.625rem; color: rgba(255,255,255,0.2);">Q4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What Each Site Contains -->
+      <div class="grid grid--2 reveal" style="margin-top: 48px; gap: 24px;">
+        <div class="card card--glass">
+          <h4 style="color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
+            DCE-Operations
+          </h4>
+          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.5); margin-bottom: 12px;">Connected to Teams — the daily workspace</p>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.8125rem; color: rgba(255,255,255,0.65);">
+            <span>📋 Bookings List</span>
+            <span>📋 Staff Schedule</span>
+            <span>📋 Task Board</span>
+            <span>📋 Inventory Tracker</span>
+            <span>📋 Team Calendar</span>
+            <span>📁 Operations Documents</span>
+          </div>
+        </div>
+        <div class="card card--glass">
+          <h4 style="color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 20px;">person</span>
+            DCE-ClientServices
+          </h4>
+          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.5); margin-bottom: 12px;">Client data with column-level encryption</p>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.8125rem; color: rgba(255,255,255,0.65);">
+            <span>📋 Client Records (PII protected)</span>
+            <span>📋 Service History</span>
+            <span>📋 Allergy/Medical Notes 🔒</span>
+            <span>📁 Client Documents</span>
+          </div>
+        </div>
+        <div class="card card--glass">
+          <h4 style="color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 20px;">campaign</span>
+            DCE-Marketing
+          </h4>
+          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.5); margin-bottom: 12px;">Brand assets, campaigns, and marketing calendar</p>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.8125rem; color: rgba(255,255,255,0.65);">
+            <span>📋 Marketing Calendar</span>
+            <span>📋 Brand Asset Registry</span>
+            <span>📁 Campaign Materials</span>
+            <span>📁 Brand Guidelines</span>
+          </div>
+        </div>
+        <div class="card card--glass">
+          <h4 style="color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="font-size: 20px;">description</span>
+            DCE-Docs
+          </h4>
+          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.5); margin-bottom: 12px;">Policies, SOPs, training, and strategy</p>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.8125rem; color: rgba(255,255,255,0.65);">
+            <span>📁 Policies & Procedures</span>
+            <span>📁 Standard Operating Procedures</span>
+            <span>📁 Training Materials</span>
+            <span>📁 Strategy (Leadership only)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teams Integration -->
+      <div class="callout callout--glass reveal text-center" style="margin-top: 32px;">
+        <h4 style="color: var(--gold); margin-bottom: 8px;">
+          <span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle;">chat</span>
+          Teams Workspace: Delta Crown Operations
+        </h4>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 0.8125rem;">
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">💬 General</span>
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">📊 Daily Ops</span>
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">📅 Bookings</span>
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">📣 Marketing</span>
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(212,168,75,0.15); color: var(--gold);">🔒 Leadership</span>
+        </div>
+        <p style="margin-top: 8px; font-size: 0.75rem; color: rgba(255,255,255,0.35);">
+          Each channel has SharePoint tabs connected to the relevant lists and libraries
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MIGRATION MAP ==================== -->
+  <section class="section section--dark" id="migration">
+    <div class="container">
+      <p class="label mb-16 reveal">The Migration</p>
+      <h2 class="mb-16 reveal" style="max-width: 650px;">From flat folders<br>to structured sites.</h2>
+      <p class="text-muted mb-48 reveal" style="max-width: 560px; font-size: 1.0625rem; color: rgba(255,255,255,0.5);">
+        The "Master DCE" folder on HTTHQ maps cleanly to the new hub-and-spoke sites. Corporate docs go to Corp Hub services. Brand-specific docs go to DCE sites.
+      </p>
+
+      <!-- DCE Migration Map -->
+      <div class="reveal mb-48">
+        <h3 class="mb-24" style="font-size: 1.125rem; display: flex; align-items: center; gap: 8px;">
+          <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+          Master DCE → New Architecture
+        </h3>
+        <div class="migration">
+          <!-- FROM (Current Folders) -->
+          <div class="migration__from">
+            <div style="font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-bottom: 8px; padding-left: 14px;">HTTHQ / Master DCE</div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Operations
+              <span class="migration__item-count">10 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              _Franchisees
+              <span class="migration__item-count">5 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Status
+              <span class="migration__item-count">2 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Fran Dev
+              <span class="migration__item-count">8 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Marketing
+              <span class="migration__item-count">12 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Product
+              <span class="migration__item-count">7 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Strategy
+              <span class="migration__item-count">5 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Training
+              <span class="migration__item-count">1 item</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Financials & Proforma
+              <span class="migration__item-count">11 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Corp Docs
+              <span class="migration__item-count">2 items</span>
+            </div>
+            <div class="migration__item migration__item--folder">
+              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
+              Real Estate
+              <span class="migration__item-count">3 items</span>
+            </div>
+          </div>
+
+          <!-- Arrow Column -->
+          <div class="migration__arrow-col">
+            <span class="material-symbols-outlined">arrow_forward</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </div>
+
+          <!-- TO (New Sites) -->
+          <div class="migration__to">
+            <div style="font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-bottom: 8px; padding-left: 14px;">New Hub-and-Spoke Sites</div>
+            <div class="migration__item migration__item--site">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">dashboard</span>
+              DCE-Operations
+              <span class="migration__item-count">Operations, Franchisees, Status, Fran Dev</span>
+            </div>
+            <div class="migration__item migration__item--site">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">campaign</span>
+              DCE-Marketing
+              <span class="migration__item-count">Marketing, Brand Assets, Letterhead</span>
+            </div>
+            <div class="migration__item migration__item--site">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">description</span>
+              DCE-Docs
+              <span class="migration__item-count">Product, Strategy, Training, Archive</span>
+            </div>
+            <div class="migration__item migration__item--corp">
+              <span class="material-symbols-outlined" style="color: var(--teal-light);">payments</span>
+              Corp-Finance
+              <span class="migration__item-count">Financials & Proforma (corporate)</span>
+            </div>
+            <div class="migration__item migration__item--corp">
+              <span class="material-symbols-outlined" style="color: var(--teal-light);">corporate_fare</span>
+              Corp Hub
+              <span class="migration__item-count">Corp Docs, Real Estate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Corporate Folders Migration -->
+      <div class="reveal">
+        <h3 class="mb-24" style="font-size: 1.125rem; display: flex; align-items: center; gap: 8px;">
+          <span class="material-symbols-outlined" style="color: var(--teal-light);">corporate_fare</span>
+          HTTHQ Corporate Folders → Corp Hub Services
+        </h3>
+        <div class="grid grid--3" style="gap: 12px;">
+          <div class="card card--glass" style="padding: 16px;">
+            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
+              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">groups</span>
+              <strong>Corp-HR</strong>
+            </div>
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← Employee Resources, Education</p>
+          </div>
+          <div class="card card--glass" style="padding: 16px;">
+            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
+              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">payments</span>
+              <strong>Corp-Finance</strong>
+            </div>
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← Finance folder</p>
+          </div>
+          <div class="card card--glass" style="padding: 16px;">
+            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
+              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">computer</span>
+              <strong>Corp-IT</strong>
+            </div>
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← IT-Technology folder</p>
+          </div>
+          <div class="card card--glass" style="padding: 16px;">
+            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
+              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">gavel</span>
+              <strong>Corp Hub — Legal</strong>
+            </div>
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← Legal folder</p>
+          </div>
+          <div class="card card--glass" style="padding: 16px;">
+            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
+              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">badge</span>
+              <strong>Corp Hub — Executive</strong>
+            </div>
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← C Suite, Exec Leadership</p>
+          </div>
+          <div class="card card--glass" style="padding: 16px;">
+            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
+              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">handshake</span>
+              <strong>Corp Hub — Vendors</strong>
+            </div>
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← Vendors, Real Estate</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== USER EXPERIENCE ==================== -->
+  <section class="section" id="users">
+    <div class="container">
+      <p class="label mb-16 reveal">The User Experience</p>
+      <h2 class="mb-16 reveal" style="max-width: 650px;">Add a user. Everything else is automatic.</h2>
+      <p class="text-muted mb-48 reveal" style="max-width: 560px; font-size: 1.0625rem;">
+        Azure AD user properties drive dynamic security group membership. Set three fields — and the user automatically sees the right hub, the right sites, the right Teams channels.
+      </p>
+
+      <div class="grid grid--2 grid--center" style="gap: clamp(32px, 6vw, 64px);">
+        <!-- User Properties -->
+        <div class="reveal reveal--left">
+          <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="color: var(--teal);">badge</span>
+            Key Azure AD Properties
+          </h3>
+          <div class="callout callout--gold" style="margin-bottom: 24px;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">These three fields on each user control everything:</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="card card--elevated" style="padding: 16px; display: flex; align-items: center; gap: 12px;">
+              <span class="material-symbols-outlined" style="color: var(--teal); font-size: 24px;">apartment</span>
+              <div>
+                <strong style="font-size: 0.9375rem;">companyName</strong>
+                <p class="text-muted" style="font-size: 0.8125rem; margin-top: 2px;">"Delta Crown Extensions" → joins SG-DCE-AllStaff</p>
+              </div>
+            </div>
+            <div class="card card--elevated" style="padding: 16px; display: flex; align-items: center; gap: 12px;">
+              <span class="material-symbols-outlined" style="color: var(--teal); font-size: 24px;">work</span>
+              <div>
+                <strong style="font-size: 0.9375rem;">jobTitle</strong>
+                <p class="text-muted" style="font-size: 0.8125rem; margin-top: 2px;">Contains "Manager/Director/VP" → also joins SG-DCE-Leadership</p>
+              </div>
+            </div>
+            <div class="card card--elevated" style="padding: 16px; display: flex; align-items: center; gap: 12px;">
+              <span class="material-symbols-outlined" style="color: var(--teal); font-size: 24px;">domain</span>
+              <div>
+                <strong style="font-size: 0.9375rem;">department</strong>
+                <p class="text-muted" style="font-size: 0.8125rem; margin-top: 2px;">Contains "Marketing" → also joins SG-DCE-Marketing</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Journey -->
+        <div class="reveal reveal--right">
+          <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined" style="color: var(--gold-dark);">person_add</span>
+            What Happens When You Add a User
+          </h3>
+          <div class="journey">
+            <div class="journey__step" style="background: rgba(0,107,94,0.04); border-color: rgba(0,107,94,0.12);">
+              <div class="journey__step-num">1</div>
+              <div class="journey__step-content">
+                <div class="journey__step-title">Set Azure AD Properties</div>
+                <div class="journey__step-desc">companyName = "Delta Crown Extensions"</div>
+                <span class="journey__step-prop">
+                  <span class="material-symbols-outlined" style="font-size: 12px;">bolt</span>
+                  Triggers dynamic group evaluation
+                </span>
+              </div>
+            </div>
+            <div class="journey__step">
+              <div class="journey__step-num">2</div>
+              <div class="journey__step-content">
+                <div class="journey__step-title">Auto-Joins Security Groups</div>
+                <div class="journey__step-desc">SG-DCE-AllStaff (+ Leadership/Marketing if applicable)</div>
+              </div>
+            </div>
+            <div class="journey__step">
+              <div class="journey__step-num">3</div>
+              <div class="journey__step-content">
+                <div class="journey__step-title">Gets Site Access</div>
+                <div class="journey__step-desc">DCE Hub, Operations, Client Services, Docs, Marketing</div>
+              </div>
+            </div>
+            <div class="journey__step">
+              <div class="journey__step-num">4</div>
+              <div class="journey__step-content">
+                <div class="journey__step-title">Gets Teams Membership</div>
+                <div class="journey__step-desc">Delta Crown Operations team + standard channels</div>
+              </div>
+            </div>
+            <div class="journey__step">
+              <div class="journey__step-num">5</div>
+              <div class="journey__step-content">
+                <div class="journey__step-title">Sees Branded Hub</div>
+                <div class="journey__step-desc">Gold & black DCE hub with brand navigation, news, search scoped to DCE only</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Permission Matrix -->
+      <div class="reveal" style="margin-top: 48px;">
+        <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
+          <span class="material-symbols-outlined" style="color: var(--teal);">security</span>
+          Permission Matrix — Who Sees What
+        </h3>
+        <div style="overflow-x: auto; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08);">
+          <table class="perm-matrix" style="min-width: 600px; background: var(--surface-card);">
+            <thead>
+              <tr>
+                <th style="color: var(--text-secondary);">Site</th>
+                <th style="color: var(--text-secondary);">AllStaff</th>
+                <th style="color: var(--text-secondary);">Leadership</th>
+                <th style="color: var(--text-secondary);">Marketing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color: var(--text);"><strong>DCE Hub</strong></td>
+                <td class="perm-cell--read" style="color: var(--teal);">👁 Read</td>
+                <td class="perm-cell--full" style="color: #2E7D32;">⚡ Full Control</td>
+                <td class="perm-cell--none" style="color: var(--text-muted);">—</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text);"><strong>DCE-Operations</strong></td>
+                <td style="color: var(--text-muted);">Teams managed</td>
+                <td style="color: var(--text-muted);">Teams managed</td>
+                <td class="perm-cell--none" style="color: var(--text-muted);">—</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text);"><strong>DCE-ClientServices</strong></td>
+                <td class="perm-cell--edit" style="color: var(--gold-dark);">✏️ Contribute</td>
+                <td class="perm-cell--full" style="color: #2E7D32;">⚡ Full Control</td>
+                <td class="perm-cell--none" style="color: var(--text-muted);">—</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text);"><strong>DCE-Marketing</strong></td>
+                <td class="perm-cell--read" style="color: var(--teal);">👁 Read</td>
+                <td class="perm-cell--full" style="color: #2E7D32;">⚡ Full Control</td>
+                <td class="perm-cell--edit" style="color: var(--gold-dark);">✏️ Edit</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text);"><strong>DCE-Docs</strong></td>
+                <td class="perm-cell--read" style="color: var(--teal);">👁 Read</td>
+                <td class="perm-cell--full" style="color: #2E7D32;">⚡ Full Control</td>
+                <td class="perm-cell--none" style="color: var(--text-muted);">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-muted" style="font-size: 0.75rem; margin-top: 8px;">
+          "Everyone" and "All Users" groups are removed from all sites. Permissions are unique (no inheritance from parent).
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROJECT PROGRESS ==================== -->
+  <section class="section section--dark" id="progress">
+    <div class="container">
+      <p class="label mb-16 reveal">Project Progress</p>
+      <h2 class="mb-16 reveal text-center">What's done.<br>What's next.</h2>
+      <p class="reveal text-center mb-48" style="color: rgba(255,255,255,0.45); max-width: 520px; margin-left: auto; margin-right: auto;">
+        All code is written, tested, and security-audited. The next step is running the scripts against the live tenant.
+      </p>
+
+      <!-- Phase Cards -->
+      <div class="grid grid--5 stagger mb-48">
+        <!-- Phase 1 -->
+        <div class="phase-card phase-card--done reveal">
+          <div class="phase-card__header">
+            <div class="phase-card__title" style="color: #4CAF50;">Phase 1</div>
+            <span class="status status--done">Done</span>
+          </div>
+          <h4 style="color: #FFF; font-size: 1rem; margin-bottom: 12px;">Email Trust</h4>
+          <div class="phase-card__items">
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              SPF configured
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              DKIM deployed
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              DMARC enforced
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              Brand domain verified
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase-card phase-card--done reveal">
+          <div class="phase-card__header">
+            <div class="phase-card__title" style="color: #4CAF50;">Phase 2</div>
+            <span class="status status--done">Code Done</span>
+          </div>
+          <h4 style="color: #FFF; font-size: 1rem; margin-bottom: 12px;">Hub Foundation</h4>
+          <div class="phase-card__items">
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              Corp Hub script
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              DCE Hub script
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              Dynamic groups
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              Verification suite
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase-card phase-card--active reveal">
+          <div class="phase-card__header">
+            <div class="phase-card__title" style="color: var(--gold);">Phase 3</div>
+            <span class="status status--active">Ready</span>
+          </div>
+          <h4 style="color: #FFF; font-size: 1rem; margin-bottom: 12px;">Sites & Teams</h4>
+          <div class="phase-card__items">
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              4 DCE sites script
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              Teams workspace
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              Security hardening
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              DLP policies
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              Shared mailboxes
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
+              PnP templates
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 4 -->
+        <div class="phase-card phase-card--pending reveal">
+          <div class="phase-card__header">
+            <div class="phase-card__title" style="color: rgba(255,255,255,0.4);">Phase 4</div>
+            <span class="status status--pending">Pending</span>
+          </div>
+          <h4 style="color: rgba(255,255,255,0.6); font-size: 1rem; margin-bottom: 12px;">Go-Live</h4>
+          <div class="phase-card__items">
+            <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
+              <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
+              E2E testing
+            </div>
+            <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
+              <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
+              Document migration
+            </div>
+            <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
+              <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
+              User onboarding
+            </div>
+            <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
+              <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
+              Production launch
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 5 -->
+        <div class="phase-card phase-card--pending reveal">
+          <div class="phase-card__header">
+            <div class="phase-card__title" style="color: rgba(255,255,255,0.4);">Phase 5</div>
+            <span class="status status--pending">Pending</span>
+          </div>
+          <h4 style="color: rgba(255,255,255,0.6); font-size: 1rem; margin-bottom: 12px;">Brand Rollout</h4>
+          <div class="phase-card__items">
+            <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
+              <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
+              Bishops (2-wk)
+            </div>
+            <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
+              <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
+              Frenchies (2-wk)
+            </div>
+            <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
+              <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
+              HTT (2-wk)
+            </div>
+            <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
+              <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
+              TLL (2-wk)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Summary -->
+      <div class="grid grid--3 reveal" style="gap: 16px;">
+        <div class="card card--glass text-center">
+          <span class="material-symbols-outlined mb-8" style="color: #4CAF50; font-size: 32px;">terminal</span>
+          <h4 class="mb-8" style="color: #FFF;">18 Scripts</h4>
+          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45);">
+            Phase 2: 8 scripts (2,600 lines)<br>
+            Phase 3: 8 scripts (3,700 lines)<br>
+            Shared modules: 2 (1,500 lines)
+          </p>
+        </div>
+        <div class="card card--glass text-center">
+          <span class="material-symbols-outlined mb-8" style="color: #4CAF50; font-size: 32px;">verified</span>
+          <h4 class="mb-8" style="color: #FFF;">150 Tests</h4>
+          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45);">
+            100 Python architecture tests<br>
+            50 Pester unit tests<br>
+            All passing ✓
+          </p>
+        </div>
+        <div class="card card--glass text-center">
+          <span class="material-symbols-outlined mb-8" style="color: var(--gold); font-size: 32px;">shield</span>
+          <h4 class="mb-8" style="color: #FFF;">Security Audited</h4>
+          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.45);">
+            STRIDE threat analysis (ADR-001, ADR-002)<br>
+            17 remediations applied<br>
+            Conditionally approved
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== HOW IT WORKS ==================== -->
+  <section class="section section--teal" id="how">
+    <div class="container text-center">
+      <p class="label mb-16 reveal" style="color: var(--gold-light);">How It Works</p>
+      <h2 class="reveal mb-16">Two commands.<br>Everything deploys.</h2>
+      <p class="reveal mb-48" style="color: rgba(255,255,255,0.5); max-width: 520px; margin-left: auto; margin-right: auto;">
+        The master orchestrators handle dependency ordering, auth, idempotency, and rollback.
+        Approve 4 browser prompts and walk away.
+      </p>
+
       <div class="flow reveal">
-        <div class="flow__step flow__step--base">
-          <span class="material-symbols-outlined flow__icon" style="color: var(--gold);">corporate_fare</span>
-          <h4>Corporate M365</h4>
-          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.5); margin-top: 4px;">
-            Your existing tenant &amp; licenses
+        <div class="flow__step flow__step--active">
+          <span class="material-symbols-outlined flow__icon" style="color: var(--teal-light);">terminal</span>
+          <h4>Phase 2 Master</h4>
+          <p style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 4px;">
+            Corp Hub → DCE Hub → Groups<br>~45 min
           </p>
         </div>
         <span class="material-symbols-outlined flow__arrow">arrow_forward</span>
         <div class="flow__step flow__step--active">
-          <span class="material-symbols-outlined flow__icon" style="color: var(--teal-light);">autorenew</span>
-          <h4>Framework Layer</h4>
-          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.6); margin-top: 4px;">
-            Automated onboarding &amp; governance
+          <span class="material-symbols-outlined flow__icon" style="color: var(--teal-light);">terminal</span>
+          <h4>Phase 3 Master</h4>
+          <p style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 4px;">
+            Sites → Teams → Security → DLP<br>~30 min
           </p>
         </div>
         <span class="material-symbols-outlined flow__arrow">arrow_forward</span>
         <div class="flow__step flow__step--base">
-          <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_royal-gold.png"
-               alt="Delta Crown" style="width: 70px; margin: 0 auto 4px;">
-          <h4>Brand Instance</h4>
-          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.5); margin-top: 4px;">
-            Full independence, unified tools
+          <span class="material-symbols-outlined flow__icon" style="color: var(--gold);">rocket_launch</span>
+          <h4>Live</h4>
+          <p style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 4px;">
+            Branded hub ready<br>for users
           </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== PROOF ==================== -->
-  <section class="section" id="proof">
-    <div class="container">
-      <div class="grid grid--2 grid--center" style="gap: clamp(32px, 6vw, 80px);">
-        <div class="reveal reveal--left">
-          <p class="label mb-8">Foundation Secured</p>
-          <h2 class="mb-16">Email Trust Framework</h2>
-          <p class="text-muted mb-24" style="font-size: 1.0625rem; max-width: 440px;">
-            SPF, DKIM, DMARC — deployed, verified, and live.
-            The most technically complex phase, completed proactively
-            to de-risk the entire template build.
-          </p>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <span class="badge badge--live">
-              <span class="material-symbols-outlined" style="font-size: 16px;">check_circle</span>
-              LIVE
-            </span>
-            <span class="badge badge--teal">
-              <span class="material-symbols-outlined" style="font-size: 16px;">savings</span>
-              $0 Cost
-            </span>
-            <span class="badge badge--gold">
-              <span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
-              Verified
-            </span>
-          </div>
-        </div>
-        <div class="reveal reveal--right">
-          <div class="card card--elevated card--gold-border text-center" style="padding: 48px 32px;">
-            <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_royal-gold.png"
-                 alt="Delta Crown" style="width: 180px; margin: 0 auto 20px;">
-            <h3 style="margin-bottom: 4px;">Template Brand #1</h3>
-            <p class="text-muted" style="font-size: 0.9375rem;">
-              Every brand after this stands on<br>Delta Crown's shoulders.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== NUMBERS ==================== -->
-  <section class="section section--dark" id="numbers">
-    <div class="container text-center">
-      <p class="label mb-16 reveal">The Numbers</p>
-      <h2 class="mb-48 reveal">Zero incremental cost.<br>Maximum impact.</h2>
-
-      <div class="stats mb-64 reveal">
-        <div class="stat">
-          <div class="stat__value" data-counter data-prefix="$" data-target="0">$0</div>
-          <div class="stat__label">New License Cost</div>
-        </div>
-        <div class="stat">
-          <div class="stat__value" data-counter data-target="75" data-suffix="%">0%</div>
-          <div class="stat__label">Faster Deployment</div>
-        </div>
-        <div class="stat">
-          <div class="stat__value" data-counter data-target="14">0</div>
-          <div class="stat__label">Days to Launch</div>
-        </div>
-        <div class="stat">
-          <div class="stat__value" data-counter data-target="4" data-suffix="+">0+</div>
-          <div class="stat__label">Brands Unlocked</div>
-        </div>
-      </div>
-
-      <div class="grid grid--4 stagger" style="max-width: 960px; margin: 0 auto;">
-        <div class="card card--glass reveal">
-          <span class="material-symbols-outlined mb-8" style="color: #4CAF50;">check</span>
-          <h4 class="mb-8">User Management</h4>
-          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.55);">Automated cross-tenant provisioning</p>
-        </div>
-        <div class="card card--glass reveal">
-          <span class="material-symbols-outlined mb-8" style="color: #4CAF50;">check</span>
-          <h4 class="mb-8">Shared Mailboxes</h4>
-          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.55);">Brand email at zero incremental cost</p>
-        </div>
-        <div class="card card--glass reveal">
-          <span class="material-symbols-outlined mb-8" style="color: #4CAF50;">check</span>
-          <h4 class="mb-8">Send-As Perms</h4>
-          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.55);">Native M365 delegation</p>
-        </div>
-        <div class="card card--glass reveal">
-          <span class="material-symbols-outlined mb-8" style="color: var(--gold);">verified</span>
-          <h4 class="mb-8">Email Trust</h4>
-          <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.55);">SPF/DKIM/DMARC — LIVE ✓</p>
-        </div>
-      </div>
-
-      <p class="reveal" style="margin-top: 48px; color: rgba(255,255,255,0.4); font-size: 0.9375rem;">
-        Existing Business Premium licenses serve all brands. One pool. Unlimited scale.
-      </p>
-    </div>
-  </section>
-
-  <!-- ==================== PLAN ==================== -->
-  <section class="section" id="plan">
-    <div class="container">
-      <p class="label mb-16 reveal">The Plan</p>
-      <h2 class="mb-16 reveal">Risk is bounded.<br>The plan is ready.</h2>
-      <p class="text-muted mb-48 reveal" style="max-width: 520px; font-size: 1.0625rem;">
-        From approval to brand launch in 30 days.
-        The highest-risk work is already behind us.
-      </p>
-
-      <div class="grid grid--2 mb-48" style="gap: clamp(32px, 6vw, 64px);">
-        <!-- Timeline -->
-        <div class="reveal reveal--left">
-          <h3 class="mb-24" style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="color: var(--teal);">event</span>
-            30-Day Execution
-          </h3>
-          <div class="timeline">
-            <div class="timeline__item timeline__item--done">
-              <div class="timeline__dot"></div>
-              <div class="timeline__week" style="color: var(--teal);">Foundation</div>
-              <div class="timeline__title">Email Trust Framework</div>
-              <div class="timeline__desc">SPF/DKIM/DMARC — Deployed &amp; verified ✓</div>
-            </div>
-            <div class="timeline__item">
-              <div class="timeline__dot"></div>
-              <div class="timeline__week">Week 1</div>
-              <div class="timeline__title">Infrastructure + Identity</div>
-              <div class="timeline__desc">Cloud provisioning &amp; cross-tenant sync</div>
-            </div>
-            <div class="timeline__item">
-              <div class="timeline__dot"></div>
-              <div class="timeline__week">Week 2</div>
-              <div class="timeline__title">Collaboration + Email</div>
-              <div class="timeline__desc">Teams, SharePoint &amp; brand email config</div>
-            </div>
-            <div class="timeline__item">
-              <div class="timeline__dot"></div>
-              <div class="timeline__week">Week 3</div>
-              <div class="timeline__title">Governance + Compliance</div>
-              <div class="timeline__desc">Security policies &amp; compliance hardening</div>
-            </div>
-            <div class="timeline__item timeline__item--milestone">
-              <div class="timeline__dot"></div>
-              <div class="timeline__week">Week 4</div>
-              <div class="timeline__title">Validation &amp; Go-Live</div>
-              <div class="timeline__desc">End-to-end testing &amp; production launch</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Risks -->
-        <div class="reveal reveal--right">
-          <h3 class="mb-24" style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="color: var(--teal);">shield</span>
-            Top Risks — All Mitigated
-          </h3>
-          <div class="pain">
-            <div class="pain__icon pain__icon--good">
-              <span class="material-symbols-outlined" style="font-size: 20px;">check_circle</span>
-            </div>
-            <div>
-              <strong>Email Deliverability</strong>
-              <p class="text-muted" style="font-size: 0.875rem; margin-top: 2px;">
-                Framework deployed and verified. Already live.
-              </p>
-            </div>
-          </div>
-          <div class="pain">
-            <div class="pain__icon" style="background: rgba(251,140,0,0.08); color: #FB8C00;">
-              <span class="material-symbols-outlined" style="font-size: 20px;">pending</span>
-            </div>
-            <div>
-              <strong>Identity &amp; Access Sync</strong>
-              <p class="text-muted" style="font-size: 0.875rem; margin-top: 2px;">
-                Native M365 patterns. Automated validation. Phased rollout.
-              </p>
-            </div>
-          </div>
-          <div class="pain mb-32">
-            <div class="pain__icon" style="background: rgba(251,140,0,0.08); color: #FB8C00;">
-              <span class="material-symbols-outlined" style="font-size: 20px;">pending</span>
-            </div>
-            <div>
-              <strong>User Adoption</strong>
-              <p class="text-muted" style="font-size: 0.875rem; margin-top: 2px;">
-                Same tools, better organized. Training &amp; 30-day support included.
-              </p>
-            </div>
-          </div>
-
-          <!-- Kill Switch -->
-          <div class="callout callout--gold text-center">
-            <p style="font-weight: 600; margin-bottom: 16px; font-size: 0.9375rem;">30-Day Decision Gate</p>
-            <div class="gate">
-              <div class="gate__option gate__option--go">
-                <span class="material-symbols-outlined gate__icon" style="color: #4CAF50;">rocket_launch</span>
-                <div class="gate__label">Scale</div>
-                <div class="gate__desc">Roll out to Bishops</div>
-              </div>
-              <div class="gate__option gate__option--adapt">
-                <span class="material-symbols-outlined gate__icon" style="color: #FB8C00;">sync</span>
-                <div class="gate__label">Adapt</div>
-                <div class="gate__desc">Refine, extend 2 wks</div>
-              </div>
-              <div class="gate__option gate__option--stop">
-                <span class="material-symbols-outlined gate__icon" style="color: #EF5350;">stop_circle</span>
-                <div class="gate__label">Stop</div>
-                <div class="gate__desc">Reverse, zero sunk cost</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -366,17 +1025,16 @@
   <section class="section section--dark" id="vision">
     <div class="container text-center">
       <p class="label mb-16 reveal">The Vision</p>
-      <h2 class="mb-16 reveal">Prove once.<br>Replicate forever.</h2>
-      <p class="reveal mb-48" style="color: rgba(255,255,255,0.5); max-width: 460px; margin-left: auto; margin-right: auto;">
-        Each deployment faster than the last.
-        Same playbook. Same governance. Same tools.
+      <h2 class="mb-16 reveal">Build once.<br>Deploy to every brand.</h2>
+      <p class="reveal mb-48" style="color: rgba(255,255,255,0.45); max-width: 460px; margin-left: auto; margin-right: auto;">
+        Delta Crown is the template. PnP templates captured from the live deployment enable 2-week brand rollouts.
       </p>
 
       <div class="cascade stagger">
         <div class="cascade__item cascade__item--primary reveal">
           <span class="material-symbols-outlined" style="color: var(--gold); font-size: 24px;">star</span>
           <span class="cascade__name">Delta Crown Extensions</span>
-          <span class="cascade__time" style="color: var(--gold);">Template 1.0 — Now</span>
+          <span class="cascade__time" style="color: var(--gold);">Template 1.0 — In Progress</span>
         </div>
         <span class="cascade__arrow reveal">
           <span class="material-symbols-outlined">arrow_downward</span>
@@ -397,29 +1055,47 @@
           <span class="cascade__time">Q4 — 2 week deploy</span>
         </div>
       </div>
+
+      <!-- Decision Gate -->
+      <div class="callout callout--gold reveal text-center" style="margin-top: 48px; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <p style="font-weight: 600; margin-bottom: 16px; font-size: 0.9375rem; color: rgba(255,255,255,0.8);">30-Day Decision Gate</p>
+        <div class="gate">
+          <div class="gate__option gate__option--go">
+            <span class="material-symbols-outlined gate__icon" style="color: #4CAF50;">rocket_launch</span>
+            <div class="gate__label">Scale</div>
+            <div class="gate__desc">Roll out to Bishops</div>
+          </div>
+          <div class="gate__option gate__option--adapt">
+            <span class="material-symbols-outlined gate__icon" style="color: #FB8C00;">sync</span>
+            <div class="gate__label">Adapt</div>
+            <div class="gate__desc">Refine, extend 2 wks</div>
+          </div>
+          <div class="gate__option gate__option--stop">
+            <span class="material-symbols-outlined gate__icon" style="color: #EF5350;">stop_circle</span>
+            <div class="gate__label">Stop</div>
+            <div class="gate__desc">Reverse, zero sunk cost</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ==================== CTA ==================== -->
   <section class="section cta-section" id="cta">
     <div class="container text-center" style="position: relative; z-index: 1;">
-      <h2 class="reveal mb-32">One Decision.<br>Four Brands.</h2>
-
-      <div class="callout callout--glass reveal mb-48 mx-auto max-w-500">
-        <p class="cta__ask">
-          <strong>Authorize Delta Crown as Template&nbsp;1.0</strong> —
-          validate the framework, then replicate across the portfolio.
-        </p>
-      </div>
+      <h2 class="reveal mb-24">Ready to Deploy.</h2>
+      <p class="reveal mb-32" style="color: rgba(255,255,255,0.5); max-width: 480px; margin-left: auto; margin-right: auto;">
+        18 scripts. 150 tests. Security audited. Deployment runbook ready.
+      </p>
 
       <div class="stats mb-48 reveal">
         <div class="stat">
           <div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">$0</div>
-          <div class="stat__label">Investment</div>
+          <div class="stat__label">License Cost</div>
         </div>
         <div class="stat">
-          <div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">30d</div>
-          <div class="stat__label">To Validation</div>
+          <div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">~75m</div>
+          <div class="stat__label">To Deploy</div>
         </div>
         <div class="stat">
           <div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">4+</div>
@@ -428,9 +1104,9 @@
       </div>
 
       <div class="reveal">
-        <h3 class="text-gold mb-16" style="font-size: 1.5rem;">Questions?</h3>
-        <p style="color: rgba(255,255,255,0.35); font-size: 0.9375rem;">
-          Built by the people who are tired of reinventing IT wheels.
+        <p style="color: rgba(255,255,255,0.25); font-size: 0.8125rem;">
+          Delta Crown Extensions — Operational Framework<br>
+          From chaos folder to branded excellence.
         </p>
       </div>
     </div>
