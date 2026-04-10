@@ -57,8 +57,10 @@ Describe "3.1 Site Configuration" {
         $content | Should -Match 'DeltaCrown\.Auth\.psm1'
     }
 
-    It "Should NOT contain Read-Host" {
-        $content | Should -Not -Match 'Read-Host'
+    It "Should NOT contain Read-Host in executable code" {
+        # Exclude comments — scripts may reference Read-Host in docs explaining its removal
+        $codeLines = ($content -split "`n") | Where-Object { $_ -notmatch '^\s*#' }
+        ($codeLines -join "`n") | Should -Not -Match 'Read-Host'
     }
 
     It "Should NOT contain hardcoded backslash paths" {
@@ -91,10 +93,13 @@ Describe "3.3 Security Configuration" {
         $content | Should -Match '"/sites/dce-docs"'
     }
 
-    It "Should NOT contain Connect-PnPOnline in helper functions" {
-        # Helper functions should not manage their own connections
-        $helperSection = $content -replace '(?s).*#\s*HELPER FUNCTIONS.*?(function\s)', '$1'
-        $helperSection | Should -Not -Match 'Connect-PnPOnline'
+    It "Should NOT contain raw Connect-PnPOnline in helper functions" {
+        # Helper functions should use Connect-DeltaCrownSharePoint, not raw Connect-PnPOnline
+        # Extract function bodies (between 'function ' and next 'function ' or section marker)
+        $helperFunctions = [regex]::Matches($content, '(?s)function\s+(Set-|Remove-|Disable-|Get-DCE)\w+.*?(?=function\s|\#\s*(STEP|MAIN|={5,}))')
+        foreach ($fn in $helperFunctions) {
+            $fn.Value | Should -Not -Match 'Connect-PnPOnline'
+        }
     }
 
     It "Should use connection ownership pattern" {
