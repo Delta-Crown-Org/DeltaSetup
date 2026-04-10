@@ -52,7 +52,7 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 # ============================================================================
 # MODULE IMPORT
 # ============================================================================
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot "phase2-week1" "modules"
 
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
@@ -115,10 +115,9 @@ try {
         Show-DeltaCrownBusinessPremiumWarning -ForceAcknowledgment ($Environment -eq "Production")
     }
     
+    # R2.4A: Require OwnerEmail as parameter (no interactive Read-Host)
     if (!$OwnerEmail) {
-        do {
-            $OwnerEmail = Read-Host "Enter admin email address for site ownership"
-        } until (Test-DeltaCrownEmailFormat $OwnerEmail)
+        throw "OwnerEmail parameter is required. Pass -OwnerEmail 'admin@example.com'"
     }
     $DCEHubConfig.Owner = $OwnerEmail
     
@@ -151,7 +150,8 @@ try {
             -Wait
         
         Write-Log "Created DCE Hub: $dceHubUrl" "SUCCESS"
-        Start-Sleep -Seconds 10
+        # R2.4C: Poll for site readiness instead of fixed delay
+        Wait-DeltaCrownSiteProvisioned -SiteUrl $dceHubUrl -TimeoutSeconds 120
     }
     
     # ------------------------------------------------------------------------
@@ -226,13 +226,21 @@ try {
     }
     
     # Export IDs
-    $dceHubId | Out-File -FilePath ".\phase2-week1\docs\dce-hub-id.txt" -Force
-    @{
+    # R2.4A: No hard-coded paths
+    $dceHubIdPath = Join-Path $ProjectRoot "phase2-week1" "docs" "dce-hub-id.txt"
+    $dceHubId | Out-File -FilePath $dceHubIdPath -Force
+    $dceHubConfigPath = Join-Path $ProjectRoot "phase2-week1" "docs" "dce-hub-config.json"
+    $dceConfig = @{
         DCEHubId = $dceHubId
         DCEHubUrl = $dceHubUrl
         CorpHubUrl = $corpHubFullUrl
         BrandingApplied = $true
-    } | ConvertTo-Json | Out-File -FilePath ".\phase2-week1\docs\dce-hub-config.json" -Force
+        ExportedAt = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+    }
+    # R2.2B: Encrypted export for sensitive hub configuration
+    Export-DeltaCrownSecureData -Data $dceConfig -Path "$dceHubConfigPath.enc" -AlsoExportPlaintext:($Environment -eq "Development")
+    # Keep plaintext for backward compatibility
+    $dceConfig | ConvertTo-Json | Out-File -FilePath $dceHubConfigPath -Force
     
     Write-Log "DCE Hub configuration saved" "SUCCESS"
     
@@ -244,7 +252,9 @@ try {
     Connect-PnPOnline -Url $AdminUrl -Interactive
     
     # Get Corp-Hub ID from previous step
-    $corpHubId = Get-Content -Path ".\phase2-week1\docs\corp-hub-id.txt" -ErrorAction SilentlyContinue
+    # R2.4A: No hard-coded paths
+    $corpHubIdPath = Join-Path $ProjectRoot "phase2-week1" "docs" "corp-hub-id.txt"
+    $corpHubId = Get-Content -Path $corpHubIdPath -ErrorAction SilentlyContinue
     if (!$corpHubId) {
         $corpHubId = (Get-PnPHubSite -Identity $corpHubFullUrl).SiteId
     }

@@ -607,6 +607,179 @@ function Import-DeltaCrownConfig {
 
 #endregion
 
+#region Secure Export/Import (R2.2B)
+
+<#
+.SYNOPSIS
+    Exports data to an encrypted file using DPAPI (Windows) or AES key (cross-platform).
+.DESCRIPTION
+    Sensitive configuration data (tenant IDs, group IDs, site URLs with GUIDs) should
+    use this function instead of plaintext JSON/CSV export.
+.PARAMETER Data
+    The data to export (hashtable, PSCustomObject, or array).
+.PARAMETER Path
+    Output file path. Will have .enc extension appended if not present.
+.PARAMETER KeyPath
+    Optional path to AES key file for cross-platform encryption.
+    If not provided, uses DPAPI on Windows (machine+user scope).
+#>
+function Export-DeltaCrownSecureData {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [object]$Data,
+        
+        [Parameter(Mandatory)]
+        [string]$Path,
+        
+        [Parameter()]
+        [string]$KeyPath = $null,
+        
+        [Parameter()]
+        [switch]$AlsoExportPlaintext
+    )
+    
+    # Ensure directory exists
+    $directory = Split-Path -Parent $Path
+    if ($directory -and !(Test-Path $directory)) {
+        New-Item -ItemType Directory -Path $directory -Force | Out-Null
+    }
+    
+    # Serialize to JSON first
+    $json = $Data | ConvertTo-Json -Depth 10 -Compress
+    $secureString = ConvertTo-SecureString -String $json -AsPlainText -Force
+    
+    # Ensure .enc extension
+    $encPath = if ($Path -notmatch '\.enc$') { "$Path.enc" } else { $Path }
+    
+    if ($KeyPath) {
+        # Cross-platform: AES key-based encryption
+        if (!(Test-Path $KeyPath)) {
+            # Generate a new 256-bit AES key
+            $key = New-Object byte[] 32
+            [System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($key)
+            $key | Set-Content -Path $KeyPath -Encoding Byte
+            Write-DeltaCrownLog "Generated new AES key at: $KeyPath" "WARNING"
+            Write-DeltaCrownLog "IMPORTANT: Store this key securely. Loss = data loss." "WARNING"
+        }
+        
+        $key = Get-Content -Path $KeyPath -Encoding Byte
+        $encrypted = ConvertFrom-SecureString -SecureString $secureString -Key $key
+    }
+    else {
+        # Windows DPAPI: Machine + User scope (default, no key file needed)
+        if ($IsWindows -or $PSVersionTable.PSEdition -eq "Desktop") {
+            $encrypted = ConvertFrom-SecureString -SecureString $secureString
+        }
+        else {
+            throw "Cross-platform encryption requires -KeyPath parameter. DPAPI is Windows-only."
+        }
+    }
+    
+    $encrypted | Out-File -FilePath $encPath -Force
+    Write-DeltaCrownLog "Encrypted export saved to: $encPath" "SUCCESS"
+    
+    # Optionally also export plaintext (for development/debugging)
+    if ($AlsoExportPlaintext) {
+        $plaintextPath = $Path -replace '\.enc$', ''
+        if ($plaintextPath -eq $Path) { $plaintextPath = "$Path.json" }
+        $Data | ConvertTo-Json -Depth 10 | Out-File -FilePath $plaintextPath -Force
+        Write-DeltaCrownLog "Plaintext copy saved to: $plaintextPath (DEVELOPMENT ONLY)" "WARNING"
+    }
+    
+    return $encPath
+}
+
+<#
+.SYNOPSIS
+    Imports data from an encrypted file.
+.PARAMETER Path
+    Path to the encrypted file (.enc).
+.PARAMETER KeyPath
+    Path to AES key file (required if file was encrypted with a key).
+#>
+function Import-DeltaCrownSecureData {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateScript({ Test-Path $_ })]
+        [string]$Path,
+        
+        [Parameter()]
+        [string]$KeyPath = $null
+    )
+    
+    $encrypted = Get-Content -Path $Path -Raw
+    
+    if ($KeyPath) {
+        if (!(Test-Path $KeyPath)) {
+            throw "AES key file not found: $KeyPath"
+        }
+        $key = Get-Content -Path $KeyPath -Encoding Byte
+        $secureString = ConvertTo-SecureString -String $encrypted -Key $key
+    }
+    else {
+        # DPAPI decryption (Windows only, same user+machine)
+        $secureString = ConvertTo-SecureString -String $encrypted
+    }
+    
+    # Convert SecureString back to plaintext JSON
+    $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureString)
+    try {
+        $json = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
+    }
+    finally {
+        [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+    }
+    
+    $data = $json | ConvertFrom-Json
+    Write-DeltaCrownLog "Imported encrypted data from: $Path" "SUCCESS"
+    return $data
+}
+
+<#
+.SYNOPSIS
+    Exports data to plaintext JSON with metadata wrapper.
+.DESCRIPTION
+    For non-sensitive data that still needs structured export.
+    Adds metadata about when/how it was created.
+#>
+function Export-DeltaCrownData {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [object]$Data,
+        
+        [Parameter(Mandatory)]
+        [string]$Path,
+        
+        [Parameter()]
+        [string]$Description = ""
+    )
+    
+    $directory = Split-Path -Parent $Path
+    if ($directory -and !(Test-Path $directory)) {
+        New-Item -ItemType Directory -Path $directory -Force | Out-Null
+    }
+    
+    $wrapper = [PSCustomObject]@{
+        _metadata = [PSCustomObject]@{
+            ExportedAt = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+            ExportedBy = $env:USERNAME
+            Machine = $env:COMPUTERNAME
+            Description = $Description
+            SecurityNote = "This file contains non-sensitive configuration data. For sensitive exports, use Export-DeltaCrownSecureData."
+        }
+        Data = $Data
+    }
+    
+    $wrapper | ConvertTo-Json -Depth 10 | Out-File -FilePath $Path -Force
+    Write-DeltaCrownLog "Data exported to: $Path" "SUCCESS"
+    return $Path
+}
+
+#endregion
+
 # Export module members
 Export-ModuleMember -Function @(
     # Logging
@@ -636,4 +809,9 @@ Export-ModuleMember -Function @(
     
     # Configuration
     'Import-DeltaCrownConfig'
+    
+    # Secure Export/Import (R2.2B)
+    'Export-DeltaCrownSecureData'
+    'Import-DeltaCrownSecureData'
+    'Export-DeltaCrownData'
 )

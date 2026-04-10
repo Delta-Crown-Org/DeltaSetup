@@ -68,7 +68,7 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 # ============================================================================
 # MODULE IMPORT
 # ============================================================================
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot "phase2-week1" "modules"
 
 # Import shared modules
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
@@ -328,13 +328,9 @@ try {
     # ------------------------------------------------------------------------
     # STEP 1: Get Owner Email (R2.4B: Input Validation)
     # ------------------------------------------------------------------------
+    # R2.4A: Require OwnerEmail as parameter (no interactive Read-Host)
     if (!$OwnerEmail) {
-        do {
-            $OwnerEmail = Read-Host "Enter admin email address for site ownership"
-            if (!(Test-DeltaCrownEmailFormat $OwnerEmail)) {
-                Write-Host "Invalid email format. Please try again." -ForegroundColor Red
-            }
-        } while (!(Test-DeltaCrownEmailFormat $OwnerEmail))
+        throw "OwnerEmail parameter is required. Pass -OwnerEmail 'admin@example.com'"
     }
     Write-DeltaCrownLog "Site Owner: $OwnerEmail"
     

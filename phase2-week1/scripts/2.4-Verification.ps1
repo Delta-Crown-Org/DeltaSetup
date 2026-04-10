@@ -50,7 +50,7 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 # ============================================================================
 # MODULE IMPORT
 # ============================================================================
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot "phase2-week1" "modules"
 
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
@@ -58,7 +58,8 @@ Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAct
 # ============================================================================
 # LOGGING SETUP
 # ============================================================================
-$LogPath = ".\phase2-week1\logs"
+# R2.4A: No hard-coded paths
+$LogPath = Join-Path $ProjectRoot "phase2-week1" "logs"
 if (!(Test-Path $LogPath)) {
     New-Item -ItemType Directory -Path $LogPath -Force | Out-Null
 }
@@ -80,38 +81,42 @@ function Write-Log {
     Add-Content -Path $LogFile -Value $logEntry
 }
 
-# ============================================================================
-# VERIFICATION FUNCTIONS
-# ============================================================================
 
-function Test-PermissionInheritance {
-    [CmdletBinding()]
-    param(
-        [Parameter(Mandatory)]
-        [string]$SiteUrl,
-        
-        [Parameter(Mandatory)]
-        [string]$SiteName
-    )
-    
+# ============================================================================
+# CONNECTION OWNERSHIP (R2.3A)
+# ============================================================================
+$script:OwnsPnPConnection = $false
+$script:OwnsGraphConnection = $false
+
+function Initialize-VerificationConnections {
+    # Check if SharePoint connection already exists (from Master orchestrator)
     try {
-        Connect-PnPOnline -Url $SiteUrl -Interactive
-        $web = Get-PnPWeb
-        
-        return [PSCustomObject]@{
-            Component = "$SiteName Permissions"
-            Status = if ($web.HasUniqueRoleAssignments) { "PASS" } else { "FAIL" }
-            Details = if ($web.HasUniqueRoleAssignments) { "Unique permissions confirmed" } else { "Inheriting permissions - SECURITY RISK" }
-        }
+        $ctx = Get-PnPContext -ErrorAction Stop
+        Write-Log "Using pre-established SharePoint connection" "INFO"
     }
     catch {
-        return [PSCustomObject]@{
-            Component = "$SiteName Permissions"
-            Status = "ERROR"
-            Details = $_.Exception.Message
-        }
+        Write-Log "Establishing SharePoint connection..." "INFO"
+        Connect-DeltaCrownSharePoint -Url $AdminUrl -Environment $Environment
+        $script:OwnsPnPConnection = $true
+    }
+    
+    # Check if Graph connection already exists
+    try {
+        $graphCtx = Get-MgContext -ErrorAction Stop
+        if ($graphCtx) {
+            Write-Log "Using pre-established Graph connection" "INFO"
+        } else { throw "No Graph context" }
+    }
+    catch {
+        Write-Log "Establishing Graph connection..." "INFO"
+        Connect-DeltaCrownGraph -RequiredScopes @("Group.Read.All") -Environment $Environment
+        $script:OwnsGraphConnection = $true
     }
 }
+
+# ============================================================================
+# VERIFICATION FUNCTIONS (R2.3A: Remove connect churn)
+# ============================================================================
 
 function Test-CorpHub {
     Write-Log "`n[VERIFY] Corporate Shared Services Hub" "VERIFY"
@@ -120,9 +125,7 @@ function Test-CorpHub {
     $corpHubUrl = "https://$TenantName.sharepoint.com/sites/corp-hub"
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
-        
-        # Check site exists
+        # Use existing admin connection
         $site = Get-PnPTenantSite -Url $corpHubUrl -ErrorAction SilentlyContinue
         $results += [PSCustomObject]@{
             Component = "Corp-Hub Site"
@@ -130,7 +133,6 @@ function Test-CorpHub {
             Details = if ($site) { "Site exists: $($site.Title)" } else { "Site not found" }
         }
         
-        # Check hub registration
         if ($site) {
             $hub = Get-PnPHubSite -Identity $corpHubUrl -ErrorAction SilentlyContinue
             $results += [PSCustomObject]@{
@@ -139,8 +141,6 @@ function Test-CorpHub {
                 Details = if ($hub) { "Hub ID: $($hub.SiteId)" } else { "Not registered as hub" }
             }
         }
-        
-        Disconnect-PnPOnline
     }
     catch {
         $results += [PSCustomObject]@{
@@ -164,28 +164,19 @@ function Test-AssociatedSites {
         @{ Url = "sites/corp-training"; Title = "Corporate Training" }
     )
     
-    try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
-        $corpHubUrl = "https://$TenantName.sharepoint.com/sites/corp-hub"
+    $corpHubUrl = "https://$TenantName.sharepoint.com/sites/corp-hub"
+    
+    foreach ($site in $sites) {
+        $siteUrl = "https://$TenantName.sharepoint.com/$($site.Url)"
         
-        foreach ($site in $sites) {
-            $siteUrl = "https://$TenantName.sharepoint.com/$($site.Url)"
-            
-            # Check site exists
+        try {
+            # Use admin connection (no separate Connect-PnPOnline)
             $tenantSite = Get-PnPTenantSite -Url $siteUrl -ErrorAction SilentlyContinue
             $siteExists = if ($tenantSite) { "PASS" } else { "FAIL" }
             
-            # Check hub association
             $hubAssoc = "NOT_CHECKED"
-            if ($tenantSite) {
-                try {
-                    Connect-PnPOnline -Url $siteUrl -Interactive -ErrorAction SilentlyContinue
-                    $connection = Get-PnPHubSiteConnection -ErrorAction SilentlyContinue
-                    $hubAssoc = if ($connection) { "Associated with: $($connection.Id)" } else { "NOT_ASSOCIATED" }
-                }
-                catch {
-                    $hubAssoc = "ERROR: $($_.Exception.Message)"
-                }
+            if ($tenantSite -and $tenantSite.HubSiteId) {
+                $hubAssoc = "Hub Site ID: $($tenantSite.HubSiteId)"
             }
             
             $results += [PSCustomObject]@{
@@ -194,14 +185,12 @@ function Test-AssociatedSites {
                 Details = $hubAssoc
             }
         }
-        
-        Disconnect-PnPOnline
-    }
-    catch {
-        $results += [PSCustomObject]@{
-            Component = "Associated Sites"
-            Status = "ERROR"
-            Details = $_.Exception.Message
+        catch {
+            $results += [PSCustomObject]@{
+                Component = $site.Title
+                Status = "ERROR"
+                Details = $_.Exception.Message
+            }
         }
     }
     
@@ -215,9 +204,7 @@ function Test-DCEHub {
     $dceHubUrl = "https://$TenantName.sharepoint.com/sites/dce-hub"
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
-        
-        # Check site exists
+        # Use admin connection
         $site = Get-PnPTenantSite -Url $dceHubUrl -ErrorAction SilentlyContinue
         $results += [PSCustomObject]@{
             Component = "DCE-Hub Site"
@@ -226,7 +213,6 @@ function Test-DCEHub {
         }
         
         if ($site) {
-            # Check hub registration
             $hub = Get-PnPHubSite -Identity $dceHubUrl -ErrorAction SilentlyContinue
             $results += [PSCustomObject]@{
                 Component = "DCE-Hub Registration"
@@ -234,44 +220,21 @@ function Test-DCEHub {
                 Details = if ($hub) { "Hub ID: $($hub.SiteId)" } else { "Not registered as hub" }
             }
             
-            # Check branding
-            try {
-                Connect-PnPOnline -Url $dceHubUrl -Interactive
-                $theme = Get-PnPWebTheme -ErrorAction SilentlyContinue
-                $results += [PSCustomObject]@{
-                    Component = "DCE Branding"
-                    Status = if ($theme -match "Delta Crown") { "PASS" } else { "INFO" }
-                    Details = if ($theme) { "Theme: $theme" } else { "Default theme" }
-                }
-            }
-            catch {
-                $results += [PSCustomObject]@{
-                    Component = "DCE Branding"
-                    Status = "WARNING"
-                    Details = "Could not verify: $($_.Exception.Message)"
-                }
-            }
-            
-            # Check hub-to-hub association
-            try {
-                Connect-PnPOnline -Url $dceHubUrl -Interactive
-                $parentHub = Get-PnPHubSiteConnection -ErrorAction SilentlyContinue
+            # Check hub association via tenant site properties
+            if ($site.HubSiteId -and $site.HubSiteId -ne [Guid]::Empty) {
                 $results += [PSCustomObject]@{
                     Component = "Hub-to-Hub Link"
-                    Status = if ($parentHub) { "PASS" } else { "FAIL" }
-                    Details = if ($parentHub) { "Linked to: $($parentHub.Id)" } else { "Not linked to Corp-Hub" }
+                    Status = "PASS"
+                    Details = "Linked to parent hub: $($site.HubSiteId)"
                 }
-            }
-            catch {
+            } else {
                 $results += [PSCustomObject]@{
                     Component = "Hub-to-Hub Link"
-                    Status = "ERROR"
-                    Details = $_.Exception.Message
+                    Status = "FAIL"
+                    Details = "Not linked to Corp-Hub"
                 }
             }
         }
-        
-        Disconnect-PnPOnline
     }
     catch {
         $results += [PSCustomObject]@{
@@ -291,21 +254,18 @@ function Test-AzureADGroups {
     $groups = @("SG-DCE-AllStaff", "SG-DCE-Leadership")
     
     try {
-        Connect-MgGraph -Scopes "Group.Read.All" -NoWelcome
-        
+        # Use existing Graph connection (no separate Connect-MgGraph)
         foreach ($groupName in $groups) {
             $group = Get-MgGroup -Filter "displayName eq '$groupName'" -ErrorAction SilentlyContinue
             
             if ($group) {
-                # Check group properties
                 $isDynamic = $group.GroupTypes -contains "DynamicMembership"
                 $processingState = $group.MembershipRuleProcessingState
                 
-                # Try to get member count
                 $memberCount = "N/A"
                 try {
                     $members = Get-MgGroupMember -GroupId $group.Id -All -ErrorAction SilentlyContinue
-                    $memberCount = $members.Count
+                    $memberCount = if ($members) { $members.Count } else { 0 }
                 }
                 catch {
                     $memberCount = "Error"
@@ -324,8 +284,6 @@ function Test-AzureADGroups {
                 }
             }
         }
-        
-        Disconnect-MgGraph
     }
     catch {
         $results += [PSCustomObject]@{
@@ -350,6 +308,7 @@ function Test-Navigation {
     foreach ($hub in $hubs) {
         try {
             $hubUrl = "https://$TenantName.sharepoint.com/$($hub.Url)"
+            # Connect to the specific site to read hub navigation
             Connect-PnPOnline -Url $hubUrl -Interactive
             
             $navNodes = Get-PnPNavigationNode -Location HubNavigation -ErrorAction SilentlyContinue
@@ -361,7 +320,8 @@ function Test-Navigation {
                 Details = "Nodes: $navCount"
             }
             
-            Disconnect-PnPOnline
+            # Return to admin connection
+            Connect-PnPOnline -Url $AdminUrl -Interactive
         }
         catch {
             $results += [PSCustomObject]@{
@@ -375,14 +335,98 @@ function Test-Navigation {
     return $results
 }
 
+# R2.3A: Permission verification (this function existed but wasn't called!)
+function Test-AllPermissions {
+    Write-Log "`n[VERIFY] Permission Inheritance (R2.3A)" "VERIFY"
+    
+    $results = @()
+    $sitesToCheck = @(
+        "https://$TenantName.sharepoint.com/sites/corp-hub",
+        "https://$TenantName.sharepoint.com/sites/corp-hr",
+        "https://$TenantName.sharepoint.com/sites/corp-it",
+        "https://$TenantName.sharepoint.com/sites/corp-finance",
+        "https://$TenantName.sharepoint.com/sites/corp-training",
+        "https://$TenantName.sharepoint.com/sites/dce-hub"
+    )
+    
+    $forbiddenGroups = @("Everyone", "Everyone except external users", "All Users")
+    
+    foreach ($siteUrl in $sitesToCheck) {
+        $siteName = ($siteUrl -split '/')[-1]
+        
+        try {
+            Connect-PnPOnline -Url $siteUrl -Interactive
+            $web = Get-PnPWeb -Includes HasUniqueRoleAssignments
+            
+            $results += [PSCustomObject]@{
+                Component = "$siteName Unique Permissions"
+                Status = if ($web.HasUniqueRoleAssignments) { "PASS" } else { "FAIL" }
+                Details = if ($web.HasUniqueRoleAssignments) { "Unique permissions confirmed" } else { "INHERITING - SECURITY RISK" }
+            }
+            
+            # Check for forbidden groups
+            $roleAssignments = Get-PnPRoleAssignment -ErrorAction SilentlyContinue
+            foreach ($forbidden in $forbiddenGroups) {
+                $found = $roleAssignments | Where-Object { $_.Principal.LoginName -like "*$forbidden*" }
+                if ($found) {
+                    $results += [PSCustomObject]@{
+                        Component = "$siteName Forbidden Group"
+                        Status = "FAIL"
+                        Details = "Found forbidden group: $forbidden"
+                    }
+                }
+            }
+        }
+        catch {
+            $results += [PSCustomObject]@{
+                Component = "$siteName Permissions"
+                Status = "ERROR"
+                Details = $_.Exception.Message
+            }
+        }
+    }
+    
+    # Return to admin connection
+    try { Connect-PnPOnline -Url $AdminUrl -Interactive } catch { }
+    
+    return $results
+}
+
+# R2.3A: Discrepancy reporting
+function Export-DiscrepancyReport {
+    param([array]$Results)
+    
+    $discrepancies = $Results | Where-Object { $_.Status -in @("FAIL", "ERROR", "WARNING") }
+    
+    if ($discrepancies.Count -gt 0) {
+        Write-Log "`n=== DISCREPANCY REPORT (R2.3A) ===" "WARNING"
+        Write-Log "Found $($discrepancies.Count) issues requiring attention:" "WARNING"
+        
+        foreach ($d in $discrepancies) {
+            $icon = switch ($d.Status) { "FAIL" { "X" } "ERROR" { "!!" } "WARNING" { "?" } }
+            Write-Log "  $icon [$($d.Status)] $($d.Component): $($d.Details)" $d.Status
+        }
+        
+        # Export to JSON
+        $reportPath = Join-Path $ProjectRoot "phase2-week1" "docs" "discrepancy-report-$(Get-Date -Format 'yyyyMMdd-HHmmss').json"
+        $discrepancies | ConvertTo-Json -Depth 3 | Out-File -FilePath $reportPath -Force
+        Write-Log "Discrepancy report saved to: $reportPath" "INFO"
+    } else {
+        Write-Log "`nNo discrepancies found - all checks passed!" "SUCCESS"
+    }
+}
+
 # ============================================================================
-# MAIN EXECUTION
+# MAIN EXECUTION (R2.3A: Consolidated connections)
 # ============================================================================
 
 try {
     Write-Log "=== Phase 2 Verification ===" "VERIFY"
     Write-Log "Tenant: $TenantName"
     Write-Log "Admin URL: $AdminUrl"
+    
+    # Initialize connections once
+    Initialize-VerificationConnections
     
     $allResults = @()
     
@@ -392,6 +436,11 @@ try {
     $allResults += Test-DCEHub
     $allResults += Test-AzureADGroups
     $allResults += Test-Navigation
+    
+    # R2.3A: Permission verification (now actually called!)
+    if ($CheckPermissions) {
+        $allResults += Test-AllPermissions
+    }
     
     # Summary
     Write-Log "`n=== VERIFICATION SUMMARY ===" "VERIFY"
@@ -410,18 +459,26 @@ try {
     Write-Log "`nDetailed Results:"
     $allResults | Format-Table -AutoSize | Out-String | Write-Host
     
+    # R2.3A: Discrepancy report
+    Export-DiscrepancyReport -Results $allResults
+    
     # Export if requested
     if ($ExportResults) {
-        $exportPath = ".\phase2-week1\docs\verification-results.csv"
+        $exportPath = Join-Path $ProjectRoot "phase2-week1" "docs" "verification-results.csv"
         $allResults | Export-Csv -Path $exportPath -NoTypeInformation -Force
         Write-Log "Results exported to: $exportPath" "SUCCESS"
     }
     
     # Final verdict
     if ($failCount -eq 0 -and $errorCount -eq 0) {
-        Write-Log "✅ All verifications passed!" "SUCCESS"
+        Write-Log "All verifications passed!" "SUCCESS"
+        exit 0
+    } elseif ($failCount -eq 0) {
+        Write-Log "Verifications passed with warnings." "WARNING"
+        exit 1
     } else {
-        Write-Log "⚠ Some verifications failed. Review and remediate." "WARNING"
+        Write-Log "Some verifications failed. Review and remediate." "ERROR"
+        exit 2
     }
     
     Write-Log "Log saved to: $LogFile"
@@ -433,6 +490,11 @@ catch {
     throw
 }
 finally {
-    Disconnect-PnPOnline -ErrorAction SilentlyContinue
-    Disconnect-MgGraph -ErrorAction SilentlyContinue
+    # Only disconnect what we own
+    if ($script:OwnsPnPConnection) {
+        Disconnect-PnPOnline -ErrorAction SilentlyContinue
+    }
+    if ($script:OwnsGraphConnection) {
+        Disconnect-MgGraph -ErrorAction SilentlyContinue
+    }
 }

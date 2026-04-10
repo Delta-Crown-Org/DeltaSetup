@@ -37,11 +37,21 @@ param(
 
 # Error handling
 $ErrorActionPreference = "Stop"
+$script:ExportPlaintext = ($Environment -eq "Development")
+
+# ============================================================================
+# PATH RESOLUTION (moved before logging — $ProjectRoot needed for log paths)
+# ============================================================================
+$ScriptRoot = $PSScriptRoot
+if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
+$ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
+$ModulesPath = Join-Path $ProjectRoot "phase2-week1" "modules"
 
 # ============================================================================
 # LOGGING SETUP
 # ============================================================================
-$LogPath = ".\phase2-week1\logs"
+# R2.4A: No hard-coded paths
+$LogPath = Join-Path $ProjectRoot "phase2-week1" "logs"
 if (!(Test-Path $LogPath)) {
     New-Item -ItemType Directory -Path $LogPath -Force | Out-Null
 }
@@ -54,14 +64,6 @@ function Write-Log {
     Write-Host $logEntry -ForegroundColor $(switch($Level) {"INFO"{"Cyan"} "SUCCESS"{"Green"} "WARNING"{"Yellow"} "ERROR"{"Red"} "WHATIF"{"Magenta"} default{"White"}})
     Add-Content -Path $LogFile -Value $logEntry
 }
-
-# ============================================================================
-# PATH RESOLUTION
-# ============================================================================
-$ScriptRoot = $PSScriptRoot
-if (!$ScriptRoot) { $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path }
-$ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
 
 # Import shared modules
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
@@ -113,27 +115,65 @@ $DynamicGroups = @(
 # ============================================================================
 
 function Test-DynamicRuleSyntax {
-    param([string]$Rule)
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Rule,
+        
+        [Parameter()]
+        [string]$GroupDisplayName = "Unknown"
+    )
     
-    Write-Log "Validating membership rule syntax..."
-    
-    # Basic validation - Microsoft Graph will do full validation on create
-    $requiredAttributes = @('user.department', 'user.companyName', 'user.jobTitle')
-    $hasValidAttributes = $requiredAttributes | Where-Object { $Rule -contains $_ }
-    
-    if (-not $hasValidAttributes) {
-        Write-Log "Warning: Rule may not contain standard attributes" "WARNING"
-    }
+    Write-Log "Validating membership rule syntax for '$GroupDisplayName'..."
     
     # Check for balanced parentheses
-    $openParens = ($Rule -split '\(').Count - 1
-    $closeParens = ($Rule -split '\)').Count - 1
+    $openParens = ([char[]]$Rule | Where-Object { $_ -eq '(' }).Count
+    $closeParens = ([char[]]$Rule | Where-Object { $_ -eq ')' }).Count
     
     if ($openParens -ne $closeParens) {
-        throw "Unbalanced parentheses in membership rule"
+        throw "Unbalanced parentheses in membership rule for '$GroupDisplayName': $openParens open, $closeParens close"
     }
     
-    Write-Log "Basic syntax validation passed" "SUCCESS"
+    # R2.3B: Validate recognized attributes (using -match for string pattern matching, not -contains)
+    $recognizedAttributes = @(
+        'user\.department',
+        'user\.companyName',
+        'user\.jobTitle',
+        'user\.userPrincipalName',
+        'user\.mail',
+        'user\.displayName',
+        'user\.accountEnabled',
+        'user\.userType',
+        'user\.assignedPlans'
+    )
+    
+    $foundAttributes = @()
+    foreach ($attr in $recognizedAttributes) {
+        if ($Rule -match $attr) {
+            $foundAttributes += ($attr -replace '\\\.', '.')
+        }
+    }
+    
+    if ($foundAttributes.Count -eq 0) {
+        throw "Membership rule for '$GroupDisplayName' does not contain any recognized user attributes. Found: $(($Rule -split '\n' | Select-Object -First 1))"
+    }
+    
+    # Validate recognized operators
+    $recognizedOperators = @('-contains', '-eq', '-ne', '-match', '-notMatch', '-startsWith', '-in', '-notIn')
+    $hasOperator = $false
+    foreach ($op in $recognizedOperators) {
+        if ($Rule -match [regex]::Escape($op)) {
+            $hasOperator = $true
+            break
+        }
+    }
+    
+    if (-not $hasOperator) {
+        throw "Membership rule for '$GroupDisplayName' does not contain a recognized comparison operator"
+    }
+    
+    Write-Log "  Validated attributes: $($foundAttributes -join ', ')" "SUCCESS"
+    Write-Log "  Parentheses balanced: $openParens pairs" "SUCCESS"
     return $true
 }
 
@@ -152,14 +192,18 @@ function Export-GroupConfiguration {
         }
     }
     
-    $exportPath = ".\phase2-week1\docs\azure-ad-groups-config.csv"
+    $exportPath = Join-Path $ProjectRoot "phase2-week1" "docs" "azure-ad-groups-config.csv"
     $exportData | Export-Csv -Path $exportPath -NoTypeInformation -Force
     Write-Log "Group configuration exported to: $exportPath" "SUCCESS"
     
     # Also export JSON for programmatic access
-    $jsonPath = ".\phase2-week1\docs\azure-ad-groups-config.json"
+    $jsonPath = Join-Path $ProjectRoot "phase2-week1" "docs" "azure-ad-groups-config.json"
     $exportData | ConvertTo-Json -Depth 3 | Out-File -FilePath $jsonPath -Force
     Write-Log "Group configuration exported to: $jsonPath" "SUCCESS"
+    
+    # R2.2B: Encrypted export for sensitive group data
+    $encPath = Join-Path $ProjectRoot "phase2-week1" "docs" "azure-ad-groups-config.enc"
+    Export-DeltaCrownSecureData -Data $exportData -Path $encPath -AlsoExportPlaintext:($script:ExportPlaintext)
 }
 
 # ============================================================================
@@ -216,8 +260,11 @@ try {
         Write-DeltaCrownLog "Test group created with ID: $($testGroup.Id)" "SUCCESS"
         Write-DeltaCrownLog "Group started in 'Paused' state for validation"
         
-        # Validate membership rule processing
-        Start-Sleep -Seconds 10
+        # R2.4C: Poll for test group validation instead of fixed delay
+        Wait-DeltaCrownCondition -Condition {
+            $g = Get-MgGroup -GroupId $testGroup.Id -Property "id,membershipRuleProcessingState,membershipRuleProcessingError" -ErrorAction SilentlyContinue
+            return ($g -and $g.MembershipRuleProcessingState -ne $null)
+        } -TimeoutSeconds 30 -IntervalSeconds 5 -ActivityMessage "Validating test group membership rule"
         $testGroupStatus = Get-MgGroup -GroupId $testGroup.Id -Property "id,displayName,membershipRuleProcessingState,membershipRuleProcessingError"
         
         if ($testGroupStatus.MembershipRuleProcessingError) {
@@ -238,6 +285,28 @@ try {
     }
     
     # ------------------------------------------------------------------------
+    # STEP 1C: Duplicate Group Detection (R2.3B)
+    # ------------------------------------------------------------------------
+    Write-DeltaCrownLog "Checking for duplicate group definitions..." "INFO"
+    
+    $groupNames = $DynamicGroups | ForEach-Object { $_.DisplayName }
+    $duplicates = $groupNames | Group-Object | Where-Object { $_.Count -gt 1 }
+    if ($duplicates) {
+        throw "Duplicate group definitions found: $($duplicates.Name -join ', '). Each group must be unique."
+    }
+    
+    # Check for existing groups with similar names (fuzzy match)
+    $allExistingGroups = Get-MgGroup -Filter "startsWith(displayName, '$GroupPrefix')" -ErrorAction SilentlyContinue
+    if ($allExistingGroups) {
+        Write-DeltaCrownLog "Found $($allExistingGroups.Count) existing groups with prefix '$GroupPrefix':" "INFO"
+        foreach ($eg in $allExistingGroups) {
+            $isDefined = $groupNames -contains $eg.DisplayName
+            $status = if ($isDefined) { "EXPECTED" } else { "UNEXPECTED" }
+            Write-DeltaCrownLog "  [$status] $($eg.DisplayName) (ID: $($eg.Id))" $(if ($isDefined) { "INFO" } else { "WARNING" })
+        }
+    }
+    
+    # ------------------------------------------------------------------------
     # STEP 2: Validate and Create Groups
     # ------------------------------------------------------------------------
     Write-Log "Processing dynamic group configurations..."
@@ -248,7 +317,7 @@ try {
         Write-Log "`nProcessing group: $($groupConfig.DisplayName)"
         
         # Validate rule syntax
-        Test-DynamicRuleSyntax -Rule $groupConfig.MembershipRule
+        Test-DynamicRuleSyntax -Rule $groupConfig.MembershipRule -GroupDisplayName $groupConfig.DisplayName
         
         # Check if group already exists
         $existingGroup = Get-MgGroup -Filter "displayName eq '$($groupConfig.DisplayName)'" -ErrorAction SilentlyContinue
@@ -289,9 +358,13 @@ try {
             
             $createdGroups += $newGroup
             
-            # Wait for processing to begin
-            Write-Log "Waiting for membership evaluation to begin..."
-            Start-Sleep -Seconds 5
+            # R2.4C: Poll for group processing instead of fixed delay
+            Wait-DeltaCrownCondition -Condition {
+                $g = Get-MgGroup -GroupId $newGroup.Id -Property "id,membershipRuleProcessingState,membershipRuleProcessingError" -ErrorAction SilentlyContinue
+                return ($g -and (-not $g.MembershipRuleProcessingError))
+            } -TimeoutSeconds 60 -IntervalSeconds 5 -ActivityMessage "Waiting for membership rule processing: $($newGroup.DisplayName)" -OnTimeout {
+                Write-DeltaCrownLog "Membership rule processing timed out for $($newGroup.DisplayName). This may resolve within 24 hours." "WARNING"
+            }
             
             # Check initial membership status
             $groupStatus = Get-MgGroup -GroupId $newGroup.Id -Property "id,displayName,membershipRuleProcessingState,membershipRuleProcessingError"
@@ -300,6 +373,22 @@ try {
             } else {
                 Write-Log "Membership rule processing state: $($groupStatus.MembershipRuleProcessingState)"
             }
+            
+            # R2.3B: Post-creation membership count verification
+            $memberCheckAttempt = 0
+            $memberCount = 0
+            while ($memberCheckAttempt -lt 3) {
+                $memberCheckAttempt++
+                try {
+                    $members = Get-MgGroupMember -GroupId $newGroup.Id -All -ErrorAction SilentlyContinue
+                    $memberCount = if ($members) { $members.Count } else { 0 }
+                    break
+                }
+                catch {
+                    Start-Sleep -Seconds 5
+                }
+            }
+            Write-Log "  Membership count: $memberCount (may increase as Azure AD evaluates rule)" "INFO"
         }
         catch {
             Write-Log "Error creating group $($groupConfig.DisplayName): $_" "ERROR"
@@ -361,7 +450,7 @@ Use these groups for site permissions instead:
 Generated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 "@
     
-    $usageDocPath = ".\phase2-week1\docs\azure-ad-groups-usage-guide.md"
+    $usageDocPath = Join-Path $ProjectRoot "phase2-week1" "docs" "azure-ad-groups-usage-guide.md"
     $usageDoc | Out-File -FilePath $usageDocPath -Force
     Write-Log "Usage guide saved to: $usageDocPath" "SUCCESS"
     

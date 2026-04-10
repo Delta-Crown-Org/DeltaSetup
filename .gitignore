@@ -29,6 +29,17 @@ Thumbs.db
 .coverage
 htmlcov/
 
+# Phase 2 runtime results (may contain tenant GUIDs)
+phase2-week1/docs/*-results.csv
+phase2-week1/docs/*-results.json
+phase2-week1/docs/*-config.json
+phase2-week1/docs/*-config.csv
+phase2-week1/docs/*.enc
+phase2-week1/docs/discrepancy-report-*.json
+phase2-week1/docs/*-id.txt
+phase2-week1/logs/
+*.aes-key
+
 # Phase 3 runtime results (may contain tenant GUIDs — F7)
 phase3-week2/docs/*-results.json
 phase3-week2/logs/

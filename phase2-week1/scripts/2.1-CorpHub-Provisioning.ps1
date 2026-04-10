@@ -51,7 +51,7 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 # ============================================================================
 # MODULE IMPORT
 # ============================================================================
-$ModulesPath = Join-Path $ProjectRoot "phase2-week1\modules"
+$ModulesPath = Join-Path $ProjectRoot "phase2-week1" "modules"
 
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
@@ -116,10 +116,9 @@ try {
     # ------------------------------------------------------------------------
     Write-DeltaCrownLog "Connecting to SharePoint Admin Center..."
     
+    # R2.4A: Require OwnerEmail as parameter (no interactive Read-Host)
     if (!$OwnerEmail) {
-        do {
-            $OwnerEmail = Read-Host "Enter admin email address for site ownership"
-        } until (Test-DeltaCrownEmailFormat $OwnerEmail)
+        throw "OwnerEmail parameter is required. Pass -OwnerEmail 'admin@example.com'"
     }
     $CorpHubConfig.Owner = $OwnerEmail
     
@@ -172,8 +171,13 @@ try {
     }
     
     # Export Hub ID for later use
-    $hubId | Out-File -FilePath ".\phase2-week1\docs\corp-hub-id.txt" -Force
-    Write-Log "Hub ID saved to corp-hub-id.txt"
+    # R2.4A: No hard-coded paths
+    $hubIdPath = Join-Path $ProjectRoot "phase2-week1" "docs" "corp-hub-id.txt"
+    # R2.2B: Encrypted export for sensitive hub configuration
+    Export-DeltaCrownSecureData -Data @{ HubId = $hubId; HubUrl = $hubSiteUrl; ExportedAt = (Get-Date) } -Path (Join-Path $ProjectRoot "phase2-week1" "docs" "corp-hub-config.enc") -AlsoExportPlaintext:($Environment -eq "Development")
+    # Also keep plaintext hub ID for cross-script compatibility
+    $hubId | Out-File -FilePath $hubIdPath -Force
+    Write-Log "Hub ID saved to $hubIdPath"
     
     # ------------------------------------------------------------------------
     # STEP 4: Create Associated Sites
@@ -221,7 +225,7 @@ try {
     }
     
     # Export site inventory
-    $exportPath = Join-Path $ProjectRoot "phase2-week1\docs\corp-sites-inventory.csv"
+    $exportPath = Join-Path $ProjectRoot "phase2-week1" "docs" "corp-sites-inventory.csv"
     $createdSites | Export-Csv -Path $exportPath -NoTypeInformation -Force
     Write-DeltaCrownLog "Site inventory exported to corp-sites-inventory.csv"
     
