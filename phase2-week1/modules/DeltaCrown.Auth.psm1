@@ -609,7 +609,10 @@ function Show-DeltaCrownBusinessPremiumWarning {
     [CmdletBinding()]
     param(
         [Parameter()]
-        [switch]$ForceAcknowledgment = $false
+        [switch]$ForceAcknowledgment = $false,
+        
+        [Parameter()]
+        [switch]$NonInteractive
     )
     
     $warning = @"
@@ -642,12 +645,18 @@ function Show-DeltaCrownBusinessPremiumWarning {
     
     Write-Host $warning -ForegroundColor Red
     
-    if ($ForceAcknowledgment) {
+    if ($ForceAcknowledgment -and -not $NonInteractive) {
         $ack = Read-Host "`nType 'I UNDERSTAND' to acknowledge and continue"
         if ($ack -ne "I UNDERSTAND") {
             throw "Business Premium acknowledgment required. Operation cancelled."
         }
         Write-Host "Acknowledgment recorded.`n" -ForegroundColor Green
+        Write-Verbose "AUDIT: Business Premium license warning acknowledged at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+    }
+    elseif ($ForceAcknowledgment -and $NonInteractive) {
+        # Agent/CI mode: Log acknowledgment without interactive prompt
+        Write-Host "Business Premium warning acknowledged (non-interactive mode).`n" -ForegroundColor Yellow
+        Write-Verbose "AUDIT: Business Premium license warning auto-acknowledged (non-interactive) at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
     }
 }
 

@@ -22,9 +22,11 @@ param(
     [string]$TenantName = "deltacrownext",
     
     [Parameter(Mandatory=$false)]
+    [ValidatePattern('^/sites/[a-zA-Z0-9-]+$')]
     [string]$CorpHubUrl = "/sites/corp-hub",
     
     [Parameter(Mandatory=$false)]
+    [ValidatePattern('^/sites/[a-zA-Z0-9-]+$')]
     [string]$DCEHubUrl = "/sites/dce-hub",
     
     [Parameter(Mandatory=$false)]
@@ -338,7 +340,7 @@ try {
     }
 }
 catch {
-    Write-Log "CRITICAL ERROR: $_" "ERROR"
+    Write-Log "CRITICAL ERROR: $_" "ERROR" -IncludeContext -Exception $_.Exception
     Write-Log "Stack Trace: $($_.ScriptStackTrace)" "ERROR"
     throw
 }

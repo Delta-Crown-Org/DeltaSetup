@@ -409,7 +409,7 @@ try {
     Write-DeltaCrownLog "Results saved to: $ResultsFile"
 }
 catch {
-    Write-DeltaCrownLog "CRITICAL ERROR: $_" "ERROR"
+    Write-DeltaCrownLog "CRITICAL ERROR: $_" "ERROR" -IncludeContext -Exception $_.Exception
     
     # R2.4D: Rollback on failure
     if (!$WhatIf) {

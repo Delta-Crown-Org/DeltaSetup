@@ -486,7 +486,7 @@ try {
     return $allResults
 }
 catch {
-    Write-Log "CRITICAL ERROR: $_" "ERROR"
+    Write-Log "CRITICAL ERROR: $_" "ERROR" -IncludeContext -Exception $_.Exception
     throw
 }
 finally {

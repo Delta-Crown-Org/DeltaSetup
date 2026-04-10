@@ -23,6 +23,7 @@ param(
     [string]$TenantName = "deltacrownext",
     
     [Parameter(Mandatory=$false)]
+    [ValidatePattern('^/sites/[a-zA-Z0-9-]+$')]
     [string]$CorpHubUrl = "/sites/corp-hub",
     
     [Parameter(Mandatory=$false)]
@@ -352,7 +353,7 @@ try {
     }
 }
 catch {
-    Write-DeltaCrownLog "CRITICAL ERROR: $_" "ERROR"
+    Write-DeltaCrownLog "CRITICAL ERROR: $_" "ERROR" -IncludeContext -Exception $_.Exception
     Write-DeltaCrownLog "Stack Trace: $($_.ScriptStackTrace)" "ERROR"
     
     # R2.4D: Rollback on failure

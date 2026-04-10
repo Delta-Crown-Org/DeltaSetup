@@ -12,6 +12,7 @@
 $script:LogBuffer = [System.Collections.ArrayList]::new()
 $script:RollbackStack = [System.Collections.Stack]::new()
 $script:Config = $null
+$script:CorrelationId = [guid]::NewGuid().ToString("N").Substring(0, 8)
 
 #region Logging
 
@@ -41,12 +42,15 @@ function Write-DeltaCrownLog {
         [switch]$IncludeContext,
         
         [Parameter()]
-        [System.Exception]$Exception = $null
+        [System.Exception]$Exception = $null,
+        
+        [Parameter()]
+        [string]$CorrelationId = $script:CorrelationId
     )
     
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss.fff"
     $caller = (Get-PSCallStack)[1].Command
-    $logEntry = "[$timestamp] [$Level]"
+    $logEntry = "[$timestamp] [$CorrelationId] [$Level]"
     
     if ($IncludeContext) {
         $logEntry += " [$caller]"
@@ -136,6 +140,32 @@ function Export-DeltaCrownLogBuffer {
     
     $script:LogBuffer | Out-File -FilePath $Path -Force
     $script:LogBuffer.Clear()
+}
+
+<#
+.SYNOPSIS
+    Gets or sets the session correlation ID for log tracing.
+#>
+function Set-DeltaCrownCorrelationId {
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [string]$Id = $null
+    )
+    
+    if ($Id) {
+        $script:CorrelationId = $Id
+    } else {
+        $script:CorrelationId = [guid]::NewGuid().ToString("N").Substring(0, 8)
+    }
+    
+    return $script:CorrelationId
+}
+
+function Get-DeltaCrownCorrelationId {
+    [CmdletBinding()]
+    param()
+    return $script:CorrelationId
 }
 
 #endregion
@@ -809,6 +839,10 @@ Export-ModuleMember -Function @(
     
     # Configuration
     'Import-DeltaCrownConfig'
+    
+    # Correlation ID (R2.4E)
+    'Set-DeltaCrownCorrelationId'
+    'Get-DeltaCrownCorrelationId'
     
     # Secure Export/Import (R2.2B)
     'Export-DeltaCrownSecureData'

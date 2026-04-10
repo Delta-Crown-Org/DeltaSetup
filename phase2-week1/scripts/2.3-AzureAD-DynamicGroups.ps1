@@ -16,9 +16,11 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
+    [ValidatePattern('^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$|^$')]
     [string]$TenantId = $null,
     
     [Parameter(Mandatory=$false)]
+    [ValidatePattern('^[A-Z]{2,5}-[A-Z]{2,5}$')]
     [string]$GroupPrefix = "SG-DCE",
     
     [Parameter(Mandatory=$false)]
@@ -478,7 +480,7 @@ Generated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
     }
 }
 catch {
-    Write-Log "CRITICAL ERROR: $_" "ERROR"
+    Write-Log "CRITICAL ERROR: $_" "ERROR" -IncludeContext -Exception $_.Exception
     Write-Log "Exception: $($_.Exception.Message)" "ERROR"
     Write-Log "Stack Trace: $($_.ScriptStackTrace)" "ERROR"
     throw
