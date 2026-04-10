@@ -1,0 +1,163 @@
+Source: W3C WCAG 2.2 Understanding
+URL: https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html
+Date Accessed: January 2025
+Credibility: Tier 1 (Official Standard)
+
+================================================================================
+Success Criterion 2.4.13: Focus Appearance - Level AAA
+================================================================================
+
+IN BRIEF
+--------
+Goal: Make it easier to spot the keyboard focus.
+What to do: Use a focus indicator of sufficient size and contrast.
+Why it's important: Many people can't see small changes in visual appearance, including older people.
+
+SUCCESS CRITERION (SC)
+----------------------
+When the keyboard focus indicator is visible, an area of the focus indicator meets all the following:
+
+1. Is at least as large as the area of a 2 CSS pixel thick perimeter of the unfocused component or sub-component
+
+2. Has a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states
+
+EXCEPTIONS
+----------
+1. The focus indicator is determined by the user agent and cannot be adjusted by the author
+
+2. The focus indicator and the indicator's background color are not modified by the author
+
+NOTES
+-----
+Note 1: What is perceived as the user interface component depends on its visual presentation including visible content, border, and component-specific background. Does not include shadow and glow effects.
+
+Note 2: Examples of sub-components that may receive focus: menu items in opened drop-down, focusable cells in grid.
+
+Note 3: Pixels modified by anti-aliasing can be ignored for contrast calculations.
+
+MINIMUM AREA CALCULATION
+------------------------
+First part of SC specifies minimum area:
+"Is at least as large as the area of a 2 CSS pixel thick perimeter of the unfocused component"
+
+This is a MINIMUM. Does not require literal 2px thick outline, only that indicator be at least that large.
+
+SIMPLEST WAY TO MEET SIZE REQUIREMENT
+-------------------------------------
+Use solid outline around component that is at least 2px thick.
+
+CSS PIXEL DEFINITION
+--------------------
+CSS pixel: The canonical unit in CSS declarations. Device-independent, distinct from hardware pixels. What developers use in "width: 200px".
+
+CALCULATION FORMULAS
+--------------------
+For common shapes:
+
+Rectangle (width w, height h): 4h + 4w
+
+Circle (radius r): 4πr
+
+Rounded rectangle (width w, height h, border radius r): 4h + 4w - (16 - 4π)r
+
+For a 90px × 30px button:
+Minimum area = (92 × 32) - (88 × 28) = 480px²
+
+OTHER INDICATOR SHAPES
+----------------------
+SC does not require solid outline. Other shapes allowed if meet minimum area.
+
+Examples:
+- 3px thick inset indicator: 612px² (passes 480px² minimum)
+- Side highlight rectangles: 504px² total (passes)
+- Color change of entire component (must have 3:1 contrast change)
+
+CONTRAST REQUIREMENT
+--------------------
+Second part of SC:
+"Has a contrast ratio of at least 3:1 between the same pixels in the focused and unfocused states"
+
+IMPORTANT: This measures CHANGE OF CONTRAST between states, not adjacent contrast.
+
+This is different from:
+- Text Contrast (measures between adjacent pixels)
+- Non-text Contrast (measures in single state)
+
+3:1 is MINIMUM allowable. Greater contrast = easier to see. Authors encouraged to maximize.
+
+CONTRAST CALCULATION EXAMPLES
+---------------------------
+
+PASS: White button → Blue focus indicator
+Change: white to blue = 12:1 contrast ratio ✓
+
+FAIL: White button → Dark gray focus (#555)
+Change: white to dark gray may not meet 3:1 ✗
+
+PASS: Black background → White focus background
+Change: black to white = 21:1 contrast ratio ✓
+
+INLINE LINKS
+------------
+If inline link breaks over multiple lines:
+- CSS outline: surrounds each part separately (passes)
+- CSS border: splits across parts but still passes due to minimum bounding box definition
+
+FOCUS APPEARANCE + NON-TEXT CONTRAST
+------------------------------------
+- Focus Appearance requires change of contrast between focused/unfocused states
+- Non-text Contrast requires adjacent contrast between indicator and adjacent colors
+- Both may apply to same element
+
+GRADIENT FOCUS INDICATORS
+-------------------------
+If focus indicator has gradient:
+- Measure area that has 3:1+ change
+- Ignore areas with less than 3:1 change
+- Calculate remaining area to determine if meets minimum
+
+BACKGROUND IMAGES
+-----------------
+If background images cover component:
+- Use two-color indicator (C40 technique)
+- Or solid box with border
+- Guarantees sufficient contrast across background variations
+
+RELATIONSHIP WITH OTHER CRITERIA
+--------------------------------
+- 2.4.7 Focus Visible: Requires visible focus indicator
+- 1.4.11 Non-text Contrast: Requires indicator contrast against adjacent colors
+- 2.4.13 Focus Appearance: Defines minimum size and contrast change
+
+COMPONENT KEYBOARD FOCUS
+------------------------
+Preamble: "When a user interface component has keyboard focus..."
+
+Keyboard focus is point of interaction for keyboard users. Whichever component is being interacted with has focus.
+
+Three typical focus indicators for complex components:
+1. Focus indicator around only whole component
+2. Focus indicators around both component and subcomponent
+3. Focus indicator around only subcomponent
+
+Each acceptable if meets requirements.
+
+EXCEPTIONS
+----------
+1. User agent default cannot be adjusted by author
+2. Neither focus indicator nor background are modified
+
+Intent: Reduce burden by allowing reliance on browser defaults (though they vary widely).
+
+Modifying background adjacent to default focus indicator nullifies exception.
+
+TECHNIQUES
+----------
+Sufficient:
+- G195: Using author-supplied visible focus indicator
+- C40: Creating two-color focus indicator for sufficient contrast
+- C41: Creating strong focus indicator within component
+
+Failures:
+- F55: Using script to remove focus when received
+- F78: Styling element outlines that remove focus indicator
