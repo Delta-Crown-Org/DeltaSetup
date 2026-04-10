@@ -15,13 +15,17 @@ Write-Host "  DCE User Property Audit — deltacrownext"   -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "A browser window will open for authentication." -ForegroundColor Yellow
-Write-Host "Sign in with your deltacrownext admin account." -ForegroundColor Yellow
+Write-Host "Sign in with tyler.granlund-admin@httbrands.com" -ForegroundColor Yellow
+Write-Host "Target tenant: deltacrownext (ce62e17d-2feb-4e67-a115-8ea4af68da30)" -ForegroundColor Yellow
 Write-Host ""
 
-# Connect
+# Connect — use explicit tenant GUID so httbrands admin account
+# gets directed to the deltacrownext tenant via cross-tenant auth
+$DCETenantId = "ce62e17d-2feb-4e67-a115-8ea4af68da30"
+
 Disconnect-MgGraph -ErrorAction SilentlyContinue
 Connect-MgGraph -Scopes "User.Read.All","Group.Read.All","Directory.Read.All" `
-    -TenantId "deltacrownext.onmicrosoft.com" -NoWelcome
+    -TenantId $DCETenantId -NoWelcome
 
 $ctx = Get-MgContext
 if (!$ctx -or !$ctx.TenantId) {
@@ -29,10 +33,18 @@ if (!$ctx -or !$ctx.TenantId) {
     exit 1
 }
 
+if ($ctx.TenantId -ne $DCETenantId) {
+    Write-Host "WARNING: Connected to wrong tenant!" -ForegroundColor Red
+    Write-Host "Expected: $DCETenantId (deltacrownext)" -ForegroundColor Red
+    Write-Host "Got:      $($ctx.TenantId)" -ForegroundColor Red
+    exit 1
+}
+
 Write-Host ""
 Write-Host "=== CONNECTED ===" -ForegroundColor Green
 Write-Host "Account:  $($ctx.Account)"
-Write-Host "TenantId: $($ctx.TenantId)"
+Write-Host "TenantId: $($ctx.TenantId) (deltacrownext)"
+Write-Host "Auth:     $($ctx.AuthType)"
 Write-Host ""
 
 # Get users
