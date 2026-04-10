@@ -170,7 +170,7 @@ DCE Hub (Communication Site)
 ### 1. SharePoint Site Structure
 
 #### DCE-Operations (Team Site — Teams-Connected)
-**URL**: `https://deltacrownext.sharepoint.com/sites/dce-operations`
+**URL**: `https://deltacrown.sharepoint.com/sites/dce-operations`
 **Purpose**: Daily operations hub, Teams-connected
 **Teams Team**: "Delta Crown Operations"
 
@@ -218,7 +218,7 @@ DCE Hub (Communication Site)
 | Description | Multi-line text | No |
 
 #### DCE-ClientServices (Team Site — Standalone)
-**URL**: `https://deltacrownext.sharepoint.com/sites/dce-clientservices`
+**URL**: `https://deltacrown.sharepoint.com/sites/dce-clientservices`
 **Purpose**: Client relationship management, service records
 
 | Component | Type | Purpose |
@@ -243,7 +243,7 @@ DCE Hub (Communication Site)
 | VIP Status | Yes/No | No |
 
 #### DCE-Marketing (Communication Site — Standalone)
-**URL**: `https://deltacrownext.sharepoint.com/sites/dce-marketing`
+**URL**: `https://deltacrown.sharepoint.com/sites/dce-marketing`
 **Purpose**: Brand assets, campaign management, social media coordination
 
 | Component | Type | Purpose |
@@ -268,7 +268,7 @@ DCE Hub (Communication Site)
 | Owner | Person | Yes |
 
 #### DCE-Docs (Team Site — Standalone, Document Center Pattern)
-**URL**: `https://deltacrownext.sharepoint.com/sites/dce-docs`
+**URL**: `https://deltacrown.sharepoint.com/sites/dce-docs`
 **Purpose**: Central document repository, policies, training materials
 
 | Component | Type | Purpose |

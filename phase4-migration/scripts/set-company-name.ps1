@@ -40,7 +40,7 @@ Connect-MgGraph -Scopes "User.ReadWrite.All","Directory.ReadWrite.All" `
 
 $ctx = Get-MgContext
 if (!$ctx -or $ctx.TenantId -ne $DCETenantId) {
-    Write-Host "ERROR: Not connected to deltacrownext tenant." -ForegroundColor Red
+    Write-Host "ERROR: Not connected to deltacrown tenant." -ForegroundColor Red
     exit 1
 }
 Write-Host "Connected: $($ctx.TenantId) (deltacrown)" -ForegroundColor Green

@@ -16,7 +16,7 @@
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     [Parameter(Mandatory=$false)]
     [string]$BrandDomain = "deltacrown.com.au",
     [Parameter(Mandatory=$false)]

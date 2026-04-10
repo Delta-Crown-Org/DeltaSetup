@@ -23,21 +23,21 @@ Quick reference for running QA tests on the DCE SharePoint Hub & Spoke implement
 
 **Infrastructure Tests:**
 ```powershell
-.\tests\qa\Run-InfrastructureTests.ps1 -TenantName "deltacrownext" -GenerateReport
+.\tests\qa\Run-InfrastructureTests.ps1 -TenantName "deltacrown" -GenerateReport
 ```
 
 **Security Tests:**
 ```powershell
 # With fail-fast (stop on first failure)
-.\tests\qa\Run-SecurityTests.ps1 -TenantName "deltacrownext" -FailFast -GenerateReport
+.\tests\qa\Run-SecurityTests.ps1 -TenantName "deltacrown" -FailFast -GenerateReport
 
 # Continue on failures
-.\tests\qa\Run-SecurityTests.ps1 -TenantName "deltacrownext" -GenerateReport
+.\tests\qa\Run-SecurityTests.ps1 -TenantName "deltacrown" -GenerateReport
 ```
 
 **Daily Smoke Tests:**
 ```powershell
-.\tests\qa\Run-Phase2-SmokeTests.ps1 -TenantName "deltacrownext"
+.\tests\qa\Run-Phase2-SmokeTests.ps1 -TenantName "deltacrown"
 ```
 
 ## 📊 Test Categories

@@ -73,7 +73,7 @@ security-controls/
 **Quick Reference**:
 ```powershell
 # Connect to Security & Compliance Center
-Connect-IPPSSession -UserPrincipalName admin@deltacrownext.com
+Connect-IPPSSession -UserPrincipalName admin@deltacrown.com
 
 # Create label
 New-Label -Name "DCE-Internal" -DisplayName "Delta Crown - Internal" `
@@ -102,7 +102,7 @@ Get-Label | Where-Object { $_.Name -eq "DCE-Internal" }
 ```powershell
 # Create DLP Policy
 New-DlpCompliancePolicy -Name "DCE-Data-Protection" `
-    -SharePointLocation "https://deltacrownext.sharepoint.com/sites/dce-*" `
+    -SharePointLocation "https://deltacrown.sharepoint.com/sites/dce-*" `
     -Mode TestWithNotifications
 
 # Add rules
@@ -301,7 +301,7 @@ Get-MgGroup -Filter "displayName eq 'SG-DCE-AllStaff'" | Select-Object Membershi
 ### Control #2: Unique Permissions
 ```powershell
 # Check site permissions
-Connect-PnPOnline -Url "https://deltacrownext.sharepoint.com/sites/dce-hub" -Interactive
+Connect-PnPOnline -Url "https://deltacrown.sharepoint.com/sites/dce-hub" -Interactive
 $web = Get-PnPWeb
 $web.HasUniqueRoleAssignments  # Should be $true
 
@@ -312,7 +312,7 @@ Get-PnPProperty -ClientObject $web -Property RoleAssignments
 ### Control #3: Sensitivity Labels
 ```powershell
 # Connect to Compliance Center
-Connect-IPPSSession -UserPrincipalName admin@deltacrownext.com
+Connect-IPPSSession -UserPrincipalName admin@deltacrown.com
 
 # List labels
 Get-Label | Where-Object { $_.Name -like "DCE*" }
@@ -324,7 +324,7 @@ Get-AutoSensitivityLabelPolicy | Where-Object { $_.Name -like "DCE*" }
 ### Control #4: DLP Policies
 ```powershell
 # Connect to Compliance Center
-Connect-IPPSSession -UserPrincipalName admin@deltacrownext.com
+Connect-IPPSSession -UserPrincipalName admin@deltacrown.com
 
 # List policies
 Get-DlpCompliancePolicy | Where-Object { $_.Name -like "DCE*" }
@@ -372,7 +372,7 @@ Get-ChildItem .\phase2-week1\reports\Permission-Audit-*.html | Sort-Object LastW
 **Resolution**:
 1. Check user attributes in Azure AD:
    ```powershell
-   Get-MgUser -UserId "user@deltacrownext.com" | Select-Object Department, CompanyName, JobTitle
+   Get-MgUser -UserId "user@deltacrown.com" | Select-Object Department, CompanyName, JobTitle
    ```
 2. Verify membership rule syntax
 3. Wait 5-30 minutes for initial sync

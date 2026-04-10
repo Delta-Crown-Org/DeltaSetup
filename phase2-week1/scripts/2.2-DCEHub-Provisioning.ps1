@@ -15,11 +15,11 @@
 param(
     [Parameter(Mandatory=$false)]
     [ValidatePattern('^https://[a-zA-Z0-9-]+\.sharepoint\.com(/.*)?$')]
-    [string]$AdminUrl = "https://deltacrownext-admin.sharepoint.com",
+    [string]$AdminUrl = "https://deltacrown-admin.sharepoint.com",
     
     [Parameter(Mandatory=$false)]
     [ValidatePattern('^[a-zA-Z0-9-]{3,64}$')]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     
     [Parameter(Mandatory=$false)]
     [ValidatePattern('^/sites/[a-zA-Z0-9-]+$')]

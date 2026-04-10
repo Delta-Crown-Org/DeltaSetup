@@ -1,6 +1,6 @@
 # ============================================================================
 # 4.1-User-Property-Audit.ps1
-# Audit existing Azure AD user properties on deltacrownext tenant
+# Audit existing Azure AD user properties on deltacrown tenant
 # ============================================================================
 # PURPOSE: Before onboarding users into the hub-and-spoke architecture,
 #          we need to know what their current Azure AD properties look like.
@@ -10,9 +10,9 @@
 #          - Gaps that need to be filled before deployment
 # ============================================================================
 # USAGE:
-#   ./4.1-User-Property-Audit.ps1 -TenantName "deltacrownext"
-#   ./4.1-User-Property-Audit.ps1 -TenantName "deltacrownext" -ExportCsv
-#   ./4.1-User-Property-Audit.ps1 -TenantName "deltacrownext" -FilterBrand "DCE"
+#   ./4.1-User-Property-Audit.ps1 -TenantName "deltacrown"
+#   ./4.1-User-Property-Audit.ps1 -TenantName "deltacrown" -ExportCsv
+#   ./4.1-User-Property-Audit.ps1 -TenantName "deltacrown" -FilterBrand "DCE"
 # ============================================================================
 # DEPENDENCIES: Microsoft.Graph.Users, Microsoft.Graph.Groups
 # MODULE DEPS:  DeltaCrown.Auth, DeltaCrown.Common
@@ -23,7 +23,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
 
     [Parameter()]
     [ValidateSet("Development", "Staging", "Production")]

@@ -13,7 +13,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     
     [Parameter(Mandatory=$false)]
     [string]$AdminUrl = $null,

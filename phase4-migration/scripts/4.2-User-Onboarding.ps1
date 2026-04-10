@@ -11,7 +11,7 @@
 #   ./4.2-User-Onboarding.ps1 -MappingFile "../config/dce-user-mapping.csv"
 #
 #   # Single user:
-#   ./4.2-User-Onboarding.ps1 -UserPrincipalName "user@deltacrownext.onmicrosoft.com" `
+#   ./4.2-User-Onboarding.ps1 -UserPrincipalName "user@deltacrown.onmicrosoft.com" `
 #       -CompanyName "Delta Crown Extensions" -JobTitle "Stylist" -Department "Operations"
 #
 #   # Dry run (show what would change):
@@ -46,7 +46,7 @@ param(
 
     # Common params
     [Parameter()]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
 
     [Parameter()]
     [ValidateSet("Development", "Staging", "Production")]

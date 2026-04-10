@@ -407,10 +407,10 @@ phase2-week1/
 
 | Role | Contact | Purpose |
 |------|---------|---------|
-| Security Team | security@deltacrownext.com | P0 remediation questions |
-| Infrastructure Team | infrastructure@deltacrownext.com | Environment provisioning |
-| Project Manager | pm@deltacrownext.com | Timeline & resource questions |
-| Technical Lead | techlead@deltacrownext.com | Technical implementation |
+| Security Team | security@deltacrown.com | P0 remediation questions |
+| Infrastructure Team | infrastructure@deltacrown.com | Environment provisioning |
+| Project Manager | pm@deltacrown.com | Timeline & resource questions |
+| Technical Lead | techlead@deltacrown.com | Technical implementation |
 
 ---
 

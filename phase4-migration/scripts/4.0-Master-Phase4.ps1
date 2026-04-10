@@ -40,7 +40,7 @@ param(
     [string]$FileMappingFile,
 
     [Parameter()]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
 
     [Parameter()]
     [ValidateSet("Development", "Staging", "Production")]

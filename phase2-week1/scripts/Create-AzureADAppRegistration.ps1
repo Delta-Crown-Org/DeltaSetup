@@ -323,7 +323,7 @@ try {
    [Environment]::SetEnvironmentVariable('DCE_CERT_PATH', '$certPath', 'User')
 
 3. TEST CONNECTION:
-   Connect-PnPOnline -Url https://deltacrownext.sharepoint.com `
+   Connect-PnPOnline -Url https://deltacrown.sharepoint.com `
        -ClientId $($app.AppId) `
        -Tenant $($context.TenantId) `
        -Thumbprint $certThumbprint

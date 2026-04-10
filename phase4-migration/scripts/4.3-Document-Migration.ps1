@@ -4,7 +4,7 @@
 # ============================================================================
 # PURPOSE: Copy documents from httbrands.sharepoint.com/sites/HTTHQ
 #          "Master DCE" folder to the new hub-and-spoke sites on
-#          deltacrownext.sharepoint.com
+#          deltacrown.sharepoint.com
 # ============================================================================
 # USAGE:
 #   # Full migration from mapping CSV:
@@ -16,7 +16,7 @@
 #   # Single folder migration:
 #   ./4.3-Document-Migration.ps1 -SourceUrl "https://httbrands.sharepoint.com/sites/HTTHQ" `
 #       -SourceLibrary "Shared Documents" -SourceFolder "Master DCE/Marketing" `
-#       -DestUrl "https://deltacrownext.sharepoint.com/sites/dce-marketing" `
+#       -DestUrl "https://deltacrown.sharepoint.com/sites/dce-marketing" `
 #       -DestLibrary "Brand Assets" -DestFolder "Marketing"
 #
 #   # Migrate only priority 1 items:
@@ -24,7 +24,7 @@
 # ============================================================================
 # IMPORTANT: This script requires PnP connections to BOTH tenants.
 #            You will be prompted to authenticate to httbrands (source)
-#            and deltacrownext (destination) separately.
+#            and deltacrown (destination) separately.
 # ============================================================================
 # DEPENDENCIES: PnP.PowerShell >= 2.0.0
 # MODULE DEPS:  DeltaCrown.Auth, DeltaCrown.Common
@@ -134,7 +134,7 @@ function Connect-DestTenant {
     param([Parameter(Mandatory)][string]$SiteUrl)
 
     Write-DeltaCrownLog "Connecting to DESTINATION tenant: $SiteUrl" "INFO"
-    Write-DeltaCrownLog "⚠️  You will be prompted to sign in to the deltacrownext tenant" "WARNING"
+    Write-DeltaCrownLog "⚠️  You will be prompted to sign in to the deltacrown tenant" "WARNING"
 
     try {
         # For destination, use our auth module if available, else interactive

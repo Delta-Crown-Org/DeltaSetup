@@ -17,7 +17,7 @@
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     [Parameter(Mandatory=$false)]
     [ValidateSet("Development", "Staging", "Production")]
     [string]$Environment = "Development",

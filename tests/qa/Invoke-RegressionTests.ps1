@@ -19,7 +19,7 @@ param(
     [int]$Phase = 2,
     
     [Parameter(Mandatory=$false)]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     
     [Parameter(Mandatory=$false)]
     [string]$OutputPath = ".\test-results\regression",

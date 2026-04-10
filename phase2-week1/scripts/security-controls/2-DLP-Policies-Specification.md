@@ -69,7 +69,7 @@ $rule1 = @{
         }
         IncidentReport = @{
             Enabled = $true
-            SendTo = @("security@deltacrownext.com")
+            SendTo = @("security@deltacrown.com")
             Severity = "High"
         }
     }
@@ -104,7 +104,7 @@ $rule2 = @{
         }
         IncidentReport = @{
             Enabled = $true
-            SendTo = @("security@deltacrownext.com")
+            SendTo = @("security@deltacrown.com")
             Severity = "Medium"
         }
     }
@@ -149,11 +149,11 @@ $locations = @{
     SharePoint = @{
         Enabled = $true
         Sites = @(
-            "https://deltacrownext.sharepoint.com/sites/dce-hub",
-            "https://deltacrownext.sharepoint.com/sites/dce-*"
+            "https://deltacrown.sharepoint.com/sites/dce-hub",
+            "https://deltacrown.sharepoint.com/sites/dce-*"
         )
         ExcludeSites = @(
-            "https://deltacrownext.sharepoint.com/sites/corp-*"
+            "https://deltacrown.sharepoint.com/sites/corp-*"
         )
     }
     
@@ -235,10 +235,10 @@ $alertConfig = @{
     
     Recipients = @{
         Email = @(
-            "security@deltacrownext.com",
-            "compliance@deltacrownext.com"
+            "security@deltacrown.com",
+            "compliance@deltacrown.com"
         )
-        TeamsWebhook = "https://deltacrownext.webhook.office.com/..."  # Optional
+        TeamsWebhook = "https://deltacrown.webhook.office.com/..."  # Optional
     }
     
     Frequency = "Immediate"  # Alert within 15 minutes
@@ -266,7 +266,7 @@ $externalAlert = @{
     }
     
     Recipients = @{
-        Email = @("security@deltacrownext.com")
+        Email = @("security@deltacrown.com")
     }
     
     Frequency = "DailyDigest"  # Once per day summary
@@ -300,7 +300,7 @@ param(
     [string]$PolicyName = "DCE-Data-Protection",
     
     [Parameter(Mandatory=$false)]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     
     [Parameter(Mandatory=$false)]
     [ValidateSet("TestWithNotifications", "TestWithoutNotifications", "Enforce")]
@@ -367,10 +367,10 @@ try {
                     }
                 }
                 ExceptIfRecipientDomainIs = @{
-                    Value = @("deltacrownext.onmicrosoft.com")
+                    Value = @("deltacrown.onmicrosoft.com")
                 }
                 GenerateAlert = $true
-                AlertRecipients = @("security@deltacrownext.com")
+                AlertRecipients = @("security@deltacrown.com")
                 UserNotificationPolicyTipText = "This content is restricted to Delta Crown Extensions staff only. Sharing with other brands or external parties is prohibited."
             }
             
@@ -390,7 +390,7 @@ try {
                     Location = "OutsideOrganization"
                 }
                 GenerateAlert = $true
-                AlertRecipients = @("security@deltacrownext.com")
+                AlertRecipients = @("security@deltacrown.com")
                 UserNotificationPolicyTipText = "WARNING: You are sharing Delta Crown Extensions content externally. Please confirm this action is authorized."
             }
             

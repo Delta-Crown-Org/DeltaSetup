@@ -72,15 +72,15 @@ This QA Test Plan establishes comprehensive quality assurance coverage for the D
 **Preconditions:**
 - PnP.PowerShell module installed (v2.0.0+)
 - Admin credentials available
-- Tenant: deltacrownext
+- Tenant: deltacrown
 
 **Test Steps:**
 ```powershell
 # Step 1: Connect to SharePoint Admin
-Connect-PnPOnline -Url "https://deltacrownext-admin.sharepoint.com" -Interactive
+Connect-PnPOnline -Url "https://deltacrown-admin.sharepoint.com" -Interactive
 
 # Step 2: Verify Corp Hub exists
-$corpHub = Get-PnPTenantSite -Url "https://deltacrownext.sharepoint.com/sites/corp-hub"
+$corpHub = Get-PnPTenantSite -Url "https://deltacrown.sharepoint.com/sites/corp-hub"
 
 # Step 3: Verify properties
 $corpHub.Title | Should -Be "Corporate Shared Services"
@@ -112,7 +112,7 @@ $corpHub.Status | Should -Be "Active"
 
 **Test Steps:**
 ```powershell
-$dceHub = Get-PnPTenantSite -Url "https://deltacrownext.sharepoint.com/sites/dce-hub"
+$dceHub = Get-PnPTenantSite -Url "https://deltacrown.sharepoint.com/sites/dce-hub"
 $dceHub.Title | Should -Be "Delta Crown Extensions Hub"
 $dceHub.Template | Should -Be "SITEPAGEPUBLISHING#0"
 ```
@@ -136,11 +136,11 @@ $dceHub.Template | Should -Be "SITEPAGEPUBLISHING#0"
 **Test Steps:**
 ```powershell
 # Check Corp Hub registration
-$corpHub = Get-PnPHubSite -Identity "https://deltacrownext.sharepoint.com/sites/corp-hub"
+$corpHub = Get-PnPHubSite -Identity "https://deltacrown.sharepoint.com/sites/corp-hub"
 $corpHub | Should -Not -Be $null
 
 # Check DCE Hub registration
-$dceHub = Get-PnPHubSite -Identity "https://deltacrownext.sharepoint.com/sites/dce-hub"
+$dceHub = Get-PnPHubSite -Identity "https://deltacrown.sharepoint.com/sites/dce-hub"
 $dceHub | Should -Not -Be $null
 ```
 
@@ -162,7 +162,7 @@ $dceHub | Should -Not -Be $null
 
 **Test Steps:**
 ```powershell
-Connect-PnPOnline -Url "https://deltacrownext.sharepoint.com/sites/dce-hub" -Interactive
+Connect-PnPOnline -Url "https://deltacrown.sharepoint.com/sites/dce-hub" -Interactive
 $parentHub = Get-PnPHubSiteConnection
 $parentHub | Should -Not -Be $null
 ```
@@ -184,7 +184,7 @@ $parentHub | Should -Not -Be $null
 
 **Test Steps:**
 ```powershell
-Connect-PnPOnline -Url "https://deltacrownext.sharepoint.com/sites/corp-hub" -Interactive
+Connect-PnPOnline -Url "https://deltacrown.sharepoint.com/sites/corp-hub" -Interactive
 $navNodes = Get-PnPNavigationNode -Location HubNavigation
 $navNodes.Count | Should -BeGreaterThan 0
 ```
@@ -214,7 +214,7 @@ $associatedSites = @(
 )
 
 foreach ($site in $associatedSites) {
-    $siteUrl = "https://deltacrownext.sharepoint.com/$site"
+    $siteUrl = "https://deltacrown.sharepoint.com/$site"
     $tenantSite = Get-PnPTenantSite -Url $siteUrl
     $tenantSite | Should -Not -Be $null
     
@@ -552,7 +552,7 @@ $authConfig = @{
 }
 
 # Attempt connection
-Connect-DeltaCrownSharePoint -Url "https://deltacrownext-admin.sharepoint.com" `
+Connect-DeltaCrownSharePoint -Url "https://deltacrown-admin.sharepoint.com" `
     -AuthConfig $authConfig
 ```
 
@@ -661,7 +661,7 @@ $verificationResult | Should -Be $true
 Invoke-PnPTenantTemplate -Path "..\templates\DCEHub-Template.json"
 
 # Verify site created
-$site = Get-PnPTenantSite -Url "https://deltacrownext.sharepoint.com/sites/dce-test"
+$site = Get-PnPTenantSite -Url "https://deltacrown.sharepoint.com/sites/dce-test"
 $site | Should -Not -Be $null
 ```
 
@@ -681,7 +681,7 @@ $site | Should -Not -Be $null
 
 **Test Steps:**
 ```powershell
-Connect-PnPOnline -Url "https://deltacrownext.sharepoint.com/sites/dce-hub" -Interactive
+Connect-PnPOnline -Url "https://deltacrown.sharepoint.com/sites/dce-hub" -Interactive
 
 $expectedLists = @("Announcements", "Policies and Procedures", "Resource Library")
 foreach ($listName in $expectedLists) {
@@ -852,7 +852,7 @@ Test-Path "..\templates\Exported-DCE-Template.xml" | Should -Be $true
 ```powershell
 # Create test site
 New-PnPSite -Type CommunicationSite -Title "Template Test" `
-    -Url "https://deltacrownext.sharepoint.com/sites/template-test"
+    -Url "https://deltacrown.sharepoint.com/sites/template-test"
 
 # Apply template
 Invoke-PnPSiteTemplate -Path "..\templates\DCEHub-Template.json"

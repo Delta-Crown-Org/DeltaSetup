@@ -14,7 +14,7 @@
 - [ ] Microsoft Graph modules installed
 - [ ] SharePoint Admin credentials confirmed
 - [ ] Azure AD Admin credentials confirmed
-- [ ] Tenant name verified: `deltacrownext`
+- [ ] Tenant name verified: `deltacrown`
 - [ ] Admin email identified
 - [ ] Change window scheduled
 - [ ] Rollback plan documented

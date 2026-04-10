@@ -27,16 +27,16 @@ phase2-week1/
 #### Option 1: Run Everything (Recommended)
 ```powershell
 # Run from the phase2-week1 directory
-.\scripts\2.0-Master-Provisioning.ps1 -TenantName "deltacrownext" -OwnerEmail "admin@deltacrownext.com"
+.\scripts\2.0-Master-Provisioning.ps1 -TenantName "deltacrown" -OwnerEmail "admin@deltacrown.com"
 ```
 
 #### Option 2: Run Individual Tasks
 ```powershell
 # Task 2.1: Corporate Hub
-.\scripts\2.1-CorpHub-Provisioning.ps1 -OwnerEmail "admin@deltacrownext.com"
+.\scripts\2.1-CorpHub-Provisioning.ps1 -OwnerEmail "admin@deltacrown.com"
 
 # Task 2.2: DCE Hub (run after 2.1)
-.\scripts\2.2-DCEHub-Provisioning.ps1 -OwnerEmail "admin@deltacrownext.com"
+.\scripts\2.2-DCEHub-Provisioning.ps1 -OwnerEmail "admin@deltacrown.com"
 
 # Task 2.3: Azure AD Groups
 .\scripts\2.3-AzureAD-DynamicGroups.ps1
@@ -99,7 +99,7 @@ Install-Module Microsoft.Graph.Identity.DirectoryManagement -Force
 
 After deployment, verify with:
 ```powershell
-.\scripts\2.4-Verification.ps1 -TenantName "deltacrownext" -ExportResults
+.\scripts\2.4-Verification.ps1 -TenantName "deltacrown" -ExportResults
 ```
 
 ### 📊 Expected Timeline

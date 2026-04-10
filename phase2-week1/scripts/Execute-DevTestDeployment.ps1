@@ -8,9 +8,9 @@
 
 [CmdletBinding()]
 param(
-    [string]$TenantName = "deltacrownext",
-    [string]$AdminUrl = "https://deltacrownext-admin.sharepoint.com",
-    [string]$OwnerEmail = "admin@deltacrownext.onmicrosoft.com",
+    [string]$TenantName = "deltacrown",
+    [string]$AdminUrl = "https://deltacrown-admin.sharepoint.com",
+    [string]$OwnerEmail = "admin@deltacrown.onmicrosoft.com",
     [switch]$WhatIf = $true,
     [switch]$SkipBusinessPremiumWarning = $true
 )

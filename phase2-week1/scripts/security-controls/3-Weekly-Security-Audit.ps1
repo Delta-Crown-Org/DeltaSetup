@@ -4,7 +4,7 @@
 # ============================================================================
 # DESCRIPTION:
 #   Comprehensive weekly security audit for the DCE brand within the
-#   deltacrownext M365 Business Premium tenant. Validates all six
+#   deltacrown M365 Business Premium tenant. Validates all six
 #   compensating controls that substitute for Information Barriers.
 #
 # AUDIT DOMAINS:
@@ -31,7 +31,7 @@
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(Mandatory = $false)]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
 
     [Parameter(Mandatory = $false)]
     [string]$AdminUrl = $null,
@@ -43,7 +43,7 @@ param(
     [string]$LogPath = ".\phase2-week1\logs",
 
     [Parameter(Mandatory = $false)]
-    [string[]]$AlertRecipients = @("security@deltacrownext.com"),
+    [string[]]$AlertRecipients = @("security@deltacrown.com"),
 
     [Parameter(Mandatory = $false)]
     [switch]$SendEmailAlert,
@@ -1547,7 +1547,7 @@ security-auditor-8f512f
         Write-AuditLog "Email send requires Exchange Online or Graph Mail.Send — see logs for prepared content" "WARN"
 
         # If Send-MgUserMail is available:
-        # Send-MgUserMail -UserId "security@deltacrownext.com" -Message @{
+        # Send-MgUserMail -UserId "security@deltacrown.com" -Message @{
         #     Subject = $subject
         #     Body = @{ ContentType = "Text"; Content = $body }
         #     ToRecipients = $AlertRecipients | ForEach-Object { @{ EmailAddress = @{ Address = $_ } } }

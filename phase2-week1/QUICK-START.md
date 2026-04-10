@@ -11,8 +11,8 @@ Install-Module PnP.PowerShell, Microsoft.Graph.Groups -Force
 
 # 3. Run master script
 .\scripts\2.0-Master-Provisioning.ps1 `
-    -TenantName "deltacrownext" `
-    -OwnerEmail "admin@deltacrownext.com"
+    -TenantName "deltacrown" `
+    -OwnerEmail "admin@deltacrown.com"
 
 # 4. Verify
 .\scripts\2.4-Verification.ps1 -ExportResults
@@ -27,12 +27,12 @@ Get-Content .\docs\URL-and-ID-Inventory.md
 
 | Resource | URL |
 |----------|-----|
-| Corp Hub | `https://deltacrownext.sharepoint.com/sites/corp-hub` |
-| Corp HR | `https://deltacrownext.sharepoint.com/sites/corp-hr` |
-| Corp IT | `https://deltacrownext.sharepoint.com/sites/corp-it` |
-| Corp Finance | `https://deltacrownext.sharepoint.com/sites/corp-finance` |
-| Corp Training | `https://deltacrownext.sharepoint.com/sites/corp-training` |
-| DCE Hub | `https://deltacrownext.sharepoint.com/sites/dce-hub` |
+| Corp Hub | `https://deltacrown.sharepoint.com/sites/corp-hub` |
+| Corp HR | `https://deltacrown.sharepoint.com/sites/corp-hr` |
+| Corp IT | `https://deltacrown.sharepoint.com/sites/corp-it` |
+| Corp Finance | `https://deltacrown.sharepoint.com/sites/corp-finance` |
+| Corp Training | `https://deltacrown.sharepoint.com/sites/corp-training` |
+| DCE Hub | `https://deltacrown.sharepoint.com/sites/dce-hub` |
 
 ---
 

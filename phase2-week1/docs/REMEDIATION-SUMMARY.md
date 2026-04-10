@@ -316,7 +316,7 @@ This document summarizes the security and code quality remediation performed on 
 ```powershell
 .\2.0-Master-Provisioning.ps1 `
     -Environment Production `
-    -OwnerEmail "admin@deltacrownext.onmicrosoft.com" `
+    -OwnerEmail "admin@deltacrown.onmicrosoft.com" `
     -SkipVerification:$false
 ```
 

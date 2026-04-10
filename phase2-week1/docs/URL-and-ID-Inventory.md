@@ -2,7 +2,7 @@
 ## Delta Crown Extensions - SharePoint Hub & Spoke Architecture
 
 > **Generated:** Will be populated during provisioning  
-> **Tenant:** deltacrownext.sharepoint.com  
+> **Tenant:** deltacrown.sharepoint.com  
 > **Status:** Template - Update after execution
 
 ---
@@ -13,7 +13,7 @@
 | Property | Value |
 |----------|-------|
 | **Title** | Corporate Shared Services |
-| **URL** | https://deltacrownext.sharepoint.com/sites/corp-hub |
+| **URL** | https://deltacrown.sharepoint.com/sites/corp-hub |
 | **Hub ID** | *{Populated after provisioning}* |
 | **Template** | Communication Site (SITEPAGEPUBLISHING#0) |
 | **Owner** | *{Admin email}* |
@@ -23,10 +23,10 @@
 
 | Site Name | URL | Hub Association | Status |
 |-----------|-----|-----------------|--------|
-| Corporate HR | https://deltacrownext.sharepoint.com/sites/corp-hr | Corp-Hub | *{Created/Existing}* |
-| Corporate IT | https://deltacrownext.sharepoint.com/sites/corp-it | Corp-Hub | *{Created/Existing}* |
-| Corporate Finance | https://deltacrownext.sharepoint.com/sites/corp-finance | Corp-Hub | *{Created/Existing}* |
-| Corporate Training | https://deltacrownext.sharepoint.com/sites/corp-training | Corp-Hub | *{Created/Existing}* |
+| Corporate HR | https://deltacrown.sharepoint.com/sites/corp-hr | Corp-Hub | *{Created/Existing}* |
+| Corporate IT | https://deltacrown.sharepoint.com/sites/corp-it | Corp-Hub | *{Created/Existing}* |
+| Corporate Finance | https://deltacrown.sharepoint.com/sites/corp-finance | Corp-Hub | *{Created/Existing}* |
+| Corporate Training | https://deltacrown.sharepoint.com/sites/corp-training | Corp-Hub | *{Created/Existing}* |
 
 ### Hub Navigation Structure
 ```
@@ -46,7 +46,7 @@ Corp-Hub Navigation
 | Property | Value |
 |----------|-------|
 | **Title** | Delta Crown Extensions Hub |
-| **URL** | https://deltacrownext.sharepoint.com/sites/dce-hub |
+| **URL** | https://deltacrown.sharepoint.com/sites/dce-hub |
 | **Hub ID** | *{Populated after provisioning}* |
 | **Parent Hub** | Corp-Hub (sites/corp-hub) |
 | **Theme** | Delta Crown Extensions Theme |

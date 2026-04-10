@@ -379,7 +379,7 @@
 - [ ] Run `2.0-Master-Provisioning.ps1 -WhatIf` to preview changes
 - [ ] Verify Azure AD user attributes populated (`department`, `companyName`, `jobTitle`)
 - [ ] Confirm site URLs don't already exist
-- [ ] Verify tenant name: `deltacrownext`
+- [ ] Verify tenant name: `deltacrown`
 - [ ] Backup any existing hub configurations
 - [ ] Change window scheduled with stakeholders
 - [ ] Rollback plan reviewed and understood
@@ -428,7 +428,7 @@
 
 ```powershell
 # Development environment only
-Connect-PnPOnline -Url "https://deltacrownext.sharepoint.com" -Interactive
+Connect-PnPOnline -Url "https://deltacrown.sharepoint.com" -Interactive
 Connect-MgGraph -Scopes "Group.ReadWrite.All", "Directory.Read.All"
 ```
 
@@ -441,7 +441,7 @@ Connect-MgGraph -Scopes "Group.ReadWrite.All", "Directory.Read.All"
 #### Phase 1: Authentication Module Deployment (5 minutes)
 1. [ ] Copy `modules/` folder to scripts directory
 2. [ ] Import authentication module: `Import-Module ./modules/DeltaCrown.Auth.psm1`
-3. [ ] Test authentication: `Connect-DeltaCrownSharePoint -Url "https://deltacrownext.sharepoint.com"`
+3. [ ] Test authentication: `Connect-DeltaCrownSharePoint -Url "https://deltacrown.sharepoint.com"`
 4. [ ] Verify connection successful
 
 #### Phase 2: Core Infrastructure (15-20 minutes)
@@ -492,8 +492,8 @@ Connect-MgGraph -Scopes "Group.ReadWrite.All", "Directory.Read.All"
 ```powershell
 # Quick smoke test
 $urls = @(
-    "https://deltacrownext.sharepoint.com/sites/corp-hub",
-    "https://deltacrownext.sharepoint.com/sites/dce-hub"
+    "https://deltacrown.sharepoint.com/sites/corp-hub",
+    "https://deltacrown.sharepoint.com/sites/dce-hub"
 )
 
 foreach ($url in $urls) {
@@ -536,7 +536,7 @@ Get-MgGroup -Filter "displayName eq 'SG-DCE-AllStaff'" |
 #### Site Permissions Verification
 ```powershell
 # Connect to DCE Hub
-Connect-PnPOnline -Url "https://deltacrownext.sharepoint.com/sites/dce-hub" -Interactive
+Connect-PnPOnline -Url "https://deltacrown.sharepoint.com/sites/dce-hub" -Interactive
 $web = Get-PnPWeb
 
 # Verify unique permissions (should be $true)

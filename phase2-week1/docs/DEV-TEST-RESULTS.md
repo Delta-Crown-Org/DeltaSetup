@@ -53,7 +53,7 @@ All required PowerShell modules are installed with versions meeting or exceeding
 ### 1.3 Owner Email Validation
 **Status:** ✅ PASS
 
-Owner email format validated: `admin@deltacrownext.onmicrosoft.com`
+Owner email format validated: `admin@deltacrown.onmicrosoft.com`
 
 ---
 
@@ -85,7 +85,7 @@ Configuration file `DeltaCrown.Config.psd1` loaded successfully. All required se
 
 | Section | Status | Notes |
 |---------|--------|-------|
-| Tenant | ✅ | deltacrownext configured |
+| Tenant | ✅ | deltacrown configured |
 | RequiredModules | ✅ | Version constraints defined |
 | Branding | ✅ | Gold (#C9A227) and Black (#1A1A1A) colors |
 | Sites | ✅ | Corp and DCE hub configurations |
@@ -98,19 +98,19 @@ Configuration file `DeltaCrown.Config.psd1` loaded successfully. All required se
 
 **Status:** ✅ PASS
 
-**Target Tenant:** deltacrownext  
-**Admin URL:** https://deltacrownext-admin.sharepoint.com  
-**Owner:** admin@deltacrownext.onmicrosoft.com
+**Target Tenant:** deltacrown  
+**Admin URL:** https://deltacrown-admin.sharepoint.com  
+**Owner:** admin@deltacrown.onmicrosoft.com
 
 ### Actions That Would Be Performed:
 
 | Resource | Action | URL |
 |----------|--------|-----|
-| Corporate Hub Site | Create | `https://deltacrownext.sharepoint.com/sites/corp-hub` |
-| Corporate HR Site | Create | `https://deltacrownext.sharepoint.com/sites/corp-hr` |
-| Corporate IT Site | Create | `https://deltacrownext.sharepoint.com/sites/corp-it` |
-| Corporate Finance Site | Create | `https://deltacrownext.sharepoint.com/sites/corp-finance` |
-| Corporate Training Site | Create | `https://deltacrownext.sharepoint.com/sites/corp-training` |
+| Corporate Hub Site | Create | `https://deltacrown.sharepoint.com/sites/corp-hub` |
+| Corporate HR Site | Create | `https://deltacrown.sharepoint.com/sites/corp-hr` |
+| Corporate IT Site | Create | `https://deltacrown.sharepoint.com/sites/corp-it` |
+| Corporate Finance Site | Create | `https://deltacrown.sharepoint.com/sites/corp-finance` |
+| Corporate Training Site | Create | `https://deltacrown.sharepoint.com/sites/corp-training` |
 | Corp-Hub | Register as Hub Site | N/A |
 | Navigation | Configure 5 nodes | Hub navigation |
 | Security | Break inheritance | All 5 sites |
@@ -131,7 +131,7 @@ Configuration file `DeltaCrown.Config.psd1` loaded successfully. All required se
 
 | Resource | Action | Details |
 |----------|--------|---------|
-| DCE Hub Site | Create | `https://deltacrownext.sharepoint.com/sites/dce-hub` |
+| DCE Hub Site | Create | `https://deltacrown.sharepoint.com/sites/dce-hub` |
 | Branding | Apply Theme | Gold #C9A227, Black #1A1A1A |
 | Theme | Add to Tenant | "Delta Crown Extensions Theme" |
 | Pages | Create | Operations, Client Services, Marketing, Document Center |
@@ -256,13 +256,13 @@ Before executing in production, ensure:
 ```powershell
 # 1. Run Master Orchestrator
 .\2.0-Master-Provisioning.ps1 `
-    -TenantName "deltacrownext" `
+    -TenantName "deltacrown" `
     -Environment "Production" `
-    -OwnerEmail "admin@deltacrownext.onmicrosoft.com"
+    -OwnerEmail "admin@deltacrown.onmicrosoft.com"
 
 # 2. Run Verification
 .\2.4-Verification.ps1 `
-    -TenantName "deltacrownext" `
+    -TenantName "deltacrown" `
     -Environment "Production" `
     -ExportResults
 
@@ -328,12 +328,12 @@ Get-MgGroup | Where-Object { $_.DisplayName -like "SG-DCE-*" }
 
 | Site | URL | Purpose |
 |------|-----|---------|
-| Corporate Hub | `https://deltacrownext.sharepoint.com/sites/corp-hub` | Shared services hub |
-| Corporate HR | `https://deltacrownext.sharepoint.com/sites/corp-hr` | HR resources |
-| Corporate IT | `https://deltacrownext.sharepoint.com/sites/corp-it` | IT support |
-| Corporate Finance | `https://deltacrownext.sharepoint.com/sites/corp-finance` | Financial services |
-| Corporate Training | `https://deltacrownext.sharepoint.com/sites/corp-training` | Training resources |
-| DCE Hub | `https://deltacrownext.sharepoint.com/sites/dce-hub` | Brand operations hub |
+| Corporate Hub | `https://deltacrown.sharepoint.com/sites/corp-hub` | Shared services hub |
+| Corporate HR | `https://deltacrown.sharepoint.com/sites/corp-hr` | HR resources |
+| Corporate IT | `https://deltacrown.sharepoint.com/sites/corp-it` | IT support |
+| Corporate Finance | `https://deltacrown.sharepoint.com/sites/corp-finance` | Financial services |
+| Corporate Training | `https://deltacrown.sharepoint.com/sites/corp-training` | Training resources |
+| DCE Hub | `https://deltacrown.sharepoint.com/sites/dce-hub` | Brand operations hub |
 
 ### Appendix C: Dynamic Group Rules
 

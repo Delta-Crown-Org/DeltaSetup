@@ -266,7 +266,7 @@ Connect-MgGraph -Scopes $requiredScopes -NoWelcome
 
 | Parameter | Line | Default | Required | Description |
 |-----------|------|---------|----------|-------------|
-| `-TenantName` | 15 | `"deltacrownext"` | Optional | M365 tenant name |
+| `-TenantName` | 15 | `"deltacrown"` | Optional | M365 tenant name |
 | `-AdminUrl` | 18 | Auto-calculated | Optional | SP Admin URL |
 | `-OwnerEmail` | 21 | Prompts | **REQUIRED** | Site owner email |
 | `-ExecuteTasks` | 24 | `"All"` | Optional | Which tasks to run |
@@ -278,8 +278,8 @@ Connect-MgGraph -Scopes $requiredScopes -NoWelcome
 
 | Parameter | Line | Default | Required |
 |-----------|------|---------|----------|
-| `-AdminUrl` | 14 | `"https://deltacrownext-admin.sharepoint.com"` | Optional |
-| `-TenantName` | 17 | `"deltacrownext"` | Optional |
+| `-AdminUrl` | 14 | `"https://deltacrown-admin.sharepoint.com"` | Optional |
+| `-TenantName` | 17 | `"deltacrown"` | Optional |
 | `-CorpHubUrl` | 20 | `"/sites/corp-hub"` | Optional |
 | `-DCEHubUrl` | 23 (2.2 only) | `"/sites/dce-hub"` | Optional |
 | `-OwnerEmail` | 26 (2.1), 26 (2.2) | Prompts if not provided | **REQUIRED** |

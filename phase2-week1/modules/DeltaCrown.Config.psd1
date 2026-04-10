@@ -19,8 +19,8 @@
     # TENANT CONFIGURATION
     # =========================================================================
     Tenant = @{
-        Name = "deltacrownext"
-        AdminUrl = "https://deltacrownext-admin.sharepoint.com"
+        Name = "deltacrown"
+        AdminUrl = "https://deltacrown-admin.sharepoint.com"
         DefaultTimeZone = 10  # US Central
         DefaultLanguage = 1033  # English (US)
     }

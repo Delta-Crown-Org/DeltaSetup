@@ -16,7 +16,7 @@
 param(
     [Parameter(Mandatory=$false)]
     [ValidatePattern('^[a-zA-Z0-9-]{3,64}$')]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     
     [Parameter(Mandatory=$false)]
     [ValidatePattern('^https://[a-zA-Z0-9-]+\.sharepoint\.com(/.*)?$')]

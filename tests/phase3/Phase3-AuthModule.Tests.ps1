@@ -59,7 +59,10 @@ Describe "DeltaCrown.Auth Module Structure" {
         $disconnectSection | Should -Match 'Disconnect-ExchangeOnline'
     }
 
-    It "Should NOT contain hardcoded tenant names" {
-        $content | Should -Not -Match 'deltacrownext(?!.*\$)'
+    It "Should NOT contain hardcoded tenant URLs or domains" {
+        # Check for tenant-specific URLs/domains, not the brand name "DeltaCrown"
+        $content | Should -Not -Match 'deltacrown\.sharepoint\.com'
+        $content | Should -Not -Match 'deltacrown-admin\.sharepoint\.com'
+        $content | Should -Not -Match 'deltacrown\.onmicrosoft\.com'
     }
 }

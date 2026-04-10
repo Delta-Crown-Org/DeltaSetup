@@ -5,7 +5,7 @@
 |-------|-------|
 | **Document ID** | SC1-SENSITIVITY-LABELS-v2.0 |
 | **Control** | SC1 — Sensitivity Labels |
-| **Tenant** | `deltacrownext` (M365 Business Premium) |
+| **Tenant** | `deltacrown` (M365 Business Premium) |
 | **Brand** | Delta Crown Extensions (DCE) |
 | **Author** | security-auditor-8f512f |
 | **Status** | APPROVED — Ready for Implementation |
@@ -44,7 +44,7 @@
 
 ### What Is Being Protected?
 
-Delta Crown Extensions is a hair extensions franchise operating within a multi-brand M365 tenant (`deltacrownext`). Multiple competing franchise brands will share this single tenant. **Sensitivity labels are the primary content classification mechanism** that prevents cross-brand data leakage and enforces access control at the document layer.
+Delta Crown Extensions is a hair extensions franchise operating within a multi-brand M365 tenant (`deltacrown`). Multiple competing franchise brands will share this single tenant. **Sensitivity labels are the primary content classification mechanism** that prevents cross-brand data leakage and enforces access control at the document layer.
 
 ### Why This Control Exists
 
@@ -105,7 +105,7 @@ SC1 (Sensitivity Labels) ← foundation
 ### Parent-Child Structure
 
 ```
-Sensitivity Labels (Tenant: deltacrownext)
+Sensitivity Labels (Tenant: deltacrown)
 │
 ├── Personal                          Priority: 0 (lowest)
 │   └── No protection, no markings
@@ -436,7 +436,7 @@ This policy publishes all four labels to DCE users and sets the default behaviou
 | **Require users to apply a label** | ✅ Yes (mandatory labelling) | Users must have a label before saving — prevents unlabelled content |
 | **Require justification to remove or downgrade** | ✅ Yes | Users must provide business justification to remove DCE-Internal or downgrade from DCE-Confidential |
 | **Provide a custom help page** | ✅ Yes | URL to internal wiki page explaining label usage |
-| **Custom help page URL** | `https://deltacrownext.sharepoint.com/sites/corp-it/SitePages/Sensitivity-Labels-Guide.aspx` |
+| **Custom help page URL** | `https://deltacrown.sharepoint.com/sites/corp-it/SitePages/Sensitivity-Labels-Guide.aspx` |
 
 ### Policy: Corp-Label-Policy
 
@@ -521,7 +521,7 @@ Install-Module -Name Microsoft.Graph.Groups -Force
 
 ```powershell
 # Connect to Security & Compliance PowerShell
-Connect-IPPSSession -UserPrincipalName admin@deltacrownext.onmicrosoft.com
+Connect-IPPSSession -UserPrincipalName admin@deltacrown.onmicrosoft.com
 
 # Verify connection
 Get-Label | Select-Object Name, DisplayName, Priority
@@ -557,9 +557,9 @@ New-Label `
     -EncryptionEnabled $true `
     -EncryptionProtectionType "Template" `
     -EncryptionRightsDefinitions @(
-        "SG-DCE-AllStaff@deltacrownext.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
-        "SG-DCE-Leadership@deltacrownext.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
-        "SG-Corp-IT-Admins@deltacrownext.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL"
+        "SG-DCE-AllStaff@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
+        "SG-DCE-Leadership@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
+        "SG-Corp-IT-Admins@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL"
     ) `
     -EncryptionOfflineAccessDays 30 `
     -EncryptionContentExpiredOnDateInDaysOrNever "Never" `
@@ -607,8 +607,8 @@ New-Label `
     -EncryptionEnabled $true `
     -EncryptionProtectionType "Template" `
     -EncryptionRightsDefinitions @(
-        "SG-DCE-Leadership@deltacrownext.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
-        "SG-Corp-IT-Admins@deltacrownext.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL"
+        "SG-DCE-Leadership@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
+        "SG-Corp-IT-Admins@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL"
     ) `
     -EncryptionOfflineAccessDays 7 `
     -EncryptionContentExpiredOnDateInDaysOrNever "Never" `
@@ -679,8 +679,8 @@ New-Label `
     -EncryptionEnabled $true `
     -EncryptionProtectionType "Template" `
     -EncryptionRightsDefinitions @(
-        "SG-Corp-AllBrands@deltacrownext.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
-        "SG-Corp-IT-Admins@deltacrownext.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL"
+        "SG-Corp-AllBrands@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
+        "SG-Corp-IT-Admins@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL"
     ) `
     -EncryptionOfflineAccessDays 14 `
     -EncryptionContentExpiredOnDateInDaysOrNever "Never" `
@@ -735,14 +735,14 @@ New-LabelPolicy `
     -Name "DCE-Label-Policy" `
     -Comment "Publishes DCE sensitivity labels to all DCE staff with DCE-Internal as default." `
     -Labels "Personal","DCE-Internal","DCE-Confidential","Corporate-Confidential" `
-    -ExchangeLocation "SG-DCE-AllStaff@deltacrownext.onmicrosoft.com" `
-    -ModernGroupLocation "SG-DCE-AllStaff@deltacrownext.onmicrosoft.com" `
+    -ExchangeLocation "SG-DCE-AllStaff@deltacrown.onmicrosoft.com" `
+    -ModernGroupLocation "SG-DCE-AllStaff@deltacrown.onmicrosoft.com" `
     -Settings @{
         "requiredowngradejustification" = "true"
         "mandatory" = "true"
         "defaultlabelid" = (Get-Label -Identity "DCE-Internal").ImmutableId
         "disablemandatoryinoutlook" = "false"
-        "customurl" = "https://deltacrownext.sharepoint.com/sites/corp-it/SitePages/Sensitivity-Labels-Guide.aspx"
+        "customurl" = "https://deltacrown.sharepoint.com/sites/corp-it/SitePages/Sensitivity-Labels-Guide.aspx"
     }
 
 # Verify policy
@@ -773,11 +773,11 @@ Get-LabelPolicy -Identity "Corp-Label-Policy" | Format-List *
 # Connect to each DCE site and set the default sensitivity label
 
 $dceSites = @(
-    "https://deltacrownext.sharepoint.com/sites/dce-hub",
-    "https://deltacrownext.sharepoint.com/sites/dce-operations",
-    "https://deltacrownext.sharepoint.com/sites/dce-clientservices",
-    "https://deltacrownext.sharepoint.com/sites/dce-marketing",
-    "https://deltacrownext.sharepoint.com/sites/dce-docs"
+    "https://deltacrown.sharepoint.com/sites/dce-hub",
+    "https://deltacrown.sharepoint.com/sites/dce-operations",
+    "https://deltacrown.sharepoint.com/sites/dce-clientservices",
+    "https://deltacrown.sharepoint.com/sites/dce-marketing",
+    "https://deltacrown.sharepoint.com/sites/dce-docs"
 )
 
 $dceInternalLabelId = (Get-Label -Identity "DCE-Internal").ImmutableId
@@ -795,11 +795,11 @@ foreach ($siteUrl in $dceSites) {
 
 # Corporate sites
 $corpSites = @(
-    "https://deltacrownext.sharepoint.com/sites/corp-hub",
-    "https://deltacrownext.sharepoint.com/sites/corp-hr",
-    "https://deltacrownext.sharepoint.com/sites/corp-finance",
-    "https://deltacrownext.sharepoint.com/sites/corp-it",
-    "https://deltacrownext.sharepoint.com/sites/corp-training"
+    "https://deltacrown.sharepoint.com/sites/corp-hub",
+    "https://deltacrown.sharepoint.com/sites/corp-hr",
+    "https://deltacrown.sharepoint.com/sites/corp-finance",
+    "https://deltacrown.sharepoint.com/sites/corp-it",
+    "https://deltacrown.sharepoint.com/sites/corp-training"
 )
 
 $corpLabelId = (Get-Label -Identity "Corporate-Confidential").ImmutableId
@@ -832,11 +832,11 @@ foreach ($siteUrl in $corpSites) {
 #>
 
 $dceSites = @(
-    "https://deltacrownext.sharepoint.com/sites/dce-hub",
-    "https://deltacrownext.sharepoint.com/sites/dce-operations",
-    "https://deltacrownext.sharepoint.com/sites/dce-clientservices",
-    "https://deltacrownext.sharepoint.com/sites/dce-marketing",
-    "https://deltacrownext.sharepoint.com/sites/dce-docs"
+    "https://deltacrown.sharepoint.com/sites/dce-hub",
+    "https://deltacrown.sharepoint.com/sites/dce-operations",
+    "https://deltacrown.sharepoint.com/sites/dce-clientservices",
+    "https://deltacrown.sharepoint.com/sites/dce-marketing",
+    "https://deltacrown.sharepoint.com/sites/dce-docs"
 )
 
 $dceInternalLabelId = (Get-Label -Identity "DCE-Internal").ImmutableId
@@ -1094,9 +1094,9 @@ $labelActivity | Export-Csv -Path ".\reports\SC1-LabelActivity-$(Get-Date -Forma
 
 | Alert | Trigger | Severity | Notification |
 |-------|---------|----------|-------------|
-| Label removed from document | `SensitivityLabelRemoved` event in DCE sites | High | Email to security@deltacrownext.com |
+| Label removed from document | `SensitivityLabelRemoved` event in DCE sites | High | Email to security@deltacrown.com |
 | DCE-Confidential downgraded | Label changed from DCE-Confidential to lower | Critical | Immediate email + Teams alert |
-| Bulk label changes (>10 in 1 hour) | Rate threshold on label operations | High | Email to security@deltacrownext.com |
+| Bulk label changes (>10 in 1 hour) | Rate threshold on label operations | High | Email to security@deltacrown.com |
 | Encryption access denied (>5 failures by one user) | Azure RMS access denied events | Medium | Daily digest |
 
 ### 10.4 Compliance Evidence Package (Quarterly)

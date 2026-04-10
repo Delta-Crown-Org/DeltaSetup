@@ -17,7 +17,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     
     [Parameter(Mandatory=$false)]
     [string]$AdminUrl = $null,
@@ -26,7 +26,7 @@ param(
     [string]$ReportPath = ".\phase2-week1\reports",
     
     [Parameter(Mandatory=$false)]
-    [string[]]$AlertRecipients = @("security@deltacrownext.com", "compliance@deltacrownext.com"),
+    [string[]]$AlertRecipients = @("security@deltacrown.com", "compliance@deltacrown.com"),
     
     [Parameter(Mandatory=$false)]
     [switch]$SendEmailAlert = $true,

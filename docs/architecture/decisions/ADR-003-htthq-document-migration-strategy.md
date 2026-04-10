@@ -67,10 +67,10 @@ HTTHQ / Shared Documents
 The current structure has **two tenants in play**:
 
 1. **`httbrands`** — The existing HTT Brands tenant where HTTHQ lives (production)
-2. **`deltacrownext`** — The new DCE tenant where the hub-and-spoke architecture is being built
+2. **`deltacrown`** — The new DCE tenant where the hub-and-spoke architecture is being built
 
 We need to decide:
-- Which documents move to `deltacrownext` (the new architecture)?
+- Which documents move to `deltacrown` (the new architecture)?
 - Which stay on `httbrands` (for other brands not yet migrated)?
 - How do we handle the transition period where both exist?
 - How do we handle corporate documents needed by ALL brands?
@@ -95,7 +95,7 @@ We need to decide:
 
 ```
 Day 1: Audit all Master DCE files
-Day 2: Copy everything to deltacrownext sites
+Day 2: Copy everything to deltacrown sites
 Day 3: Redirect users to new sites
 Day 4: Archive Master DCE folder on HTTHQ
 ```
@@ -263,13 +263,13 @@ Corporate documents (C Suite, Exec Leadership, Finance, HR, Legal, IT) currently
 
 **Options**:
 
-1. **Copy corporate docs to `deltacrownext` Corp Hub** — DCE users get fast access, but documents become stale copies
+1. **Copy corporate docs to `deltacrown` Corp Hub** — DCE users get fast access, but documents become stale copies
 2. **Keep corporate docs on `httbrands`, give DCE users cross-tenant access** — Single source of truth, but complex permissions
-3. **SharePoint cross-site shortcut (same tenant solution for later)** — When HTT brand migrates to `deltacrownext`, all corporate docs come naturally
+3. **SharePoint cross-site shortcut (same tenant solution for later)** — When HTT brand migrates to `deltacrown`, all corporate docs come naturally
 
 **Recommended**: **Option 1 for now, transition to native when HTT migrates**
 
-Copy the corporate documents DCE needs to the Corp Hub on `deltacrownext`. Accept that these are copies for now. When HTT (the parent brand) migrates in Phase 5 (Q4), the Corp Hub becomes the canonical location and everything converges.
+Copy the corporate documents DCE needs to the Corp Hub on `deltacrown`. Accept that these are copies for now. When HTT (the parent brand) migrates in Phase 5 (Q4), the Corp Hub becomes the canonical location and everything converges.
 
 ### What DCE Actually Needs from Corporate
 
@@ -287,7 +287,7 @@ Copy the corporate documents DCE needs to the Corp Hub on `deltacrownext`. Accep
 
 ## Existing User Onboarding
 
-### Current Users on `deltacrownext` Tenant
+### Current Users on `deltacrown` Tenant
 
 These users already exist on the tenant. We need to:
 1. **Audit current Azure AD properties** — Check what `companyName`, `department`, `jobTitle` are set to

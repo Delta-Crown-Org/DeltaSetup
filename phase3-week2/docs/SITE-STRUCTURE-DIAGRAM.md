@@ -5,7 +5,7 @@
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │                    M365 TENANT (Business Premium)                 │
-│                    Tenant: deltacrownext                          │
+│                    Tenant: deltacrown                          │
 │                                                                   │
 │  ┌─────────────────────────────────────────────────────────────┐ │
 │  │  CORPORATE SHARED SERVICES HUB (Phase 2 ✅)                 │ │

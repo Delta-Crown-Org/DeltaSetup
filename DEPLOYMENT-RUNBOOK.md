@@ -2,7 +2,7 @@
 
 ## Overview
 
-This runbook deploys the complete SharePoint Hub & Spoke architecture for Delta Crown Extensions (DCE) — the first brand on the `deltacrownext` M365 tenant.
+This runbook deploys the complete SharePoint Hub & Spoke architecture for Delta Crown Extensions (DCE) — the first brand on the `deltacrown` M365 tenant.
 
 **Total deployment time**: ~45 minutes (Phase 2) + ~30 minutes (Phase 3)
 **Browser prompts**: 4 per phase (SharePoint, Graph, Exchange, IPPS)
@@ -20,8 +20,8 @@ This runbook deploys the complete SharePoint Hub & Spoke architecture for Delta 
   Install-Module Microsoft.Graph.Identity.DirectoryManagement -MinimumVersion 2.0.0
   Install-Module ExchangeOnlineManagement -MinimumVersion 3.0.0
   ```
-- [ ] You have Global Admin or SharePoint Admin on `deltacrownext`
-- [ ] You know your admin email (e.g., `tyler@deltacrownext.onmicrosoft.com`)
+- [ ] You have Global Admin or SharePoint Admin on `deltacrown`
+- [ ] You know your admin email (e.g., `tyler@deltacrown.onmicrosoft.com`)
 
 ## Phase 2: Foundation (Hub Sites + Security Groups)
 
@@ -44,14 +44,14 @@ cd phase2-week1/scripts
 
 # Option A: Full deployment (recommended first time)
 ./2.0-Master-Provisioning.ps1 `
-    -TenantName "deltacrownext" `
+    -TenantName "deltacrown" `
     -OwnerEmail "YOUR_ADMIN_EMAIL" `
     -Environment Development `
     -SkipBusinessPremiumWarning
 
 # Option B: Dry run first (see what would happen)
 ./2.0-Master-Provisioning.ps1 `
-    -TenantName "deltacrownext" `
+    -TenantName "deltacrown" `
     -OwnerEmail "YOUR_ADMIN_EMAIL" `
     -Environment Development `
     -SkipBusinessPremiumWarning `
@@ -110,9 +110,9 @@ cd phase3-week2/scripts
 
 # Full deployment
 ./3.0-Master-Phase3.ps1 `
-    -TenantName "deltacrownext" `
+    -TenantName "deltacrown" `
     -Environment Development `
-    -AdminUrl "https://deltacrownext-admin.sharepoint.com"
+    -AdminUrl "https://deltacrown-admin.sharepoint.com"
 ```
 
 ### What You'll See
@@ -131,10 +131,10 @@ cd phase3-week2/scripts
 
 ```powershell
 # Resume from Security Hardening (steps 1-2 already done)
-./3.0-Master-Phase3.ps1 -StartFrom "3.3" -TenantName "deltacrownext"
+./3.0-Master-Phase3.ps1 -StartFrom "3.3" -TenantName "deltacrown"
 
 # Run only DLP policies
-./3.0-Master-Phase3.ps1 -Phase "DLP" -TenantName "deltacrownext"
+./3.0-Master-Phase3.ps1 -Phase "DLP" -TenantName "deltacrown"
 ```
 
 ---
@@ -146,11 +146,11 @@ After both phases complete:
 ```powershell
 # Phase 2 verification
 cd phase2-week1/scripts
-./2.4-Verification.ps1 -TenantName "deltacrownext" -CheckPermissions -ExportResults
+./2.4-Verification.ps1 -TenantName "deltacrown" -CheckPermissions -ExportResults
 
 # Phase 3 verification
 cd phase3-week2/scripts
-./3.7-Phase3-Verification.ps1 -TenantName "deltacrownext"
+./3.7-Phase3-Verification.ps1 -TenantName "deltacrown"
 ```
 
 ### Expected Verification Output
@@ -182,7 +182,7 @@ cd phase3-week2/scripts
 ## Architecture Reference
 
 ```
-M365 Tenant: deltacrownext (Business Premium)
+M365 Tenant: deltacrown (Business Premium)
 │
 ├── Corp-Hub (Communication Site) ◄── Shared Services
 │   ├── Corp-HR

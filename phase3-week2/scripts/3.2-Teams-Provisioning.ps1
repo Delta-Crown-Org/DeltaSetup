@@ -17,14 +17,14 @@
 param(
     [Parameter(Mandatory=$false)]
     [ValidatePattern('^[a-zA-Z0-9-]{3,64}$')]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
 
     [Parameter(Mandatory=$false)]
     [ValidateSet("Development", "Staging", "Production")]
     [string]$Environment = "Development",
 
     [Parameter(Mandatory=$false)]
-    [string]$AdminUrl = "https://deltacrownext-admin.sharepoint.com"
+    [string]$AdminUrl = "https://deltacrown-admin.sharepoint.com"
 )
 
 # Error handling

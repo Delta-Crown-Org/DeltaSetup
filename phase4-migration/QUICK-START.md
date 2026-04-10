@@ -8,13 +8,13 @@ Open a PowerShell 7 terminal and run:
 cd ~/dev/DeltaSetup/phase4-migration/scripts
 
 # This will open a browser window for Azure AD authentication.
-# Sign in with your deltacrownext admin account.
-./4.1-User-Property-Audit.ps1 -TenantName "deltacrownext" -ExportCsv
+# Sign in with your deltacrown admin account.
+./4.1-User-Property-Audit.ps1 -TenantName "deltacrown" -ExportCsv
 ```
 
 **What it does:**
 - Connects to Microsoft Graph (browser auth popup)
-- Lists ALL users on the deltacrownext tenant
+- Lists ALL users on the deltacrown tenant
 - Shows their current companyName, department, jobTitle
 - Simulates which dynamic security groups they'd match
 - Flags users with missing properties
@@ -33,10 +33,10 @@ Open `phase4-migration/config/dce-user-mapping.csv` in Excel or VS Code.
 
 The CSV is pre-populated with known corporate users from the HTTHQ audit. **You need to:**
 
-1. ✅ **Verify UPNs** — The `@deltacrownext.onmicrosoft.com` UPNs are best-guesses. Check against the audit CSV from Step 1.
+1. ✅ **Verify UPNs** — The `@deltacrown.onmicrosoft.com` UPNs are best-guesses. Check against the audit CSV from Step 1.
 2. ✅ **Verify job titles** — Fill in actual titles (triggers Leadership group if Manager/Director/VP)
 3. ✅ **Verify departments** — Fill in actual departments (triggers Marketing group)
-4. ➕ **Add missing users** — Anyone on deltacrownext not in the CSV
+4. ➕ **Add missing users** — Anyone on deltacrown not in the CSV
 5. ➖ **Remove wrong users** — Anyone who shouldn't be DCE-branded
 
 ### Dynamic Group Rules Cheat Sheet
@@ -76,11 +76,11 @@ Once user properties are set, deploy the full architecture:
 ```powershell
 # Phase 2: Hub Foundation (~45 min)
 cd ~/dev/DeltaSetup/phase2-week1/scripts
-./2.0-Master-Provisioning.ps1 -TenantName "deltacrownext" -OwnerEmail "YOUR_EMAIL" -Environment Development -SkipBusinessPremiumWarning
+./2.0-Master-Provisioning.ps1 -TenantName "deltacrown" -OwnerEmail "YOUR_EMAIL" -Environment Development -SkipBusinessPremiumWarning
 
 # Phase 3: Sites + Teams + Security (~30 min)
 cd ~/dev/DeltaSetup/phase3-week2/scripts
-./3.0-Master-Phase3.ps1 -TenantName "deltacrownext" -Environment Development
+./3.0-Master-Phase3.ps1 -TenantName "deltacrown" -Environment Development
 
 # Phase 4: Document Migration (after Phase 2+3)
 cd ~/dev/DeltaSetup/phase4-migration/scripts

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Phase 4 migrates existing users and documents from the legacy HTT Headquarters SharePoint site (`httbrands.sharepoint.com/sites/HTTHQ`) to the new hub-and-spoke architecture on `deltacrownext`.
+Phase 4 migrates existing users and documents from the legacy HTT Headquarters SharePoint site (`httbrands.sharepoint.com/sites/HTTHQ`) to the new hub-and-spoke architecture on `deltacrown`.
 
 **Prerequisites**: Phase 2 + Phase 3 must be deployed first.
 
@@ -21,7 +21,7 @@ Phase 4 migrates existing users and documents from the legacy HTT Headquarters S
 cd phase4-migration/scripts
 
 # Step 1: Audit existing users (read-only, safe to run anytime)
-./4.1-User-Property-Audit.ps1 -TenantName "deltacrownext" -ExportCsv
+./4.1-User-Property-Audit.ps1 -TenantName "deltacrown" -ExportCsv
 
 # Step 2: Review the audit CSV and update dce-user-mapping.csv
 
@@ -63,7 +63,7 @@ Maps source folders to destination sites. Review/edit before running 4.3.
 |--------|-------------|
 | SourceSite | HTTHQ site URL |
 | SourceFolder | Folder path within Shared Documents |
-| DestinationSite | Target site URL on deltacrownext |
+| DestinationSite | Target site URL on deltacrown |
 | DestinationLibrary | Target document library |
 | DestinationFolder | Target folder within the library |
 | Priority | 1 (critical), 2 (important), 3 (nice to have) |

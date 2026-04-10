@@ -17,9 +17,9 @@
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$TenantName = "deltacrownext",
+    [string]$TenantName = "deltacrown",
     [Parameter(Mandatory=$false)]
-    [string]$AdminUrl = "https://deltacrownext-admin.sharepoint.com",
+    [string]$AdminUrl = "https://deltacrown-admin.sharepoint.com",
     [Parameter(Mandatory=$false)]
     [ValidateSet("Development", "Staging", "Production")]
     [string]$Environment = "Development"
