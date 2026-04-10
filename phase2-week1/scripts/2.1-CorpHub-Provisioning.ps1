@@ -159,7 +159,7 @@ try {
     # ------------------------------------------------------------------------
     Write-Log "Registering Corp-Hub as Hub Site..."
     
-    Connect-PnPOnline -Url $hubSiteUrl -Interactive
+    Connect-PnPOnline -Url $hubSiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
     
     $existingHub = Get-PnPHubSite -Identity $hubSiteUrl -ErrorAction SilentlyContinue
     if ($existingHub) {
@@ -242,7 +242,7 @@ try {
             Write-DeltaCrownLog "Securing permissions for $($siteInfo.Title)..."
             
             # Connect to site
-            Connect-PnPOnline -Url $siteInfo.Url -Interactive
+            Connect-PnPOnline -Url $siteInfo.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             
             # Break inheritance (R2.3A: Explicit permission break)
             $web = Get-PnPWeb
@@ -287,7 +287,7 @@ try {
         $siteUrl = "https://$TenantName.sharepoint.com$($site.Url)"
         
         try {
-            Connect-PnPOnline -Url $siteUrl -Interactive
+            Connect-PnPOnline -Url $siteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             
             # Check current hub association
             $currentHub = Get-PnPHubSiteConnection -ErrorAction SilentlyContinue
@@ -308,7 +308,7 @@ try {
     # ------------------------------------------------------------------------
     Write-Log "Configuring Corp-Hub navigation..."
     
-    Connect-PnPOnline -Url $hubSiteUrl -Interactive
+    Connect-PnPOnline -Url $hubSiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
     
     # Get existing navigation nodes
     $existingNodes = Get-PnPNavigationNode -Location HubNavigation -ErrorAction SilentlyContinue

@@ -161,7 +161,7 @@ try {
     # ------------------------------------------------------------------------
     Write-Log "Applying Delta Crown Extensions branding..."
     
-    Connect-PnPOnline -Url $dceHubUrl -Interactive
+    Connect-PnPOnline -Url $dceHubUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
     
     # Apply theme
     $themeName = "Delta Crown Extensions Theme"
@@ -194,7 +194,7 @@ try {
     }
     
     # Add theme to tenant
-    Connect-PnPOnline -Url $AdminUrl -Interactive
+    Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
     $existingTheme = Get-PnPTenantTheme -Name $themeName -ErrorAction SilentlyContinue
     if (!$existingTheme) {
         Add-PnPTenantTheme -Name $themeName -Palette $themePalette -IsInverted $false
@@ -204,7 +204,7 @@ try {
     }
     
     # Apply theme to DCE Hub
-    Connect-PnPOnline -Url $dceHubUrl -Interactive
+    Connect-PnPOnline -Url $dceHubUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
     Set-PnPWebTheme -Theme $themeName
     Write-Log "Applied theme to DCE Hub" "SUCCESS"
     
@@ -251,7 +251,7 @@ try {
     # ------------------------------------------------------------------------
     Write-Log "Linking DCE-Hub to Corp-Hub..."
     
-    Connect-PnPOnline -Url $AdminUrl -Interactive
+    Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
     
     # Get Corp-Hub ID from previous step
     # R2.4A: No hard-coded paths
@@ -263,7 +263,7 @@ try {
     
     # Associate DCE-Hub as child of Corp-Hub
     # Note: In SharePoint, this creates a hub-to-hub relationship
-    Connect-PnPOnline -Url $dceHubUrl -Interactive
+    Connect-PnPOnline -Url $dceHubUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
     
     $currentConnection = Get-PnPHubSiteConnection -ErrorAction SilentlyContinue
     if ($currentConnection -and $currentConnection.Id -eq $corpHubId) {
@@ -278,7 +278,7 @@ try {
     # ------------------------------------------------------------------------
     Write-Log "Configuring DCE Hub navigation..."
     
-    Connect-PnPOnline -Url $dceHubUrl -Interactive
+    Connect-PnPOnline -Url $dceHubUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
     
     # Note: Hub navigation inherits from parent, but we can add DCE-specific items
     foreach ($navItem in $DCEHubNavigation) {

@@ -70,10 +70,10 @@ $SmokeTests = @(
     @{
         Name = "Hub Sites Accessible"
         Test = {
-            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/corp-hub" -Interactive
+            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/corp-hub" -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             $corpWeb = Get-PnPWeb
             
-            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/dce-hub" -Interactive
+            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/dce-hub" -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             $dceWeb = Get-PnPWeb
             
             return ($corpWeb -and $dceWeb)
@@ -92,7 +92,7 @@ $SmokeTests = @(
     @{
         Name = "DCE Hub Linked to Corp Hub"
         Test = {
-            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/dce-hub" -Interactive
+            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/dce-hub" -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             $parent = Get-PnPHubSiteConnection -ErrorAction SilentlyContinue
             return [bool]$parent
         }
@@ -118,7 +118,7 @@ $SmokeTests = @(
     @{
         Name = "Navigation Nodes Present"
         Test = {
-            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/corp-hub" -Interactive
+            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/corp-hub" -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             $nav = Get-PnPNavigationNode -Location HubNavigation -ErrorAction SilentlyContinue
             return ($nav.Count -gt 0)
         }
@@ -130,7 +130,7 @@ $SmokeTests = @(
             $dceSites = Get-PnPTenantSite | Where-Object { $_.Url -match "dce-" } | Select-Object -First 2
             
             foreach ($site in $dceSites) {
-                Connect-PnPOnline -Url $site.Url -Interactive
+                Connect-PnPOnline -Url $site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
                 $web = Get-PnPWeb
                 if (-not $web.HasUniqueRoleAssignments) { return $false }
             }

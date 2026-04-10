@@ -95,7 +95,7 @@ function Test-TC-INF-001 {
     Write-TestLog "Running TC-INF-001: Corporate Hub Site Provisioning" "INFO"
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
+        Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
         
         $corpHubUrl = "https://$TenantName.sharepoint.com/sites/corp-hub"
         $corpHub = Get-PnPTenantSite -Url $corpHubUrl -ErrorAction SilentlyContinue
@@ -223,7 +223,7 @@ function Test-TC-INF-004 {
     Write-TestLog "Running TC-INF-004: Hub-to-Hub Association" "INFO"
     
     try {
-        Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/dce-hub" -Interactive
+        Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/sites/dce-hub" -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
         
         $parentHub = Get-PnPHubSiteConnection -ErrorAction SilentlyContinue
         $hasAssociation = [bool]$parentHub
@@ -260,7 +260,7 @@ function Test-TC-INF-005 {
         )
         
         foreach ($hub in $hubs) {
-            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/$($hub.Url)" -Interactive
+            Connect-PnPOnline -Url "https://$TenantName.sharepoint.com/$($hub.Url)" -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             $navNodes = Get-PnPNavigationNode -Location HubNavigation -ErrorAction SilentlyContinue
             $nodeCount = if ($navNodes) { $navNodes.Count } else { 0 }
             $results += "$($hub.Name)=$nodeCount"
@@ -309,7 +309,7 @@ function Test-TC-INF-006 {
             $exists = [bool]$tenantSite
             
             if ($exists) {
-                Connect-PnPOnline -Url $siteUrl -Interactive
+                Connect-PnPOnline -Url $siteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
                 $hubConnection = Get-PnPHubSiteConnection -ErrorAction SilentlyContinue
                 $isAssociated = [bool]$hubConnection
                 $results += "$($site.Title)=$exists/$isAssociated"

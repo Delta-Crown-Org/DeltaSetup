@@ -309,7 +309,7 @@ function Test-Navigation {
         try {
             $hubUrl = "https://$TenantName.sharepoint.com/$($hub.Url)"
             # Connect to the specific site to read hub navigation
-            Connect-PnPOnline -Url $hubUrl -Interactive
+            Connect-PnPOnline -Url $hubUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             
             $navNodes = Get-PnPNavigationNode -Location HubNavigation -ErrorAction SilentlyContinue
             $navCount = if ($navNodes) { $navNodes.Count } else { 0 }
@@ -321,7 +321,7 @@ function Test-Navigation {
             }
             
             # Return to admin connection
-            Connect-PnPOnline -Url $AdminUrl -Interactive
+            Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
         }
         catch {
             $results += [PSCustomObject]@{
@@ -355,7 +355,7 @@ function Test-AllPermissions {
         $siteName = ($siteUrl -split '/')[-1]
         
         try {
-            Connect-PnPOnline -Url $siteUrl -Interactive
+            Connect-PnPOnline -Url $siteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             $web = Get-PnPWeb -Includes HasUniqueRoleAssignments
             
             $results += [PSCustomObject]@{
@@ -387,7 +387,7 @@ function Test-AllPermissions {
     }
     
     # Return to admin connection
-    try { Connect-PnPOnline -Url $AdminUrl -Interactive } catch { }
+    try { Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' } catch { }
     
     return $results
 }

@@ -319,7 +319,7 @@ function Invoke-PermissionAudit {
                 continue  # Skip remaining checks for this site in WhatIf
             }
 
-            Connect-PnPOnline -Url $site.Url -Interactive -ErrorAction Stop
+            Connect-PnPOnline -Url $site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
             $web = Get-PnPWeb -ErrorAction Stop
             $hasUnique = Get-PnPProperty -ClientObject $web -Property HasUniqueRoleAssignments
 
@@ -519,7 +519,7 @@ function Invoke-PermissionAudit {
 
         # --- PERM-005: External Sharing Disabled ---
         try {
-            Connect-PnPOnline -Url $AdminUrl -Interactive -ErrorAction Stop
+            Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
             $siteInfo = Get-PnPTenantSite -Url $site.Url -ErrorAction Stop
             $sharingCap = $siteInfo.SharingCapability
 
@@ -1011,7 +1011,7 @@ function Invoke-SensitivityLabelAudit {
 
         foreach ($site in $script:DCESites) {
             try {
-                Connect-PnPOnline -Url $site.Url -Interactive -ErrorAction Stop
+                Connect-PnPOnline -Url $site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
                 $lists = Get-PnPList | Where-Object { $_.BaseTemplate -eq 101 -and -not $_.Hidden }
 
                 foreach ($list in $lists) {

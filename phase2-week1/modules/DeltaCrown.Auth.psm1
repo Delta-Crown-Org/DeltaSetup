@@ -16,6 +16,14 @@
 $script:AuthContext = @{}
 $script:ConfigPath = $null
 
+# PnP App Registration Client ID (required for PnP.PowerShell 3.x)
+$script:PnPClientId = $null
+$pnpConfigPath = Join-Path $PSScriptRoot "pnp-app-config.json"
+if (Test-Path $pnpConfigPath) {
+    $pnpConfig = Get-Content $pnpConfigPath -Raw | ConvertFrom-Json
+    $script:PnPClientId = $pnpConfig.PnPClientId
+}
+
 #region Configuration
 
 <#
@@ -203,7 +211,11 @@ function Connect-DeltaCrownSharePoint {
                 if ($AuthConfig._Environment -eq "Production") {
                     throw "Interactive authentication is NOT allowed in Production environment!"
                 }
-                Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop
+                if ($script:PnPClientId) {
+                    Connect-PnPOnline -Url $Url -Interactive -ClientId $script:PnPClientId -ErrorAction Stop
+                } else {
+                    throw "PnP Client ID not found. Run register-pnp-app.ps1 first, or set pnp-app-config.json."
+                }
                 Write-Verbose "Connected using interactive authentication (Development mode)"
             }
             else {

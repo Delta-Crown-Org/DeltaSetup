@@ -152,7 +152,7 @@ function Test-CrossBrandSearch {
     $testResults = @()
     
     try {
-        Connect-PnPOnline -Url $Brand.HubUrl -Interactive -ErrorAction Stop
+        Connect-PnPOnline -Url $Brand.HubUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
         
         foreach ($keyword in $Brand.SearchKeywords) {
             Write-TestLog "  Searching for keyword: '$keyword'" "INFO"
@@ -238,21 +238,21 @@ function Test-CrossBrandAccess {
     
     try {
         # Connect to admin to get all sites
-        Connect-PnPOnline -Url $AdminUrl -Interactive -ErrorAction Stop
+        Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
         $allSites = Get-PnPTenantSite | Where-Object { 
             $_.Url -match "bishops|frenchies|htt-|tll-|corp-" 
         }
         Disconnect-PnPOnline
         
         # Now connect as brand user (simulated - in production, use delegated access)
-        Connect-PnPOnline -Url $Brand.HubUrl -Interactive
+        Connect-PnPOnline -Url $Brand.HubUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
         
         foreach ($externalSite in $allSites) {
             Write-TestLog "  Testing access to: $($externalSite.Title)" "INFO"
             
             try {
                 # Attempt to access the external site
-                Connect-PnPOnline -Url $externalSite.Url -Interactive -ErrorAction Stop
+                Connect-PnPOnline -Url $externalSite.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
                 $web = Get-PnPWeb
                 
                 # If we get here, access was successful (VIOLATION!)
@@ -317,7 +317,7 @@ function Test-HubNavigationIsolation {
     $testResults = @()
     
     try {
-        Connect-PnPOnline -Url $Brand.HubUrl -Interactive -ErrorAction Stop
+        Connect-PnPOnline -Url $Brand.HubUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
         
         # Get hub navigation
         $navNodes = Get-PnPNavigationNode -Location HubNavigation -ErrorAction SilentlyContinue

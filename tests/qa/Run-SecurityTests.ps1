@@ -101,7 +101,7 @@ function Test-TC-SEC-001 {
     Write-SecTestLog "Running TC-SEC-001: Permission Inheritance Verification" "INFO"
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
+        Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
         
         # Get all DCE sites
         $dceSites = Get-PnPTenantSite | Where-Object { 
@@ -113,7 +113,7 @@ function Test-TC-SEC-001 {
         
         foreach ($site in $dceSites) {
             try {
-                Connect-PnPOnline -Url $site.Url -Interactive
+                Connect-PnPOnline -Url $site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
                 $web = Get-PnPWeb
                 $checkedSites++
                 
@@ -167,7 +167,7 @@ function Test-TC-SEC-002 {
     )
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
+        Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
         $dceSites = Get-PnPTenantSite | Where-Object { 
             $_.Url -match "dce-" -or $_.Title -match "Delta Crown" 
         }
@@ -176,7 +176,7 @@ function Test-TC-SEC-002 {
         
         foreach ($site in $dceSites) {
             try {
-                Connect-PnPOnline -Url $site.Url -Interactive
+                Connect-PnPOnline -Url $site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
                 $web = Get-PnPWeb
                 $roleAssignments = Get-PnPProperty -ClientObject $web -Property RoleAssignments
                 
@@ -230,7 +230,7 @@ function Test-TC-SEC-003 {
     Write-SecTestLog "Running TC-SEC-003: External Sharing Verification" "INFO"
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive
+        Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
         $dceSites = Get-PnPTenantSite | Where-Object { 
             $_.Url -match "dce-" -or $_.Title -match "Delta Crown" 
         }

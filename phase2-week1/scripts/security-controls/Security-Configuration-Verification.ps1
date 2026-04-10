@@ -222,7 +222,7 @@ function Test-Control2-UniquePermissions {
     $allPass = $true
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive -ErrorAction Stop
+        Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
         
         # Get all DCE sites
         $dceSites = Get-PnPTenantSite | Where-Object {
@@ -235,7 +235,7 @@ function Test-Control2-UniquePermissions {
             Write-SecLog "    Checking: $($site.Title)" "INFO"
             
             try {
-                Connect-PnPOnline -Url $site.Url -Interactive -ErrorAction SilentlyContinue
+                Connect-PnPOnline -Url $site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction SilentlyContinue
                 $web = Get-PnPWeb
                 $hasUniquePerms = $web.HasUniqueRoleAssignments
                 

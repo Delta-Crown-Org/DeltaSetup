@@ -140,7 +140,7 @@ function Register-SiteCleanup {
     Register-DeltaCrownRollbackAction -ActionName "Delete Site: $SiteUrl" -Action {
         param($ctx)
         try {
-            Connect-PnPOnline -Url $ctx.AdminUrl -Interactive
+            Connect-PnPOnline -Url $ctx.AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
             Remove-PnPTenantSite -Url $ctx.SiteUrl -Force -SkipRecycleBin -ErrorAction SilentlyContinue
             Write-DeltaCrownLog "Rollback: Deleted site $($ctx.SiteUrl)" "INFO"
         }

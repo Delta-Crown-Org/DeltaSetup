@@ -107,7 +107,7 @@ function Get-DCESites {
     Write-Log "Scanning for DCE sites..." "INFO"
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive -ErrorAction Stop
+        Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
         
         # Get all sites and filter for DCE
         $allSites = Get-PnPTenantSite | Where-Object {
@@ -154,7 +154,7 @@ function Test-PermissionInheritance {
     Write-Log "Checking permissions for: $($Site.Title)" "INFO"
     
     try {
-        Connect-PnPOnline -Url $Site.Url -Interactive -ErrorAction SilentlyContinue
+        Connect-PnPOnline -Url $Site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction SilentlyContinue
         
         $web = Get-PnPWeb
         $hasUniquePermissions = $web.HasUniqueRoleAssignments
@@ -212,7 +212,7 @@ function Test-DangerousGroups {
     Write-Log "Checking for dangerous groups on: $($Site.Title)" "INFO"
     
     try {
-        Connect-PnPOnline -Url $Site.Url -Interactive -ErrorAction SilentlyContinue
+        Connect-PnPOnline -Url $Site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction SilentlyContinue
         
         $roleAssignments = Get-PnPPropertyBag -Key "_vti_ext_permission"
         $web = Get-PnPWeb
@@ -280,7 +280,7 @@ function Test-ExternalSharing {
     Write-Log "Checking external sharing for: $($Site.Title)" "INFO"
     
     try {
-        Connect-PnPOnline -Url $AdminUrl -Interactive -ErrorAction SilentlyContinue
+        Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction SilentlyContinue
         
         $siteInfo = Get-PnPTenantSite -Url $Site.Url
         $sharing = $siteInfo.SharingCapability
@@ -334,7 +334,7 @@ function Test-AnonymousLinks {
     Write-Log "Checking for anonymous links on: $($Site.Title)" "INFO"
     
     try {
-        Connect-PnPOnline -Url $Site.Url -Interactive -ErrorAction SilentlyContinue
+        Connect-PnPOnline -Url $Site.Url -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction SilentlyContinue
         
         # Get all sharing links (requires elevated permissions)
         $sharingLinks = @()
@@ -397,7 +397,7 @@ function Invoke-AutoRemediation {
             "Inheritance" {
                 Write-Log "Auto-remediation: Breaking permission inheritance on $($violation.SiteUrl)" "WARNING"
                 try {
-                    Connect-PnPOnline -Url $violation.SiteUrl -Interactive
+                    Connect-PnPOnline -Url $violation.SiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
                     Set-PnPWeb -BreakRoleInheritance -CopyRoleAssignments
                     Write-Log "Fixed: Broke permission inheritance on $($violation.SiteTitle)" "SUCCESS"
                 }
@@ -409,7 +409,7 @@ function Invoke-AutoRemediation {
             "ExternalSharing" {
                 Write-Log "Auto-remediation: Disabling external sharing on $($violation.SiteUrl)" "WARNING"
                 try {
-                    Connect-PnPOnline -Url $AdminUrl -Interactive
+                    Connect-PnPOnline -Url $AdminUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207'
                     Set-PnPTenantSite -Url $violation.SiteUrl -SharingCapability Disabled
                     Write-Log "Fixed: Disabled external sharing on $($violation.SiteTitle)" "SUCCESS"
                 }

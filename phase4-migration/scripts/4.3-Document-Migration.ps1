@@ -119,7 +119,7 @@ function Connect-SourceTenant {
 
     try {
         # PnP connection to source — must be interactive since it's a different tenant
-        Connect-PnPOnline -Url $SiteUrl -Interactive -ErrorAction Stop
+        Connect-PnPOnline -Url $SiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
         $script:SourceConnection = Get-PnPConnection
         Write-DeltaCrownLog "Connected to source: $SiteUrl" "SUCCESS"
     }
@@ -143,7 +143,7 @@ function Connect-DestTenant {
             Connect-DeltaCrownSharePoint -Url $SiteUrl -AuthConfig $authConfig
         }
         else {
-            Connect-PnPOnline -Url $SiteUrl -Interactive -ErrorAction Stop
+            Connect-PnPOnline -Url $SiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
         }
         $script:DestConnection = Get-PnPConnection
         Write-DeltaCrownLog "Connected to destination: $SiteUrl" "SUCCESS"
@@ -164,7 +164,7 @@ function Get-SourceFiles {
 
     try {
         # Ensure we're connected to source
-        Connect-PnPOnline -Url $SiteUrl -Interactive -ErrorAction Stop
+        Connect-PnPOnline -Url $SiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
 
         $serverRelativeUrl = "/$($Library)/$($FolderPath)" -replace "//", "/"
 
@@ -229,7 +229,7 @@ function Copy-FileToDestination {
             $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
             # Download from source
-            Connect-PnPOnline -Url $SourceSiteUrl -Interactive -ErrorAction Stop
+            Connect-PnPOnline -Url $SourceSiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
             $tempDir = Join-Path ([System.IO.Path]::GetTempPath()) "dce-migration"
             if (-not (Test-Path $tempDir)) { New-Item -ItemType Directory -Path $tempDir -Force | Out-Null }
             $tempFile = Join-Path $tempDir $SourceFile.Name
@@ -237,7 +237,7 @@ function Copy-FileToDestination {
             Get-PnPFile -Url $SourceFile.ServerRelativeUrl -Path $tempDir -FileName $SourceFile.Name -AsFile -Force -ErrorAction Stop
 
             # Ensure destination folder exists
-            Connect-PnPOnline -Url $DestSiteUrl -Interactive -ErrorAction Stop
+            Connect-PnPOnline -Url $DestSiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
 
             # Create folder path if needed
             $folderParts = $destRelativePath.Split("/") | Where-Object { $_ -and $_ -ne $SourceFile.Name }
@@ -299,7 +299,7 @@ function Test-MigrationIntegrity {
     )
 
     try {
-        Connect-PnPOnline -Url $DestSiteUrl -Interactive -ErrorAction Stop
+        Connect-PnPOnline -Url $DestSiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
         $destFiles = Get-PnPFolderItem -FolderSiteRelativeUrl "$DestLibrary/$DestFolder" -ItemType File -Recursive -ErrorAction Stop
 
         $actualCount = ($destFiles | Measure-Object).Count
