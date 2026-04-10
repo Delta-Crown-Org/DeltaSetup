@@ -1,0 +1,13 @@
+SourceSite,SourceLibrary,SourceFolder,DestinationSite,DestinationLibrary,DestinationFolder,Priority,Status,Notes
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Operations,https://deltacrownext.sharepoint.com/sites/dce-operations,Documents,Operations,1,pending,Daily ops documents
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/_Franchisees,https://deltacrownext.sharepoint.com/sites/dce-operations,Documents,Franchisees,1,pending,Franchise management
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Status,https://deltacrownext.sharepoint.com/sites/dce-operations,Documents,Status,2,pending,Status tracking
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Fran Dev,https://deltacrownext.sharepoint.com/sites/dce-operations,Documents,Franchise-Development,2,pending,Growth/development
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Marketing,https://deltacrownext.sharepoint.com/sites/dce-marketing,Brand Assets,Marketing,1,pending,Brand marketing materials
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Product,https://deltacrownext.sharepoint.com/sites/dce-docs,Documents,Product,2,pending,Product reference
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Strategy,https://deltacrownext.sharepoint.com/sites/dce-docs,Documents,Strategy,2,pending,Leadership only access
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Training,https://deltacrownext.sharepoint.com/sites/dce-docs,Documents,Training,3,pending,Training materials
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Financials & Proforma,https://deltacrownext.sharepoint.com/sites/dce-operations,Documents,Financials,1,pending,Review each file - some may go to corp-finance
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Corp Docs,https://deltacrownext.sharepoint.com/sites/corp-hub,Shared Documents,Corporate,3,pending,Cross-brand corporate docs
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Real Estate & Construction,https://deltacrownext.sharepoint.com/sites/corp-hub,Shared Documents,Real-Estate,3,pending,Cross-brand function
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/zArchive,https://deltacrownext.sharepoint.com/sites/dce-docs,Documents,Archive,3,pending,Historical reference
