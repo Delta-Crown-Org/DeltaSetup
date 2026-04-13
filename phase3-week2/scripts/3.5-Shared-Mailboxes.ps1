@@ -18,7 +18,7 @@ param(
     [Parameter(Mandatory=$false)]
     [string]$TenantName = "deltacrown",
     [Parameter(Mandatory=$false)]
-    [string]$BrandDomain = "httbrands.com",
+    [string]$BrandDomain = "httbrands.com",  # NOTE: Exchange tenant is httbrands, deltacrown.com not configured
     [Parameter(Mandatory=$false)]
     [ValidateSet("Development", "Staging", "Production")]
     [string]$Environment = "Development"
