@@ -678,7 +678,7 @@ try {
                 Write-DeltaCrownLog "Applied theme to: $siteUrl" "SUCCESS"
             }
             catch {
-                Write-DeltaCrownLog "Failed to apply theme to $siteUrl: $_" "WARNING"
+                Write-DeltaCrownLog "Failed to apply theme to ${siteUrl}: $_" "WARNING"
             }
         }
     }
