@@ -1,0 +1,84 @@
+PHASE 4 DOCUMENT MIGRATION PREVIEW REPORT
+Generated: 2026-04-13 10:28:27
+
+MIGRATION MAPPING:
+
+Source Dest Priority Notes
+------ ---- -------- -----
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+
+
+
+DESTINATION SITES:
+corp-hub: 2 folders
+  - Corp Docs
+   - Real Estate & Construction
+ dce-docs: 4 folders
+  - Product
+   - Strategy
+   - Training
+   - zArchive
+ dce-marketing: 1 folders
+  - Marketing
+ dce-operations: 5 folders
+  - Operations
+   - _Franchisees
+   - Status
+   - Fran Dev
+   - Financials & Proforma
+
+
+PRIORITY SUMMARY:
+- P1 (Critical): 4 folders
+- P2 (Standard): 4 folders  
+- P3 (Deferred): 4 folders
+
+NEXT STEPS:
+Run 4.3-Document-Migration.ps1 to execute migration
