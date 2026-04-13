@@ -292,7 +292,7 @@ h4 { font-size: 1.125rem; }
    STAT COUNTERS
    ============================================================ */
 .stats { display: flex; justify-content: center; gap: clamp(32px, 6vw, 80px); flex-wrap: wrap; }
-.stat { text-align: center; }
+.stat { text-align: center; min-width: 120px; }
 .stat__value {
   font-family: var(--font-heading);
   font-size: clamp(3rem, 8vw, 6rem); font-weight: 700;
@@ -709,8 +709,8 @@ h4 { font-size: 1.125rem; }
 .phase-card--done { background: rgba(46,125,50,0.06); border: 1px solid rgba(46,125,50,0.2); }
 .phase-card--active { background: rgba(212,168,75,0.06); border: 2px solid rgba(212,168,75,0.3); }
 .phase-card--pending { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); }
-.phase-card__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.phase-card__title { font-family: var(--font-heading); font-size: 1.125rem; font-weight: 600; }
+.phase-card__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; white-space: nowrap; }
+.phase-card__title { font-family: var(--font-heading); font-size: 1.125rem; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
 .phase-card__items { display: flex; flex-direction: column; gap: 6px; }
 .phase-card__item { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: rgba(255,255,255,0.7); }
 .phase-card__item .material-symbols-outlined { font-size: 16px; }
@@ -745,9 +745,15 @@ h4 { font-size: 1.125rem; }
 
 /* --- Ticker/Scroll Stats Bar --- */
 .ticker { display: flex; justify-content: center; gap: clamp(24px, 4vw, 48px); flex-wrap: wrap; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
-.ticker__item { text-align: center; }
-.ticker__value { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; color: var(--gold); }
-.ticker__label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.ticker__item { text-align: center; min-width: 100px; padding: 12px; }
+.ticker__value { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.ticker__label { font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); margin-top: 4px; white-space: nowrap; }
+
+/* Stat cards at bottom - ensure no overflow */
+.cta-section .stats { gap: clamp(24px, 4vw, 48px); }
+.cta-section .stat { min-width: 100px; padding: 16px; }
+.cta-section .stat__value { white-space: nowrap; }
+.cta-section .stat__label { white-space: nowrap; margin-top: 8px; }
 
 /* --- Responsive Grid: 5 columns for phases --- */
 .grid--5 { grid-template-columns: repeat(5, 1fr); }
