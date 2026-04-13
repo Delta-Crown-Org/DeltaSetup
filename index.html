@@ -688,52 +688,39 @@
           </div>
         </div>
 
-        <!-- User Journey -->
+        <!-- Simple User Access Table -->
         <div class="reveal reveal--right">
-          <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="color: var(--gold-dark);">person_add</span>
-            What Happens When You Add a User
-          </h3>
-          <div class="journey">
-            <div class="journey__step" style="background: rgba(0,107,94,0.04); border-color: rgba(0,107,94,0.12);">
-              <div class="journey__step-num">1</div>
-              <div class="journey__step-content">
-                <div class="journey__step-title">Set Azure AD Properties</div>
-                <div class="journey__step-desc">companyName = "Delta Crown Extensions"</div>
-                <span class="journey__step-prop">
-                  <span class="material-symbols-outlined" style="font-size: 12px;">bolt</span>
-                  Triggers dynamic group evaluation
-                </span>
-              </div>
-            </div>
-            <div class="journey__step">
-              <div class="journey__step-num">2</div>
-              <div class="journey__step-content">
-                <div class="journey__step-title">Auto-Joins Security Groups</div>
-                <div class="journey__step-desc">SG-DCE-AllStaff (+ Leadership/Marketing if applicable)</div>
-              </div>
-            </div>
-            <div class="journey__step">
-              <div class="journey__step-num">3</div>
-              <div class="journey__step-content">
-                <div class="journey__step-title">Gets Site Access</div>
-                <div class="journey__step-desc">DCE Hub, Operations, Client Services, Docs, Marketing</div>
-              </div>
-            </div>
-            <div class="journey__step">
-              <div class="journey__step-num">4</div>
-              <div class="journey__step-content">
-                <div class="journey__step-title">Gets Teams Membership</div>
-                <div class="journey__step-desc">Delta Crown Operations team + standard channels</div>
-              </div>
-            </div>
-            <div class="journey__step">
-              <div class="journey__step-num">5</div>
-              <div class="journey__step-content">
-                <div class="journey__step-title">Sees Branded Hub</div>
-                <div class="journey__step-desc">Gold & black DCE hub with brand navigation, news, search scoped to DCE only</div>
-              </div>
-            </div>
+          <div class="simple-table">
+            <h3 style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-outlined" style="color: var(--gold-dark);">person_add</span>
+              Who Gets Access to What
+            </h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>If companyName is...</th>
+                  <th>They join...</th>
+                  <th>They can see...</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>"Delta Crown Extensions"</td>
+                  <td>SG-DCE-AllStaff</td>
+                  <td>DCE Hub + All DCE Sites</td>
+                </tr>
+                <tr>
+                  <td>+ jobTitle has "Manager"</td>
+                  <td>SG-DCE-Leadership</td>
+                  <td>+ Leadership channel</td>
+                </tr>
+                <tr>
+                  <td>+ department is "Marketing"</td>
+                  <td>SG-DCE-Marketing</td>
+                  <td>+ Marketing site edit rights</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

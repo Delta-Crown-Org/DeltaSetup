@@ -156,9 +156,12 @@ h4 { font-size: 1.125rem; }
 }
 .nav__link {
   font-size: 0.8125rem; letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.65);
+  color: var(--text-secondary);
   transition: color 0.3s ease;
   position: relative;
+}
+.nav--solid .nav__link {
+  color: rgba(255,255,255,0.65);
 }
 .nav__link:hover, .nav__link--active { color: var(--gold); }
 .nav__link::after {
@@ -218,9 +221,12 @@ h4 { font-size: 1.125rem; }
   position: absolute; bottom: 40px; left: 50%;
   transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 8px;
-  color: rgba(255,255,255,0.35);
+  color: var(--text-muted);
   font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase;
   animation: float 2.5s ease-in-out infinite;
+}
+.hero .hero__scroll {
+  color: rgba(255,255,255,0.35);
 }
 @keyframes float {
   0%, 100% { transform: translateX(-50%) translateY(0); }
@@ -298,6 +304,11 @@ h4 { font-size: 1.125rem; }
 .stat__label {
   font-size: 0.8125rem; text-transform: uppercase;
   letter-spacing: 0.1em; margin-top: 8px;
+  color: var(--text-secondary);
+}
+.section--dark .stat__label,
+.section--teal .stat__label,
+.hero .stat__label {
   color: rgba(255,255,255,0.5);
 }
 
@@ -707,3 +718,52 @@ h4 { font-size: 1.125rem; }
 /* --- Mobile Nav Toggle --- */
 .nav__toggle { display: none; background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; padding: 8px; }
 @media (max-width: 768px) { .nav__toggle { display: block; margin-left: auto; } }
+
+/* ============================================================
+   READABILITY FIXES — Added 2025-04-13
+   ============================================================ */
+
+/* Fix: Ensure readable text on all backgrounds */
+.text-readable { color: var(--text) !important; }
+.text-readable-secondary { color: var(--text-secondary) !important; }
+
+.bg-light .card--glass,
+.section:not(.section--dark) .card--glass {
+  color: var(--text);
+}
+.bg-light .card--glass h4,
+.section:not(.section--dark) .card--glass h4 {
+  color: var(--teal);
+}
+
+/* Simple table component for better readability */
+.simple-table { 
+  background: var(--surface-card);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+}
+.simple-table h3 {
+  color: var(--teal);
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+}
+.simple-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.simple-table th {
+  background: var(--teal);
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+.simple-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--surface-dim);
+  color: var(--text);
+}
+.simple-table tr:hover td {
+  background: var(--surface-dim);
+}
