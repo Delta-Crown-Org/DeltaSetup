@@ -18,7 +18,7 @@ param(
     [Parameter(Mandatory=$false)]
     [string]$TenantName = "deltacrown",
     [Parameter(Mandatory=$false)]
-    [string]$BrandDomain = "deltacrown.com.au",
+    [string]$BrandDomain = "httbrands.com",
     [Parameter(Mandatory=$false)]
     [ValidateSet("Development", "Staging", "Production")]
     [string]$Environment = "Development"
