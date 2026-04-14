@@ -113,18 +113,68 @@
 
 ---
 
+## ⏳ Phase 5: Exchange Online — READY TO DEPLOY
+
+### Prerequisites
+- [ ] Pax8 CSP relationship established for deltacrown tenant
+- [ ] At least one licensed mailbox user (Lindy Sturgill) to activate Exchange Online
+- [ ] DNS records (SPF, DKIM, DMARC) verified for deltacrown.com ✅
+
+### Script: `phase3-week2/scripts/5.1-Exchange-Setup.ps1`
+
+**Run verification first:**
+```powershell
+cd ~/dev/DeltaSetup/phase3-week2/scripts
+pwsh -File ./5.1-Exchange-Setup.ps1 -VerifyOnly
+```
+
+**Then full deployment:**
+```powershell
+pwsh -File ./5.1-Exchange-Setup.ps1
+```
+
+### Dynamic Distribution Groups (3)
+| DDG | Email | Recipient Filter |
+|-----|-------|-----------------|
+| DCE All Staff | allstaff@deltacrown.com | Company = "Delta Crown Extensions" |
+| DCE Managers | managers@deltacrown.com | Company = "DCE" + Title contains "Manager" |
+| DCE Stylists | stylists@deltacrown.com | Company = "DCE" + Title contains "Stylist" |
+
+### Shared Mailboxes (3)
+| Mailbox | Email | Send-As | Full Access | Auto-Reply |
+|---------|-------|---------|-------------|------------|
+| DCE Operations | operations@deltacrown.com | DCE-AllStaff | DCE-Managers | None |
+| DCE Bookings | bookings@deltacrown.com | DCE-AllStaff | DCE-AllStaff | 24hr confirmation |
+| DCE Info | info@deltacrown.com | DCE-AllStaff | DCE-Managers | 48hr response |
+
+### Architecture Note
+> **Hybrid group strategy**: Azure AD dynamic security groups (DCE-AllStaff, DCE-Managers, etc.) remain for SharePoint/Teams permissions. Exchange Dynamic Distribution Groups provide independent mail routing at @deltacrown.com. This gives maximum versatility on Business Premium licensing.
+
+---
+
 ## Next Steps
 
-1. **Execute Phase 4 migration** from Tyler's local machine:
+1. **Run Phase 5 pre-flight** to verify Exchange Online is active:
+   ```bash
+   cd ~/dev/DeltaSetup/phase3-week2/scripts
+   pwsh -File ./5.1-Exchange-Setup.ps1 -VerifyOnly
+   ```
+
+2. **Execute Phase 5** once Exchange is confirmed active:
+   ```bash
+   pwsh -File ./5.1-Exchange-Setup.ps1
+   ```
+
+3. **Execute Phase 4 migration** from Tyler's local machine:
    ```bash
    cd ~/dev/DeltaSetup/phase4-migration/scripts
    pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv'
    ```
 
-2. **E2E Testing** — validate all sites, lists, permissions
+4. **E2E Testing** — validate all sites, lists, permissions, mailboxes
 
-3. **User Onboarding** — add DCE users, assign licenses
+5. **User Onboarding** — add DCE users, assign licenses, set up personal shared mailboxes
 
-4. **Production Launch** 🚀
+6. **Production Launch** 🚀
 
 **Ready when you are, Tyler! 🐶**
