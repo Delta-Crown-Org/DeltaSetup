@@ -21,7 +21,6 @@
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [switch]$VerifyOnly,
-    [switch]$WhatIf,
     [string]$AdminUPN = "tyler.granlund-admin@httbrands.com",
     [string]$Organization = "deltacrown.com",
     [string]$TenantId = "ce62e17d-2feb-4e67-a115-8ea4af68da30",

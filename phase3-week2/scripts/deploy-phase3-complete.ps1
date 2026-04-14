@@ -207,7 +207,7 @@ try {
     $mailboxes = @(
         @{ Name = "DCE Operations"; Alias = "operations"; Primary = "operations@deltacrown.com" }
         @{ Name = "DCE Bookings"; Alias = "bookings"; Primary = "bookings@deltacrown.com" }
-        @{ Name = "DCE Info"; Alias = "info"; Primary = "dceinfo@httbrands.com" }
+        @{ Name = "DCE Info"; Alias = "info"; Primary = "info@deltacrown.com" }
     )
     
     foreach ($mb in $mailboxes) {
