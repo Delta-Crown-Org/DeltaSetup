@@ -382,11 +382,19 @@ function Connect-DeltaCrownExchange {
         
         [Parameter()]
         [ValidateRange(1,5)]
-        [int]$RetryCount = 3
+        [int]$RetryCount = 3,
+        
+        [Parameter()]
+        [string]$ExchangeOrganization = $null
     )
     
     if (!$AuthConfig) {
         $AuthConfig = Import-DeltaCrownAuthConfig
+    }
+    
+    # Merge explicit ExchangeOrganization into config if provided
+    if ($ExchangeOrganization) {
+        $AuthConfig['ExchangeOrganization'] = $ExchangeOrganization
     }
     
     $attempt = 0
@@ -408,12 +416,24 @@ function Connect-DeltaCrownExchange {
                 Connect-ExchangeOnline -CertificateThumbprint $AuthConfig.Thumbprint -AppId $AuthConfig.ClientId -Organization "$($AuthConfig.TenantId)" -ShowBanner:$false -ErrorAction Stop
                 Write-Verbose "Connected to Exchange Online using thumbprint"
             }
+            # Interactive (Development only)
             elseif ($AuthConfig.Interactive -or $AuthConfig._Environment -eq "Development") {
                 if ($AuthConfig._Environment -eq "Production") {
                     throw "Interactive authentication is NOT allowed in Production environment!"
                 }
-                Connect-ExchangeOnline -ShowBanner:$false -ErrorAction Stop
-                Write-Verbose "Connected to Exchange Online using interactive authentication"
+                $connectParams = @{
+                    ShowBanner = $false
+                    ErrorAction = "Stop"
+                }
+                # Cross-tenant support: target specific organization if configured
+                if ($AuthConfig.ExchangeOrganization) {
+                    $connectParams['Organization'] = $AuthConfig.ExchangeOrganization
+                }
+                if ($AuthConfig.AdminUPN) {
+                    $connectParams['UserPrincipalName'] = $AuthConfig.AdminUPN
+                }
+                Connect-ExchangeOnline @connectParams
+                Write-Verbose "Connected to Exchange Online using interactive authentication (Development mode)"
             }
             else {
                 throw "No valid authentication method available for Exchange Online"

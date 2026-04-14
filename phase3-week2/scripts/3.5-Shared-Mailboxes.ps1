@@ -18,7 +18,7 @@ param(
     [Parameter(Mandatory=$false)]
     [string]$TenantName = "deltacrown",
     [Parameter(Mandatory=$false)]
-    [string]$BrandDomain = "httbrands.com",  # NOTE: Exchange tenant is httbrands, deltacrown.com not configured
+    [string]$BrandDomain = "deltacrown.com",
     [Parameter(Mandatory=$false)]
     [ValidateSet("Development", "Staging", "Production")]
     [string]$Environment = "Development"
@@ -54,24 +54,24 @@ $SharedMailboxes = @(
     @{
         Name          = "DCE Operations"
         Email         = "operations@$BrandDomain"
-        SendAs        = "SG-DCE-AllStaff"
-        FullAccess    = "SG-DCE-Leadership"
+        SendAs        = "DCE-AllStaff"
+        FullAccess    = "DCE-Managers"
         AutoReply     = $null  # No auto-reply
         ForwardTo     = $null  # Will be set to General channel email
     },
     @{
         Name          = "DCE Bookings"
         Email         = "bookings@$BrandDomain"
-        SendAs        = "SG-DCE-AllStaff"
-        FullAccess    = "SG-DCE-AllStaff"
+        SendAs        = "DCE-AllStaff"
+        FullAccess    = "DCE-AllStaff"
         AutoReply     = "Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours."
         ForwardTo     = $null  # Will be set to Bookings channel email
     },
     @{
         Name          = "DCE Info"
         Email         = "info@$BrandDomain"
-        SendAs        = "SG-DCE-AllStaff"
-        FullAccess    = "SG-DCE-Leadership"
+        SendAs        = "DCE-AllStaff"
+        FullAccess    = "DCE-Managers"
         AutoReply     = "Thank you for contacting Delta Crown Extensions. We will respond within 48 hours."
         ForwardTo     = $null  # Group mailbox
     }

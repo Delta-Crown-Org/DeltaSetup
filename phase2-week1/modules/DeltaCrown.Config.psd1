@@ -20,7 +20,11 @@
     # =========================================================================
     Tenant = @{
         Name = "deltacrown"
+        TenantId = "ce62e17d-2feb-4e67-a115-8ea4af68da30"
+        Domain = "deltacrown.com"
         AdminUrl = "https://deltacrown-admin.sharepoint.com"
+        AdminUPN = "tyler.granlund-admin@httbrands.com"
+        ExchangeOrganization = "deltacrown.com"
         DefaultTimeZone = 10  # US Central
         DefaultLanguage = 1033  # English (US)
     }
