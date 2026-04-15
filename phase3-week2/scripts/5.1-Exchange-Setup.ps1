@@ -104,13 +104,13 @@ $DynamicDistributionGroups = @(
         Name            = "DCE Managers"
         Alias           = "managers"
         Email           = "managers@$Organization"
-        RecipientFilter = "((RecipientType -eq 'UserMailbox') -and (Company -eq 'Delta Crown Extensions') -and (Title -like '*Manager*'))"
+        RecipientFilter = "((RecipientType -eq 'UserMailbox') -and (Company -eq 'Delta Crown Extensions') -and (Title -like 'Manager*'))"
     },
     @{
         Name            = "DCE Stylists"
         Alias           = "stylists"
         Email           = "stylists@$Organization"
-        RecipientFilter = "((RecipientType -eq 'UserMailbox') -and (Company -eq 'Delta Crown Extensions') -and (Title -like '*Stylist*'))"
+        RecipientFilter = "((RecipientType -eq 'UserMailbox') -and (Company -eq 'Delta Crown Extensions') -and (Title -like 'Stylist*'))"
     }
 )
 
@@ -146,11 +146,12 @@ function Connect-ExchangeCrossTenant {
     if ($existingSession -and $existingSession.State -eq "Opened") {
         Write-DeltaCrownLog "Using pre-established Exchange Online session" "INFO"; return
     }
-    Write-DeltaCrownLog "Connecting to Exchange Online -> $Organization as $AdminUPN" "INFO"
+    $delegatedOrg = "deltacrown.onmicrosoft.com"
+    Write-DeltaCrownLog "Connecting to Exchange Online -> $delegatedOrg as $AdminUPN" "INFO"
     Connect-ExchangeOnline -UserPrincipalName $AdminUPN `
-        -Organization $Organization -ShowBanner:$false
+        -DelegatedOrganization $delegatedOrg -ShowBanner:$false
     $script:OwnsExchangeConnection = $true
-    Write-DeltaCrownLog "Connected to Exchange Online ($Organization)" "SUCCESS"
+    Write-DeltaCrownLog "Connected to Exchange Online ($delegatedOrg)" "SUCCESS"
 }
 
 function Connect-GraphCrossTenant {
@@ -348,13 +349,7 @@ try {
     Connect-ExchangeCrossTenant
 
     # ==================================================================
-    # STEP 2: Connect to Microsoft Graph
-    # ==================================================================
-    Write-DeltaCrownBanner "STEP 2: Connect to Microsoft Graph"
-    Connect-GraphCrossTenant
-
-    # ==================================================================
-    # STEP 3: Create Dynamic Distribution Groups
+    # STEP 2: Create Dynamic Distribution Groups
     # ==================================================================
     Write-DeltaCrownBanner "STEP 3: Create Dynamic Distribution Groups"
 
@@ -388,7 +383,7 @@ try {
     }
 
     # ==================================================================
-    # STEP 4: Create Shared Mailboxes with Permissions
+    # STEP 3: Create Shared Mailboxes with Permissions
     # ==================================================================
     Write-DeltaCrownBanner "STEP 4: Create Shared Mailboxes"
 
