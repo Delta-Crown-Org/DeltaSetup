@@ -1,8 +1,8 @@
 # Delta Crown Extensions — Live Deployment Status
 
 **Tenant:** deltacrown (`ce62e17d-2feb-4e67-a115-8ea4af68da30`)  
-**Last Updated:** June 2025  
-**Deployed By:** planning-agent-ba064f (Richard) + pack-leader
+**Last Updated:** June 14, 2025  
+**Deployed By:** code-puppy-1a19cb (Richard) + pack-leader
 
 ---
 
@@ -158,11 +158,7 @@ pwsh -File ./5.1-Exchange-Setup.ps1
 
 All scripts now use prefix-free group names: `AllStaff`, `Managers`, `Stylists`, `External`, `Marketing`.
 
-**⚠️ ACTION REQUIRED:** Rename live Azure AD groups to match:
-```powershell
-cd ~/dev/DeltaSetup/phase2-week1/scripts
-pwsh -File ./rename-groups.ps1
-```
+**✅ COMPLETED:** Live Azure AD groups renamed via `rename-groups.ps1`.
 
 ### Issue 2: `deltacrown.com.au` Domain Typo (DeltaSetup-107) — FIXED
 
@@ -172,33 +168,29 @@ All 37 occurrences of `.com.au` replaced with `.com` across scripts, tests, ADRs
 
 ## Next Steps
 
-0. **Rename Azure AD groups** (one-time, required before running any updated scripts):
-   ```bash
-   cd ~/dev/DeltaSetup/phase2-week1/scripts
-   pwsh -File ./rename-groups.ps1
-   ```
-
-1. **Run Phase 5 pre-flight** to verify Exchange Online is active:
-   ```bash
-   cd ~/dev/DeltaSetup/phase3-week2/scripts
-   pwsh -File ./5.1-Exchange-Setup.ps1 -VerifyOnly
-   ```
-
-2. **Execute Phase 5** once Exchange is confirmed active:
-   ```bash
-   pwsh -File ./5.1-Exchange-Setup.ps1
-   ```
-
-3. **Execute Phase 4 migration** from Tyler's local machine:
+1. **Execute Phase 4 migration** from Tyler's local machine:
    ```bash
    cd ~/dev/DeltaSetup/phase4-migration/scripts
    pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv'
    ```
 
-4. **E2E Testing** — validate all sites, lists, permissions, mailboxes
+2. **E2E Testing** — validate all sites, lists, permissions, mailboxes, Exchange
 
-5. **User Onboarding** — add DCE users, assign licenses, set up personal shared mailboxes
+3. **SharePoint Teams provisioning** — run remaining Phase 3 scripts
 
-6. **Production Launch** 🚀
+4. **User Onboarding** — add DCE users, assign licenses
 
-**Ready when you are, Tyler! 🐶**
+5. **Production Launch** 🚀
+
+## Completed Milestones
+
+| Milestone | Date | Status |
+|-----------|------|--------|
+| Phase 2: Hub & Spoke | Prior | ✅ |
+| Phase 3: DCE Sites | Prior | ✅ |
+| DeltaSetup-106: Group cleanup | 2025-06-14 | ✅ |
+| DeltaSetup-107: Domain typo fix | 2025-06-14 | ✅ |
+| Azure AD group rename | 2025-06-14 | ✅ |
+| Phase 5.1: Exchange Online | 2025-06-14 | ✅ |
+
+**Let's go, Tyler! 🐶**
