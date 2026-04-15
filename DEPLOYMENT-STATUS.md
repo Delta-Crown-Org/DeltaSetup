@@ -166,9 +166,9 @@ Most Phase 2/3 scripts reference: `SG-DCE-AllStaff`, `SG-DCE-Leadership`, `SG-DC
 
 **Already fixed:** 3.5-Shared-Mailboxes.ps1, 5.1-Exchange-Setup.ps1
 
-### Issue 2: `deltacrown.com.au` Domain Typo (DeltaSetup-107)
+### Issue 2: `deltacrown.com` Domain Typo (DeltaSetup-107)
 
-Correct domain: `deltacrown.com`. ~37 occurrences of `.com.au` across ADRs, scripts, specs, and Python tests. Most critically in `3.0-Master-Phase3.ps1` which sets `BrandDomain = "deltacrown.com.au"`.
+Correct domain: `deltacrown.com`. ~37 occurrences of `.com.au` across ADRs, scripts, specs, and Python tests. Most critically in `3.0-Master-Phase3.ps1` which sets `BrandDomain = "deltacrown.com"`.
 
 **Already fixed:** DEPLOYMENT-RUNBOOK.md, 3.5-Shared-Mailboxes.ps1, 5.1-Exchange-Setup.ps1
 

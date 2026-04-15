@@ -316,9 +316,9 @@ DCE Hub (Communication Site)
 | Leadership | Docs & Policies | SharePoint Library | Policies from DCE-Docs |
 
 **Shared Mailbox Integration**:
-- `operations@deltacrown.com.au` → Connected to General channel (via connector or forwarding rule)
-- `bookings@deltacrown.com.au` → Connected to Bookings channel
-- `info@deltacrown.com.au` → General team mailbox
+- `operations@deltacrown.com` → Connected to General channel (via connector or forwarding rule)
+- `bookings@deltacrown.com` → Connected to Bookings channel
+- `info@deltacrown.com` → General team mailbox
 
 **Guest Access Policy**:
 - Guest access: **Disabled** at team level
@@ -430,7 +430,7 @@ DCE Hub (Communication Site)
 |-----------|-----------|-------------------|
 | Brand Name | Delta Crown Extensions | `{BrandName}` |
 | Brand Prefix | DCE | `{BrandPrefix}` |
-| Brand Domain | deltacrown.com.au | `{BrandDomain}` |
+| Brand Domain | deltacrown.com | `{BrandDomain}` |
 | Hub URL | /sites/dce-hub | /sites/`{prefix}`-hub |
 | Primary Color | #C9A227 (Gold) | `{PrimaryColor}` |
 | Secondary Color | #1A1A1A (Black) | `{SecondaryColor}` |
@@ -440,8 +440,8 @@ DCE Hub (Communication Site)
 | AllStaff Group | SG-DCE-AllStaff | SG-`{BrandPrefix}`-AllStaff |
 | Leadership Group | SG-DCE-Leadership | SG-`{BrandPrefix}`-Leadership |
 | Marketing Group | SG-DCE-Marketing | SG-`{BrandPrefix}`-Marketing |
-| Operations Email | operations@deltacrown.com.au | operations@`{BrandDomain}` |
-| Bookings Email | bookings@deltacrown.com.au | bookings@`{BrandDomain}` |
+| Operations Email | operations@deltacrown.com | operations@`{BrandDomain}` |
+| Bookings Email | bookings@deltacrown.com | bookings@`{BrandDomain}` |
 | Location Choices | (brand-specific locations) | `{LocationChoices}` |
 
 #### Template Export Procedure
@@ -562,9 +562,9 @@ Phase3 = @{
         )
     }
     SharedMailboxes = @(
-        @{ Name = "DCE Operations"; Email = "operations"; Domain = "deltacrown.com.au" }
-        @{ Name = "DCE Bookings"; Email = "bookings"; Domain = "deltacrown.com.au" }
-        @{ Name = "DCE Info"; Email = "info"; Domain = "deltacrown.com.au" }
+        @{ Name = "DCE Operations"; Email = "operations"; Domain = "deltacrown.com" }
+        @{ Name = "DCE Bookings"; Email = "bookings"; Domain = "deltacrown.com" }
+        @{ Name = "DCE Info"; Email = "info"; Domain = "deltacrown.com" }
     )
     DLPPolicies = @(
         @{ Name = "DCE-Data-Protection"; Mode = "TestWithNotifications" }
@@ -597,7 +597,7 @@ Phase3 = @{
 #### S — Spoofing
 | Threat | Component | Mitigation | Residual Risk |
 |--------|-----------|------------|---------------|
-| Attacker sends email as operations@deltacrown.com.au | Shared Mailboxes | SPF/DKIM/DMARC already configured (Phase 1) | LOW |
+| Attacker sends email as operations@deltacrown.com | Shared Mailboxes | SPF/DKIM/DMARC already configured (Phase 1) | LOW |
 | User impersonates Leadership group member | Teams Private Channel | Azure AD dynamic group prevents manual addition | MEDIUM |
 | Compromised service account accesses brand sites | PnP Templates | Certificate-based auth with time-limited tokens | MEDIUM |
 
@@ -827,7 +827,7 @@ See `tests/architecture/test_adr_002_phase3_sites_teams.py` for automated checks
 |----------|-------------|-----------|---------------------|
 | `{BrandName}` | Full brand name | Delta Crown Extensions | Bishops Barbershop |
 | `{BrandPrefix}` | 3-letter prefix | DCE | BSH |
-| `{BrandDomain}` | Email domain | deltacrown.com.au | bishops.com.au |
+| `{BrandDomain}` | Email domain | deltacrown.com | bishops.com.au |
 | `{PrimaryColor}` | Brand primary color | #C9A227 | #1B365D |
 | `{SecondaryColor}` | Brand secondary color | #1A1A1A | #FFFFFF |
 | `{LightAccent}` | Light accent color | #D4B43F | #3B5998 |

@@ -96,7 +96,7 @@ $ForbiddenGroups = @("Everyone", "Everyone except external users", "All Users")
 
 $ExpectedChannels = @("General", "Daily Ops", "Bookings", "Marketing", "Leadership")
 
-$ExpectedMailboxes = @("operations@deltacrown.com.au", "bookings@deltacrown.com.au", "info@deltacrown.com.au")
+$ExpectedMailboxes = @("operations@deltacrown.com", "bookings@deltacrown.com", "info@deltacrown.com")
 
 $ExpectedDLPPolicies = @("DCE-Data-Protection", "Corp-Data-Protection", "External-Sharing-Block")
 
@@ -438,7 +438,7 @@ try {
             }
 
             # Check auto-reply on bookings
-            $bookingsReply = Get-MailboxAutoReplyConfiguration -Identity "bookings@deltacrown.com.au" -ErrorAction SilentlyContinue
+            $bookingsReply = Get-MailboxAutoReplyConfiguration -Identity "bookings@deltacrown.com" -ErrorAction SilentlyContinue
             if ($bookingsReply) {
                 Test-Condition "Mailboxes" "Auto-reply enabled: bookings" ($bookingsReply.AutoReplyState -eq "Enabled") -FailureMsg "Auto-reply not enabled"
             }

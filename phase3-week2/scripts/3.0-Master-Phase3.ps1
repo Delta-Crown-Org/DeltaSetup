@@ -244,7 +244,7 @@ try {
 
             # Pass BrandDomain to 3.5 (Shared Mailboxes)
             if ($step.Id -eq "3.5") {
-                $commonParams.BrandDomain = "deltacrown.com.au"
+                $commonParams.BrandDomain = "deltacrown.com"
             }
 
             # Propagate WhatIf

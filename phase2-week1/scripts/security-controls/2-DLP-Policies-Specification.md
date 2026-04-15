@@ -179,7 +179,7 @@ $locations = @{
     Exchange = @{
         Enabled = $true
         Recipients = @(
-            "*@deltacrown.com.au"
+            "*@deltacrown.com"
         )
     }
 }

@@ -177,13 +177,13 @@ MICROSOFT TEAMS
 
 ```
 EXCHANGE ONLINE SHARED MAILBOXES
-├── operations@deltacrown.com.au
+├── operations@deltacrown.com
 │   └── → Forwarding rule → General channel email address
 │
-├── bookings@deltacrown.com.au
+├── bookings@deltacrown.com
 │   └── → Forwarding rule → Bookings channel email address
 │
-└── info@deltacrown.com.au
+└── info@deltacrown.com
     └── → Team group mailbox (general)
 
 SPF/DKIM/DMARC: Already configured (Phase 1) ✅
@@ -249,7 +249,7 @@ PnP TEMPLATE PACKAGE
 │   └── brand-config.psd1 (all parameterized values)
 │       ├── {BrandName} = "Delta Crown Extensions"
 │       ├── {BrandPrefix} = "DCE"
-│       ├── {BrandDomain} = "deltacrown.com.au"
+│       ├── {BrandDomain} = "deltacrown.com"
 │       ├── {PrimaryColor} = "#C9A227"
 │       └── ... (see ADR-002 Appendix A)
 │

@@ -175,9 +175,9 @@ Phase 2 Complete ✅
 **Creates**:
 | Mailbox | Email | Auto-Reply | Teams Channel |
 |---------|-------|------------|---------------|
-| DCE Operations | operations@deltacrown.com.au | Off | General |
-| DCE Bookings | bookings@deltacrown.com.au | On | Bookings |
-| DCE Info | info@deltacrown.com.au | On | Group mailbox |
+| DCE Operations | operations@deltacrown.com | Off | General |
+| DCE Bookings | bookings@deltacrown.com | On | Bookings |
+| DCE Info | info@deltacrown.com | On | Group mailbox |
 
 **Steps**:
 1. Create each shared mailbox

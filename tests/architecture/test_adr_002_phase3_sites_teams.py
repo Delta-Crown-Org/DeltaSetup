@@ -72,9 +72,9 @@ TEAMS_VISIBILITY = "Private"
 
 # Shared Mailboxes
 REQUIRED_SHARED_MAILBOXES = [
-    "operations@deltacrown.com.au",
-    "bookings@deltacrown.com.au",
-    "info@deltacrown.com.au",
+    "operations@deltacrown.com",
+    "bookings@deltacrown.com",
+    "info@deltacrown.com",
 ]
 
 # DLP Policy Budget
@@ -292,10 +292,10 @@ class TestTeamsConfiguration:
         assert len(REQUIRED_SHARED_MAILBOXES) == 3
 
     def test_shared_mailboxes_use_brand_domain(self):
-        """All shared mailboxes must use deltacrown.com.au domain."""
+        """All shared mailboxes must use deltacrown.com domain."""
         for mailbox in REQUIRED_SHARED_MAILBOXES:
-            assert mailbox.endswith("@deltacrown.com.au"), \
-                f"Mailbox '{mailbox}' must use deltacrown.com.au domain"
+            assert mailbox.endswith("@deltacrown.com"), \
+                f"Mailbox '{mailbox}' must use deltacrown.com domain"
 
 
 # ============================================================================

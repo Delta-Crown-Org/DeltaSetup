@@ -440,7 +440,7 @@ Tier 4: DLP Policies
   ├── Create "Client Bookings" channel
   ├── Create "Marketing" channel
   └── Create "Leadership" private channel
-□ Configure shared mailbox: operations@deltacrown.com.au
+□ Configure shared mailbox: operations@deltacrown.com
 □ Link shared mailbox to Teams (if needed)
 □ Verify Teams ↔ SharePoint file sync works
 ```
@@ -476,12 +476,12 @@ Tier 4: DLP Policies
 
 #### Day 7: Brand Email Configuration
 ```
-□ Verify deltacrown.com.au domain in M365 Admin
+□ Verify deltacrown.com domain in M365 Admin
 □ Configure brand-specific email addresses:
-  ├── operations@deltacrown.com.au (shared mailbox)
-  ├── info@deltacrown.com.au (shared mailbox)
-  └── bookings@deltacrown.com.au (shared mailbox)
-□ Verify SPF/DKIM/DMARC for deltacrown.com.au (should be done)
+  ├── operations@deltacrown.com (shared mailbox)
+  ├── info@deltacrown.com (shared mailbox)
+  └── bookings@deltacrown.com (shared mailbox)
+□ Verify SPF/DKIM/DMARC for deltacrown.com (should be done)
 □ Configure email signatures with DCE branding
 □ Test email flow: send/receive from all brand addresses
 ```

@@ -132,31 +132,31 @@
 
 ## Shared Mailbox Configuration
 
-### Mailbox 1: operations@deltacrown.com.au
+### Mailbox 1: operations@deltacrown.com
 | Property | Value |
 |----------|-------|
 | **Display Name** | DCE Operations |
-| **Email** | operations@deltacrown.com.au |
+| **Email** | operations@deltacrown.com |
 | **Send-As Permissions** | SG-DCE-AllStaff |
 | **Full Access** | SG-DCE-Leadership |
 | **Auto-Reply** | Off |
 | **Teams Integration** | Forward to General channel email |
 
-### Mailbox 2: bookings@deltacrown.com.au
+### Mailbox 2: bookings@deltacrown.com
 | Property | Value |
 |----------|-------|
 | **Display Name** | DCE Bookings |
-| **Email** | bookings@deltacrown.com.au |
+| **Email** | bookings@deltacrown.com |
 | **Send-As Permissions** | SG-DCE-AllStaff |
 | **Full Access** | SG-DCE-AllStaff |
 | **Auto-Reply** | "Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours." |
 | **Teams Integration** | Forward to Bookings channel email |
 
-### Mailbox 3: info@deltacrown.com.au
+### Mailbox 3: info@deltacrown.com
 | Property | Value |
 |----------|-------|
 | **Display Name** | DCE Info |
-| **Email** | info@deltacrown.com.au |
+| **Email** | info@deltacrown.com |
 | **Send-As Permissions** | SG-DCE-AllStaff |
 | **Full Access** | SG-DCE-Leadership |
 | **Auto-Reply** | "Thank you for contacting Delta Crown Extensions. We will respond within 48 hours." |
