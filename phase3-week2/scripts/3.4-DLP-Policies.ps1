@@ -102,10 +102,10 @@ $DLPPolicies = @(
                 AccessScope = "NotInOrganization"
                 Severity    = "High"
                 PolicyTip   = "Corporate confidential content cannot be shared externally."
-                # B6: Include Australian sensitive info types for PII detection
+                # B6: Include US sensitive info types for PII detection
                 SensitiveInfo = @(
-                    @{ Name = "Australia Tax File Number";       MinCount = 1; MaxConfidence = 100 }
-                    @{ Name = "Australia Medical Account Number"; MinCount = 1; MaxConfidence = 100 }
+                    @{ Name = "U.S. Social Security Number (SSN)"; MinCount = 1; MaxConfidence = 100 }
+                    @{ Name = "U.S. Individual Taxpayer Identification Number (ITIN)"; MinCount = 1; MaxConfidence = 100 }
                 )
             }
         )

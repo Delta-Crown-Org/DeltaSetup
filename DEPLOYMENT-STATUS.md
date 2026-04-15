@@ -168,17 +168,21 @@ All 37 occurrences of `.com.au` replaced with `.com` across scripts, tests, ADRs
 
 ## Next Steps
 
-1. **Execute Phase 4 migration** from Tyler's local machine:
+1. **Run Security Hardening** (needs PnP browser auth):
+   ```bash
+   cd ~/dev/DeltaSetup/phase3-week2/scripts
+   pwsh -File ./deploy-security-hardening.ps1
+   ```
+
+2. **Execute Phase 4 migration** (needs PnP browser auth):
    ```bash
    cd ~/dev/DeltaSetup/phase4-migration/scripts
    pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv'
    ```
 
-2. **E2E Testing** — validate all sites, lists, permissions, mailboxes, Exchange
+3. **E2E Testing** — validate all sites, lists, permissions, mailboxes, Exchange
 
-3. **SharePoint Teams provisioning** — run remaining Phase 3 scripts
-
-4. **User Onboarding** — add DCE users, assign licenses
+4. **Delete temp app** `DeltaCrown-TeamsProvisioner-TEMP` from Azure AD (secret auto-expires 2026-04-16)
 
 5. **Production Launch** 🚀
 
@@ -192,5 +196,9 @@ All 37 occurrences of `.com.au` replaced with `.com` across scripts, tests, ADRs
 | DeltaSetup-107: Domain typo fix | 2025-06-14 | ✅ |
 | Azure AD group rename | 2025-06-14 | ✅ |
 | Phase 5.1: Exchange Online | 2025-06-14 | ✅ |
+| Phase 3.2: Teams workspace | 2025-06-15 | ✅ |
+| Phase 3.4: DLP Policies (3 custom) | 2025-06-15 | ✅ |
+| Marketing dynamic group created | 2025-06-15 | ✅ |
+| DLP PII type fix (AU→US) | 2025-06-15 | ✅ |
 
 **Let's go, Tyler! 🐶**
