@@ -152,29 +152,31 @@ pwsh -File ./5.1-Exchange-Setup.ps1
 
 ---
 
-## ⚠️ Known Issues — Pre-Existing Naming Conflicts
+## ✅ Resolved Issues
 
-> **These do NOT block Phase 5 Exchange deployment.** They block re-running older Phase 3 scripts.
+### Issue 1: Group Name Mismatch (DeltaSetup-106) — FIXED
 
-### Issue 1: Group Name Mismatch (DeltaSetup-106)
+All scripts now use prefix-free group names: `AllStaff`, `Managers`, `Stylists`, `External`, `Marketing`.
 
-Azure AD groups in the live tenant: `AllStaff`, `Managers`, `Stylists`, `External`
+**⚠️ ACTION REQUIRED:** Rename live Azure AD groups to match:
+```powershell
+cd ~/dev/DeltaSetup/phase2-week1/scripts
+pwsh -File ./rename-groups.ps1
+```
 
-Most Phase 2/3 scripts reference: `AllStaff`, `Managers`, `Marketing`
+### Issue 2: `deltacrown.com.au` Domain Typo (DeltaSetup-107) — FIXED
 
-**Affected:** 3.0-Master-Phase3.ps1, 3.2-Teams-Provisioning.ps1, 3.3-Security-Hardening.ps1, 3.7-Phase3-Verification.ps1, deploy-phase3-complete.ps1, 2.3-AzureAD-DynamicGroups.ps1, 2.4-Verification.ps1, security-controls/*.ps1, DeltaCrown.Config.psd1 (DynamicGroups section)
-
-**Already fixed:** 3.5-Shared-Mailboxes.ps1, 5.1-Exchange-Setup.ps1
-
-### Issue 2: `deltacrown.com` Domain Typo (DeltaSetup-107)
-
-Correct domain: `deltacrown.com`. ~37 occurrences of `.com.au` across ADRs, scripts, specs, and Python tests. Most critically in `3.0-Master-Phase3.ps1` which sets `BrandDomain = "deltacrown.com"`.
-
-**Already fixed:** DEPLOYMENT-RUNBOOK.md, 3.5-Shared-Mailboxes.ps1, 5.1-Exchange-Setup.ps1
+All 37 occurrences of `.com.au` replaced with `.com` across scripts, tests, ADRs, and docs.
 
 ---
 
 ## Next Steps
+
+0. **Rename Azure AD groups** (one-time, required before running any updated scripts):
+   ```bash
+   cd ~/dev/DeltaSetup/phase2-week1/scripts
+   pwsh -File ./rename-groups.ps1
+   ```
 
 1. **Run Phase 5 pre-flight** to verify Exchange Online is active:
    ```bash

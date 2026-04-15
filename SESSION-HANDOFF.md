@@ -1,5 +1,64 @@
 # Session Handoff — Exchange Online Setup (Phase 5)
 
+---
+
+# Session Update — Cleanup Sprint (DeltaSetup-106, DeltaSetup-107)
+
+**Date:** 2025-06-14 (continued)
+**Agent:** code-puppy-1a19cb (Richard)
+**Branch:** gh-pages
+
+---
+
+## What Was Accomplished This Session
+
+### DeltaSetup-107: Domain Typo Fix ✅
+- Replaced all 37 occurrences of `deltacrown.com.au` → `deltacrown.com`
+- Fixed across 12 files: scripts, Python tests, ADRs, specs, docs
+
+### DeltaSetup-106: Group Name Cleanup ✅
+- Tyler decided: **no prefix** on group names (domain identifies the brand)
+- Full mapping applied across **45 files**:
+  - `SG-DCE-AllStaff` → `AllStaff`
+  - `SG-DCE-Leadership` → `Managers`
+  - `SG-DCE-Marketing` → `Marketing`
+  - `DCE-AllStaff` → `AllStaff`
+  - `DCE-Managers` → `Managers`
+  - `DCE-Stylists` → `Stylists`
+  - `DCE-External` → `External`
+- Preserved: `SG-DCE-Sync-Users` (HTT Brands tenant), DCE-* site/policy names
+- Fixed special patterns: `startsWith` filter in 5.1, `-replace` in 4.1
+
+### New Files
+| File | Purpose |
+|------|---------|
+| `phase2-week1/scripts/rename-groups.ps1` | Renames live Azure AD groups to match updated scripts |
+
+---
+
+## ⚠️ ACTION REQUIRED — Before Running Any Scripts
+
+Tyler must rename the live Azure AD groups:
+```powershell
+cd ~/dev/DeltaSetup/phase2-week1/scripts
+pwsh -File ./rename-groups.ps1
+```
+
+This renames DCE-AllStaff→AllStaff, DCE-Managers→Managers, DCE-Stylists→Stylists, DCE-External→External in the live tenant.
+
+---
+
+## Next Session Priorities
+
+1. **Run rename-groups.ps1** to rename live Azure AD groups
+2. **Run Exchange pre-flight** → `5.1-Exchange-Setup.ps1 -VerifyOnly`
+3. **If Exchange active** → run full `5.1-Exchange-Setup.ps1`
+4. **Phase 4 migration** → document migration execution
+5. **E2E Testing** → validate all sites, lists, permissions, mailboxes
+
+---
+
+
 **Date:** 2025-06-14
 **Agent:** planning-agent-ba064f (Richard)
 **Branch:** gh-pages
