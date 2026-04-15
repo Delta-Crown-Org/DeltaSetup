@@ -162,7 +162,7 @@ function Connect-GraphCrossTenant {
     } catch { <# No context - connect fresh #> }
     Write-DeltaCrownLog "Connecting to Microsoft Graph -> tenant $TenantId" "INFO"
     Connect-MgGraph -Scopes "Group.Read.All","User.Read.All" `
-        -TenantId $TenantId -NoWelcome
+        -TenantId $TenantId -UseDeviceCode -NoWelcome
     $script:OwnsGraphConnection = $true
     Write-DeltaCrownLog "Connected to Microsoft Graph ($TenantId)" "SUCCESS"
 }
@@ -187,6 +187,60 @@ function Invoke-VerifyOnly {
         AzureADGroups      = @()
         LicensedUsers      = @()
         Errors             = @()
+    }
+
+    # --- Microsoft Graph checks (run in subprocess to avoid MSAL assembly conflict with Exchange) ---
+    try {
+        Write-DeltaCrownLog "Running Graph checks in subprocess (avoids MSAL conflict)..." "INFO"
+        $graphScript = @'
+            $ErrorActionPreference = "Stop"
+            Connect-MgGraph -Scopes "Group.Read.All","User.Read.All" -TenantId "{TENANT}" -NoWelcome
+            $result = @{ Groups = @(); Users = @(); Error = $null }
+            try {
+                $expectedNames = @('AllStaff', 'Managers', 'Stylists', 'External')
+                foreach ($gn in $expectedNames) {
+                    $g = Get-MgGroup -Filter "displayName eq '$gn'" -ErrorAction SilentlyContinue | Select-Object -First 1
+                    if ($g) { $result.Groups += @{ DisplayName = $g.DisplayName; Id = $g.Id; SecurityEnabled = $g.SecurityEnabled } }
+                }
+                $users = Get-MgUser -All -Property DisplayName, UserPrincipalName, AssignedLicenses
+                $licensed = @($users | Where-Object { $_.AssignedLicenses.Count -gt 0 })
+                foreach ($u in $licensed) { $result.Users += @{ DisplayName = $u.DisplayName; UPN = $u.UserPrincipalName } }
+            } catch { $result.Error = $_.Exception.Message }
+            Disconnect-MgGraph -ErrorAction SilentlyContinue | Out-Null
+            $result | ConvertTo-Json -Depth 3
+'@.Replace("{TENANT}", $TenantId)
+
+        $graphJson = pwsh -NoProfile -Command $graphScript 2>&1 | Where-Object { $_ -is [string] } | Out-String
+        $graphResult = $graphJson | ConvertFrom-Json -ErrorAction Stop
+
+        if ($graphResult.Error) {
+            throw $graphResult.Error
+        }
+
+        if ($graphResult.Groups.Count -gt 0) {
+            $report.AzureADGroups = $graphResult.Groups
+            Write-DeltaCrownLog "  Found $($graphResult.Groups.Count) of 4 expected group(s)" "INFO"
+            foreach ($g in $graphResult.Groups) {
+                Write-DeltaCrownLog "    - $($g.DisplayName) (Security=$($g.SecurityEnabled))" "INFO"
+            }
+        } else {
+            Write-DeltaCrownLog "  No security groups found - this is unexpected!" "WARNING"
+        }
+
+        if ($graphResult.Users.Count -gt 0) {
+            $report.LicensedUsers = $graphResult.Users
+            Write-DeltaCrownLog "  Found $($graphResult.Users.Count) licensed user(s)" "INFO"
+            foreach ($u in $graphResult.Users) {
+                Write-DeltaCrownLog "    - $($u.DisplayName) <$($u.UPN)>" "INFO"
+            }
+        } else {
+            Write-DeltaCrownLog "  No licensed users found - Exchange may not activate!" "WARNING"
+        }
+    }
+    catch {
+        $errMsg = "Graph check failed: $($_.Exception.Message)"
+        Write-DeltaCrownLog $errMsg "ERROR"
+        $report.Errors += $errMsg
     }
 
     # --- Exchange Online checks ---
@@ -234,48 +288,7 @@ function Invoke-VerifyOnly {
         $report.Errors += $errMsg
     }
 
-    # --- Microsoft Graph checks ---
-    try {
-        Connect-GraphCrossTenant
-
-        Write-DeltaCrownLog "Listing security groups (AllStaff, Managers, Stylists, External)..." "INFO"
-        $expectedGroupNames = @('AllStaff', 'Managers', 'Stylists', 'External')
-        $groups = @()
-        foreach ($gn in $expectedGroupNames) {
-            $found = Get-MgGroup -Filter "displayName eq '$gn'" -ErrorAction SilentlyContinue | Select-Object -First 1
-            if ($found) { $groups += $found }
-        }
-        if ($groups) {
-            $report.AzureADGroups = @($groups | Select-Object DisplayName, Id, MailEnabled, SecurityEnabled, GroupTypes)
-            Write-DeltaCrownLog "  Found $($groups.Count) of $($expectedGroupNames.Count) expected group(s)" "INFO"
-            foreach ($g in $groups) {
-                $mailStatus = if ($g.MailEnabled) { "Mail-Enabled" } else { "Not Mail-Enabled" }
-                Write-DeltaCrownLog "    - $($g.DisplayName) [$mailStatus] (Security=$($g.SecurityEnabled))" "INFO"
-            }
-        } else {
-            Write-DeltaCrownLog "  No security groups found - this is unexpected!" "WARNING"
-        }
-
-        Write-DeltaCrownLog "Listing licensed users..." "INFO"
-        $users = Get-MgUser -All -Property DisplayName, UserPrincipalName, AssignedLicenses -ErrorAction Stop
-        $licensed = @($users | Where-Object { $_.AssignedLicenses.Count -gt 0 })
-        if ($licensed) {
-            $report.LicensedUsers = @($licensed | Select-Object DisplayName, UserPrincipalName)
-            Write-DeltaCrownLog "  Found $($licensed.Count) licensed user(s)" "INFO"
-            foreach ($u in $licensed) {
-                Write-DeltaCrownLog "    - $($u.DisplayName) <$($u.UserPrincipalName)>" "INFO"
-            }
-        } else {
-            Write-DeltaCrownLog "  No licensed users found - Exchange may not activate!" "WARNING"
-        }
-    }
-    catch {
-        $errMsg = "Graph check failed: $($_.Exception.Message)"
-        Write-DeltaCrownLog $errMsg "ERROR"
-        $report.Errors += $errMsg
-    }
-
-    # --- Status Report ---
+        # --- Status Report ---
     Write-DeltaCrownBanner "PRE-FLIGHT REPORT"
     Write-DeltaCrownLog "Exchange Active:     $($report.ExchangeActive)" $(if ($report.ExchangeActive) { "SUCCESS" } else { "WARNING" })
     Write-DeltaCrownLog "Mailboxes Found:     $($report.ExistingMailboxes.Count)" "INFO"
