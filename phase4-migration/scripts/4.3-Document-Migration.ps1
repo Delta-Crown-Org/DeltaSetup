@@ -118,9 +118,8 @@ function Connect-SourceTenant {
     Write-DeltaCrownLog "⚠️  You will be prompted to sign in to the httbrands tenant" "WARNING"
 
     try {
-        # PnP connection to source — must be interactive since it's a different tenant
-        Connect-PnPOnline -Url $SiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
-        $script:SourceConnection = Get-PnPConnection
+        # PnP connection to source — interactive, cached via -ReturnConnection
+        $script:SourceConnection = Connect-PnPOnline -Url $SiteUrl -Interactive -ReturnConnection -ErrorAction Stop
         Write-DeltaCrownLog "Connected to source: $SiteUrl" "SUCCESS"
     }
     catch {
@@ -143,9 +142,8 @@ function Connect-DestTenant {
             Connect-DeltaCrownSharePoint -Url $SiteUrl -AuthConfig $authConfig
         }
         else {
-            Connect-PnPOnline -Url $SiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
+            $script:DestConnection = Connect-PnPOnline -Url $SiteUrl -Interactive -ReturnConnection -ErrorAction Stop
         }
-        $script:DestConnection = Get-PnPConnection
         Write-DeltaCrownLog "Connected to destination: $SiteUrl" "SUCCESS"
     }
     catch {
@@ -163,13 +161,10 @@ function Get-SourceFiles {
     )
 
     try {
-        # Ensure we're connected to source
-        Connect-PnPOnline -Url $SiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
-
         $serverRelativeUrl = "/$($Library)/$($FolderPath)" -replace "//", "/"
 
-        # Get all files in the folder recursively
-        $items = Get-PnPFolderItem -FolderSiteRelativeUrl "$Library/$FolderPath" -ItemType File -Recursive -ErrorAction Stop
+        # Get all files in the folder recursively using stored source connection
+        $items = Get-PnPFolderItem -FolderSiteRelativeUrl "$Library/$FolderPath" -ItemType File -Recursive -Connection $script:SourceConnection -ErrorAction Stop
 
         $files = foreach ($item in $items) {
             [PSCustomObject]@{
@@ -228,16 +223,12 @@ function Copy-FileToDestination {
         if ($PSCmdlet.ShouldProcess("$($SourceFile.Name) → $destFullPath", "Copy")) {
             $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
-            # Download from source
-            Connect-PnPOnline -Url $SourceSiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
+            # Download from source using stored connection
             $tempDir = Join-Path ([System.IO.Path]::GetTempPath()) "dce-migration"
             if (-not (Test-Path $tempDir)) { New-Item -ItemType Directory -Path $tempDir -Force | Out-Null }
             $tempFile = Join-Path $tempDir $SourceFile.Name
 
-            Get-PnPFile -Url $SourceFile.ServerRelativeUrl -Path $tempDir -FileName $SourceFile.Name -AsFile -Force -ErrorAction Stop
-
-            # Ensure destination folder exists
-            Connect-PnPOnline -Url $DestSiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
+            Get-PnPFile -Url $SourceFile.ServerRelativeUrl -Path $tempDir -FileName $SourceFile.Name -AsFile -Force -Connection $script:SourceConnection -ErrorAction Stop
 
             # Create folder path if needed
             $folderParts = $destRelativePath.Split("/") | Where-Object { $_ -and $_ -ne $SourceFile.Name }
@@ -245,17 +236,17 @@ function Copy-FileToDestination {
             foreach ($part in $folderParts) {
                 $currentPath = "$currentPath/$part"
                 try {
-                    Resolve-PnPFolder -SiteRelativePath $currentPath -ErrorAction Stop | Out-Null
+                    Resolve-PnPFolder -SiteRelativePath $currentPath -Connection $script:DestConnection -ErrorAction Stop | Out-Null
                 }
                 catch {
                     # Folder doesn't exist, create it
-                    Add-PnPFolder -Name $part -Folder ($currentPath -replace "/$part$", "") -ErrorAction SilentlyContinue | Out-Null
+                    Add-PnPFolder -Name $part -Folder ($currentPath -replace "/$part$", "") -Connection $script:DestConnection -ErrorAction SilentlyContinue | Out-Null
                 }
             }
 
             # Upload to destination
             $destFolderPath = ($destFullPath -replace "/$($SourceFile.Name)$", "")
-            Add-PnPFile -Path $tempFile -Folder $destFolderPath -ErrorAction Stop | Out-Null
+            Add-PnPFile -Path $tempFile -Folder $destFolderPath -Connection $script:DestConnection -ErrorAction Stop | Out-Null
 
             # Clean up temp file
             Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
@@ -299,8 +290,7 @@ function Test-MigrationIntegrity {
     )
 
     try {
-        Connect-PnPOnline -Url $DestSiteUrl -Interactive -ClientId '6d8820fe-7a7b-4226-bc3b-2c53add3c207' -ErrorAction Stop
-        $destFiles = Get-PnPFolderItem -FolderSiteRelativeUrl "$DestLibrary/$DestFolder" -ItemType File -Recursive -ErrorAction Stop
+        $destFiles = Get-PnPFolderItem -FolderSiteRelativeUrl "$DestLibrary/$DestFolder" -ItemType File -Recursive -Connection $script:DestConnection -ErrorAction Stop
 
         $actualCount = ($destFiles | Measure-Object).Count
 
@@ -398,7 +388,7 @@ if ($mappings.Count -eq 0) {
     exit 0
 }
 
-# Collect unique source and destination sites for auth
+# Show migration plan
 $sourceSites = $mappings | Select-Object -ExpandProperty SourceSite -Unique
 $destSites = $mappings | Select-Object -ExpandProperty DestinationSite -Unique
 
@@ -408,6 +398,7 @@ foreach ($s in $sourceSites) { Write-DeltaCrownLog "  📤 $s" "INFO" }
 Write-DeltaCrownLog "DESTINATION sites ($($destSites.Count)):" "INFO"
 foreach ($d in $destSites) { Write-DeltaCrownLog "  📥 $d" "INFO" }
 Write-DeltaCrownLog "" "INFO"
+Write-DeltaCrownLog "Connections will be established on demand (auth prompt once per site)" "INFO"
 
 # Process each mapping
 $mappingIndex = 0
@@ -418,6 +409,14 @@ foreach ($mapping in $mappings) {
 
     if ($mapping.Notes) {
         Write-DeltaCrownLog "  Notes: $($mapping.Notes)" "DEBUG"
+    }
+
+    # Ensure connections are live for this mapping's source + destination
+    if (-not $script:SourceConnection -or $script:SourceConnection.Url -ne $mapping.SourceSite) {
+        Connect-SourceTenant -SiteUrl $mapping.SourceSite
+    }
+    if (-not $script:DestConnection -or $script:DestConnection.Url -ne $mapping.DestinationSite) {
+        Connect-DestTenant -SiteUrl $mapping.DestinationSite
     }
 
     # Get source files

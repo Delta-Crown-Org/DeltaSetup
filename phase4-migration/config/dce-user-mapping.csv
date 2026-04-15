@@ -1,5 +1,7 @@
 UserPrincipalName,DisplayName,CurrentCompanyName,NewCompanyName,CurrentJobTitle,NewJobTitle,CurrentDepartment,NewDepartment,TargetGroups,Notes
-Allynn.Shepherd@deltacrown.com,Allynn Shepherd,,Delta Crown Extensions,,,,,SG-DCE-AllStaff,FLAG: Need title + department
-Jay.Miller@deltacrown.com,Jay Miller,,Delta Crown Extensions,,,,,SG-DCE-AllStaff,FLAG: Need title + department
-Lindy.Sturgill@deltacrown.com,Lindy Sturgill,,Delta Crown Extensions,,,,,SG-DCE-AllStaff,FLAG: Need title + department
-Sarah.Miller@deltacrown.com,Sarah Miller,,Delta Crown Extensions,,,,,SG-DCE-AllStaff,FLAG: Need title + department
+Allynn.Shepherd@deltacrown.com,Allynn Shepherd,Delta Crown Extensions,Delta Crown Extensions,,,,,AllStaff,NEEDS: title + department
+Amit.Shah@deltacrown.com,Amit Shah,Delta Crown Extensions,Delta Crown Extensions,Owner,Owner,Franchisee,Franchisee,AllStaff,Franchise Owner — SET 2025-06-14
+Jay.Miller@deltacrown.com,Jay Miller,Delta Crown Extensions,Delta Crown Extensions,,,,,AllStaff,NEEDS: title + department
+Lindy.Sturgill@deltacrown.com,Lindy Sturgill,Delta Crown Extensions,Delta Crown Extensions,,,,,AllStaff,NEEDS: title + department
+Sarah.Miller@deltacrown.com,Sarah Miller,Delta Crown Extensions,Delta Crown Extensions,,,,,AllStaff,NEEDS: title + department
+Toni.Careccia@deltacrown.com,Toni Careccia,Delta Crown Extensions,Delta Crown Extensions,Owner,Owner,Franchisee,Franchisee,AllStaff,Franchise Owner — SET 2025-06-14

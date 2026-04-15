@@ -1,9 +1,9 @@
 SourceSite,SourceLibrary,SourceFolder,DestinationSite,DestinationLibrary,DestinationFolder,Priority,Status,Notes
 https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Operations,https://deltacrown.sharepoint.com/sites/dce-operations,Documents,Operations,1,pending,Daily ops documents
 https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/_Franchisees,https://deltacrown.sharepoint.com/sites/dce-operations,Documents,Franchisees,1,pending,Franchise management
-https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Status,https://deltacrown.sharepoint.com/sites/dce-operations,Documents,Status,2,pending,Status tracking
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/_Status,https://deltacrown.sharepoint.com/sites/dce-operations,Documents,Status,2,pending,Status tracking (was Master DCE/Status)
 https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Fran Dev,https://deltacrown.sharepoint.com/sites/dce-operations,Documents,Franchise-Development,2,pending,Growth/development
-https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Marketing,https://deltacrown.sharepoint.com/sites/dce-marketing,Brand Assets,Marketing,1,pending,Brand marketing materials
+https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/DCE Marketing,https://deltacrown.sharepoint.com/sites/dce-marketing,Brand Assets,Marketing,1,pending,Brand marketing materials (was Master DCE/Marketing)
 https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Product,https://deltacrown.sharepoint.com/sites/dce-docs,Documents,Product,2,pending,Product reference
 https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Strategy,https://deltacrown.sharepoint.com/sites/dce-docs,Documents,Strategy,2,pending,Leadership only access
 https://httbrands.sharepoint.com/sites/HTTHQ,Shared Documents,Master DCE/Training,https://deltacrown.sharepoint.com/sites/dce-docs,Documents,Training,3,pending,Training materials
