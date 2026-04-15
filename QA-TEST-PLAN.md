@@ -268,7 +268,7 @@ foreach ($site in $associatedSites) {
 ```powershell
 Connect-MgGraph -Scopes "Group.Read.All"
 
-$requiredGroups = @("SG-DCE-AllStaff", "SG-DCE-Leadership")
+$requiredGroups = @("AllStaff", "Managers")
 foreach ($groupName in $requiredGroups) {
     $group = Get-MgGroup -Filter "displayName eq '$groupName'"
     $group | Should -Not -Be $null
@@ -277,8 +277,8 @@ foreach ($groupName in $requiredGroups) {
 ```
 
 **Expected Results:**
-- ✅ SG-DCE-AllStaff exists and is dynamic
-- ✅ SG-DCE-Leadership exists and is dynamic
+- ✅ AllStaff exists and is dynamic
+- ✅ Managers exists and is dynamic
 
 ---
 
@@ -293,13 +293,13 @@ foreach ($groupName in $requiredGroups) {
 
 **Test Steps:**
 ```powershell
-$allStaff = Get-MgGroup -Filter "displayName eq 'SG-DCE-AllStaff'"
+$allStaff = Get-MgGroup -Filter "displayName eq 'AllStaff'"
 $allStaff.MembershipRule | Should -Match "department"
 $allStaff.MembershipRuleProcessingState | Should -Be "On"
 ```
 
 **Expected Results:**
-- ✅ SG-DCE-AllStaff has membership rule based on department
+- ✅ AllStaff has membership rule based on department
 - ✅ Processing state is "On"
 - ✅ Rule matches "Delta Crown" department
 

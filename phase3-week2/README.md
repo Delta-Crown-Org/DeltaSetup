@@ -95,8 +95,8 @@ Before starting Phase 3, verify Phase 2 is deployed:
 # Confirm these exist:
 # ✅ /sites/corp-hub (Corporate Hub)
 # ✅ /sites/dce-hub (DCE Hub)
-# ✅ SG-DCE-AllStaff (Azure AD group)
-# ✅ SG-DCE-Leadership (Azure AD group)
+# ✅ AllStaff (Azure AD group)
+# ✅ Managers (Azure AD group)
 ```
 
 ---

@@ -81,9 +81,9 @@ Write-Host "=== DYNAMIC GROUP SIMULATION ===" -ForegroundColor Cyan
 $allStaff   = ($members | Where-Object { $_.CompanyName -eq "Delta Crown Extensions" }).Count
 $leadership = ($members | Where-Object { $_.CompanyName -eq "Delta Crown Extensions" -and $_.JobTitle -match "Manager|Director|VP|Vice President|Chief|Head of|Lead" }).Count
 $marketing  = ($members | Where-Object { $_.CompanyName -eq "Delta Crown Extensions" -and $_.Department -match "Marketing" }).Count
-Write-Host "SG-DCE-AllStaff:   $allStaff"
-Write-Host "SG-DCE-Leadership: $leadership"
-Write-Host "SG-DCE-Marketing:  $marketing"
+Write-Host "AllStaff:   $allStaff"
+Write-Host "Managers: $leadership"
+Write-Host "Marketing:  $marketing"
 
 # Export
 $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"

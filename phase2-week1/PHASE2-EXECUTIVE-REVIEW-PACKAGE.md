@@ -70,8 +70,8 @@ This review package consolidates all Phase 2 deliverables, security audit findin
 - DCE-specific navigation structure
 
 **Azure AD Dynamic Security Groups:**
-- `SG-DCE-AllStaff` — All DCE employees (auto-populated)
-- `SG-DCE-Leadership` — Managers, Directors, VPs, Chiefs (auto-populated)
+- `AllStaff` — All DCE employees (auto-populated)
+- `Managers` — Managers, Directors, VPs, Chiefs (auto-populated)
 
 ---
 
@@ -228,8 +228,8 @@ This review package consolidates all Phase 2 deliverables, security audit findin
 
 | Group | Rule Logic | Validation Status |
 |-------|------------|-------------------|
-| SG-DCE-AllStaff | `department` contains "Delta Crown" OR `companyName` contains "Delta Crown Extensions" | ⚠️ Requires attribute verification |
-| SG-DCE-Leadership | `companyName` contains "Delta Crown" AND title contains Manager/Director/VP/Chief/President | ⚠️ Requires title standardization |
+| AllStaff | `department` contains "Delta Crown" OR `companyName` contains "Delta Crown Extensions" | ⚠️ Requires attribute verification |
+| Managers | `companyName` contains "Delta Crown" AND title contains Manager/Director/VP/Chief/President | ⚠️ Requires title standardization |
 
 **Risk Notes:**
 - Dynamic groups auto-populate based on user attributes

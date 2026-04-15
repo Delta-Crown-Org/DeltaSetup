@@ -272,8 +272,8 @@ try {
     # Simulate WhatIf results
     $whatIfResults = @{
         WouldCreateGroups = @(
-            "SG-DCE-AllStaff (Dynamic: dept contains 'Delta Crown' OR company contains 'Delta Crown Extensions')",
-            "SG-DCE-Leadership (Dynamic: company contains 'Delta Crown' AND title contains Manager/Director/VP)"
+            "AllStaff (Dynamic: dept contains 'Delta Crown' OR company contains 'Delta Crown Extensions')",
+            "Managers (Dynamic: company contains 'Delta Crown' AND title contains Manager/Director/VP)"
         )
     }
     

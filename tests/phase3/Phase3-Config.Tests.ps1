@@ -107,8 +107,8 @@ Describe "3.3 Security Configuration" {
         $content | Should -Match '\$script:OwnsGraphConnection'
     }
 
-    It "Should create SG-DCE-Marketing group" {
-        $content | Should -Match 'SG-DCE-Marketing'
+    It "Should create Marketing group" {
+        $content | Should -Match 'Marketing'
     }
 }
 

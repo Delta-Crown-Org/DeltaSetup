@@ -33,7 +33,7 @@ This runbook deploys the complete SharePoint Hub & Spoke architecture for Delta 
 | **Service Sites** | `/sites/corp-hr`, `/sites/corp-it`, `/sites/corp-finance`, `/sites/corp-training` |
 | **DCE Hub** | `/sites/dce-hub` — Delta Crown Extensions Hub (Communication Site, gold/black theme) |
 | **Hub-to-Hub Link** | DCE-Hub → Corp-Hub parent association |
-| **Security Groups** | `SG-DCE-AllStaff` (dynamic), `SG-DCE-Leadership` (dynamic) |
+| **Security Groups** | `AllStaff` (dynamic), `Managers` (dynamic) |
 | **Navigation** | Hub navigation on both Corp and DCE hubs |
 | **Branding** | Delta Crown gold (#C9A227) / black (#1A1A1A) theme applied to DCE Hub |
 
@@ -95,13 +95,13 @@ The orchestrator has **automatic rollback** — if a step fails, it cleans up cr
 | **SharePoint Lists** | Bookings, Staff Schedule, Tasks, Inventory, Calendar, Client Records, Marketing Calendar, Brand Assets |
 | **Document Libraries** | Per-site document libraries with metadata columns |
 | **Teams Workspace** | "Delta Crown Operations" team with 5 channels (General, Daily Ops, Bookings, Marketing, Leadership) |
-| **Private Channel** | Leadership channel (SG-DCE-Leadership only) |
+| **Private Channel** | Leadership channel (Managers only) |
 | **Channel Tabs** | SharePoint list/library tabs in each channel |
 | **Security Hardening** | Unique permissions on all sites, "Everyone" groups removed, permission matrix applied |
 | **DLP Policies** | DCE-Data-Protection (test), Corp-Data-Protection (test), External-Sharing-Block (enforce) |
 | **Shared Mailboxes** | operations@, bookings@, info@ (deltacrown.com) — created by `5.1-Exchange-Setup.ps1` |
 | **Dynamic Distribution Groups** | allstaff@, managers@, stylists@ (deltacrown.com) — created by `5.1-Exchange-Setup.ps1` |
-| **SG-DCE-Marketing** | New dynamic security group for marketing staff |
+| **Marketing** | New dynamic security group for marketing staff |
 | **PnP Templates** | Exported templates for brand replication |
 
 ### Run It
@@ -202,9 +202,9 @@ M365 Tenant: deltacrown (Business Premium)
         └── Libraries: Policies, SOPs, Training Materials
 
 Security Groups:
-├── SG-DCE-AllStaff (Dynamic: department contains "Delta Crown")
-├── SG-DCE-Leadership (Dynamic: company "Delta Crown" + Manager/Director/VP)
-└── SG-DCE-Marketing (Dynamic: company "Delta Crown" + Marketing title)
+├── AllStaff (Dynamic: department contains "Delta Crown")
+├── Managers (Dynamic: company "Delta Crown" + Manager/Director/VP)
+└── Marketing (Dynamic: company "Delta Crown" + Marketing title)
 
 DLP Policies:
 ├── DCE-Data-Protection (TestWithNotifications, 30 days)

@@ -340,25 +340,25 @@ if (!$SkipGroups) {
 
     $adGroups = @(
         @{
-            DisplayName = "DCE-AllStaff"
+            DisplayName = "AllStaff"
             Description = "All Delta Crown Extensions staff"
             MailNickname = "dce-allstaff"
             MembershipRule = '(user.companyName -eq "Delta Crown Extensions")'
         }
         @{
-            DisplayName = "DCE-Managers"
+            DisplayName = "Managers"
             Description = "DCE management team"
             MailNickname = "dce-managers"
             MembershipRule = '(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Manager")'
         }
         @{
-            DisplayName = "DCE-Stylists"
+            DisplayName = "Stylists"
             Description = "DCE stylists and technicians"
             MailNickname = "dce-stylists"
             MembershipRule = '(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Stylist")'
         }
         @{
-            DisplayName = "DCE-External"
+            DisplayName = "External"
             Description = "External partners and contractors for DCE"
             MailNickname = "dce-external"
             MembershipRule = '(user.userType -eq "Guest") and (user.companyName -eq "Delta Crown Extensions")'

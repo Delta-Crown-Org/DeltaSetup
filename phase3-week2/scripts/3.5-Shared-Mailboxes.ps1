@@ -54,24 +54,24 @@ $SharedMailboxes = @(
     @{
         Name          = "DCE Operations"
         Email         = "operations@$BrandDomain"
-        SendAs        = "DCE-AllStaff"
-        FullAccess    = "DCE-Managers"
+        SendAs        = "AllStaff"
+        FullAccess    = "Managers"
         AutoReply     = $null  # No auto-reply
         ForwardTo     = $null  # Will be set to General channel email
     },
     @{
         Name          = "DCE Bookings"
         Email         = "bookings@$BrandDomain"
-        SendAs        = "DCE-AllStaff"
-        FullAccess    = "DCE-AllStaff"
+        SendAs        = "AllStaff"
+        FullAccess    = "AllStaff"
         AutoReply     = "Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours."
         ForwardTo     = $null  # Will be set to Bookings channel email
     },
     @{
         Name          = "DCE Info"
         Email         = "info@$BrandDomain"
-        SendAs        = "DCE-AllStaff"
-        FullAccess    = "DCE-Managers"
+        SendAs        = "AllStaff"
+        FullAccess    = "Managers"
         AutoReply     = "Thank you for contacting Delta Crown Extensions. We will respond within 48 hours."
         ForwardTo     = $null  # Group mailbox
     }

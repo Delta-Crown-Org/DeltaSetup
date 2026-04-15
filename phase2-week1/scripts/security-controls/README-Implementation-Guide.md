@@ -51,8 +51,8 @@ security-controls/
 - **File**: `phase2-week1/scripts/2.3-AzureAD-DynamicGroups.ps1`
 - **Purpose**: Automated brand membership via Azure AD attributes
 - **Groups to Create**:
-  - `SG-DCE-AllStaff` (Department contains "Delta Crown")
-  - `SG-DCE-Leadership` (Company contains "Delta Crown" AND management titles)
+  - `AllStaff` (Department contains "Delta Crown")
+  - `Managers` (Company contains "Delta Crown" AND management titles)
 - **Prerequisites**: User attributes populated in Azure AD
 - **Execution**: `./2.3-AzureAD-DynamicGroups.ps1 -WhatIf` (test first)
 
@@ -78,7 +78,7 @@ Connect-IPPSSession -UserPrincipalName admin@deltacrown.com
 # Create label
 New-Label -Name "DCE-Internal" -DisplayName "Delta Crown - Internal" `
     -EncryptionEnabled $true `
-    -EncryptionAssignUsers "SG-DCE-AllStaff", "SG-DCE-Leadership" `
+    -EncryptionAssignUsers "AllStaff", "Managers" `
     -HeaderText "Delta Crown Extensions — INTERNAL USE ONLY"
 ```
 
@@ -292,10 +292,10 @@ if (Test-Path $securityModule) {
 Get-MgGroup | Where-Object { $_.DisplayName -like "SG-DCE*" }
 
 # Check group members
-Get-MgGroupMember -GroupId (Get-MgGroup -Filter "displayName eq 'SG-DCE-AllStaff'").Id
+Get-MgGroupMember -GroupId (Get-MgGroup -Filter "displayName eq 'AllStaff'").Id
 
 # View membership rule
-Get-MgGroup -Filter "displayName eq 'SG-DCE-AllStaff'" | Select-Object MembershipRule
+Get-MgGroup -Filter "displayName eq 'AllStaff'" | Select-Object MembershipRule
 ```
 
 ### Control #2: Unique Permissions

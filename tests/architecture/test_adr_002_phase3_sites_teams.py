@@ -86,7 +86,7 @@ PHASE3_DLP_POLICIES = [
 ]
 
 # Security Groups
-REQUIRED_NEW_GROUPS = ["SG-DCE-Marketing"]
+REQUIRED_NEW_GROUPS = ["Marketing"]
 
 # Permission Model
 SITES_REQUIRING_UNIQUE_PERMISSIONS = [
@@ -317,8 +317,8 @@ class TestSecurityConstraints:
         assert "Everyone except external users" in FORBIDDEN_PERMISSION_GROUPS
 
     def test_new_marketing_group_required(self):
-        """Phase 3 requires new SG-DCE-Marketing group."""
-        assert "SG-DCE-Marketing" in REQUIRED_NEW_GROUPS
+        """Phase 3 requires new Marketing group."""
+        assert "Marketing" in REQUIRED_NEW_GROUPS
 
     def test_guest_access_disabled(self):
         """Guest access must be disabled at team level."""

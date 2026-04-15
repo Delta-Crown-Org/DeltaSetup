@@ -170,9 +170,9 @@
     # =========================================================================
     DynamicGroups = @(
         @{
-            DisplayName = "SG-DCE-AllStaff"
+            DisplayName = "AllStaff"
             Description = "All Delta Crown Extensions staff - auto-populated based on department or company attribute"
-            MailNickname = "sg-dce-allstaff"
+            MailNickname = "allstaff"
             MembershipRule = @'
 (user.department -contains "Delta Crown") -or 
 (user.companyName -contains "Delta Crown Extensions")
@@ -184,9 +184,9 @@
             Visibility = "Private"
         },
         @{
-            DisplayName = "SG-DCE-Leadership"
+            DisplayName = "Managers"
             Description = "Delta Crown Extensions leadership team - Managers, Directors, and VPs"
-            MailNickname = "sg-dce-leadership"
+            MailNickname = "managers"
             MembershipRule = @'
 (user.companyName -contains "Delta Crown") -and 
 (

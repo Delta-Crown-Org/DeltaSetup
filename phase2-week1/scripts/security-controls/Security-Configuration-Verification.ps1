@@ -41,7 +41,7 @@ $CompensatingControls = @{
     Control1 = @{
         Name = "Azure AD Dynamic Groups"
         Description = "Brand-specific dynamic groups for automated membership"
-        RequiredGroups = @("SG-DCE-AllStaff", "SG-DCE-Leadership")
+        RequiredGroups = @("AllStaff", "Managers")
         Criticality = "CRITICAL"
     }
     Control2 = @{

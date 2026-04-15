@@ -25,7 +25,7 @@ cd ~/dev/DeltaSetup/phase4-migration/scripts
 **What to look for:**
 - Users with `Brand = UNASSIGNED` → need companyName set
 - Users with `MissingFields` → need properties filled in
-- Users matching `SG-DCE-Leadership` → verify these are actually leadership
+- Users matching `Managers` → verify these are actually leadership
 
 ## Step 2: Review and Update the User Mapping
 
@@ -43,9 +43,9 @@ The CSV is pre-populated with known corporate users from the HTTHQ audit. **You 
 
 | Property | Value | Auto-Joins |
 |----------|-------|------------|
-| `companyName` = "Delta Crown Extensions" | Required for all DCE users | SG-DCE-AllStaff |
-| `jobTitle` contains Manager/Director/VP/Chief/Head | Leadership roles | SG-DCE-Leadership |
-| `department` contains "Marketing" | Marketing team | SG-DCE-Marketing |
+| `companyName` = "Delta Crown Extensions" | Required for all DCE users | AllStaff |
+| `jobTitle` contains Manager/Director/VP/Chief/Head | Leadership roles | Managers |
+| `department` contains "Marketing" | Marketing team | Marketing |
 
 ## Step 3: Dry Run User Onboarding
 
@@ -66,7 +66,7 @@ Review the output. If it looks right, proceed to Step 4.
 This will:
 1. Update each user's Azure AD properties
 2. Wait ~5 minutes for dynamic group evaluation
-3. Verify users appeared in SG-DCE-AllStaff
+3. Verify users appeared in AllStaff
 4. Report results
 
 ## Step 5: Run the Full Deployment (Phase 2 + 3 + 4)

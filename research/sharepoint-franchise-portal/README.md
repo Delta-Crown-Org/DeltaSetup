@@ -69,7 +69,7 @@ research/sharepoint-franchise-portal/
 │  │  Dynamic Groups                                   │  │
 │  │  • DCE-All-Franchisees (companyName-based)        │  │
 │  │  • DCE-Operations (department-based)              │  │
-│  │  • DCE-Leadership (jobTitle-based)                │  │
+│  │  • Managers (jobTitle-based)                │  │
 │  └─────────────────────┬─────────────────────────────┘  │
 │                        │                                 │
 │  ┌─────────────────────▼─────────────────────────────┐  │

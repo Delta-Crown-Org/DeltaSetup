@@ -91,16 +91,16 @@
 **Script:** `scripts/2.3-AzureAD-DynamicGroups.ps1`
 
 ### Group Creation
-- [ ] SG-DCE-AllStaff group created
-- [ ] SG-DCE-Leadership group created
+- [ ] AllStaff group created
+- [ ] Managers group created
 
 ### Membership Rules
-- [ ] SG-DCE-AllStaff rule validated
-- [ ] SG-DCE-Leadership rule validated
+- [ ] AllStaff rule validated
+- [ ] Managers rule validated
 
 ### Processing Status
-- [ ] SG-DCE-AllStaff membership processing enabled
-- [ ] SG-DCE-Leadership membership processing enabled
+- [ ] AllStaff membership processing enabled
+- [ ] Managers membership processing enabled
 
 ### Documentation
 - [ ] Group configuration exported to JSON

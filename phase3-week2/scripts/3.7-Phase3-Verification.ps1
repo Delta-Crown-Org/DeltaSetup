@@ -90,7 +90,7 @@ $ClientRecordsPIIColumns = @("Email", "Phone", "AllergyNotes", "ServiceHistory")
 # C3: DCE-Docs library metadata columns
 $DocsMetadataColumns = @("DocType", "Department", "ReviewDate", "DocVersion", "DocStatus", "DocOwner")
 
-$ExpectedGroups = @("SG-DCE-AllStaff", "SG-DCE-Leadership", "SG-DCE-Marketing")
+$ExpectedGroups = @("AllStaff", "Managers", "Marketing")
 
 $ForbiddenGroups = @("Everyone", "Everyone except external users", "All Users")
 

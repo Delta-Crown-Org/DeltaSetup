@@ -26,7 +26,7 @@
 - ✅ DCE Gold/Black theme applied
 - ✅ Corp-Hub navigation: Home, HR, IT, Finance, Training, DCE Hub
 - ✅ DCE-Hub navigation + placeholder pages
-- ✅ 4 Azure AD dynamic groups: DCE-AllStaff, DCE-Managers, DCE-Stylists, DCE-External
+- ✅ 4 Azure AD dynamic groups: AllStaff, Managers, Stylists, External
 
 ---
 
@@ -143,12 +143,12 @@ pwsh -File ./5.1-Exchange-Setup.ps1
 ### Shared Mailboxes (3)
 | Mailbox | Email | Send-As | Full Access | Auto-Reply |
 |---------|-------|---------|-------------|------------|
-| DCE Operations | operations@deltacrown.com | DCE-AllStaff | DCE-Managers | None |
-| DCE Bookings | bookings@deltacrown.com | DCE-AllStaff | DCE-AllStaff | 24hr confirmation |
-| DCE Info | info@deltacrown.com | DCE-AllStaff | DCE-Managers | 48hr response |
+| DCE Operations | operations@deltacrown.com | AllStaff | Managers | None |
+| DCE Bookings | bookings@deltacrown.com | AllStaff | AllStaff | 24hr confirmation |
+| DCE Info | info@deltacrown.com | AllStaff | Managers | 48hr response |
 
 ### Architecture Note
-> **Hybrid group strategy**: Azure AD dynamic security groups (DCE-AllStaff, DCE-Managers, etc.) remain for SharePoint/Teams permissions. Exchange Dynamic Distribution Groups provide independent mail routing at @deltacrown.com. This gives maximum versatility on Business Premium licensing.
+> **Hybrid group strategy**: Azure AD dynamic security groups (AllStaff, Managers, etc.) remain for SharePoint/Teams permissions. Exchange Dynamic Distribution Groups provide independent mail routing at @deltacrown.com. This gives maximum versatility on Business Premium licensing.
 
 ---
 
@@ -158,9 +158,9 @@ pwsh -File ./5.1-Exchange-Setup.ps1
 
 ### Issue 1: Group Name Mismatch (DeltaSetup-106)
 
-Azure AD groups in the live tenant: `DCE-AllStaff`, `DCE-Managers`, `DCE-Stylists`, `DCE-External`
+Azure AD groups in the live tenant: `AllStaff`, `Managers`, `Stylists`, `External`
 
-Most Phase 2/3 scripts reference: `SG-DCE-AllStaff`, `SG-DCE-Leadership`, `SG-DCE-Marketing`
+Most Phase 2/3 scripts reference: `AllStaff`, `Managers`, `Marketing`
 
 **Affected:** 3.0-Master-Phase3.ps1, 3.2-Teams-Provisioning.ps1, 3.3-Security-Hardening.ps1, 3.7-Phase3-Verification.ps1, deploy-phase3-complete.ps1, 2.3-AzureAD-DynamicGroups.ps1, 2.4-Verification.ps1, security-controls/*.ps1, DeltaCrown.Config.psd1 (DynamicGroups section)
 

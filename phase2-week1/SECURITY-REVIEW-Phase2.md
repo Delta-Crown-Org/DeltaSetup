@@ -143,7 +143,7 @@ Set-PnPWebTheme -Theme $themeName
 # Lines 70-101: Dynamic group definitions
 $DynamicGroups = @(
     @{
-        DisplayName = "SG-DCE-AllStaff"
+        DisplayName = "AllStaff"
         Description = "All Delta Crown Extensions staff"
         # SECURITY RULE:
         MembershipRule = @'
@@ -155,7 +155,7 @@ $DynamicGroups = @(
         Visibility = "Private"
     },
     @{
-        DisplayName = "SG-DCE-Leadership"
+        DisplayName = "Managers"
         # SECURITY RULE:
         MembershipRule = @'
 (user.companyName -contains "Delta Crown") -and 
@@ -194,8 +194,8 @@ $newGroup = New-MgGroup -BodyParameter $params
 
 | Group | Rule Logic | Risk |
 |-------|------------|------|
-| SG-DCE-AllStaff | `department` contains "Delta Crown" OR `companyName` contains "Delta Crown Extensions" | MEDIUM - Verify attributes populated |
-| SG-DCE-Leadership | `companyName` contains "Delta Crown" AND title contains Manager/Director/VP/Chief/President | MEDIUM - Verify title naming convention |
+| AllStaff | `department` contains "Delta Crown" OR `companyName` contains "Delta Crown Extensions" | MEDIUM - Verify attributes populated |
+| Managers | `companyName` contains "Delta Crown" AND title contains Manager/Director/VP/Chief/President | MEDIUM - Verify title naming convention |
 
 **Approval Required:** ⬜ **YES - MANDATORY**  
 **Reviewer Initials:** _______  

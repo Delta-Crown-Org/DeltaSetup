@@ -309,8 +309,8 @@ Day 13-14: Training + go-live
 
 ```
 Tier 1: Azure AD Dynamic Groups (Brand Membership)
-├── SG-DCE-AllStaff       → All Delta Crown employees
-├── SG-DCE-Leadership     → DCE management team
+├── AllStaff       → All Delta Crown employees
+├── Managers     → DCE management team
 ├── SG-BSH-AllStaff       → All Bishops employees
 ├── SG-Corp-SharedServices → Users needing shared services access
 └── SG-Corp-IT-Admins     → IT administrators (all brands)
@@ -448,15 +448,15 @@ Tier 4: DLP Policies
 #### Day 5: Permissions & Security
 ```
 □ Create Azure AD Dynamic Groups:
-  ├── SG-DCE-AllStaff (Department = "Delta Crown")
-  ├── SG-DCE-Leadership (Title contains "Manager" AND Department = "Delta Crown")
-  └── SG-DCE-Marketing (Department = "Delta Crown Marketing")
+  ├── AllStaff (Department = "Delta Crown")
+  ├── Managers (Title contains "Manager" AND Department = "Delta Crown")
+  └── Marketing (Department = "Delta Crown Marketing")
 □ Apply permissions to all DCE sites (unique, NOT inherited):
-  ├── DCE Hub: SG-DCE-AllStaff = Read
+  ├── DCE Hub: AllStaff = Read
   ├── DCE-Operations: Managed by Teams membership
-  ├── DCE-ClientServices: SG-DCE-AllStaff = Contribute
-  ├── DCE-Marketing: SG-DCE-AllStaff = Read, SG-DCE-Marketing = Contribute
-  └── DCE-Docs: SG-DCE-AllStaff = Contribute
+  ├── DCE-ClientServices: AllStaff = Contribute
+  ├── DCE-Marketing: AllStaff = Read, Marketing = Contribute
+  └── DCE-Docs: AllStaff = Contribute
 □ Remove "Everyone" and "All Users" from ALL DCE sites
 □ Disable external sharing on all DCE sites (default)
 ```
@@ -465,11 +465,11 @@ Tier 4: DLP Policies
 ```
 □ Create sensitivity label: "DCE-Internal"
   ├── Auto-label: Apply to all content in DCE site collections
-  ├── Protection: Encrypt; restrict to SG-DCE-AllStaff
+  ├── Protection: Encrypt; restrict to AllStaff
   └── Markings: Header "Delta Crown — Internal"
 □ Create DLP policy: "DCE Data Protection"
   ├── Scope: DCE SharePoint sites + Teams
-  ├── Rule: Block sharing of DCE-Internal content outside SG-DCE-AllStaff
+  ├── Rule: Block sharing of DCE-Internal content outside AllStaff
   └── Mode: Test mode for 90 days (then enforce)
 □ Publish labels and DLP policies
 ```

@@ -5,7 +5,7 @@
 # VERSION: 1.1.0
 # DESCRIPTION: Hardens all DCE sites with unique permissions, removes
 #              Everyone/All Users groups, applies security group matrix,
-#              disables external sharing, creates SG-DCE-Marketing group
+#              disables external sharing, creates Marketing group
 # DEPENDS ON: 3.1 (all 4 DCE sites exist), 3.2 (Leadership channel SPO)
 # ADR: ADR-002 Phase 3 — Permission Model (Section 3)
 # FIXES: A1 (connect churn), A3 (centralized auth), B7 (path separators)
@@ -62,21 +62,21 @@ $ForbiddenGroups = @(
 
 $PermissionMatrix = @{
     "/sites/dce-hub"            = @(
-        @{ Group = "SG-DCE-AllStaff";   Role = "Read" }
-        @{ Group = "SG-DCE-Leadership"; Role = "Full Control" }
+        @{ Group = "AllStaff";   Role = "Read" }
+        @{ Group = "Managers"; Role = "Full Control" }
     )
     "/sites/dce-clientservices"  = @(
-        @{ Group = "SG-DCE-AllStaff";   Role = "Contribute" }
-        @{ Group = "SG-DCE-Leadership"; Role = "Full Control" }
+        @{ Group = "AllStaff";   Role = "Contribute" }
+        @{ Group = "Managers"; Role = "Full Control" }
     )
     "/sites/dce-marketing"       = @(
-        @{ Group = "SG-DCE-AllStaff";   Role = "Read" }
-        @{ Group = "SG-DCE-Leadership"; Role = "Full Control" }
-        @{ Group = "SG-DCE-Marketing";  Role = "Edit" }
+        @{ Group = "AllStaff";   Role = "Read" }
+        @{ Group = "Managers"; Role = "Full Control" }
+        @{ Group = "Marketing";  Role = "Edit" }
     )
     "/sites/dce-docs"            = @(
-        @{ Group = "SG-DCE-AllStaff";   Role = "Read" }
-        @{ Group = "SG-DCE-Leadership"; Role = "Full Control" }
+        @{ Group = "AllStaff";   Role = "Read" }
+        @{ Group = "Managers"; Role = "Full Control" }
     )
     # DCE-Operations is Teams-managed — skip permission assignment
 }
@@ -88,14 +88,14 @@ $PermissionMatrix = @{
 function New-DCEMarketingGroup {
     <#
     .SYNOPSIS
-        Creates the SG-DCE-Marketing dynamic security group.
+        Creates the Marketing dynamic security group.
     .DESCRIPTION
         Assumes caller has already connected to Microsoft Graph.
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param()
 
-    $groupName = "SG-DCE-Marketing"
+    $groupName = "Marketing"
 
     $existing = Get-MgGroup -Filter "displayName eq '$groupName'" -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($existing) {
@@ -264,9 +264,9 @@ try {
     Write-DeltaCrownLog "SharePoint Admin connection ready" "SUCCESS"
 
     # ------------------------------------------------------------------
-    # STEP 1: Create SG-DCE-Marketing dynamic group (uses Graph)
+    # STEP 1: Create Marketing dynamic group (uses Graph)
     # ------------------------------------------------------------------
-    Write-DeltaCrownLog "=== Step 1: Create SG-DCE-Marketing Group ===" "STAGE"
+    Write-DeltaCrownLog "=== Step 1: Create Marketing Group ===" "STAGE"
     $marketingGroup = New-DCEMarketingGroup
     $results.GroupCreated = ($marketingGroup -ne $null)
 

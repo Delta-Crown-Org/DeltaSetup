@@ -97,8 +97,8 @@ Phase 2 Complete ✅
 4. Create standard channels
 5. Create private channel (Leadership)
 6. Add tabs to each channel (SharePoint list/library connections)
-7. Set owners from SG-DCE-Leadership
-8. Set members from SG-DCE-AllStaff
+7. Set owners from Managers
+8. Set members from AllStaff
 9. Associate Leadership channel SPO site with DCE Hub
 
 **Idempotency**: Checks if team/channels exist before creating.
@@ -112,7 +112,7 @@ Phase 2 Complete ✅
 **Prerequisites**: All 4 DCE sites exist + Leadership channel SPO site
 
 **Actions**:
-1. Create SG-DCE-Marketing dynamic group (new in Phase 3)
+1. Create Marketing dynamic group (new in Phase 3)
 2. For EACH DCE site:
    a. Break permission inheritance
    b. Remove "Everyone" group
@@ -181,7 +181,7 @@ Phase 2 Complete ✅
 
 **Steps**:
 1. Create each shared mailbox
-2. Set Send-As permissions (SG-DCE-AllStaff)
+2. Set Send-As permissions (AllStaff)
 3. Set Full Access permissions (per spec)
 4. Configure auto-reply messages
 5. Set up mail forwarding to Teams channel email addresses
@@ -232,7 +232,7 @@ Phase 2 Complete ✅
 | Tabs | All tabs correctly configured |
 | Permissions | Unique permissions on all sites |
 | Forbidden Groups | No Everyone/All Users on any site |
-| Security Groups | SG-DCE-Marketing created and populated |
+| Security Groups | Marketing created and populated |
 | DLP | All 3 policies exist and active |
 | Mailboxes | All 3 shared mailboxes functional |
 | External Sharing | Disabled on all DCE sites |

@@ -52,8 +52,8 @@ $rule1 = @{
                 # Recipient is NOT in DCE groups
                 Operator = "NOT"
                 RecipientGroups = @(
-                    "SG-DCE-AllStaff",
-                    "SG-DCE-Leadership"
+                    "AllStaff",
+                    "Managers"
                 )
             }
         )
@@ -162,7 +162,7 @@ $locations = @{
         Enabled = $true
         Accounts = @(
             # All DCE users (dynamic via group membership)
-            "SG-DCE-AllStaff"
+            "AllStaff"
         )
     }
     

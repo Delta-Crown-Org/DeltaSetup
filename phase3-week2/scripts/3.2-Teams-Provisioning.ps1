@@ -66,8 +66,8 @@ $TeamConfig = @{
     Description   = "Daily operations hub for Delta Crown Extensions franchise"
     MailNickname  = "dce-operations"
     Visibility    = "Private"
-    OwnerGroup    = "SG-DCE-Leadership"
-    MemberGroup   = "SG-DCE-AllStaff"
+    OwnerGroup    = "Managers"
+    MemberGroup   = "AllStaff"
 }
 
 $ChannelConfig = @(

@@ -105,8 +105,8 @@
 **File:** `scripts/2.3-AzureAD-DynamicGroups.ps1` (324 lines)
 
 **Creates:**
-- `SG-DCE-AllStaff` — All DCE employees (auto-populated via department/company attributes)
-- `SG-DCE-Leadership` — Managers, Directors, VPs, Chiefs (auto-populated via title attributes)
+- `AllStaff` — All DCE employees (auto-populated via department/company attributes)
+- `Managers` — Managers, Directors, VPs, Chiefs (auto-populated via title attributes)
 
 **Features:**
 - Dynamic membership rules based on Azure AD attributes
@@ -297,7 +297,7 @@
 **Purpose:** Integration with 2.4-Verification.ps1
 
 **Verifies All 6 Compensating Controls:**
-1. ✅ Dynamic Groups (SG-DCE-* groups exist)
+1. ✅ Dynamic Groups (AllStaff, Managers, etc. exist)
 2. ✅ Unique Permissions (no inheritance on DCE sites)
 3. ✅ Sensitivity Labels (DCE-Internal label published)
 4. ✅ DLP Policies (DCE-Data-Protection policy active)
@@ -452,7 +452,7 @@ Connect-MgGraph -Scopes "Group.ReadWrite.All", "Directory.Read.All"
    - Creates DCE Hub with branding
    - Links to Corporate Hub
 3. [ ] Execute: `2.3-AzureAD-DynamicGroups.ps1`
-   - Creates SG-DCE-AllStaff and SG-DCE-Leadership
+   - Creates AllStaff and Managers
    - Validates membership rules
 
 #### Phase 3: Security Compensating Controls (20-30 minutes)
@@ -519,7 +519,7 @@ foreach ($url in $urls) {
 Get-MgGroup | Where-Object { $_.DisplayName -like "SG-DCE*" }
 
 # Check membership processing
-Get-MgGroup -Filter "displayName eq 'SG-DCE-AllStaff'" | 
+Get-MgGroup -Filter "displayName eq 'AllStaff'" | 
     Select-Object DisplayName, MembershipRuleProcessingState, MembershipRule
 ```
 
@@ -529,8 +529,8 @@ Get-MgGroup -Filter "displayName eq 'SG-DCE-AllStaff'" |
 
 #### Group Membership Population
 - [ ] Wait 5-30 minutes for initial sync
-- [ ] Check SG-DCE-AllStaff has expected members
-- [ ] Check SG-DCE-Leadership has expected members
+- [ ] Check AllStaff has expected members
+- [ ] Check Managers has expected members
 - [ ] Verify membership rules processing = "On"
 
 #### Site Permissions Verification

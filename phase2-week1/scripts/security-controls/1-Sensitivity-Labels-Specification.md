@@ -96,7 +96,7 @@ SC1 (Sensitivity Labels) ← foundation
    - Client-side auto-label recommends (based on sensitive info types)
 2. **Default label strategy is critical**: Setting `DCE-Internal` as the default label in the label policy ensures new content is labelled without user action.
 3. **Container labels partially available**: We can set site-level sensitivity (privacy, external sharing controls) via Azure AD P1 features included in Business Premium.
-4. **Encryption is our primary enforcement**: Even if a file is copied out of a DCE site, encryption ensures only `SG-DCE-AllStaff` members can decrypt it.
+4. **Encryption is our primary enforcement**: Even if a file is copied out of a DCE site, encryption ensures only `AllStaff` members can decrypt it.
 
 ---
 
@@ -111,13 +111,13 @@ Sensitivity Labels (Tenant: deltacrown)
 │   └── No protection, no markings
 │
 ├── DCE-Internal                      Priority: 1
-│   └── Encryption: SG-DCE-AllStaff
+│   └── Encryption: AllStaff
 │   └── Markings: Gold header/footer
 │   └── Default for all DCE sites
 │
 ├── DCE-Confidential                  Priority: 2
 │   └── Parent: (standalone, not child of DCE-Internal)
-│   └── Encryption: SG-DCE-Leadership ONLY
+│   └── Encryption: Managers ONLY
 │   └── Markings: Red header/footer + watermark
 │   └── For HR, financial, legal content
 │
@@ -192,7 +192,7 @@ None. Users must manually select this label to opt out of the default `DCE-Inter
 | **Name** | `DCE-Internal` |
 | **Display Name** | Delta Crown — Internal |
 | **Description (users)** | "Content exclusive to Delta Crown Extensions staff. Do not share with other brands or external parties." |
-| **Description (admins)** | "Default label for all DCE site collections. Encrypts content with AES-256 via Azure RMS. Access restricted to SG-DCE-AllStaff, SG-DCE-Leadership, and SG-Corp-IT-Admins (emergency access)." |
+| **Description (admins)** | "Default label for all DCE site collections. Encrypts content with AES-256 via Azure RMS. Access restricted to AllStaff, Managers, and SG-Corp-IT-Admins (emergency access)." |
 | **Tooltip** | "Delta Crown confidential — internal use only" |
 | **Priority** | 1 |
 
@@ -210,8 +210,8 @@ None. Users must manually select this label to opt out of the default `DCE-Inter
 
 | User/Group | Permission Level | ObjectId Source |
 |------------|-----------------|-----------------|
-| `SG-DCE-AllStaff` | Co-Author | Azure AD dynamic group |
-| `SG-DCE-Leadership` | Co-Author | Azure AD dynamic group |
+| `AllStaff` | Co-Author | Azure AD dynamic group |
+| `Managers` | Co-Author | Azure AD dynamic group |
 | `SG-Corp-IT-Admins` | Co-Author | Azure AD security group (emergency access) |
 
 **Co-Author permissions include**: View, Open, Read, Save, Edit, Export, Print, Copy, Forward, Reply, Reply All, Allow Macros.
@@ -272,7 +272,7 @@ None. Users must manually select this label to opt out of the default `DCE-Inter
 | **Name** | `DCE-Confidential` |
 | **Display Name** | Delta Crown — Confidential |
 | **Description (users)** | "Highly sensitive Delta Crown content. Restricted to DCE Leadership only. For financial, HR, legal, and strategic documents." |
-| **Description (admins)** | "Elevated label for leadership-only content. Encrypts with access restricted to SG-DCE-Leadership and SG-Corp-IT-Admins. Includes full visual markings with RED indicators." |
+| **Description (admins)** | "Elevated label for leadership-only content. Encrypts with access restricted to Managers and SG-Corp-IT-Admins. Includes full visual markings with RED indicators." |
 | **Tooltip** | "Restricted to DCE Leadership — HR, financial, and legal content" |
 | **Priority** | 2 |
 
@@ -290,10 +290,10 @@ None. Users must manually select this label to opt out of the default `DCE-Inter
 
 | User/Group | Permission Level | Rationale |
 |------------|-----------------|-----------|
-| `SG-DCE-Leadership` | Co-Author | Leadership team only |
+| `Managers` | Co-Author | Leadership team only |
 | `SG-Corp-IT-Admins` | Co-Author | Emergency/break-glass access |
 
-> **Critical**: `SG-DCE-AllStaff` does **NOT** have access to this label's encrypted content. This is the key differentiator from DCE-Internal.
+> **Critical**: `AllStaff` does **NOT** have access to this label's encrypted content. This is the key differentiator from DCE-Internal.
 
 #### Content Marking
 
@@ -306,7 +306,7 @@ None. Users must manually select this label to opt out of the default `DCE-Inter
 | | Font colour | `#CC0000` (Red) |
 | | Alignment | Centre |
 | **Footer** | Enabled | ✅ |
-| | Text | `RESTRICTED: Unauthorised disclosure may result in disciplinary action. SG-DCE-Leadership access only.` |
+| | Text | `RESTRICTED: Unauthorised disclosure may result in disciplinary action. Managers access only.` |
 | | Font | Calibri |
 | | Font size | 8pt |
 | | Font colour | `#CC0000` (Red) |
@@ -425,7 +425,7 @@ This policy publishes all four labels to DCE users and sets the default behaviou
 | **Policy Name** | `DCE-Label-Policy` |
 | **Description** | "Publishes DCE sensitivity labels and sets DCE-Internal as the default for all DCE users and sites." |
 | **Published Labels** | `Personal`, `DCE-Internal`, `DCE-Confidential`, `Corporate-Confidential` |
-| **Applied to Users/Groups** | `SG-DCE-AllStaff`, `SG-DCE-Leadership` |
+| **Applied to Users/Groups** | `AllStaff`, `Managers` |
 
 #### Policy Settings
 
@@ -557,8 +557,8 @@ New-Label `
     -EncryptionEnabled $true `
     -EncryptionProtectionType "Template" `
     -EncryptionRightsDefinitions @(
-        "SG-DCE-AllStaff@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
-        "SG-DCE-Leadership@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
+        "AllStaff@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
+        "Managers@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
         "SG-Corp-IT-Admins@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL"
     ) `
     -EncryptionOfflineAccessDays 30 `
@@ -607,7 +607,7 @@ New-Label `
     -EncryptionEnabled $true `
     -EncryptionProtectionType "Template" `
     -EncryptionRightsDefinitions @(
-        "SG-DCE-Leadership@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
+        "Managers@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL",
         "SG-Corp-IT-Admins@deltacrown.onmicrosoft.com:VIEW,VIEWRIGHTSDATA,DOCEDIT,EDIT,PRINT,EXTRACT,REPLY,REPLYALL,FORWARD,OBJMODEL"
     ) `
     -EncryptionOfflineAccessDays 7 `
@@ -619,7 +619,7 @@ New-Label `
     -HeaderFontColor "#CC0000" `
     -HeaderAlignment "Center" `
     -FooterEnabled $true `
-    -FooterText "RESTRICTED: Unauthorised disclosure may result in disciplinary action. SG-DCE-Leadership access only." `
+    -FooterText "RESTRICTED: Unauthorised disclosure may result in disciplinary action. Managers access only." `
     -FooterFontSize 8 `
     -FooterFontColor "#CC0000" `
     -FooterAlignment "Center" `
@@ -735,8 +735,8 @@ New-LabelPolicy `
     -Name "DCE-Label-Policy" `
     -Comment "Publishes DCE sensitivity labels to all DCE staff with DCE-Internal as default." `
     -Labels "Personal","DCE-Internal","DCE-Confidential","Corporate-Confidential" `
-    -ExchangeLocation "SG-DCE-AllStaff@deltacrown.onmicrosoft.com" `
-    -ModernGroupLocation "SG-DCE-AllStaff@deltacrown.onmicrosoft.com" `
+    -ExchangeLocation "AllStaff@deltacrown.onmicrosoft.com" `
+    -ModernGroupLocation "AllStaff@deltacrown.onmicrosoft.com" `
     -Settings @{
         "requiredowngradejustification" = "true"
         "mandatory" = "true"
@@ -985,7 +985,7 @@ $sc1Result = Test-SC1-SensitivityLabels
 |---|-----------|-------|-----------------|-----------|
 | 1 | New document in DCE site gets default label | Create a Word doc in dce-hub → save | Document has `DCE-Internal` label | ☐ |
 | 2 | DCE-Internal encrypted file blocks non-DCE user | Share DCE-Internal file link with a Bishops user | User gets "Access Denied" when opening | ☐ |
-| 3 | DCE-Confidential blocks non-leadership | SG-DCE-AllStaff member tries to open DCE-Confidential file | Access denied | ☐ |
+| 3 | DCE-Confidential blocks non-leadership | AllStaff member tries to open DCE-Confidential file | Access denied | ☐ |
 | 4 | Visual markings appear in Word | Open DCE-Internal document in Word | Gold header, grey footer, diagonal watermark visible | ☐ |
 | 5 | Downgrade requires justification | Change label from DCE-Confidential to Personal | Justification dialog appears | ☐ |
 | 6 | Corporate-Confidential accessible by all brands | Share Corp-Confidential file with DCE and Bishops users | Both can open | ☐ |
@@ -1014,7 +1014,7 @@ $sc1Result = Test-SC1-SensitivityLabels
 | **V7.1.2** | Data classification applied to all data | Default label ensures coverage; mandatory labelling enforced | L2 |
 | **V7.2.1** | Encryption at rest | Sensitivity label encryption protects files at rest | L2 |
 | **V7.2.2** | Encryption in transit | M365 enforces TLS 1.2+ for all connections | L1 |
-| **V8.3.1** | Sensitive data access controls | DCE-Confidential restricted to SG-DCE-Leadership | L2 |
+| **V8.3.1** | Sensitive data access controls | DCE-Confidential restricted to Managers | L2 |
 | **V8.3.4** | Data not unnecessarily exposed | Encryption prevents access even if file is copied/shared | L2 |
 
 ### ISO 27001:2022
@@ -1271,8 +1271,8 @@ Write-Warning "This is a P1 security incident. Document everything."
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  Personal          → No protection. Personal content only.       │
-│  DCE-Internal      → Encrypted to SG-DCE-AllStaff. DEFAULT.     │
-│  DCE-Confidential  → Encrypted to SG-DCE-Leadership ONLY.       │
+│  DCE-Internal      → Encrypted to AllStaff. DEFAULT.     │
+│  DCE-Confidential  → Encrypted to Managers ONLY.       │
 │  Corp-Confidential → Encrypted to SG-Corp-AllBrands.            │
 │                                                                  │
 │  🔑 Encryption = file-level protection that travels with doc    │
@@ -1288,11 +1288,11 @@ Write-Warning "This is a P1 security incident. Document everything."
 
 | Group | Type | Membership Rule | Used By Labels |
 |-------|------|----------------|----------------|
-| `SG-DCE-AllStaff` | Dynamic Security | `department contains "Delta Crown" OR companyName contains "Delta Crown Extensions"` | DCE-Internal |
-| `SG-DCE-Leadership` | Dynamic Security | `companyName contains "Delta Crown" AND (jobTitle contains Manager/Director/VP/Chief/President)` | DCE-Internal, DCE-Confidential |
+| `AllStaff` | Dynamic Security | `department contains "Delta Crown" OR companyName contains "Delta Crown Extensions"` | DCE-Internal |
+| `Managers` | Dynamic Security | `companyName contains "Delta Crown" AND (jobTitle contains Manager/Director/VP/Chief/President)` | DCE-Internal, DCE-Confidential |
 | `SG-Corp-IT-Admins` | Static Security | Manual membership (≤3 members) | All encrypted labels (break-glass) |
 | `SG-Corp-AllBrands` | Dynamic Security | `companyName contains "Delta Crown" OR companyName contains "Bishops" OR ...` | Corporate-Confidential |
-| `SG-DCE-Marketing` | Dynamic Security | `department contains "Marketing" AND companyName contains "Delta Crown"` | Not directly (DLP/permissions) |
+| `Marketing` | Dynamic Security | `department contains "Marketing" AND companyName contains "Delta Crown"` | Not directly (DLP/permissions) |
 
 ## Appendix C: Colour Reference
 

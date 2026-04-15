@@ -251,7 +251,7 @@ function Test-AzureADGroups {
     Write-Log "`n[VERIFY] Azure AD Dynamic Groups" "VERIFY"
     
     $results = @()
-    $groups = @("SG-DCE-AllStaff", "SG-DCE-Leadership")
+    $groups = @("AllStaff", "Managers")
     
     try {
         # Use existing Graph connection (no separate Connect-MgGraph)

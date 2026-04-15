@@ -59,16 +59,16 @@ Import-Module (Join-Path $modulesPath "DeltaCrown.Common.psm1") -Force -ErrorAct
 
 $script:AuditResults = [System.Collections.ArrayList]::new()
 $script:GroupSimulation = @{
-    "SG-DCE-AllStaff" = {
+    "AllStaff" = {
         param($user)
         $user.CompanyName -eq "Delta Crown Extensions"
     }
-    "SG-DCE-Leadership" = {
+    "Managers" = {
         param($user)
         $user.CompanyName -eq "Delta Crown Extensions" -and
         ($user.JobTitle -match "Manager|Director|VP|Vice President|Chief|Head of|Lead")
     }
-    "SG-DCE-Marketing" = {
+    "Marketing" = {
         param($user)
         $user.CompanyName -eq "Delta Crown Extensions" -and
         ($user.Department -match "Marketing")
@@ -150,9 +150,9 @@ function Format-AuditReport {
     Write-DeltaCrownLog "  UNASSIGNED (no company):   $unassigned" $(if ($unassigned -gt 0) { "WARNING" } else { "SUCCESS" })
     Write-DeltaCrownLog "" "INFO"
     Write-DeltaCrownLog "DCE DYNAMIC GROUP SIMULATION:" "INFO"
-    Write-DeltaCrownLog "  Would join SG-DCE-AllStaff:   $dceUsers" "INFO"
-    Write-DeltaCrownLog "  Would join SG-DCE-Leadership: $leadershipMatch" "INFO"
-    Write-DeltaCrownLog "  Would join SG-DCE-Marketing:  $marketingMatch" "INFO"
+    Write-DeltaCrownLog "  Would join AllStaff:   $dceUsers" "INFO"
+    Write-DeltaCrownLog "  Would join Managers: $leadershipMatch" "INFO"
+    Write-DeltaCrownLog "  Would join Marketing:  $marketingMatch" "INFO"
     Write-DeltaCrownLog "" "INFO"
 
     # Brand breakdown
@@ -266,9 +266,9 @@ Write-DeltaCrownLog "Auditing user properties..." "INFO"
 
 foreach ($user in $allUsers) {
     $brand = Get-UserBrandAssignment -User $user
-    $matchesAllStaff = Test-DynamicGroupMatch -User $user -GroupName "SG-DCE-AllStaff"
-    $matchesLeadership = Test-DynamicGroupMatch -User $user -GroupName "SG-DCE-Leadership"
-    $matchesMarketing = Test-DynamicGroupMatch -User $user -GroupName "SG-DCE-Marketing"
+    $matchesAllStaff = Test-DynamicGroupMatch -User $user -GroupName "AllStaff"
+    $matchesLeadership = Test-DynamicGroupMatch -User $user -GroupName "Managers"
+    $matchesMarketing = Test-DynamicGroupMatch -User $user -GroupName "Marketing"
 
     $auditEntry = [PSCustomObject]@{
         UPN              = $user.UserPrincipalName
@@ -298,7 +298,7 @@ foreach ($user in $allUsers) {
 if ($ShowGroupMembership) {
     Write-DeltaCrownLog "Fetching actual dynamic group memberships..." "INFO"
 
-    $targetGroups = @("SG-DCE-AllStaff", "SG-DCE-Leadership", "SG-DCE-Marketing")
+    $targetGroups = @("AllStaff", "Managers", "Marketing")
 
     foreach ($groupName in $targetGroups) {
         try {
@@ -310,7 +310,7 @@ if ($ShowGroupMembership) {
                 }
 
                 foreach ($entry in $script:AuditResults) {
-                    $propName = "Actual_$($groupName -replace 'SG-DCE-', '')"
+                    $propName = "Actual_$groupName"
                     $entry | Add-Member -NotePropertyName $propName -NotePropertyValue ($entry.UPN -in $memberUpns) -Force
                 }
 

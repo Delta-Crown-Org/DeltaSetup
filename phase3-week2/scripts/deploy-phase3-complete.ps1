@@ -143,7 +143,7 @@ foreach ($siteUrl in $sitesToSecure) {
         }
         
         # Add Azure AD groups
-        $groups = @("SG-DCE-AllStaff", "SG-DCE-Leadership", "SG-DCE-Managers")
+        $groups = @("AllStaff", "Managers", "Managers")
         Write-Log "  Configured group access (manual verification recommended)" "SUCCESS"
         
         # Disable external sharing at site level

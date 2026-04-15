@@ -48,7 +48,7 @@ pwsh -File ./5.1-Exchange-Setup.ps1 -VerifyOnly
    - Whether Exchange Online is active (`Get-OrganizationConfig`)
    - Existing mailboxes (user + shared)
    - Existing distribution groups and dynamic distribution groups
-   - Azure AD groups matching `DCE-*` (expects 4: DCE-AllStaff, DCE-Managers, DCE-Stylists, DCE-External)
+   - Azure AD security groups (expects 4: AllStaff, Managers, Stylists, External)
    - Licensed users in the tenant
 
 **How to interpret the output:**
@@ -57,7 +57,7 @@ pwsh -File ./5.1-Exchange-Setup.ps1 -VerifyOnly
 |------|---------|-----------------|
 | `Exchange Active` | `True` | `False` → need a licensed user first (see Section 3) |
 | `Mailboxes Found` | ≥ 1 (Lindy's mailbox) | `0` → no licensed users yet |
-| `Azure AD Groups` | 4 (DCE-AllStaff, DCE-Managers, DCE-Stylists, DCE-External) | < 4 → groups missing from Phase 2 |
+| `Azure AD Groups` | 4 (AllStaff, Managers, Stylists, External) | < 4 → groups missing from Phase 2 |
 | `Licensed Users` | ≥ 1 | `0` → Exchange won't activate without one |
 | `Errors` | `0` | Any errors → read the message, fix, re-run |
 
@@ -158,9 +158,9 @@ Both connect cross-tenant to the deltacrown.com organization.
 - `stylists@deltacrown.com` — DCE users with "Stylist" in their title
 
 **3 Shared Mailboxes:**
-- `operations@deltacrown.com` — Send-As: DCE-AllStaff, Full Access: DCE-Managers
-- `bookings@deltacrown.com` — Send-As: DCE-AllStaff, Full Access: DCE-AllStaff, auto-reply enabled
-- `info@deltacrown.com` — Send-As: DCE-AllStaff, Full Access: DCE-Managers, auto-reply enabled
+- `operations@deltacrown.com` — Send-As: AllStaff, Full Access: Managers
+- `bookings@deltacrown.com` — Send-As: AllStaff, Full Access: AllStaff, auto-reply enabled
+- `info@deltacrown.com` — Send-As: AllStaff, Full Access: Managers, auto-reply enabled
 
 ### Dry Run (WhatIf)
 
@@ -244,7 +244,7 @@ Get-Mailbox -RecipientTypeDetails SharedMailbox | Format-Table DisplayName, Prim
 |---------|-------|-----|
 | **"Exchange not active"** / `Get-OrganizationConfig` fails | No user has an Exchange Online license in the tenant | Assign a license to Lindy Sturgill first (see [Section 3](#3-if-exchange-online-is-not-active-yet)) |
 | **Cross-tenant auth failure** | Missing `-Organization deltacrown.com` or admin doesn't have Exchange Admin role | Verify you're using `tyler.granlund-admin@httbrands.com` and that this account has Global Admin (which includes Exchange Admin) on deltacrown.com |
-| **"Group not found"** when setting permissions | Azure AD groups (DCE-AllStaff, etc.) are security groups, not mail-enabled | Security groups work for mailbox permissions — this shouldn't error. If it does, verify the group exists: `Get-MgGroup -Filter "displayName eq 'DCE-AllStaff'"` |
+| **"Group not found"** when setting permissions | Azure AD groups (AllStaff, etc.) are security groups, not mail-enabled | Security groups work for mailbox permissions — this shouldn't error. If it does, verify the group exists: `Get-MgGroup -Filter "displayName eq 'AllStaff'"` |
 | **"Mailbox already exists"** | Script is **idempotent** — it skips existing resources | Safe to re-run. The script checks for existing DDGs and mailboxes before creating them. |
 | **Connection timeout / "session expired"** | Stale PowerShell sessions | Disconnect everything and retry: `Disconnect-ExchangeOnline -Confirm:$false; Disconnect-MgGraph` then re-run the script |
 | **"Access denied" or 403** | Admin account lacks permissions on the DCE tenant | Verify Global Admin role assignment at [entra.microsoft.com](https://entra.microsoft.com) → switch to DCE tenant → Roles |
@@ -267,9 +267,9 @@ Get-Mailbox -RecipientTypeDetails SharedMailbox | Format-Table DisplayName, Prim
 
 | Name | Email | Send-As | Full Access | Auto-Reply |
 |------|-------|---------|-------------|------------|
-| DCE Operations | `operations@deltacrown.com` | DCE-AllStaff | DCE-Managers | None |
-| DCE Bookings | `bookings@deltacrown.com` | DCE-AllStaff | DCE-AllStaff | _"...confirm your booking within 24 hours."_ |
-| DCE Info | `info@deltacrown.com` | DCE-AllStaff | DCE-Managers | _"...respond within 48 hours."_ |
+| DCE Operations | `operations@deltacrown.com` | AllStaff | Managers | None |
+| DCE Bookings | `bookings@deltacrown.com` | AllStaff | AllStaff | _"...confirm your booking within 24 hours."_ |
+| DCE Info | `info@deltacrown.com` | AllStaff | Managers | _"...respond within 48 hours."_ |
 
 ### Native Users (4)
 
@@ -282,7 +282,7 @@ Get-Mailbox -RecipientTypeDetails SharedMailbox | Format-Table DisplayName, Prim
 
 ### Architecture Note
 
-> Azure AD dynamic security groups (DCE-AllStaff, DCE-Managers, DCE-Stylists, DCE-External) handle SharePoint/Teams permissions. Exchange Dynamic Distribution Groups provide independent mail routing at `@deltacrown.com`. This hybrid group strategy gives maximum versatility on Business Premium licensing — shared mailboxes cost nothing extra.
+> Azure AD dynamic security groups (AllStaff, Managers, Stylists, External) handle SharePoint/Teams permissions. Exchange Dynamic Distribution Groups provide independent mail routing at `@deltacrown.com`. This hybrid group strategy gives maximum versatility on Business Premium licensing — shared mailboxes cost nothing extra.
 
 ---
 

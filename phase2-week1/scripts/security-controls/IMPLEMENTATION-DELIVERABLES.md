@@ -158,7 +158,7 @@ $TestConfig = @{
 - Integration-ready for existing verification workflow
 
 **Control Verification Functions**:
-- `Test-Control1-DynamicGroups()` - Verifies SG-DCE-* groups
+- `Test-Control1-DynamicGroups()` - Verifies AllStaff, Managers, Stylists, External groups
 - `Test-Control2-UniquePermissions()` - Checks permission inheritance
 - `Test-Control3-SensitivityLabels()` - Validates DCE-Internal label
 - `Test-Control4-DLPPolicies()` - Checks DCE-Data-Protection policy

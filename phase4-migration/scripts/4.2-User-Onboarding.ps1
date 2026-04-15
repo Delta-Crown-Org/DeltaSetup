@@ -78,7 +78,7 @@ Import-Module (Join-Path $modulesPath "DeltaCrown.Common.psm1") -Force -ErrorAct
 # ============================================================================
 
 $script:UpdateResults = [System.Collections.ArrayList]::new()
-$script:TargetGroups = @("SG-DCE-AllStaff", "SG-DCE-Leadership", "SG-DCE-Marketing")
+$script:TargetGroups = @("AllStaff", "Managers", "Marketing")
 
 # Properties that trigger dynamic group evaluation
 $script:GroupTriggerProperties = @("CompanyName", "JobTitle", "Department")
@@ -245,8 +245,8 @@ function Wait-ForGroupEvaluation {
         foreach ($upn in $UpdatedUPNs) {
             $user = Get-MgUser -UserId $upn -Property "CompanyName" -ErrorAction SilentlyContinue
             if ($user -and $user.CompanyName -eq "Delta Crown Extensions") {
-                # Check if user is in SG-DCE-AllStaff
-                $group = Get-MgGroup -Filter "displayName eq 'SG-DCE-AllStaff'" -ErrorAction SilentlyContinue
+                # Check if user is in AllStaff
+                $group = Get-MgGroup -Filter "displayName eq 'AllStaff'" -ErrorAction SilentlyContinue
                 if ($group) {
                     $isMember = Get-MgGroupMember -GroupId $group.Id -Filter "id eq '$($user.Id)'" -ErrorAction SilentlyContinue
                     if ($isMember) {
@@ -258,7 +258,7 @@ function Wait-ForGroupEvaluation {
 
         if ($verified -eq $total) {
             $allVerified = $true
-            Write-DeltaCrownLog "✅ All $total users verified in SG-DCE-AllStaff" "SUCCESS"
+            Write-DeltaCrownLog "✅ All $total users verified in AllStaff" "SUCCESS"
         }
         else {
             Write-DeltaCrownLog "  $verified / $total verified — waiting ${PollIntervalSeconds}s..." "INFO"

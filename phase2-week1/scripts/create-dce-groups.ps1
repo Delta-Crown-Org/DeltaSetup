@@ -11,13 +11,13 @@ Write-Host "Tyler: you'll get a browser popup for Graph auth" -ForegroundColor Y
 Connect-MgGraph -Scopes "Group.ReadWrite.All","Directory.ReadWrite.All" -TenantId $tenantId
 
 $groups = @(
-    @{ N="DCE-AllStaff";  D="All Delta Crown Extensions staff"
+    @{ N="AllStaff";  D="All Delta Crown Extensions staff"
        M='(user.companyName -eq "Delta Crown Extensions")'; Nick="dce-allstaff" }
-    @{ N="DCE-Managers";  D="DCE management team"
+    @{ N="Managers";  D="DCE management team"
        M='(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Manager")'; Nick="dce-managers" }
-    @{ N="DCE-Stylists";  D="DCE stylists and technicians"
+    @{ N="Stylists";  D="DCE stylists and technicians"
        M='(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Stylist")'; Nick="dce-stylists" }
-    @{ N="DCE-External";  D="External partners for DCE"
+    @{ N="External";  D="External partners for DCE"
        M='(user.userType -eq "Guest") and (user.companyName -eq "Delta Crown Extensions")'; Nick="dce-external" }
 )
 

@@ -109,7 +109,7 @@ Set-PnPListItemPermission -List "Documents" `
 |-----------|----------------|---------|
 | `DCE-All-Franchisees` | `user.companyName -eq "Delta Crown Extensions"` | All franchise users |
 | `DCE-Operations` | `user.department -eq "Operations"` | Operations team |
-| `DCE-Leadership` | `user.jobTitle -contains "Director" -or user.jobTitle -contains "Manager"` | Leadership |
+| `Managers` | `user.jobTitle -contains "Director" -or user.jobTitle -contains "Manager"` | Leadership |
 | `DCE-Corporate-Only` | `user.userPrincipalName -endsWith "@httbrands.com"` | HTT corporate staff |
 
 **Required Entra ID Attributes:**
@@ -164,7 +164,7 @@ New-AzureADMSGroup `
 
 #### Level 4: Role-Based (Management)
 - **Content**: Management resources, confidential docs
-- **Target**: `DCE-Leadership` group
+- **Target**: `Managers` group
 - **Method**: Document library targeting
 
 **Implementation Steps:**
@@ -237,7 +237,7 @@ New-AzureADMSGroup `
 #### Policy 1: Require Compliant Device for Confidential Access
 ```
 Name: "CA-DCE-Confidential-DeviceRequired"
-Users: DCE-Leadership group
+Users: Managers group
 Cloud Apps: SharePoint Online, Exchange Online
 Conditions: None
 Grant: Require device compliance OR Hybrid Azure AD joined

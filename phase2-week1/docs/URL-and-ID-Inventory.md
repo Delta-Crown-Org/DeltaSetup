@@ -78,12 +78,12 @@ DCE-Hub Navigation (Inherits from Corp-Hub)
 
 | Group Name | Object ID | Type | Membership Rule |
 |------------|-----------|------|-----------------|
-| **SG-DCE-AllStaff** | *{GUID}* | Dynamic Security | `(user.department -contains "Delta Crown") -or (user.companyName -contains "Delta Crown Extensions")` |
-| **SG-DCE-Leadership** | *{GUID}* | Dynamic Security | `(user.companyName -contains "Delta Crown") -and ((user.jobTitle -contains "Manager") -or (user.jobTitle -contains "Director") -or (user.jobTitle -contains "VP"))` |
+| **AllStaff** | *{GUID}* | Dynamic Security | `(user.department -contains "Delta Crown") -or (user.companyName -contains "Delta Crown Extensions")` |
+| **Managers** | *{GUID}* | Dynamic Security | `(user.companyName -contains "Delta Crown") -and ((user.jobTitle -contains "Manager") -or (user.jobTitle -contains "Director") -or (user.jobTitle -contains "VP"))` |
 
 ### Group Usage Matrix
 
-| Resource | SG-DCE-AllStaff | SG-DCE-Leadership |
+| Resource | AllStaff | Managers |
 |----------|-----------------|-------------------|
 | DCE-Hub (Visitors) | ✅ | ✅ |
 | DCE-Hub (Members) | ✅ | ✅ |
@@ -137,7 +137,7 @@ DCE-Hub Navigation (Inherits from Corp-Hub)
 | Corp-IT | *Admin* | IT Staff | All Staff |
 | Corp-Finance | *Admin* | Finance Staff | Leadership Only |
 | Corp-Training | *Admin* | Training Staff | All Staff |
-| DCE-Hub | SG-DCE-Leadership | SG-DCE-AllStaff | SG-DCE-AllStaff |
+| DCE-Hub | Managers | AllStaff | AllStaff |
 
 ### Important Notes
 - **No Information Barriers** in Business Premium

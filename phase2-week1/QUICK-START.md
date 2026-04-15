@@ -40,8 +40,8 @@ Get-Content .\docs\URL-and-ID-Inventory.md
 
 | Group | Rule |
 |-------|------|
-| SG-DCE-AllStaff | Department contains "Delta Crown" OR Company contains "Delta Crown Extensions" |
-| SG-DCE-Leadership | Company contains "Delta Crown" AND Title contains Manager/Director/VP |
+| AllStaff | Department contains "Delta Crown" OR Company contains "Delta Crown Extensions" |
+| Managers | Company contains "Delta Crown" AND Title contains Manager/Director/VP |
 
 ---
 

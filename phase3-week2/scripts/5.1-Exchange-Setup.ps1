@@ -8,8 +8,8 @@
 #              Dynamic Distribution Groups mirroring Azure AD groups, shared
 #              mailboxes with permissions, and auto-reply configurations.
 #              Supports -VerifyOnly for Phase 0 pre-flight checks.
-# DEPENDS ON: Azure AD groups (DCE-AllStaff, DCE-Managers, DCE-Stylists,
-#             DCE-External) already exist. At least one licensed user for
+# DEPENDS ON: Azure AD groups (AllStaff, Managers, Stylists,
+#             External) already exist. At least one licensed user for
 #             Exchange activation.
 # ADR: ADR-002 Phase 5 — Exchange Online Integration
 # ============================================================================
@@ -118,22 +118,22 @@ $SharedMailboxes = @(
     @{
         Name       = "DCE Operations"
         Email      = "operations@$Organization"
-        SendAs     = "DCE-AllStaff"
-        FullAccess = "DCE-Managers"
+        SendAs     = "AllStaff"
+        FullAccess = "Managers"
         AutoReply  = $null
     },
     @{
         Name       = "DCE Bookings"
         Email      = "bookings@$Organization"
-        SendAs     = "DCE-AllStaff"
-        FullAccess = "DCE-AllStaff"
+        SendAs     = "AllStaff"
+        FullAccess = "AllStaff"
         AutoReply  = "Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours."
     },
     @{
         Name       = "DCE Info"
         Email      = "info@$Organization"
-        SendAs     = "DCE-AllStaff"
-        FullAccess = "DCE-Managers"
+        SendAs     = "AllStaff"
+        FullAccess = "Managers"
         AutoReply  = "Thank you for contacting Delta Crown Extensions. We will respond within 48 hours."
     }
 )
@@ -238,17 +238,22 @@ function Invoke-VerifyOnly {
     try {
         Connect-GraphCrossTenant
 
-        Write-DeltaCrownLog "Listing DCE-* Azure AD groups..." "INFO"
-        $groups = Get-MgGroup -Filter "startsWith(displayName,'DCE-')" -All -ErrorAction Stop
+        Write-DeltaCrownLog "Listing security groups (AllStaff, Managers, Stylists, External)..." "INFO"
+        $expectedGroupNames = @('AllStaff', 'Managers', 'Stylists', 'External')
+        $groups = @()
+        foreach ($gn in $expectedGroupNames) {
+            $found = Get-MgGroup -Filter "displayName eq '$gn'" -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($found) { $groups += $found }
+        }
         if ($groups) {
             $report.AzureADGroups = @($groups | Select-Object DisplayName, Id, MailEnabled, SecurityEnabled, GroupTypes)
-            Write-DeltaCrownLog "  Found $($groups.Count) DCE-* group(s)" "INFO"
+            Write-DeltaCrownLog "  Found $($groups.Count) of $($expectedGroupNames.Count) expected group(s)" "INFO"
             foreach ($g in $groups) {
                 $mailStatus = if ($g.MailEnabled) { "Mail-Enabled" } else { "Not Mail-Enabled" }
                 Write-DeltaCrownLog "    - $($g.DisplayName) [$mailStatus] (Security=$($g.SecurityEnabled))" "INFO"
             }
         } else {
-            Write-DeltaCrownLog "  No DCE-* groups found - this is unexpected!" "WARNING"
+            Write-DeltaCrownLog "  No security groups found - this is unexpected!" "WARNING"
         }
 
         Write-DeltaCrownLog "Listing licensed users..." "INFO"

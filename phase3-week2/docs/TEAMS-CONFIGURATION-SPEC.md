@@ -8,8 +8,8 @@
 | **Description** | Daily operations hub for Delta Crown Extensions franchise |
 | **Visibility** | Private |
 | **Mail Nickname** | dce-operations |
-| **Owners** | Members of SG-DCE-Leadership |
-| **Members** | Members of SG-DCE-AllStaff |
+| **Owners** | Members of Managers |
+| **Members** | Members of AllStaff |
 | **Guest Access** | Disabled |
 | **Fun Settings** | Giphy: Off, Stickers: Off, Custom Memes: Off |
 | **Messaging Settings** | Owner can delete messages: Yes |
@@ -106,7 +106,7 @@
 |----------|-------|
 | **Type** | Private |
 | **Description** | Management discussions — financials, HR, strategy |
-| **Members** | SG-DCE-Leadership ONLY |
+| **Members** | Managers ONLY |
 | **Files Location** | /sites/dce-operations-Leadership/ (SEPARATE SPO SITE) |
 
 **⚠️ IMPORTANT**: Private channels automatically create a separate SharePoint site collection. This site must be:
@@ -137,8 +137,8 @@
 |----------|-------|
 | **Display Name** | DCE Operations |
 | **Email** | operations@deltacrown.com |
-| **Send-As Permissions** | SG-DCE-AllStaff |
-| **Full Access** | SG-DCE-Leadership |
+| **Send-As Permissions** | AllStaff |
+| **Full Access** | Managers |
 | **Auto-Reply** | Off |
 | **Teams Integration** | Forward to General channel email |
 
@@ -147,8 +147,8 @@
 |----------|-------|
 | **Display Name** | DCE Bookings |
 | **Email** | bookings@deltacrown.com |
-| **Send-As Permissions** | SG-DCE-AllStaff |
-| **Full Access** | SG-DCE-AllStaff |
+| **Send-As Permissions** | AllStaff |
+| **Full Access** | AllStaff |
 | **Auto-Reply** | "Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours." |
 | **Teams Integration** | Forward to Bookings channel email |
 
@@ -157,8 +157,8 @@
 |----------|-------|
 | **Display Name** | DCE Info |
 | **Email** | info@deltacrown.com |
-| **Send-As Permissions** | SG-DCE-AllStaff |
-| **Full Access** | SG-DCE-Leadership |
+| **Send-As Permissions** | AllStaff |
+| **Full Access** | Managers |
 | **Auto-Reply** | "Thank you for contacting Delta Crown Extensions. We will respond within 48 hours." |
 | **Teams Integration** | Group mailbox (team-level) |
 
@@ -240,8 +240,8 @@ New-MgTeamChannel -TeamId $team.Id `
     -Description "Management discussions" `
     -MembershipType "Private"
 
-# 5. Add Owners (SG-DCE-Leadership members)
-# 6. Add Members (SG-DCE-AllStaff members)
+# 5. Add Owners (Managers members)
+# 6. Add Members (AllStaff members)
 # 7. Configure Tabs per channel
 ```
 
@@ -256,12 +256,12 @@ After deployment, verify:
 - [ ] Daily Ops channel has Inventory tab
 - [ ] Bookings channel has Booking Tracker and Calendar tabs
 - [ ] Marketing channel has Brand Assets and Campaigns tabs
-- [ ] Leadership channel accessible only to SG-DCE-Leadership
+- [ ] Leadership channel accessible only to Managers
 - [ ] Leadership channel has Client Records and Docs tabs
 - [ ] Private channel SPO site associated with DCE Hub
 - [ ] Shared mailboxes sending/receiving correctly
 - [ ] Mailbox forwarding to channels working
 - [ ] Guest access confirmed disabled
 - [ ] File sync between channels and SharePoint working
-- [ ] Team members match SG-DCE-AllStaff membership
-- [ ] Team owners match SG-DCE-Leadership membership
+- [ ] Team members match AllStaff membership
+- [ ] Team owners match Managers membership

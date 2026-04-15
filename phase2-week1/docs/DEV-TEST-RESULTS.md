@@ -154,8 +154,8 @@ Configuration file `DeltaCrown.Config.psd1` loaded successfully. All required se
 
 | Group Name | Type | Membership Rule |
 |------------|------|-----------------|
-| SG-DCE-AllStaff | Dynamic Security | `(user.department -contains "Delta Crown") -or (user.companyName -contains "Delta Crown Extensions")` |
-| SG-DCE-Leadership | Dynamic Security | `(user.companyName -contains "Delta Crown") -and (jobTitle contains Manager/Director/VP/Chief/President)` |
+| AllStaff | Dynamic Security | `(user.department -contains "Delta Crown") -or (user.companyName -contains "Delta Crown Extensions")` |
+| Managers | Dynamic Security | `(user.companyName -contains "Delta Crown") -and (jobTitle contains Manager/Director/VP/Chief/President)` |
 
 **Group Properties:**
 - ✅ Security Enabled: Yes
@@ -283,7 +283,7 @@ Get-PnPTenantSite | Where-Object { $_.Url -match "corp-|dce-" }
 Get-PnPHubSite
 
 # Verify dynamic groups
-Get-MgGroup | Where-Object { $_.DisplayName -like "SG-DCE-*" }
+Get-MgGroup | Where-Object { $_.DisplayName -in @('AllStaff', 'Managers', 'Stylists', 'External') }
 ```
 
 ---
@@ -337,13 +337,13 @@ Get-MgGroup | Where-Object { $_.DisplayName -like "SG-DCE-*" }
 
 ### Appendix C: Dynamic Group Rules
 
-**SG-DCE-AllStaff:**
+**AllStaff:**
 ```powershell
 (user.department -contains "Delta Crown") -or 
 (user.companyName -contains "Delta Crown Extensions")
 ```
 
-**SG-DCE-Leadership:**
+**Managers:**
 ```powershell
 (user.companyName -contains "Delta Crown") -and 
 (

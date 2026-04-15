@@ -78,7 +78,7 @@ $DynamicGroups = @(
     @{
         DisplayName = "$GroupPrefix-AllStaff"
         Description = "All Delta Crown Extensions staff - auto-populated based on department or company attribute"
-        MailNickname = "sg-dce-allstaff"
+        MailNickname = "allstaff"
         MembershipRule = @'
 (user.department -contains "Delta Crown") -or 
 (user.companyName -contains "Delta Crown Extensions")
@@ -92,7 +92,7 @@ $DynamicGroups = @(
     @{
         DisplayName = "$GroupPrefix-Leadership"
         Description = "Delta Crown Extensions leadership team - Managers, Directors, and VPs"
-        MailNickname = "sg-dce-leadership"
+        MailNickname = "managers"
         MembershipRule = @'
 (user.companyName -contains "Delta Crown") -and 
 (
@@ -418,8 +418,8 @@ try {
 
 | Group Name | Purpose | Membership Rule |
 |------------|---------|-----------------|
-| SG-DCE-AllStaff | All DCE employees | Department contains "Delta Crown" OR Company contains "Delta Crown Extensions" |
-| SG-DCE-Leadership | Management tier | Company contains "Delta Crown" AND (Title contains Manager/Director/VP/etc.) |
+| AllStaff | All DCE employees | Department contains "Delta Crown" OR Company contains "Delta Crown Extensions" |
+| Managers | Management tier | Company contains "Delta Crown" AND (Title contains Manager/Director/VP/etc.) |
 
 ### SharePoint Permission Strategy
 
@@ -427,17 +427,17 @@ try {
 Use these groups for site permissions instead:
 
 1. **Site-Level Permissions**
-   - Assign SG-DCE-AllStaff to "DCE Members" group on DCE sites
-   - Assign SG-DCE-Leadership to "DCE Owners" or custom "Leadership" group
+   - Assign AllStaff to "DCE Members" group on DCE sites
+   - Assign Managers to "DCE Owners" or custom "Leadership" group
 
 2. **Library/Folder-Level Permissions**
    - Break inheritance on sensitive libraries
-   - Assign SG-DCE-Leadership for confidential docs
+   - Assign Managers for confidential docs
    - NEVER use "Everyone" or "All Users" groups
 
 3. **Hub Permissions**
    - Corp-Hub: Use Corp-specific groups (not DCE)
-   - DCE-Hub: Use SG-DCE-AllStaff for visitors, SG-DCE-Leadership for owners
+   - DCE-Hub: Use AllStaff for visitors, Managers for owners
 
 ### Sync Time Expectations
 - Initial group population: 5-30 minutes

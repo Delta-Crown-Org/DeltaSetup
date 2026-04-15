@@ -121,24 +121,24 @@ $script:LeadershipChannelSite = [PSCustomObject]@{
 # All other sites use explicit security group assignments.
 $script:PermissionMatrix = @{
     "dce-hub" = @{
-        "SG-DCE-AllStaff"    = "Read"
-        "SG-DCE-Leadership"  = "Full Control"
-        "SG-DCE-Marketing"   = "Read"
+        "AllStaff"    = "Read"
+        "Managers"  = "Full Control"
+        "Marketing"   = "Read"
     }
     "dce-clientservices" = @{
-        "SG-DCE-AllStaff"    = "Contribute"
-        "SG-DCE-Leadership"  = "Full Control"
-        "SG-DCE-Marketing"   = "Read"
+        "AllStaff"    = "Contribute"
+        "Managers"  = "Full Control"
+        "Marketing"   = "Read"
     }
     "dce-marketing" = @{
-        "SG-DCE-AllStaff"    = "Read"
-        "SG-DCE-Leadership"  = "Full Control"
-        "SG-DCE-Marketing"   = "Edit"
+        "AllStaff"    = "Read"
+        "Managers"  = "Full Control"
+        "Marketing"   = "Edit"
     }
     "dce-docs" = @{
-        "SG-DCE-AllStaff"    = "Read"
-        "SG-DCE-Leadership"  = "Full Control"
-        "SG-DCE-Marketing"   = "Read"
+        "AllStaff"    = "Read"
+        "Managers"  = "Full Control"
+        "Marketing"   = "Read"
     }
 }
 
@@ -154,19 +154,19 @@ $script:ForbiddenGroupPatterns = @(
 # --- Dynamic Group Expectations -----------------------------------------------
 $script:ExpectedGroups = @(
     @{
-        DisplayName      = "SG-DCE-AllStaff"
+        DisplayName      = "AllStaff"
         ExpectedMinCount = 1
         ExpectedMaxCount = 300   # Business Premium max 300 users
         MustBeDynamic    = $true
     },
     @{
-        DisplayName      = "SG-DCE-Leadership"
+        DisplayName      = "Managers"
         ExpectedMinCount = 1
         ExpectedMaxCount = 30
         MustBeDynamic    = $true
     },
     @{
-        DisplayName      = "SG-DCE-Marketing"
+        DisplayName      = "Marketing"
         ExpectedMinCount = 0
         ExpectedMaxCount = 50
         MustBeDynamic    = $true

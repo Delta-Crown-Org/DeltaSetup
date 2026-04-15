@@ -104,7 +104,7 @@
 │  │  LEADERSHIP PRIVATE CHANNEL SITE (Auto-created)             │ │
 │  │  URL: /sites/dce-operations-Leadership (auto-generated)     │ │
 │  │  Type: Team Site — PRIVATE CHANNEL SITE                     │ │
-│  │  Access: SG-DCE-Leadership ONLY                              │ │
+│  │  Access: Managers ONLY                              │ │
 │  │  Hub: Must be manually associated with DCE Hub               │ │
 │  └─────────────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────────┘
@@ -114,14 +114,14 @@
 
 ```
 AZURE AD DYNAMIC GROUPS
-├── SG-DCE-AllStaff ──────────────────────────────────────────────┐
+├── AllStaff ──────────────────────────────────────────────┐
 │   Rule: department contains "Delta Crown"                       │
 │                                                                  │
-├── SG-DCE-Leadership ────────────────────────────────────────────┤
+├── Managers ────────────────────────────────────────────┤
 │   Rule: company contains "Delta Crown" AND                      │
 │         title contains Manager|Director|VP|Chief                │
 │                                                                  │
-└── SG-DCE-Marketing (🆕 Phase 3) ───────────────────────────────┤
+└── Marketing (🆕 Phase 3) ───────────────────────────────┤
     Rule: department eq "Delta Crown Marketing"                   │
                                                                    │
                                                                    │

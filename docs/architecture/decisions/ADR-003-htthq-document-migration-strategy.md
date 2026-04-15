@@ -298,9 +298,9 @@ These users already exist on the tenant. We need to:
 
 | Property | Purpose | Example Value | Group Triggered |
 |----------|---------|---------------|-----------------|
-| `companyName` | Brand assignment | "Delta Crown Extensions" | SG-DCE-AllStaff |
-| `jobTitle` | Role-based access | "Operations Manager" | SG-DCE-Leadership |
-| `department` | Function-based access | "Marketing" | SG-DCE-Marketing |
+| `companyName` | Brand assignment | "Delta Crown Extensions" | AllStaff |
+| `jobTitle` | Role-based access | "Operations Manager" | Managers |
+| `department` | Function-based access | "Marketing" | Marketing |
 | `usageLocation` | Compliance | "AU" | Data residency |
 
 ### Onboarding Script Requirements

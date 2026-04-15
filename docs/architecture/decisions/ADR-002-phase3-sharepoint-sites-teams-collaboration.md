@@ -293,8 +293,8 @@ DCE Hub (Communication Site)
 
 #### Team: "Delta Crown Operations"
 **Visibility**: Private
-**Owners**: SG-DCE-Leadership members
-**Members**: SG-DCE-AllStaff members
+**Owners**: Managers members
+**Members**: AllStaff members
 
 | Channel | Type | SharePoint Library | Purpose |
 |---------|------|-------------------|---------|
@@ -335,16 +335,16 @@ DCE Hub (Communication Site)
 │  └── SharePoint Admin, Global Admin                  │
 │                                                      │
 │  Tier 1: Azure AD Dynamic Groups                    │
-│  ├── SG-DCE-AllStaff (auto from department attr)    │
-│  ├── SG-DCE-Leadership (auto from title attr)       │
-│  └── SG-DCE-Marketing (NEW — needed for Phase 3)   │
+│  ├── AllStaff (auto from department attr)    │
+│  ├── Managers (auto from title attr)       │
+│  └── Marketing (NEW — needed for Phase 3)   │
 │                                                      │
 │  Tier 2: Site Permissions (ALL unique, NO inherit)  │
-│  ├── DCE Hub: SG-DCE-AllStaff=Read                  │
+│  ├── DCE Hub: AllStaff=Read                  │
 │  ├── DCE-Operations: Teams membership manages       │
-│  ├── DCE-ClientServices: SG-DCE-AllStaff=Contribute │
+│  ├── DCE-ClientServices: AllStaff=Contribute │
 │  ├── DCE-Marketing: AllStaff=Read, Marketing=Edit   │
-│  └── DCE-Docs: SG-DCE-AllStaff=Read, Leaders=Edit  │
+│  └── DCE-Docs: AllStaff=Read, Leaders=Edit  │
 │                                                      │
 │  Tier 3: Sensitivity Labels                         │
 │  └── DCE-Internal auto-applied to all DCE sites     │
@@ -357,10 +357,10 @@ DCE Hub (Communication Site)
 **New Security Group Required**:
 | Group | Rule | Purpose |
 |-------|------|---------|
-| SG-DCE-Marketing | `(user.department -eq "Delta Crown Marketing")` | Marketing site edit access |
+| Marketing | `(user.department -eq "Delta Crown Marketing")` | Marketing site edit access |
 
 **Permission Matrix**:
-| Site | SG-DCE-AllStaff | SG-DCE-Leadership | SG-DCE-Marketing | Teams Managed |
+| Site | AllStaff | Managers | Marketing | Teams Managed |
 |------|----------------|-------------------|-------------------|---------------|
 | DCE Hub | Read | Full Control | Read | No |
 | DCE-Operations | — | — | — | Yes (Team membership) |
@@ -437,9 +437,9 @@ DCE Hub (Communication Site)
 | Light Accent | #D4B43F | `{LightAccent}` |
 | Dark Accent | #B08D1F | `{DarkAccent}` |
 | Logo URL | /sites/dce-hub/SiteAssets/logo.png | /sites/`{prefix}`-hub/SiteAssets/logo.png |
-| AllStaff Group | SG-DCE-AllStaff | SG-`{BrandPrefix}`-AllStaff |
-| Leadership Group | SG-DCE-Leadership | SG-`{BrandPrefix}`-Leadership |
-| Marketing Group | SG-DCE-Marketing | SG-`{BrandPrefix}`-Marketing |
+| AllStaff Group | AllStaff | SG-`{BrandPrefix}`-AllStaff |
+| Leadership Group | Managers | SG-`{BrandPrefix}`-Leadership |
+| Marketing Group | Marketing | SG-`{BrandPrefix}`-Marketing |
 | Operations Email | operations@deltacrown.com | operations@`{BrandDomain}` |
 | Bookings Email | bookings@deltacrown.com | bookings@`{BrandDomain}` |
 | Location Choices | (brand-specific locations) | `{LocationChoices}` |
@@ -696,8 +696,8 @@ Phase3 = @{
 □ Execute 3.2-Teams-Provisioning.ps1
 □ Create M365 Group for "Delta Crown Operations"
 □ Enable as Teams team (Private)
-□ Set owners: SG-DCE-Leadership members
-□ Set members: SG-DCE-AllStaff members
+□ Set owners: Managers members
+□ Set members: AllStaff members
 □ Create standard channels:
   ├── Daily Ops (with Daily Ops library)
   ├── Bookings (with Bookings list tab)
@@ -720,7 +720,7 @@ Phase3 = @{
 ### Day 5-6: Security Hardening
 ```
 □ Execute 3.3-Security-Hardening.ps1
-□ Create SG-DCE-Marketing dynamic group
+□ Create Marketing dynamic group
 □ Break permission inheritance on ALL DCE sites:
   ├── DCE Hub
   ├── DCE-Operations
@@ -733,7 +733,7 @@ Phase3 = @{
   ├── "Everyone except external users"
   └── "All Users"
 □ Apply security groups per permission matrix:
-  ├── DCE Hub: SG-DCE-AllStaff=Read, SG-DCE-Leadership=Full Control
+  ├── DCE Hub: AllStaff=Read, Managers=Full Control
   ├── DCE-Operations: Managed by Teams
   ├── DCE-ClientServices: AllStaff=Contribute, Leadership=Full Control
   ├── DCE-Marketing: AllStaff=Read, Marketing=Edit, Leadership=Full Control
@@ -867,4 +867,4 @@ See `tests/architecture/test_adr_002_phase3_sites_teams.py` for automated checks
 4. Remove shared mailboxes
 5. Dissociate sites from hub
 6. Remove SharePoint sites
-7. Remove new security groups (SG-DCE-Marketing)
+7. Remove new security groups (Marketing)

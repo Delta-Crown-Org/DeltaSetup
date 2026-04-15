@@ -83,8 +83,8 @@ Install-Module Microsoft.Graph.Identity.DirectoryManagement -Force
 - ✅ Initial page structure
 
 #### 2.3 Azure AD Dynamic Groups
-- ✅ `SG-DCE-AllStaff` — All DCE employees
-- ✅ `SG-DCE-Leadership` — Managers, Directors, VPs
+- ✅ `AllStaff` — All DCE employees
+- ✅ `Managers` — Managers, Directors, VPs
 
 ### 🔒 Security Notes
 
