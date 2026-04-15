@@ -49,7 +49,7 @@ try {
         Write-Host "━━━ $siteName ━━━" -ForegroundColor Yellow
 
         # Connect to this site
-        $pnpConnection = Connect-PnPOnline -Url $siteUrl -Interactive -ReturnConnection
+        $pnpConnection = Connect-PnPOnline -Url $siteUrl -DeviceLogin -Tenant "deltacrown.onmicrosoft.com" -ReturnConnection
         Write-Host "  Connected"
 
         # 1. Break inheritance
@@ -118,7 +118,7 @@ try {
         $siteUrl = "https://$TenantName.sharepoint.com/sites/$siteName"
         Write-Host "━━━ $siteName (sharing only) ━━━" -ForegroundColor Yellow
         try {
-            $conn = Connect-PnPOnline -Url $siteUrl -Interactive -ReturnConnection
+            $conn = Connect-PnPOnline -Url $siteUrl -DeviceLogin -Tenant "deltacrown.onmicrosoft.com" -ReturnConnection
             if (-not $WhatIf) {
                 Set-PnPSite -Sharing Disabled -Connection $conn -ErrorAction SilentlyContinue
                 Write-Host "  ✅ External sharing disabled"
