@@ -1,8 +1,8 @@
 # Delta Crown Extensions — Live Deployment Status
 
 **Tenant:** deltacrown (`ce62e17d-2feb-4e67-a115-8ea4af68da30`)  
-**Last Updated:** April 2025  
-**Deployed By:** code-puppy-8352f6 (Richard)
+**Last Updated:** June 2025  
+**Deployed By:** planning-agent-ba064f (Richard) + pack-leader
 
 ---
 
@@ -149,6 +149,28 @@ pwsh -File ./5.1-Exchange-Setup.ps1
 
 ### Architecture Note
 > **Hybrid group strategy**: Azure AD dynamic security groups (DCE-AllStaff, DCE-Managers, etc.) remain for SharePoint/Teams permissions. Exchange Dynamic Distribution Groups provide independent mail routing at @deltacrown.com. This gives maximum versatility on Business Premium licensing.
+
+---
+
+## ⚠️ Known Issues — Pre-Existing Naming Conflicts
+
+> **These do NOT block Phase 5 Exchange deployment.** They block re-running older Phase 3 scripts.
+
+### Issue 1: Group Name Mismatch (DeltaSetup-106)
+
+Azure AD groups in the live tenant: `DCE-AllStaff`, `DCE-Managers`, `DCE-Stylists`, `DCE-External`
+
+Most Phase 2/3 scripts reference: `SG-DCE-AllStaff`, `SG-DCE-Leadership`, `SG-DCE-Marketing`
+
+**Affected:** 3.0-Master-Phase3.ps1, 3.2-Teams-Provisioning.ps1, 3.3-Security-Hardening.ps1, 3.7-Phase3-Verification.ps1, deploy-phase3-complete.ps1, 2.3-AzureAD-DynamicGroups.ps1, 2.4-Verification.ps1, security-controls/*.ps1, DeltaCrown.Config.psd1 (DynamicGroups section)
+
+**Already fixed:** 3.5-Shared-Mailboxes.ps1, 5.1-Exchange-Setup.ps1
+
+### Issue 2: `deltacrown.com.au` Domain Typo (DeltaSetup-107)
+
+Correct domain: `deltacrown.com`. ~37 occurrences of `.com.au` across ADRs, scripts, specs, and Python tests. Most critically in `3.0-Master-Phase3.ps1` which sets `BrandDomain = "deltacrown.com.au"`.
+
+**Already fixed:** DEPLOYMENT-RUNBOOK.md, 3.5-Shared-Mailboxes.ps1, 5.1-Exchange-Setup.ps1
 
 ---
 
