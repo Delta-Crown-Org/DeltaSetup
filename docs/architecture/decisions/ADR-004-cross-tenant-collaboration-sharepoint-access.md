@@ -165,7 +165,7 @@ Partner Tenant
 - Useful in selected Teams use cases
 
 **Cons**:
-- ❌ Not the standard mechanism for normal SharePoint site access
+- ❌ B2B Direct Connect is not the standard mechanism for normal SharePoint site access
 - ❌ Encourages wrong mental model for portal and site navigation
 - ❌ Creates support confusion when shared-channel semantics are mixed with normal site access expectations
 - ❌ Does not replace B2B collaboration or cross-tenant sync for typical SharePoint patterns
