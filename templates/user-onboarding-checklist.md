@@ -54,6 +54,7 @@
 - User access matrix: `templates/dce-user-access-matrix-template.csv`
 - Group resource mapping matrix: `templates/dce-group-resource-mapping-template.csv`
 - Pilot bootstrap notes: `docs/onboarding/dce-pilot-bootstrap-notes.md`
+- Tyler pilot checklist: `docs/onboarding/tyler-cross-tenant-pilot-checklist.md`
 
 ## Notes
 _____________________________________________
