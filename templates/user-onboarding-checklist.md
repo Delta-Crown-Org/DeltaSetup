@@ -53,6 +53,7 @@
 - Attribute/group/resource matrix: `docs/onboarding/dce-attribute-group-resource-matrix.md`
 - User access matrix: `templates/dce-user-access-matrix-template.csv`
 - Group resource mapping matrix: `templates/dce-group-resource-mapping-template.csv`
+- Pilot bootstrap notes: `docs/onboarding/dce-pilot-bootstrap-notes.md`
 
 ## Notes
 _____________________________________________

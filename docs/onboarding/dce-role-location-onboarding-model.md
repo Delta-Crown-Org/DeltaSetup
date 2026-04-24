@@ -189,6 +189,7 @@ If Tyler requires special direct permissions to make the pilot work, the model i
 
 ### Step 1 — Fill out the access matrix
 Use `templates/dce-user-access-matrix-template.csv` together with `templates/dce-group-resource-mapping-template.csv`.
+If you need a seeded starting point, review `docs/onboarding/dce-pilot-bootstrap-notes.md` first.
 
 For each person define:
 - identity email
