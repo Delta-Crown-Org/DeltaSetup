@@ -15,8 +15,12 @@
 4. Microsoft Learn — Sensitivity Labels (Tier 1)
 5. PnP Community GitHub — PnP PowerShell (Tier 2)
 
+## Related Research Added Later
+- `research/cross-tenant-collaboration-m365/` — second-pass research covering B2B collaboration, cross-tenant sync, dynamic-group anti-patterns, and order-of-operations lessons from HTT projects.
+
 ## Research Gaps (to fill when web-puppy available)
 - [ ] PnP PowerShell 2.x latest cmdlet changes for template export
 - [ ] Teams Graph API v1.0 private channel provisioning updates
 - [ ] M365 Business Premium DLP policy count limits (verified as 10)
 - [ ] SharePoint list template best practices for service businesses 2025
+- [ ] Future ADR for cross-tenant SharePoint / Teams collaboration overlay (proposed ADR-004)
