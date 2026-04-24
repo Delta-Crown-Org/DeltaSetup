@@ -50,7 +50,9 @@
 
 ## Reference
 - Model: `docs/onboarding/dce-role-location-onboarding-model.md`
-- Access matrix: `templates/dce-user-access-matrix-template.csv`
+- Attribute/group/resource matrix: `docs/onboarding/dce-attribute-group-resource-matrix.md`
+- User access matrix: `templates/dce-user-access-matrix-template.csv`
+- Group resource mapping matrix: `templates/dce-group-resource-mapping-template.csv`
 
 ## Notes
 _____________________________________________

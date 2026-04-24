@@ -188,7 +188,7 @@ If Tyler requires special direct permissions to make the pilot work, the model i
 ## Simplest Admin Workflow
 
 ### Step 1 — Fill out the access matrix
-Use `templates/dce-user-access-matrix-template.csv`.
+Use `templates/dce-user-access-matrix-template.csv` together with `templates/dce-group-resource-mapping-template.csv`.
 
 For each person define:
 - identity email
@@ -281,9 +281,10 @@ That is clerical cosplay.
 ## Immediate Next Actions
 1. finalize the canonical list of DCE roles
 2. finalize the canonical list of DCE location codes
-3. fill out the CSV for current users
-4. decide which attributes will be authoritative in Entra
-5. add or update dynamic group rules to use those attributes
-6. onboard `tyler.granlund@httbrands.com` as the pilot cross-tenant user
-7. validate SharePoint, Teams, mailbox, and app access end to end
-8. refine the model before scaling to other tenants
+3. fill out the user access CSV for current users
+4. fill out the group-to-resource mapping CSV
+5. decide which attributes will be authoritative in Entra
+6. add or update dynamic group rules to use those attributes
+7. onboard `tyler.granlund@httbrands.com` as the pilot cross-tenant user
+8. validate SharePoint, Teams, mailbox, and app access end to end
+9. refine the model before scaling to other tenants
