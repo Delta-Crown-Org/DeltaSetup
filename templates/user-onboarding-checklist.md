@@ -8,35 +8,49 @@
 - **Onboarded By**: _______________
 
 ## Pre-Onboarding (IT Admin)
-- [ ] User added to `SG-DCE-Sync-Users` security group in HTT Brands tenant
+- [ ] User row added to `templates/dce-user-access-matrix-template.csv`
+- [ ] Canonical role selected
+- [ ] Canonical location code(s) selected
+- [ ] User added to `SG-DCE-Sync-Users` security group in HTT Brands tenant (if cross-tenant)
 - [ ] Cross-tenant sync cycle completed (check DCE tenant → Users)
-- [ ] User appears in DCE tenant as **Member** type (NOT Guest)
-- [ ] Shared mailbox created: `_______________@deltacrown.com`
-- [ ] Send-As permission granted on shared mailbox
-- [ ] Full Access permission granted on shared mailbox (AutoMapping enabled)
-- [ ] User added to appropriate M365 Groups:
-  - [ ] Delta Crown All Staff
-  - [ ] DCE Operations
-  - [ ] DCE Leadership
-  - [ ] Other: _______________
-- [ ] User added to appropriate Teams:
-  - [ ] Delta Crown Extensions
-  - [ ] Other: _______________
+- [ ] User appears in DCE tenant as **Member** type (NOT Guest) when sync is the chosen model
+- [ ] Identity labels applied in DCE tenant:
+  - [ ] `companyName`
+  - [ ] `department`
+  - [ ] `jobTitle`
+  - [ ] `officeLocation`
+  - [ ] role/access extension attributes as adopted
+- [ ] Shared mailbox created or mapped if required: `_______________@deltacrown.com`
+- [ ] Send-As permission granted on shared mailbox if required
+- [ ] Full Access permission granted on shared mailbox (AutoMapping enabled) if required
+- [ ] User added to appropriate M365 / Entra groups via the standard model:
+  - [ ] AllStaff
+  - [ ] Managers / Leadership
+  - [ ] Functional group(s)
+  - [ ] Location group(s)
+  - [ ] Cross-tenant pilot group if applicable
 
 ## User Setup (With End User)
 - [ ] User briefed on DCE tenant access
-- [ ] User can sign into DCE SharePoint site
-- [ ] User can access DCE Teams team
-- [ ] Shared mailbox appears in user's Outlook (may take 30-60 min)
-- [ ] User can select @deltacrown.com in the "From" field
-- [ ] Test email sent from @deltacrown.com to external recipient
+- [ ] User can sign into DCE SharePoint hub/site experience
+- [ ] User can access the correct DCE Teams team/channel(s)
+- [ ] User can access the correct apps for their role/location
+- [ ] Shared mailbox appears in user's Outlook (may take 30-60 min) if applicable
+- [ ] User can select @deltacrown.com in the "From" field if applicable
+- [ ] Test email sent from @deltacrown.com to external recipient if applicable
 - [ ] External recipient confirms email received (not in spam)
 - [ ] Reply to @deltacrown.com arrives in shared mailbox
+- [ ] User confirms they cannot see resources outside their role/location scope
 
 ## Post-Onboarding
 - [ ] Welcome email sent (use `templates/user-welcome-email.html`)
-- [ ] User confirmed all access working
+- [ ] User confirmed all expected access working
+- [ ] Negative test completed for out-of-scope resources
 - [ ] Onboarding issue closed in GitHub
+
+## Reference
+- Model: `docs/onboarding/dce-role-location-onboarding-model.md`
+- Access matrix: `templates/dce-user-access-matrix-template.csv`
 
 ## Notes
 _____________________________________________
