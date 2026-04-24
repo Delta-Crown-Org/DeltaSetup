@@ -1,62 +1,68 @@
 # M365 / Entra ID Cross-Tenant Access Research
 
 **Date:** 2025-08-08  
-**Researcher:** Web-Puppy (`web-puppy-08d789`)  
-**Project context:** SharePoint-centric cross-tenant collaboration research for this repo’s architecture work.
+**Researcher:** Web-Puppy (`web-puppy-b2e0e5`)  
+**Project context:** Franchise / multi-brand Microsoft 365 architecture work in this repo, with emphasis on SharePoint, Teams, cross-tenant collaboration, and operational guardrails.
 
 ## Executive summary
 
-### Key findings
-1. **AADSTS500213** means the **resource tenant inbound cross-tenant access policy** blocked the user.
-2. **Do not use target-tenant dynamic group membership as the first inbound B2B collaboration gate** for first-time SharePoint access.
-3. **For SharePoint Online**, the stable pattern is typically:
-   - inbound B2B collaboration **users/groups = All external users and groups**
-   - inbound **applications = scoped allowlist** to SharePoint Online and any supporting Microsoft apps required for first-run UX/MFA
-   - actual content authorization handled later in **SharePoint / M365 groups / target-tenant groups**
-4. **Cross-tenant sync** provisions **B2B collaboration users**; it can coexist with normal B2B collaboration.
-5. **B2B direct connect** is **not** the model for regular SharePoint site access; Microsoft says it currently works with **Teams shared channels**.
+This update focuses on four Microsoft Learn–anchored topics requested for deeper follow-up:
+
+1. **Multitenant organization (MTO) vs non-MTO patterns**
+2. **Cross-tenant sync attribute mapping and `userType` behavior**
+3. **Deny-by-default cross-tenant access posture**
+4. **Cross-tenant sync failure modes and order-of-operations gotchas**
 
 ## Direct answers
 
-### Topic 1: AADSTS500213 and inbound B2B collaboration scoping
-- Microsoft Learn defines AADSTS500213 as: **"NotAllowedByInboundPolicyTenant - The resource tenant's cross-tenant access policy doesn't allow this user to access this tenant."**
-- When inbound B2B collaboration policy is evaluated, Microsoft says cross-tenant access settings are checked **"at the time of invitation."**
-- If your rule depends on a guest object already being in a target-tenant dynamic group, you have a **chicken-and-egg problem**:
-  - the policy must allow the invitation/access first
-  - but the guest object and target-tenant membership exist only after invite/provisioning succeeds
-  - therefore the policy blocks before the group can ever include the user
-- Best fix: use **All external users and groups** at the inbound policy layer, then use **Applications** scoping and SharePoint authorization to narrow actual access.
+### Topic 1: What is MTO, and how is it different from standard cross-tenant sync?
+- A **multitenant organization (MTO)** is an Entra/Microsoft 365 feature that creates an explicit organizational boundary around multiple tenants your organization owns.
+- MTO is **not the same thing** as cross-tenant sync:
+  - **MTO** = a higher-level grouping/boundary plus Microsoft 365 collaboration semantics.
+  - **Cross-tenant sync** = the provisioning engine that creates/updates/deletes B2B users across tenants.
+- Microsoft says the two are **independent**, but MTO’s best experience generally relies on **B2B member provisioning**, often via cross-tenant sync.
+- MTO enables differentiated **“in-organization”** user treatment plus improved experiences in **new Teams** and **Viva Engage** that standard cross-tenant sync alone does not create.
+- For a **franchise / brand** scenario, use **MTO only when the tenants are truly one organization with high trust and near-internal collaboration expectations**. If brands are semi-independent, selectively connected, or need narrow app/resource sharing, use **standard cross-tenant sync + partner-specific cross-tenant access settings** without assuming MTO.
 
-### Topic 2: Cross-tenant sync vs B2B collaboration for SharePoint
-- Cross-tenant sync creates **B2B collaboration users** in the target tenant.
-- `userType=Member`: **"Users will be created as external member ... Users will be able to function as any internal member of the target tenant."**
-- `userType=Guest`: **"Users will be created as external guests ... in the target tenant."**
-- Automatic redemption must be enabled on **both sides** to suppress first-run consent for sync.
-- Sequence matters: target inbound sync + target inbound auto redemption first, then source outbound auto redemption, then source sync configuration/testing.
-- Coexistence: yes. Microsoft says cross-tenant sync can manage **existing B2B users** and its sync settings **don't impact** B2B invitations from other processes.
+### Topic 2: What can be mapped in cross-tenant sync, and how does `userType` behave?
+- Microsoft documents that cross-tenant sync can map **commonly used Entra user attributes**, including `displayName`, `userPrincipalName`, directory extension attributes, and `manager` in supported clouds/scenarios.
+- `userType` can be mapped to:
+  - **Member**: external member in target tenant; more internal-like behavior.
+  - **Guest**: external guest in target tenant.
+- Important gotcha: **existing B2B guests do not automatically flip to Member** unless the mapping is configured with **Apply this mapping = Always**.
+- `showInAddressList` is especially important for Microsoft 365 people search and Outlook visibility; Microsoft says it defaults to **true** in cross-tenant sync mappings.
+- `IsSoftDeleted` matters operationally because users that fall out of scope are **soft deleted** in the target tenant; that deprovisioning is easy to trigger accidentally by changing assignment, group membership, or scoping filters.
 
-### Topic 3: B2B direct connect limitations
-- Microsoft: **"This feature currently works with Microsoft Teams shared channels."**
-- Microsoft FAQ: **"There's no plan to extend support for B2B direct connect beyond Teams Connect shared channels."**
-- Therefore B2B direct connect does **not** provide normal SharePoint site access.
-- If you try to use it for normal site sharing, expect failure because SharePoint external sharing relies on **B2B collaboration identity presence** in the resource tenant.
+### Topic 3: What does deny-by-default mean for cross-tenant access?
+- Microsoft’s documented defaults are **not a full deny-by-default posture for B2B collaboration**. By default, B2B collaboration with other Entra tenants is enabled.
+- A deliberate **deny-by-default** posture therefore means **changing the default inbound/outbound B2B collaboration settings to block**, then adding only required partners under **Organizational settings**.
+- Microsoft says **organization-specific settings take precedence over default settings**.
+- So if you **block inbound by default** but create a **partner-specific allow override**, that partner override wins for that organization.
+- Big warning from Microsoft: changing defaults to block can break existing business-critical access, so this must be done only after log review and partner inventory.
 
-### Topic 4: Dynamic groups in cross-tenant patterns
-- **Safe:** dynamic groups used after the user object exists in the target tenant, such as SharePoint permissions, audience targeting, or access to downstream apps.
-- **Dangerous:** dynamic groups used as the **initial inbound B2B collaboration policy scope** when membership depends on a not-yet-provisioned guest.
-- Difference:
-  - **Entra cross-tenant access policy layer** = can the user enter the tenant?
-  - **SharePoint authorization layer** = what can an already-provisioned user access?
+### Topic 4: What are common cross-tenant sync failure modes?
+- The most common setup failures are **policy prerequisite failures**, not mapping failures:
+  - target tenant did not enable **Allow user synchronization into this tenant**
+  - source and/or target did not enable **automatic redemption** correctly
+- Microsoft’s configure doc shows `AzureActiveDirectoryCrossTenantSyncPolicyCheckFailure` when:
+  - the **source tenant** has not enabled outbound automatic redemption
+  - the **target tenant** has not enabled inbound sync / inbound policy prerequisites
+- Cross-tenant sync can also fail later operationally because of:
+  - users falling **out of scope**, triggering soft deletion
+  - **contact object collisions** at scale
+  - **quarantine** when provisioning is unhealthy
+  - userType/address-list expectations not matching M365 behavior
+- Order matters: **inbound sync + auto redemption first, then source outbound auto redemption, then mapping/testing, then production scope**.
 
-### Topic 5: Cross-tenant access settings order of operations
-1. Review **default** settings and keep them restrictive.
-2. Add the partner under **Organizational settings**.
-3. Configure **inbound** partner settings in the resource tenant.
-4. Configure **outbound** settings in the source/home tenant if needed.
-5. Configure **trust settings** for MFA / compliant device / hybrid join as needed.
-6. Configure **automatic redemption on both sides** if using sync or wanting consent suppression.
-7. For SharePoint/OneDrive native sharing with Entra B2B integration, ensure **external collaboration settings/domain allowances** are also correct.
-8. Only then rely on groups and SharePoint permissions for granular authorization.
+## Best-fit conclusion for this repo’s franchise scenario
+
+For this project’s multi-brand / franchise context, the safest Microsoft-aligned pattern is:
+
+- **Use standard cross-tenant sync + partner-specific cross-tenant access settings** as the baseline.
+- Use **`userType=Member`** only for brands/users that should operate like one workforce.
+- Use **MTO** only if the participating tenants are genuinely one enterprise boundary and you want the added Teams/Viva/M365 “in-organization” semantics.
+- Use a **deny-by-default default policy** only if you can operationally maintain partner-specific overrides and have reviewed existing dependencies.
+- Treat **scope changes, auto-redemption settings, and inbound sync enablement** as the key order-of-operations risks.
 
 ## Files
 - `sources.md`

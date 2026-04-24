@@ -1,28 +1,61 @@
 # Raw Microsoft Learn quotes
 
-## AADSTS500213
-Source: https://learn.microsoft.com/en-us/entra/identity-platform/reference-error-codes#aadsts500213
+## Multitenant organization overview
+Source: https://learn.microsoft.com/en-us/entra/identity/multi-tenant-organizations/multi-tenant-organization-overview
 
-> "AADSTS500213 NotAllowedByInboundPolicyTenant - The resource tenant's cross-tenant access policy doesn't allow this user to access this tenant."
+> "Multitenant organization is a feature in Microsoft Entra ID and Microsoft 365 that enables you to define a boundary around the Microsoft Entra tenants that your organization owns."
+
+> "Each pair of tenants in the group is governed by cross-tenant access settings that you can use to configure B2B collaboration."
+
+> "The multitenant organization capability in Microsoft Teams is built on the assumption of reciprocal provisioning of B2B collaboration member users across multitenant organization tenants."
+
+> "The multitenant organization capability in Viva Engage is built on the assumption of centralized provisioning of B2B collaboration member users into a hub tenant."
+
+> "As such, the multitenant organization capability is best deployed with the use of a bulk provisioning engine for B2B collaboration users, for example with cross-tenant synchronization."
+
+> "Any given tenant can only create or join a single multitenant organization."
+
+> "A multitenant organization isn't allowed between a Cloud Solution Provider (CSP) and their customer tenants."
+
+> "Maximum number of active tenants, including the owner tenant: 100"
 
 ---
 
-## Cross-tenant access settings for B2B collaboration
-Source: https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-settings-b2b-collaboration
+## Multitenant organization capabilities
+Source: https://learn.microsoft.com/en-us/entra/identity/multi-tenant-organizations/overview
 
-> "Both allow/block list and cross-tenant access settings are checked at the time of invitation."
+> "Cross-tenant synchronization - Provides a synchronization service that automates creating, updating, and deleting B2B collaboration users across your organization of multiple tenants."
 
-> "All external users and groups: Applies the action you chose under Access status to all users and groups from external Microsoft Entra organizations."
+> "Multitenant organization - Defines a boundary around the Microsoft Entra tenants that your organization owns... In conjunction with B2B member provisioning, enables seamless collaboration experiences in Microsoft Teams and Microsoft 365 applications like Microsoft Viva Engage."
 
-> "Select external users and groups... Lets you apply the action you chose under Access status to specific users and groups within the external organization."
+> "Compare multitenant capabilities... cross-tenant synchronization and multitenant organization capabilities are independent of each other, though both rely on underlying B2B collaboration."
 
-> "In the Add other users and groups pane, in the search box, type the user object ID or group object ID you obtained from your partner organization."
+> "Users are synchronized from their home tenant to the resource tenant as B2B collaboration users."
 
-> "If you are using the native sharing capabilities in Microsoft SharePoint and Microsoft OneDrive with Microsoft Entra B2B integration enabled, you must add the external domains to the external collaboration settings. Otherwise, invitations from these applications might fail, even if the external tenant has been added in the cross-tenant access settings."
+> "If shown in address list, B2B collaboration users are available as contacts in Outlook. If elevated to user type Member, B2B collaboration member users are available in most Microsoft 365 applications."
 
-> "Automatically redeem invitations with the tenant <tenant>: Check this setting if you want to automatically redeem invitations. If so, users from the specified tenant won't have to accept the consent prompt the first time they access this tenant using cross-tenant synchronization, B2B collaboration, or B2B direct connect. This setting only suppresses the consent prompt if the specified tenant also checks this setting for outbound access."
+> "For collaboration in most Microsoft 365 applications, a B2B collaboration user should be shown in address lists as well as be set to user type Member."
 
-> "If you want to configure Cross-tenant access settings to allow only a designated set of applications... if you configure an allowlist and only allow SharePoint Online, the user can't access My Apps or register for MFA in the resource tenant."
+> "For enterprise organizations with complex identity topologies, consider using cross-tenant synchronization in Microsoft Entra ID."
+
+---
+
+## Limitations in multitenant organizations
+Source: https://learn.microsoft.com/en-us/entra/identity/multi-tenant-organizations/multi-tenant-organization-known-issues
+
+> "If you're already using Microsoft Entra cross-tenant synchronization, for various multi-hub multi-spoke topologies, you don't need to use the Microsoft 365 admin center share users functionality. Instead, you might want to continue using your existing Microsoft Entra cross-tenant synchronization jobs."
+
+> "For enterprise organizations with complex identity configurations, use cross-tenant synchronization in Microsoft Entra admin center."
+
+> "By default, new B2B users are provisioned as B2B members, while existing B2B guests remain B2B guests. You can opt to convert B2B guests into B2B members by setting Apply this mapping to Always."
+
+> "By default, showInAddressList is synchronized into a target tenant as true."
+
+> "The at-scale provisioning of B2B users might collide with contact objects. The handling or conversion of contact objects isn't currently supported."
+
+> "By default, when provisioning scope is reduced while a synchronization job is running, users fall out of scope and are soft deleted, unless Target Object Actions for Delete is disabled."
+
+> "Currently, SkipOutOfScopeDeletions works for application provisioning jobs, but not for cross-tenant synchronization."
 
 ---
 
@@ -31,27 +64,33 @@ Source: https://learn.microsoft.com/en-us/entra/identity/multi-tenant-organizati
 
 > "Cross-tenant synchronization automates creating, updating, and deleting Microsoft Entra B2B collaboration users and groups across tenants in an organization."
 
-> "Users created with cross-tenant synchronization are able to access both Microsoft applications (such as Teams and SharePoint)..."
+> "Users created with cross-tenant synchronization are able to access both Microsoft applications (such as Teams and SharePoint) and non-Microsoft applications..."
 
-> "Users created by cross-tenant synchronization will have the same experience when accessing Microsoft Teams and other Microsoft 365 services as B2B collaboration users created through a manual invitation."
+> "Is a push process from the source tenant, not a pull process from the target tenant."
 
-> "Over time, the member userType will be used by the various Microsoft 365 services to provide differentiated end user experiences for users in a multitenant organization."
+> "Attribute mapping is configured in the source tenant."
 
-> "The cross-tenant synchronization settings are an inbound only organizational settings... These settings don't impact B2B invitations created through other processes such as manual invitation or Microsoft Entra entitlement management."
+> "Extension attributes are supported."
+
+> "Cross-tenant synchronization utilizes a feature that improves the user experience by suppressing the first-time B2B consent prompt and redemption process in each tenant."
 
 > "The automatic redemption setting will only suppress the consent prompt and invitation email if both the home/source tenant (outbound) and resource/target tenant (inbound) checks this setting."
 
-> "Will cross-tenant synchronization manage existing B2B users? Yes."
+> "If a user is removed from the scope of sync in a source tenant, cross-tenant synchronization will soft delete them in the target tenant."
 
-> "Cross-tenant synchronization can update existing B2B users, ensuring that each user has only one account."
+> "Cross-tenant synchronization will sync commonly used attributes on the user object in Microsoft Entra ID, including (but not limited to) displayName, userPrincipalName, and directory extension attributes."
 
-> "What user types can be synchronized? ... Users can be synchronized to target tenants as external members (default) or external guests."
+> "Cross-tenant synchronization supports provisioning the manager attribute in the Azure commercial cloud."
 
-> "B2B direct connect is the underlying identity technology required for Teams Connect shared channels."
+> "Attributes including (but not limited to) photos, custom security attributes, and user attributes outside of the directory can't be synchronized by cross-tenant synchronization."
+
+> "What user types can be synchronized?... Users can be synchronized to target tenants as external members (default) or external guests."
+
+> "Cross-tenant synchronization will match the user and make any necessary updates to the user, such as update the display name. By default, the UserType won't be updated from guest to member, but you can configure this in the attribute mappings."
+
+> "Yes, cross-tenant synchronization can enable people search in Microsoft 365. Ensure that the showInAddressList attribute is set to True on users in the target tenant. The showInAddressList attribute is set to true by default in the cross-tenant synchronization attribute mappings."
 
 > "B2B collaboration is recommended for all other cross-tenant application access scenarios, including both Microsoft and non-Microsoft applications."
-
-> "B2B direct connect and cross-tenant synchronization are designed to co-exist..."
 
 > "There's no plan to extend support for B2B direct connect beyond Teams Connect shared channels."
 
@@ -62,60 +101,70 @@ Source: https://learn.microsoft.com/en-us/entra/identity/multi-tenant-organizati
 
 > "Select the Allow user synchronization into this tenant checkbox."
 
-> "In this step, you automatically redeem invitations so users from the source tenant don't have to accept the consent prompt. This setting must be checked in both the source tenant (outbound) and target tenant (inbound)."
-
-> "For cross-tenant synchronization to work, at least one internal user must be assigned to the configuration."
+> "This setting must be checked in both the source tenant (outbound) and target tenant (inbound)."
 
 > "Member... Default. Users will be created as external member (B2B collaboration users) in the target tenant. Users will be able to function as any internal member of the target tenant."
 
 > "Guest... Users will be created as external guests (B2B collaboration users) in the target tenant."
 
-Troubleshooting quotes:
+> "If the B2B user already exists in the target tenant, then Member (userType) won't be changed to Member, unless the Apply this mapping setting is set to Always."
+
+> "Symptom - Test connection fails with AzureActiveDirectoryCrossTenantSyncPolicyCheckFailure"
 
 > "Details: The source tenant has not enabled automatic user consent with the target tenant."
 
 > "Details: The target tenant has not enabled inbound synchronization with this tenant."
 
----
-
-## B2B direct connect overview
-Source: https://learn.microsoft.com/en-us/entra/external-id/b2b-direct-connect-overview
-
-> "B2B direct connect is a feature of Microsoft Entra External ID... This feature currently works with Microsoft Teams shared channels."
-
-> "Currently, B2B direct connect capabilities work with Teams shared channels."
-
-> "B2B direct connect users don't have a presence in your Microsoft Entra organization..."
-
-> "With B2B direct connect, you add the external user to a shared channel within a team. This user can access the resources within the shared channel, but they don't have access to the entire team or any other resources outside the shared channel."
+> "If provisioning seems to be in an unhealthy state, the configuration will go into quarantine."
 
 ---
 
-## B2B direct connect setup
-Source: https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-settings-b2b-direct-connect
+## Cross-tenant access overview
+Source: https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-overview
 
-> "By default, outbound B2B direct connect is blocked for your entire tenant, and inbound B2B direct connect is blocked for all external Microsoft Entra organizations."
+> "By default, B2B collaboration with other Microsoft Entra organizations is enabled, and B2B direct connect is blocked."
 
-> "Because B2B direct connect is established through mutual trust, both you and the other organization need to enable B2B direct connect with each other in your cross-tenant access settings."
+> "The default cross-tenant access settings apply to all Microsoft Entra organizations external to your tenant, except organizations for which you configure custom settings."
+
+> "Organizational settings take precedence over default settings."
+
+> "Changing the default inbound or outbound settings to block access could block existing business-critical access to apps in your organization or partner organizations."
+
+> "Example 1: If you block inbound access for all external users and groups, access to all your applications must also be blocked."
+
+> "Conditional Access policies that require MFA or Terms of Use (ToU) can prevent users from completing MFA registration or ToU consent."
 
 ---
 
-## SharePoint external sharing overview
-Source: https://learn.microsoft.com/en-us/sharepoint/external-sharing-overview
+## Cross-tenant access settings
+Source: https://learn.microsoft.com/en-us/entra/external-id/cross-tenant-access-settings-b2b-collaboration
 
-> "Microsoft Entra B2B integration enabled -> Guest account always created... What happens when sharing sites? Guest account always created Microsoft Entra settings apply"
+> "Both allow/block list and cross-tenant access settings are checked at the time of invitation."
 
-> "When users share with people outside the organization, an invitation is sent to the person in email, which contains a link to the shared item."
+> "Allow users sync into this tenant"
+
+> "Automatically redeem invitations with the tenant <tenant>"
+
+> "This setting only suppresses the consent prompt if the specified tenant also checks this setting for outbound access."
+
+> "if you configure an allowlist and only allow SharePoint Online, the user can't access My Apps or register for MFA in the resource tenant."
 
 ---
 
 ## B2B guest user properties
 Source: https://learn.microsoft.com/en-us/entra/external-id/user-properties
 
-> "External guest... The user object created in the resource Microsoft Entra directory has a UserType of Guest."
-
-> "External member... The user object created in the resource Microsoft Entra directory has a UserType of Member."
-
 > "Member: This value indicates an employee of the host organization... this user expects to have access to internal-only sites."
 
 > "Guest: This value indicates a user who isn't considered internal to the company, such as an external collaborator, partner, or customer."
+
+> "External member... The user object created in the resource Microsoft Entra directory has a UserType of Member."
+
+> "External guest... The user object created in the resource Microsoft Entra directory has a UserType of Guest."
+
+---
+
+## Microsoft Graph reference for quarantine handling
+Source: https://learn.microsoft.com/en-us/graph/api/resources/synchronization-synchronizationjob?view=graph-rest-1.0
+
+> "Start synchronization. If the job is in quarantine, the quarantine status is cleared."
