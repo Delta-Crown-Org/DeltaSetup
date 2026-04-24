@@ -21,6 +21,8 @@ param(
     [Parameter(Mandatory=$false)]
     [string]$AdminUrl = "https://deltacrown-admin.sharepoint.com",
     [Parameter(Mandatory=$false)]
+    [string[]]$LocationCodes = @(),
+    [Parameter(Mandatory=$false)]
     [ValidateSet("Development", "Staging", "Production")]
     [string]$Environment = "Development"
 )
@@ -62,60 +64,94 @@ $ForbiddenGroups = @(
 
 $PermissionMatrix = @{
     "/sites/dce-hub"            = @(
-        @{ Group = "AllStaff";   Role = "Read" }
+        @{ Group = "AllStaff"; Role = "Read" }
         @{ Group = "Managers"; Role = "Full Control" }
+        @{ Group = "DCE-Leadership"; Role = "Full Control" }
     )
     "/sites/dce-clientservices"  = @(
-        @{ Group = "AllStaff";   Role = "Contribute" }
+        @{ Group = "AllStaff"; Role = "Read" }
+        @{ Group = "DCE-ClientServices"; Role = "Contribute" }
         @{ Group = "Managers"; Role = "Full Control" }
+        @{ Group = "DCE-Leadership"; Role = "Full Control" }
     )
     "/sites/dce-marketing"       = @(
-        @{ Group = "AllStaff";   Role = "Read" }
+        @{ Group = "AllStaff"; Role = "Read" }
         @{ Group = "Managers"; Role = "Full Control" }
-        @{ Group = "Marketing";  Role = "Edit" }
+        @{ Group = "Marketing"; Role = "Edit" }
     )
     "/sites/dce-docs"            = @(
-        @{ Group = "AllStaff";   Role = "Read" }
+        @{ Group = "AllStaff"; Role = "Read" }
         @{ Group = "Managers"; Role = "Full Control" }
+        @{ Group = "DCE-Leadership"; Role = "Full Control" }
     )
     # DCE-Operations is Teams-managed — skip permission assignment
 }
+
+$RequiredDynamicGroups = @(
+    "AllStaff"
+    "Managers"
+    "Marketing"
+    "Stylists"
+    "DCE-Operations"
+    "DCE-ClientServices"
+    "DCE-Leadership"
+)
+
+$RequiredStaticGroups = @(
+    "DCE-CrossTenant-Pilot"
+)
 
 # ============================================================================
 # HELPER FUNCTIONS (A1: NO connection management — caller owns the connection)
 # ============================================================================
 
-function New-DCEMarketingGroup {
+function Get-DCERequiredGroupNames {
+    [CmdletBinding()]
+    param()
+
+    $required = @($RequiredDynamicGroups + $RequiredStaticGroups)
+    foreach ($locationCode in $LocationCodes | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) {
+        $groupLocationSuffix = ($locationCode.Trim() -replace '^DCE-', '')
+        $required += "DCE-Loc-$groupLocationSuffix"
+    }
+
+    return $required | Select-Object -Unique
+}
+
+function Test-DCEEntraGroupExists {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)][string]$GroupName)
+
+    return (Get-MgGroup -Filter "displayName eq '$GroupName'" -ErrorAction SilentlyContinue | Select-Object -First 1)
+}
+
+function Ensure-DCEPilotGroup {
     <#
     .SYNOPSIS
-        Creates the Marketing dynamic security group.
+        Ensures the cross-tenant pilot security group exists.
     .DESCRIPTION
         Assumes caller has already connected to Microsoft Graph.
     #>
     [CmdletBinding(SupportsShouldProcess)]
     param()
 
-    $groupName = "Marketing"
-
-    $existing = Get-MgGroup -Filter "displayName eq '$groupName'" -ErrorAction SilentlyContinue | Select-Object -First 1
+    $groupName = "DCE-CrossTenant-Pilot"
+    $existing = Test-DCEEntraGroupExists -GroupName $groupName
     if ($existing) {
         Write-DeltaCrownLog "Security group already exists: $groupName (ID: $($existing.Id))" "WARNING"
         return $existing
     }
 
-    if ($PSCmdlet.ShouldProcess($groupName, "Create dynamic security group")) {
+    if ($PSCmdlet.ShouldProcess($groupName, "Create static security group")) {
         $group = New-MgGroup `
             -DisplayName $groupName `
-            -Description "Delta Crown Extensions marketing team — auto-populated" `
+            -Description "Pilot validation group for cross-tenant onboarding and access checks" `
             -MailEnabled:$false `
             -SecurityEnabled:$true `
-            -MailNickname "sg-dce-marketing" `
-            -GroupTypes @("DynamicMembership") `
-            -MembershipRule '(user.department -eq "Delta Crown Marketing")' `
-            -MembershipRuleProcessingState "On" `
+            -MailNickname "dcecrosstenantpilot" `
             -Visibility "Private"
 
-        Write-DeltaCrownLog "Created dynamic group: $groupName (ID: $($group.Id))" "SUCCESS"
+        Write-DeltaCrownLog "Created static security group: $groupName (ID: $($group.Id))" "SUCCESS"
 
         Register-DeltaCrownRollbackAction `
             -ActionName "Remove $groupName" `
@@ -237,7 +273,8 @@ try {
     Write-DeltaCrownLog "Script Version: $scriptVersion" "INFO"
 
     $results = @{
-        GroupCreated        = $false
+        PilotGroupReady    = $false
+        MissingGroups       = @()
         SitesHardened       = @()
         ForbiddenRemoved    = 0
         PermissionsApplied  = @()
@@ -264,11 +301,23 @@ try {
     Write-DeltaCrownLog "SharePoint Admin connection ready" "SUCCESS"
 
     # ------------------------------------------------------------------
-    # STEP 1: Create Marketing dynamic group (uses Graph)
+    # STEP 1: Verify required Entra groups and ensure pilot group exists
     # ------------------------------------------------------------------
-    Write-DeltaCrownLog "=== Step 1: Create Marketing Group ===" "STAGE"
-    $marketingGroup = New-DCEMarketingGroup
-    $results.GroupCreated = ($marketingGroup -ne $null)
+    Write-DeltaCrownLog "=== Step 1: Verify Entra Group Readiness ===" "STAGE"
+
+    $pilotGroup = Ensure-DCEPilotGroup
+    $results.PilotGroupReady = ($pilotGroup -ne $null)
+
+    foreach ($requiredGroup in (Get-DCERequiredGroupNames)) {
+        $group = Test-DCEEntraGroupExists -GroupName $requiredGroup
+        if ($group) {
+            Write-DeltaCrownLog "Required group ready: $requiredGroup" "SUCCESS"
+        }
+        else {
+            Write-DeltaCrownLog "Required group missing: $requiredGroup" "WARNING"
+            $results.MissingGroups += $requiredGroup
+        }
+    }
 
     # ------------------------------------------------------------------
     # STEP 2: Build site list (needs admin PnP for Leadership lookup)
@@ -348,7 +397,8 @@ try {
     $duration = $results.EndTime - $results.StartTime
 
     Write-DeltaCrownBanner "PHASE 3.3 COMPLETE"
-    Write-DeltaCrownLog "Marketing group created: $($results.GroupCreated)" "SUCCESS"
+    Write-DeltaCrownLog "Pilot group ready:       $($results.PilotGroupReady)" "SUCCESS"
+    Write-DeltaCrownLog "Missing groups:          $($results.MissingGroups.Count)" $(if($results.MissingGroups.Count -gt 0){"WARNING"}else{"SUCCESS"})
     Write-DeltaCrownLog "Sites hardened:          $($results.SitesHardened.Count)" "SUCCESS"
     Write-DeltaCrownLog "Forbidden groups removed: $($results.ForbiddenRemoved)" "SUCCESS"
     Write-DeltaCrownLog "Permission matrices set: $($results.PermissionsApplied.Count)" "SUCCESS"
@@ -365,7 +415,7 @@ try {
         SitesHardened    = $results.SitesHardened
         Errors           = $results.Errors
         Duration         = $duration
-        Status           = if ($results.Errors.Count -eq 0) { "SUCCESS" } else { "PARTIAL" }
+        Status           = if ($results.Errors.Count -eq 0 -and $results.MissingGroups.Count -eq 0) { "SUCCESS" } else { "PARTIAL" }
     }
 }
 catch {

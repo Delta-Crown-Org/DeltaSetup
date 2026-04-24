@@ -21,6 +21,8 @@ param(
     [Parameter(Mandatory=$false)]
     [string]$AdminUrl = "https://deltacrown-admin.sharepoint.com",
     [Parameter(Mandatory=$false)]
+    [string[]]$ExpectedLocationCodes = @(),
+    [Parameter(Mandatory=$false)]
     [ValidateSet("Development", "Staging", "Production")]
     [string]$Environment = "Development",
     [Parameter(Mandatory=$false)]
@@ -90,7 +92,17 @@ $ClientRecordsPIIColumns = @("Email", "Phone", "AllergyNotes", "ServiceHistory")
 # C3: DCE-Docs library metadata columns
 $DocsMetadataColumns = @("DocType", "Department", "ReviewDate", "DocVersion", "DocStatus", "DocOwner")
 
-$ExpectedGroups = @("AllStaff", "Managers", "Marketing")
+$ExpectedDynamicGroups = @(
+    "AllStaff",
+    "Managers",
+    "Marketing",
+    "Stylists",
+    "DCE-Operations",
+    "DCE-ClientServices",
+    "DCE-Leadership"
+)
+
+$ExpectedStaticGroups = @("DCE-CrossTenant-Pilot")
 
 $ForbiddenGroups = @("Everyone", "Everyone except external users", "All Users")
 
@@ -289,13 +301,29 @@ try {
     # ------------------------------------------------------------------
     Write-DeltaCrownLog "=== Category 5: Security Groups ===" "STAGE"
 
-    foreach ($groupName in $ExpectedGroups) {
+    $allExpectedDynamicGroups = @($ExpectedDynamicGroups)
+    foreach ($locationCode in $ExpectedLocationCodes | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) {
+        $groupLocationSuffix = ($locationCode.Trim() -replace '^DCE-', '')
+        $allExpectedDynamicGroups += "DCE-Loc-$groupLocationSuffix"
+    }
+
+    foreach ($groupName in ($allExpectedDynamicGroups | Select-Object -Unique)) {
         $group = Get-MgGroup -Filter "displayName eq '$groupName'" -ErrorAction SilentlyContinue | Select-Object -First 1
         Test-Condition "Groups" "Group exists: $groupName" ($group -ne $null) -FailureMsg "Group not found"
 
         if ($group) {
             $isDynamic = $group.GroupTypes -contains "DynamicMembership"
             Test-Condition "Groups" "Dynamic membership: $groupName" $isDynamic -FailureMsg "Not a dynamic group" -Severity "WARN"
+        }
+    }
+
+    foreach ($groupName in $ExpectedStaticGroups) {
+        $group = Get-MgGroup -Filter "displayName eq '$groupName'" -ErrorAction SilentlyContinue | Select-Object -First 1
+        Test-Condition "Groups" "Group exists: $groupName" ($group -ne $null) -FailureMsg "Group not found"
+
+        if ($group) {
+            $isDynamic = $group.GroupTypes -contains "DynamicMembership"
+            Test-Condition "Groups" "Static membership: $groupName" (-not $isDynamic) -FailureMsg "Pilot group should remain static" -Severity "WARN"
         }
     }
 

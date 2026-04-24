@@ -18,10 +18,15 @@ param(
     [Parameter(Mandatory=$false)]
     [ValidatePattern('^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$|^$')]
     [string]$TenantId = $null,
-    
+
     [Parameter(Mandatory=$false)]
-    [ValidatePattern('^[A-Z]{2,5}-[A-Z]{2,5}$')]
-    [string]$GroupPrefix = "SG-DCE",
+    [string]$GroupPrefix = "",
+
+    [Parameter(Mandatory=$false)]
+    [string[]]$LocationCodes = @(),
+
+    [Parameter(Mandatory=$false)]
+    [switch]$CreatePilotGroup,
     
     [Parameter(Mandatory=$false)]
     [switch]$WhatIf,
@@ -72,28 +77,64 @@ Import-Module (Join-Path $ModulesPath "DeltaCrown.Auth.psm1") -Force -ErrorActio
 Import-Module (Join-Path $ModulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
 
 # ============================================================================
-# DYNAMIC GROUP CONFIGURATION
+# GROUP CONFIGURATION
 # ============================================================================
-$DynamicGroups = @(
-    @{
-        DisplayName = "$GroupPrefix-AllStaff"
-        Description = "All Delta Crown Extensions staff - auto-populated based on department or company attribute"
-        MailNickname = "allstaff"
-        MembershipRule = @'
-(user.department -contains "Delta Crown") -or 
-(user.companyName -contains "Delta Crown Extensions")
-'@
+function Get-DCEGroupDisplayName {
+    param([Parameter(Mandatory)][string]$BaseName)
+
+    if ([string]::IsNullOrWhiteSpace($GroupPrefix)) {
+        return $BaseName
+    }
+
+    return "$GroupPrefix-$BaseName"
+}
+
+function New-DynamicGroupDefinition {
+    param(
+        [Parameter(Mandatory)][string]$BaseName,
+        [Parameter(Mandatory)][string]$Description,
+        [Parameter(Mandatory)][string]$MailNickname,
+        [Parameter(Mandatory)][string]$MembershipRule
+    )
+
+    return @{
+        DisplayName = Get-DCEGroupDisplayName -BaseName $BaseName
+        Description = $Description
+        MailNickname = $MailNickname
+        MembershipRule = $MembershipRule
         MembershipRuleProcessingState = "On"
         GroupTypes = @("DynamicMembership")
         SecurityEnabled = $true
         MailEnabled = $false
         Visibility = "Private"
-    },
-    @{
-        DisplayName = "$GroupPrefix-Leadership"
-        Description = "Delta Crown Extensions leadership team - Managers, Directors, and VPs"
-        MailNickname = "managers"
-        MembershipRule = @'
+        MembershipMode = "Dynamic"
+    }
+}
+
+function New-StaticGroupDefinition {
+    param(
+        [Parameter(Mandatory)][string]$BaseName,
+        [Parameter(Mandatory)][string]$Description,
+        [Parameter(Mandatory)][string]$MailNickname
+    )
+
+    return @{
+        DisplayName = Get-DCEGroupDisplayName -BaseName $BaseName
+        Description = $Description
+        MailNickname = $MailNickname
+        SecurityEnabled = $true
+        MailEnabled = $false
+        Visibility = "Private"
+        MembershipMode = "Static"
+    }
+}
+
+$DynamicGroups = @(
+    (New-DynamicGroupDefinition -BaseName "AllStaff" -Description "All Delta Crown Extensions staff - auto-populated based on department or company attribute" -MailNickname "allstaff" -MembershipRule @'
+(user.department -contains "Delta Crown") -or
+(user.companyName -contains "Delta Crown Extensions")
+'@),
+    (New-DynamicGroupDefinition -BaseName "Managers" -Description "Delta Crown Extensions managers - title-based baseline leadership group" -MailNickname "managers" -MembershipRule @'
 (user.companyName -contains "Delta Crown") -and 
 (
     (user.jobTitle -contains "Manager") -or 
@@ -103,14 +144,34 @@ $DynamicGroups = @(
     (user.jobTitle -contains "Chief") -or
     (user.jobTitle -contains "President")
 )
-'@
-        MembershipRuleProcessingState = "On"
-        GroupTypes = @("DynamicMembership")
-        SecurityEnabled = $true
-        MailEnabled = $false
-        Visibility = "Private"
-    }
+'@),
+    (New-DynamicGroupDefinition -BaseName "Marketing" -Description "Delta Crown Extensions marketing team - attribute-driven" -MailNickname "marketing" -MembershipRule '(user.department -eq "Delta Crown Marketing") -or (user.extensionAttribute1 -eq "Marketing")'),
+    (New-DynamicGroupDefinition -BaseName "Stylists" -Description "Delta Crown Extensions stylists - title or role based" -MailNickname "stylists" -MembershipRule '(user.jobTitle -contains "Stylist") -or (user.extensionAttribute1 -eq "Stylist")'),
+    (New-DynamicGroupDefinition -BaseName "DCE-Operations" -Description "Delta Crown Extensions operations function - driven by canonical role attribute" -MailNickname "dceoperations" -MembershipRule '(user.extensionAttribute1 -eq "Operations")'),
+    (New-DynamicGroupDefinition -BaseName "DCE-ClientServices" -Description "Delta Crown Extensions client services function - driven by canonical role attribute" -MailNickname "dceclientservices" -MembershipRule '(user.extensionAttribute1 -eq "ClientServices")'),
+    (New-DynamicGroupDefinition -BaseName "DCE-Leadership" -Description "Delta Crown Extensions leadership function - driven by canonical role or access profile" -MailNickname "dceleadership" -MembershipRule '(user.extensionAttribute1 -eq "Leadership") -or (user.extensionAttribute3 -eq "DCE-Leadership")')
 )
+
+foreach ($locationCode in $LocationCodes | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) {
+    $normalizedLocation = $locationCode.Trim()
+    $groupLocationSuffix = $normalizedLocation -replace '^DCE-', ''
+    $mailNickname = ("dceloc" + ($groupLocationSuffix -replace '[^A-Za-z0-9]', '')).ToLowerInvariant()
+    $DynamicGroups += New-DynamicGroupDefinition `
+        -BaseName "DCE-Loc-$groupLocationSuffix" `
+        -Description "Delta Crown Extensions location access group for $normalizedLocation" `
+        -MailNickname $mailNickname `
+        -MembershipRule "(user.officeLocation -eq `"$normalizedLocation`") -or (user.extensionAttribute2 -eq `"$normalizedLocation`")"
+}
+
+$StaticGroups = @()
+if ($CreatePilotGroup) {
+    $StaticGroups += New-StaticGroupDefinition `
+        -BaseName "DCE-CrossTenant-Pilot" `
+        -Description "Pilot validation group for cross-tenant onboarding and access checks" `
+        -MailNickname "dcecrosstenantpilot"
+}
+
+$AllGroupConfigs = @($DynamicGroups + $StaticGroups)
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -141,6 +202,11 @@ function Test-DynamicRuleSyntax {
         'user\.department',
         'user\.companyName',
         'user\.jobTitle',
+        'user\.officeLocation',
+        'user\.employeeType',
+        'user\.extensionAttribute1',
+        'user\.extensionAttribute2',
+        'user\.extensionAttribute3',
         'user\.userPrincipalName',
         'user\.mail',
         'user\.displayName',
@@ -187,7 +253,7 @@ function Export-GroupConfiguration {
             DisplayName = $Groups[$i].DisplayName
             Description = $Groups[$i].Description
             MailNickname = $Groups[$i].MailNickname
-            MembershipRule = $Groups[$i].MembershipRule -replace "`n", " " -replace "`r", ""
+            MembershipRule = if ($Groups[$i].ContainsKey('MembershipRule')) { $Groups[$i].MembershipRule -replace "`n", " " -replace "`r", "" } else { "Static membership" }
             ObjectId = if ($Results[$i]) { $Results[$i].Id } else { "N/A" }
             Status = if ($Results[$i]) { "Created" } else { "Failed" }
             Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
@@ -291,14 +357,19 @@ try {
     # ------------------------------------------------------------------------
     Write-DeltaCrownLog "Checking for duplicate group definitions..." "INFO"
     
-    $groupNames = $DynamicGroups | ForEach-Object { $_.DisplayName }
+    $groupNames = $AllGroupConfigs | ForEach-Object { $_.DisplayName }
     $duplicates = $groupNames | Group-Object | Where-Object { $_.Count -gt 1 }
     if ($duplicates) {
         throw "Duplicate group definitions found: $($duplicates.Name -join ', '). Each group must be unique."
     }
     
     # Check for existing groups with similar names (fuzzy match)
-    $allExistingGroups = Get-MgGroup -Filter "startsWith(displayName, '$GroupPrefix')" -ErrorAction SilentlyContinue
+    $allExistingGroups = if ([string]::IsNullOrWhiteSpace($GroupPrefix)) {
+        Get-MgGroup -Filter "displayName eq 'AllStaff' or displayName eq 'Managers' or displayName eq 'Marketing' or startsWith(displayName, 'DCE-') or startsWith(displayName, 'Stylists')" -ErrorAction SilentlyContinue
+    }
+    else {
+        Get-MgGroup -Filter "startsWith(displayName, '$GroupPrefix')" -ErrorAction SilentlyContinue
+    }
     if ($allExistingGroups) {
         Write-DeltaCrownLog "Found $($allExistingGroups.Count) existing groups with prefix '$GroupPrefix':" "INFO"
         foreach ($eg in $allExistingGroups) {
@@ -315,11 +386,13 @@ try {
     
     $createdGroups = @()
     
-    foreach ($groupConfig in $DynamicGroups) {
+    foreach ($groupConfig in $AllGroupConfigs) {
         Write-Log "`nProcessing group: $($groupConfig.DisplayName)"
         
-        # Validate rule syntax
-        Test-DynamicRuleSyntax -Rule $groupConfig.MembershipRule -GroupDisplayName $groupConfig.DisplayName
+        # Validate rule syntax for dynamic groups only
+        if ($groupConfig.MembershipMode -eq "Dynamic") {
+            Test-DynamicRuleSyntax -Rule $groupConfig.MembershipRule -GroupDisplayName $groupConfig.DisplayName
+        }
         
         # Check if group already exists
         $existingGroup = Get-MgGroup -Filter "displayName eq '$($groupConfig.DisplayName)'" -ErrorAction SilentlyContinue
@@ -332,65 +405,77 @@ try {
         
         if ($WhatIf) {
             Write-Log "WHATIF: Would create group $($groupConfig.DisplayName)" "WHATIF"
-            Write-Log "WHATIF: Membership Rule:`n$($groupConfig.MembershipRule)" "WHATIF"
+            if ($groupConfig.MembershipMode -eq "Dynamic") {
+                Write-Log "WHATIF: Membership Rule:`n$($groupConfig.MembershipRule)" "WHATIF"
+            }
             continue
         }
         
         # Create the dynamic group
         try {
             Write-Log "Creating dynamic group: $($groupConfig.DisplayName)..."
-            
+
             $params = @{
                 DisplayName = $groupConfig.DisplayName
                 Description = $groupConfig.Description
                 MailNickname = $groupConfig.MailNickname
-                GroupTypes = $groupConfig.GroupTypes
                 SecurityEnabled = $groupConfig.SecurityEnabled
                 MailEnabled = $groupConfig.MailEnabled
                 Visibility = $groupConfig.Visibility
-                MembershipRule = $groupConfig.MembershipRule
-                MembershipRuleProcessingState = $groupConfig.MembershipRuleProcessingState
+            }
+
+            if ($groupConfig.MembershipMode -eq "Dynamic") {
+                $params.GroupTypes = $groupConfig.GroupTypes
+                $params.MembershipRule = $groupConfig.MembershipRule
+                $params.MembershipRuleProcessingState = $groupConfig.MembershipRuleProcessingState
             }
             
             $newGroup = New-MgGroup -BodyParameter $params
             
             Write-Log "Created group: $($newGroup.DisplayName)" "SUCCESS"
             Write-Log "  - Object ID: $($newGroup.Id)"
-            Write-Log "  - Membership Rule Processing: $($newGroup.MembershipRuleProcessingState)"
-            
+            if ($groupConfig.MembershipMode -eq "Dynamic") {
+                Write-Log "  - Membership Rule Processing: $($newGroup.MembershipRuleProcessingState)"
+            }
+            else {
+                Write-Log "  - Membership Mode: Static"
+            }
+
             $createdGroups += $newGroup
-            
-            # R2.4C: Poll for group processing instead of fixed delay
-            Wait-DeltaCrownCondition -Condition {
-                $g = Get-MgGroup -GroupId $newGroup.Id -Property "id,membershipRuleProcessingState,membershipRuleProcessingError" -ErrorAction SilentlyContinue
-                return ($g -and (-not $g.MembershipRuleProcessingError))
-            } -TimeoutSeconds 60 -IntervalSeconds 5 -ActivityMessage "Waiting for membership rule processing: $($newGroup.DisplayName)" -OnTimeout {
-                Write-DeltaCrownLog "Membership rule processing timed out for $($newGroup.DisplayName). This may resolve within 24 hours." "WARNING"
-            }
-            
-            # Check initial membership status
-            $groupStatus = Get-MgGroup -GroupId $newGroup.Id -Property "id,displayName,membershipRuleProcessingState,membershipRuleProcessingError"
-            if ($groupStatus.MembershipRuleProcessingError) {
-                Write-Log "Membership processing error: $($groupStatus.MembershipRuleProcessingError)" "ERROR"
-            } else {
-                Write-Log "Membership rule processing state: $($groupStatus.MembershipRuleProcessingState)"
-            }
-            
-            # R2.3B: Post-creation membership count verification
-            $memberCheckAttempt = 0
-            $memberCount = 0
-            while ($memberCheckAttempt -lt 3) {
-                $memberCheckAttempt++
-                try {
-                    $members = Get-MgGroupMember -GroupId $newGroup.Id -All -ErrorAction SilentlyContinue
-                    $memberCount = if ($members) { $members.Count } else { 0 }
-                    break
+
+            if ($groupConfig.MembershipMode -eq "Dynamic") {
+                # R2.4C: Poll for group processing instead of fixed delay
+                Wait-DeltaCrownCondition -Condition {
+                    $g = Get-MgGroup -GroupId $newGroup.Id -Property "id,membershipRuleProcessingState,membershipRuleProcessingError" -ErrorAction SilentlyContinue
+                    return ($g -and (-not $g.MembershipRuleProcessingError))
+                } -TimeoutSeconds 60 -IntervalSeconds 5 -ActivityMessage "Waiting for membership rule processing: $($newGroup.DisplayName)" -OnTimeout {
+                    Write-DeltaCrownLog "Membership rule processing timed out for $($newGroup.DisplayName). This may resolve within 24 hours." "WARNING"
                 }
-                catch {
-                    Start-Sleep -Seconds 5
+
+                # Check initial membership status
+                $groupStatus = Get-MgGroup -GroupId $newGroup.Id -Property "id,displayName,membershipRuleProcessingState,membershipRuleProcessingError"
+                if ($groupStatus.MembershipRuleProcessingError) {
+                    Write-Log "Membership processing error: $($groupStatus.MembershipRuleProcessingError)" "ERROR"
+                } else {
+                    Write-Log "Membership rule processing state: $($groupStatus.MembershipRuleProcessingState)"
                 }
+
+                # R2.3B: Post-creation membership count verification
+                $memberCheckAttempt = 0
+                $memberCount = 0
+                while ($memberCheckAttempt -lt 3) {
+                    $memberCheckAttempt++
+                    try {
+                        $members = Get-MgGroupMember -GroupId $newGroup.Id -All -ErrorAction SilentlyContinue
+                        $memberCount = if ($members) { $members.Count } else { 0 }
+                        break
+                    }
+                    catch {
+                        Start-Sleep -Seconds 5
+                    }
+                }
+                Write-Log "  Membership count: $memberCount (may increase as Azure AD evaluates rule)" "INFO"
             }
-            Write-Log "  Membership count: $memberCount (may increase as Azure AD evaluates rule)" "INFO"
         }
         catch {
             Write-Log "Error creating group $($groupConfig.DisplayName): $_" "ERROR"
@@ -402,7 +487,7 @@ try {
     # STEP 3: Export Configuration
     # ------------------------------------------------------------------------
     if (!$WhatIf) {
-        Export-GroupConfiguration -Groups $DynamicGroups -Results $createdGroups
+        Export-GroupConfiguration -Groups $AllGroupConfigs -Results $createdGroups
     }
     
     # ------------------------------------------------------------------------
@@ -419,7 +504,14 @@ try {
 | Group Name | Purpose | Membership Rule |
 |------------|---------|-----------------|
 | AllStaff | All DCE employees | Department contains "Delta Crown" OR Company contains "Delta Crown Extensions" |
-| Managers | Management tier | Company contains "Delta Crown" AND (Title contains Manager/Director/VP/etc.) |
+| Managers | Baseline management tier | Company contains "Delta Crown" AND (Title contains Manager/Director/VP/etc.) |
+| Marketing | Marketing function | Department = Delta Crown Marketing OR extensionAttribute1 = Marketing |
+| Stylists | Stylist function | Title contains Stylist OR extensionAttribute1 = Stylist |
+| DCE-Operations | Operations function | extensionAttribute1 = Operations |
+| DCE-ClientServices | Client services function | extensionAttribute1 = ClientServices |
+| DCE-Leadership | Canonical leadership function | extensionAttribute1 = Leadership OR extensionAttribute3 = DCE-Leadership |
+| DCE-Loc-* | Location access groups | officeLocation = code OR extensionAttribute2 = code |
+| DCE-CrossTenant-Pilot | Pilot validation group | Static membership |
 
 ### SharePoint Permission Strategy
 
@@ -446,8 +538,8 @@ Use these groups for site permissions instead:
 
 ### Troubleshooting
 - Check membership rule syntax if group shows 0 members
-- Verify user attributes (department, companyName, jobTitle) are populated
-- Review Azure AD > Groups > [Group] > Members for status
+- Verify user attributes (`department`, `companyName`, `jobTitle`, `officeLocation`, `extensionAttribute1-3`) are populated
+- Review Entra ID > Groups > [Group] > Members for status
 
 Generated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 "@
@@ -460,7 +552,7 @@ Generated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
     # COMPLETION
     # ------------------------------------------------------------------------
     Write-Log "`n=== Azure AD Dynamic Groups Setup Complete ===" "SUCCESS"
-    Write-Log "Groups Processed: $($DynamicGroups.Count)"
+    Write-Log "Groups Processed: $($AllGroupConfigs.Count)"
     Write-Log "Groups Created: $($createdGroups.Count)"
     Write-Log "Log saved to: $LogFile"
     
@@ -473,7 +565,7 @@ Generated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
     
     return [PSCustomObject]@{
         GroupsCreated = $createdGroups
-        TotalConfigured = $DynamicGroups.Count
+        TotalConfigured = $AllGroupConfigs.Count
         WhatIfMode = $WhatIf
         Status = "SUCCESS"
         Timestamp = Get-Date
