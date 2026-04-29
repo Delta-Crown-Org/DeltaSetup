@@ -38,6 +38,15 @@ $ForbiddenGroups = @(
 )
 
 $TenantName = "deltacrown"
+$TenantId = "ce62e17d-2feb-4e67-a115-8ea4af68da30"
+$PnpConfigPath = Join-Path $PSScriptRoot "..\..\phase2-week1\modules\pnp-app-config.json"
+if (-not (Test-Path $PnpConfigPath)) {
+    throw "PnP app config not found: $PnpConfigPath"
+}
+$PnpClientId = (Get-Content $PnpConfigPath -Raw | ConvertFrom-Json).PnPClientId
+if (-not $PnpClientId) {
+    throw "PnPClientId missing from $PnpConfigPath"
+}
 $pnpConnection = $null
 
 try {
@@ -49,7 +58,7 @@ try {
         Write-Host "━━━ $siteName ━━━" -ForegroundColor Yellow
 
         # Connect to this site
-        $pnpConnection = Connect-PnPOnline -Url $siteUrl -DeviceLogin -Tenant "deltacrown.onmicrosoft.com" -ReturnConnection
+        $pnpConnection = Connect-PnPOnline -Url $siteUrl -DeviceLogin -ClientId $PnpClientId -Tenant $TenantId -ReturnConnection
         Write-Host "  Connected"
 
         # 1. Break inheritance
@@ -118,7 +127,7 @@ try {
         $siteUrl = "https://$TenantName.sharepoint.com/sites/$siteName"
         Write-Host "━━━ $siteName (sharing only) ━━━" -ForegroundColor Yellow
         try {
-            $conn = Connect-PnPOnline -Url $siteUrl -DeviceLogin -Tenant "deltacrown.onmicrosoft.com" -ReturnConnection
+            $conn = Connect-PnPOnline -Url $siteUrl -DeviceLogin -ClientId $PnpClientId -Tenant $TenantId -ReturnConnection
             if (-not $WhatIf) {
                 Set-PnPSite -Sharing Disabled -Connection $conn -ErrorAction SilentlyContinue
                 Write-Host "  ✅ External sharing disabled"
