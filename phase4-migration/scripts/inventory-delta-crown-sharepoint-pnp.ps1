@@ -5,9 +5,10 @@ Enhanced read-only SharePoint/PnP inventory for Delta Crown.
 .DESCRIPTION
 Uses PnP.PowerShell delegated auth to inventory SharePoint tenant sites,
 site/web metadata, lists/libraries, list-level unique permission flags, site
-groups, group member counts, and web role assignment summaries. The script does
-not read list items, file contents, or item-level permissions. Raw outputs are
-local-only and must not be committed.
+groups, group member rows, web role assignment summaries, and list/library role
+assignment summaries for risk-named or uniquely-permissioned lists. The script
+does not read list items, file contents, or item-level permissions. Raw outputs
+are local-only and must not be committed.
 #>
 
 [CmdletBinding()]
@@ -25,6 +26,10 @@ $ErrorActionPreference = "Stop"
 
 $RiskListNames = @("Client Records", "Service History", "Feedback")
 $RiskLibraryNames = @("Consent Forms")
+$DefaultDetailSkipUrls = @(
+    "https://deltacrown.sharepoint.com/sites/allcompany",
+    "https://deltacrown.sharepoint.com/sites/DeltaCrownOperations-Leadership"
+)
 
 function Write-InventoryLog {
     param([string]$Message)
@@ -141,8 +146,10 @@ function Get-ListSummaries {
     }
 }
 
-function Get-GroupSummaries {
+function Get-GroupInventory {
     param([string]$SiteUrl)
+    $summaryRows = @()
+    $memberRows = @()
     $groups = @(Get-PnPGroup -ErrorAction SilentlyContinue)
     foreach ($group in $groups) {
         $members = @()
@@ -152,26 +159,48 @@ function Get-GroupSummaries {
         catch {
             $members = @()
         }
-        [pscustomobject]@{
+        $summaryRows += [pscustomobject]@{
             SiteUrl     = $SiteUrl
             GroupTitle  = $group.Title
             OwnerTitle  = if ($group.OwnerTitle) { $group.OwnerTitle } else { "" }
             MemberCount = Safe-Count $members
             LoginNames  = Join-Values ($members | ForEach-Object { $_.LoginName })
         }
+        foreach ($member in $members) {
+            $memberRows += [pscustomobject]@{
+                SiteUrl     = $SiteUrl
+                GroupTitle  = $group.Title
+                MemberTitle = $member.Title
+                LoginName   = $member.LoginName
+                Email       = Get-OptionalProperty $member "Email"
+                PrincipalType = [string](Get-OptionalProperty $member "PrincipalType")
+            }
+        }
+    }
+    [pscustomobject]@{
+        Groups = @($summaryRows)
+        Members = @($memberRows)
     }
 }
 
-function Get-WebRoleAssignmentSummaries {
-    param([string]$SiteUrl)
-    $web = Get-PnPWeb -Includes RoleAssignments
-    $assignments = @()
+function Get-RoleAssignmentRows {
+    param(
+        [string]$SiteUrl,
+        [string]$Scope,
+        [string]$ObjectTitle,
+        [string]$ObjectUrl,
+        [object]$Object
+    )
+    $rows = @()
     try {
-        Get-PnPProperty -ClientObject $web -Property RoleAssignments | Out-Null
-        foreach ($assignment in $web.RoleAssignments) {
+        Get-PnPProperty -ClientObject $Object -Property RoleAssignments | Out-Null
+        foreach ($assignment in $Object.RoleAssignments) {
             Get-PnPProperty -ClientObject $assignment -Property Member,RoleDefinitionBindings | Out-Null
-            $assignments += [pscustomobject]@{
+            $rows += [pscustomobject]@{
                 SiteUrl       = $SiteUrl
+                Scope         = $Scope
+                ObjectTitle   = $ObjectTitle
+                ObjectUrl     = $ObjectUrl
                 PrincipalName = $assignment.Member.Title
                 PrincipalType = [string]$assignment.Member.PrincipalType
                 Roles         = Join-Values ($assignment.RoleDefinitionBindings | ForEach-Object { $_.Name })
@@ -179,14 +208,50 @@ function Get-WebRoleAssignmentSummaries {
         }
     }
     catch {
-        $assignments += [pscustomobject]@{
+        $rows += [pscustomobject]@{
             SiteUrl       = $SiteUrl
+            Scope         = $Scope
+            ObjectTitle   = $ObjectTitle
+            ObjectUrl     = $ObjectUrl
             PrincipalName = "<error>"
             PrincipalType = "Error"
             Roles         = $_.Exception.Message
         }
     }
-    return @($assignments)
+    return @($rows)
+}
+
+function Get-WebRoleAssignmentSummaries {
+    param([string]$SiteUrl)
+    $web = Get-PnPWeb -Includes Title,Url,RoleAssignments
+    return @(Get-RoleAssignmentRows -SiteUrl $SiteUrl -Scope "Web" -ObjectTitle $web.Title -ObjectUrl $web.Url -Object $web)
+}
+
+function Get-ListRoleAssignmentSummaries {
+    param([string]$SiteUrl)
+    $rows = @()
+    $lists = @(Get-PnPList -Includes Title,RootFolder,BaseType,Hidden,ItemCount,HasUniqueRoleAssignments,RoleAssignments)
+    foreach ($list in $lists) {
+        $rootUrl = if ($list.RootFolder) { $list.RootFolder.ServerRelativeUrl } else { "" }
+        $isRiskName = ($RiskListNames -contains $list.Title) -or ($RiskLibraryNames -contains $list.Title)
+        if (-not $list.HasUniqueRoleAssignments -and -not $isRiskName) {
+            continue
+        }
+        if (-not $list.HasUniqueRoleAssignments) {
+            $rows += [pscustomobject]@{
+                SiteUrl       = $SiteUrl
+                Scope         = "List"
+                ObjectTitle   = $list.Title
+                ObjectUrl     = $rootUrl
+                PrincipalName = "<inherits from web>"
+                PrincipalType = "Inherited"
+                Roles         = "Inherited"
+            }
+            continue
+        }
+        $rows += Get-RoleAssignmentRows -SiteUrl $SiteUrl -Scope "List" -ObjectTitle $list.Title -ObjectUrl $rootUrl -Object $list
+    }
+    return @($rows)
 }
 
 function Build-Summary {
@@ -195,7 +260,9 @@ function Build-Summary {
         [object[]]$Webs,
         [object[]]$Lists,
         [object[]]$Groups,
-        [object[]]$RoleAssignments,
+        [object[]]$GroupMembers,
+        [object[]]$WebRoleAssignments,
+        [object[]]$ListRoleAssignments,
         [object[]]$Errors
     )
     $riskLists = @($Lists | Where-Object { $_.IsRiskName })
@@ -220,7 +287,9 @@ function Build-Summary {
         RiskNamedListOrLibraryCount = Safe-Count $riskLists
         ListUniquePermissionCount = Safe-Count $uniqueLists
         GroupCount = Safe-Count $Groups
-        WebRoleAssignmentCount = Safe-Count $RoleAssignments
+        GroupMemberRowCount = Safe-Count $GroupMembers
+        WebRoleAssignmentCount = Safe-Count $WebRoleAssignments
+        ListRoleAssignmentCount = Safe-Count $ListRoleAssignments
         ExternalSharingSiteCount = Safe-Count $externalSharingSites
         ClientServicesSiteCount = Safe-Count $clientServicesSites
         BrandResourceOrAssetNameMatchCount = Safe-Count $brandResourcesMatches
@@ -228,6 +297,7 @@ function Build-Summary {
         TenantSites = @($TenantSites | Select-Object Url,Title,Template,SharingCapability,Owner,GroupId,HubSiteId,IsHubSite)
         RiskNamedLists = @($riskLists | Select-Object SiteUrl,Title,BaseType,ItemCount,HasUniqueRoleAssignments)
         UniquePermissionLists = @($uniqueLists | Select-Object SiteUrl,Title,BaseType,ItemCount)
+        RiskListRoleAssignments = @($ListRoleAssignments | Where-Object { $_.ObjectTitle -in ($RiskListNames + $RiskLibraryNames) } | Select-Object SiteUrl,ObjectTitle,ObjectUrl,PrincipalName,PrincipalType,Roles)
         Errors = $Errors
     }
 }
@@ -239,7 +309,9 @@ $tenantSites = @()
 $webRows = @()
 $listRows = @()
 $groupRows = @()
-$roleRows = @()
+$groupMemberRows = @()
+$webRoleRows = @()
+$listRoleRows = @()
 $errors = @()
 
 try {
@@ -257,13 +329,21 @@ finally {
 foreach ($site in $tenantSites) {
     $siteUrl = $site.Url
     if (-not $siteUrl) { continue }
+    if ($DefaultDetailSkipUrls -contains $siteUrl) {
+        Write-InventoryLog "Skipping known access-limited site detail: $siteUrl"
+        $errors += [pscustomobject]@{ SiteUrl = $siteUrl; Scope = "site-detail"; Error = "Skipped: known access-limited site from prior PnP inventory." }
+        continue
+    }
     Write-InventoryLog "Inventorying site: $siteUrl"
     try {
         Connect-PnPInventory -Url $siteUrl
         $webRows += Get-WebSummary -SiteUrl $siteUrl
         $listRows += Get-ListSummaries -SiteUrl $siteUrl
-        $groupRows += Get-GroupSummaries -SiteUrl $siteUrl
-        $roleRows += Get-WebRoleAssignmentSummaries -SiteUrl $siteUrl
+        $groupInventory = Get-GroupInventory -SiteUrl $siteUrl
+        $groupRows += $groupInventory.Groups
+        $groupMemberRows += $groupInventory.Members
+        $webRoleRows += Get-WebRoleAssignmentSummaries -SiteUrl $siteUrl
+        $listRoleRows += Get-ListRoleAssignmentSummaries -SiteUrl $siteUrl
     }
     catch {
         $errors += [pscustomobject]@{ SiteUrl = $siteUrl; Scope = "site-detail"; Error = $_.Exception.Message }
@@ -277,9 +357,11 @@ Export-Rows -Rows $tenantSites -Path (Join-Path $OutputPath "sharepoint-pnp-tena
 Export-Rows -Rows $webRows -Path (Join-Path $OutputPath "sharepoint-pnp-webs.csv")
 Export-Rows -Rows $listRows -Path (Join-Path $OutputPath "sharepoint-pnp-lists.csv")
 Export-Rows -Rows $groupRows -Path (Join-Path $OutputPath "sharepoint-pnp-site-groups.csv")
-Export-Rows -Rows $roleRows -Path (Join-Path $OutputPath "sharepoint-pnp-web-role-assignments.csv")
+Export-Rows -Rows $groupMemberRows -Path (Join-Path $OutputPath "sharepoint-pnp-site-group-members.csv")
+Export-Rows -Rows $webRoleRows -Path (Join-Path $OutputPath "sharepoint-pnp-web-role-assignments.csv")
+Export-Rows -Rows $listRoleRows -Path (Join-Path $OutputPath "sharepoint-pnp-list-role-assignments.csv")
 Export-Rows -Rows $errors -Path (Join-Path $OutputPath "sharepoint-pnp-errors.csv")
 
-$summary = Build-Summary -TenantSites $tenantSites -Webs $webRows -Lists $listRows -Groups $groupRows -RoleAssignments $roleRows -Errors $errors
+$summary = Build-Summary -TenantSites $tenantSites -Webs $webRows -Lists $listRows -Groups $groupRows -GroupMembers $groupMemberRows -WebRoleAssignments $webRoleRows -ListRoleAssignments $listRoleRows -Errors $errors
 $summary | ConvertTo-Json -Depth 8 | Set-Content -Path (Join-Path $OutputPath "sharepoint-pnp-summary.json") -Encoding UTF8
 Write-InventoryLog "Wrote enhanced SharePoint/PnP inventory outputs to $OutputPath"
