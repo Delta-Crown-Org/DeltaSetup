@@ -11,32 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Tenor+Sans&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <style>
-    .op-hero { min-height: 92vh; }
-    .op-kicker { color: var(--gold); text-transform: uppercase; letter-spacing: .18em; font-size: .8rem; }
-    .op-pill-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 32px; }
-    .op-pill { border: 1px solid rgba(212,168,75,.35); color: var(--gold-light); border-radius: 999px; padding: 8px 14px; background: rgba(255,255,255,.05); font-size: .78rem; }
-    .op-list { display: grid; gap: 12px; margin-top: 18px; }
-    .op-list li { display: flex; gap: 10px; align-items: flex-start; color: var(--text-secondary); font-size: .93rem; }
-    .section--dark .op-list li, .section--teal .op-list li { color: rgba(255,255,255,.72); }
-    .op-list .material-symbols-outlined { color: var(--gold); font-size: 20px; flex-shrink: 0; margin-top: 2px; }
-    .op-map { display: grid; grid-template-columns: repeat(5, minmax(150px, 1fr)); gap: 14px; align-items: stretch; }
-    .op-map-card { border-radius: 16px; padding: 20px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); min-height: 180px; }
-    .op-map-card h3 { font-size: 1.05rem; margin: 10px 0 8px; }
-    .op-map-card p { font-size: .82rem; color: rgba(255,255,255,.66); }
-    .op-arrow { display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 28px; }
-    .op-table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 16px; }
-    .op-table th, .op-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.1); vertical-align: top; }
-    .op-table th { color: var(--gold-light); font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; background: rgba(255,255,255,.06); }
-    .op-table td { color: rgba(255,255,255,.78); font-size: .9rem; }
-    .op-badge { display: inline-block; border-radius: 999px; padding: 4px 10px; font-size: .72rem; background: rgba(212,168,75,.12); color: var(--gold-light); border: 1px solid rgba(212,168,75,.22); margin: 2px 4px 2px 0; }
-    .op-lane { border-left: 3px solid var(--gold); padding-left: 18px; margin-bottom: 26px; }
-    .op-lane h3 { color: var(--teal-deeper); }
-    .section--dark .op-lane h3 { color: #fff; }
-    .op-mini { font-size: .82rem; color: var(--text-muted); }
-    .op-quote { font-family: var(--font-heading); color: #fff; font-size: clamp(1.4rem, 3vw, 2.2rem); line-height: 1.25; }
-    @media (max-width: 1000px) { .op-map { grid-template-columns: 1fr; } .op-arrow { transform: rotate(90deg); } }
-  </style>
+  <link rel="stylesheet" href="css/microsoft-platform.css?v=20260430-visual3">
+  <link rel="stylesheet" href="css/operations.css?v=20260430-ops2">
 </head>
 <body>
   <a href="#hero" class="skip-link">Skip to content</a>
@@ -62,16 +38,30 @@
     <section class="section hero op-hero" id="hero">
       <div class="hero__content container">
         <p class="op-kicker reveal">Executive & Operations View</p>
-        <h1 class="hero__title reveal">The Delta Brands<br>Microsoft 365 Operating Model.</h1>
-        <p class="reveal" style="max-width: 760px; margin: 0 auto; color: rgba(255,255,255,.66); font-size: 1.05rem;">
-          A people-first identity architecture that makes Delta Crown Extensions visible inside the Head to Toe Brands ecosystem, routes people into the right groups, lights up the right SharePoint and Teams spaces, and becomes the repeatable pattern for every future brand.
+        <h1 class="hero__title reveal">The Microsoft 365<br>Operating System.</h1>
+        <p class="reveal" style="max-width: 780px; margin: 0 auto; color: rgba(255,255,255,.68); font-size: 1.08rem;">
+          Delta Crown becomes the pilot brand for a cleaner ops model: identity tells Microsoft who someone is, Microsoft routes them into the right places, and ops gets predictable access without manually stitching the business together.
         </p>
-        <div class="op-pill-row reveal">
-          <span class="op-pill">Cross-tenant identity</span>
-          <span class="op-pill">Dynamic groups</span>
-          <span class="op-pill">SharePoint hub & spoke</span>
-          <span class="op-pill">Teams operations workspace</span>
-          <span class="op-pill">SSO-ready app access</span>
+
+        <div class="op-system-strip reveal" aria-label="Microsoft systems powering operations">
+          <div class="op-system"><img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="Microsoft 365"><strong>Microsoft 365</strong><span>Tenant foundation</span></div>
+          <div class="op-system"><img src="phase4-migration/assets/microsoft-icons/people-settings.svg" alt="Microsoft Entra ID"><strong>Entra ID</strong><span>Identity rules</span></div>
+          <div class="op-system"><img src="phase4-migration/assets/microsoft-icons/folder-people.svg" alt="Microsoft SharePoint"><strong>SharePoint</strong><span>Hubs + docs</span></div>
+          <div class="op-system"><img src="phase4-migration/assets/microsoft-icons/share.svg" alt="Microsoft Teams collaboration"><strong>Teams</strong><span>Daily ops</span></div>
+          <div class="op-system"><img src="phase4-migration/assets/microsoft-icons/lock-shield.svg" alt="Microsoft security"><strong>Security</strong><span>DLP + access</span></div>
+        </div>
+
+        <div class="op-command reveal" aria-label="Operations command summary">
+          <div class="op-command__panel op-command__panel--gold">
+            <span class="op-command__label">The operating rule</span>
+            <strong class="op-command__big">Clean identity in.<br>Clean access out.</strong>
+            <p>Stop treating SharePoint, Teams, mail, and apps like separate chores. Identity becomes the control panel.</p>
+          </div>
+          <div class="op-command__panel">
+            <span class="op-command__label">Live state</span>
+            <strong class="op-command__big">6</strong>
+            <p>DCE users currently resolve through AllStaff. The next ops win is completing titles and departments so the rest of the dynamic groups light up.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -79,22 +69,16 @@
     <section class="section" id="operating-model">
       <div class="container">
         <p class="label mb-16 reveal">The Mission</p>
-        <div class="grid grid--2 grid--center">
-          <div>
-            <h2 class="mb-24 reveal">Onboard the person correctly once. Let the ecosystem do the rest.</h2>
-            <p class="text-muted reveal" style="font-size: 1.05rem;">
-              Delta Crown is the first full brand implementation of a cleaner operating model: identity attributes describe who someone is, groups translate that identity into access, and Microsoft 365 resources inherit that structure instead of being manually patched together after the fact.
-            </p>
-          </div>
-          <div class="card card--elevated card--gold-border reveal">
-            <h3>Business Value</h3>
-            <ul class="op-list">
-              <li><span class="material-symbols-outlined">search</span><span>Delta team members show up clearly in directory searches as Delta Crown / Delta Brands people.</span></li>
-              <li><span class="material-symbols-outlined">hub</span><span>Corporate operators, FBCs, and support teams know where to find brand workspaces and who belongs there.</span></li>
-              <li><span class="material-symbols-outlined">rule</span><span>Role, brand, department, and location changes become controlled identity updates instead of one-off permission chaos.</span></li>
-              <li><span class="material-symbols-outlined">rocket_launch</span><span>The same pattern can be reused for Bishops, Frenchies, Lash Lounge, and future brands.</span></li>
-            </ul>
-          </div>
+        <h2 class="mb-16 reveal" style="max-width: 760px;">Ops should not have to remember where every permission lives.</h2>
+        <p class="text-muted reveal" style="font-size: 1.05rem; max-width: 760px;">
+          The platform translates one clean person record into the workspace, documents, groups, and app access that person needs. That is the story: fewer one-off fixes, faster onboarding, safer access, repeatable brand rollout.
+        </p>
+
+        <div class="op-impact-grid reveal" aria-label="Operational impact cards">
+          <article class="op-impact"><img src="phase4-migration/assets/microsoft-icons/people-team.svg" alt="People"><strong>People are findable</strong><p>Corporate support sees who belongs to Delta Crown and what role they play.</p></article>
+          <article class="op-impact"><img src="phase4-migration/assets/microsoft-icons/key.svg" alt="Access"><strong>Access is explainable</strong><p>Groups are driven by attributes instead of someone’s memory of a permission rabbit hole.</p></article>
+          <article class="op-impact"><img src="phase4-migration/assets/microsoft-icons/folder-people.svg" alt="Workspace"><strong>Workspaces are obvious</strong><p>Users land in DCE spaces, not the HTT shared-docs junk drawer.</p></article>
+          <article class="op-impact"><img src="phase4-migration/assets/microsoft-icons/apps.svg" alt="Apps"><strong>Apps can follow</strong><p>The same identity model can drive FranConnect, Monday, Freshdesk, mail routing, and more.</p></article>
         </div>
       </div>
     </section>
@@ -102,60 +86,25 @@
     <section class="section section--dark" id="identity">
       <div class="container">
         <p class="label mb-16 reveal">Identity Is The Control Plane</p>
-        <h2 class="mb-24 reveal">The person record drives everything downstream.</h2>
+        <h2 class="mb-16 reveal">One person record controls the downstream experience.</h2>
         <p class="text-muted mb-48 reveal" style="max-width: 760px; color: rgba(255,255,255,.58);">
-          Microsoft credentials become the anchor for directory visibility, MFA/passkeys, SharePoint permissions, Teams membership, distribution lists, and SSO-backed application access.
+          Microsoft credentials anchor MFA/passkeys, directory visibility, dynamic groups, SharePoint permissions, Teams membership, distribution lists, and future SSO-backed application access.
         </p>
 
-        <div class="op-map reveal">
-          <div class="op-map-card">
-            <span class="material-symbols-outlined" style="color: var(--gold); font-size: 34px;">person_add</span>
-            <h3>1. Onboard Person</h3>
-            <p>Create or sync the user with a clean Microsoft identity, MFA, and future passkey-ready credential posture.</p>
-          </div>
-          <div class="op-arrow">→</div>
-          <div class="op-map-card">
-            <span class="material-symbols-outlined" style="color: var(--gold); font-size: 34px;">badge</span>
-            <h3>2. Set Attributes</h3>
-            <p>Brand, company, department, role, title, location, manager, and support affiliation describe who they are.</p>
-          </div>
-          <div class="op-arrow">→</div>
-          <div class="op-map-card">
-            <span class="material-symbols-outlined" style="color: var(--gold); font-size: 34px;">groups</span>
-            <h3>3. Group Assignment</h3>
-            <p>Dynamic groups and M365 groups translate identity into membership without hand-managed sprawl.</p>
-          </div>
-        </div>
-
-        <div class="grid grid--3 stagger" style="margin-top: 32px;">
-          <div class="card card--glass reveal">
-            <h3>Minimum Attribute Set</h3>
-            <ul class="op-list">
-              <li><span class="material-symbols-outlined">apartment</span><span><strong>companyName:</strong> Delta Crown Extensions</span></li>
-              <li><span class="material-symbols-outlined">domain</span><span><strong>department:</strong> Operations, Marketing, Training, Finance, etc.</span></li>
-              <li><span class="material-symbols-outlined">work</span><span><strong>jobTitle:</strong> manager/director/stylist/FBC/support role signals</span></li>
-              <li><span class="material-symbols-outlined">store</span><span><strong>location:</strong> salon, market, region, or corporate support scope</span></li>
-            </ul>
-          </div>
-          <div class="card card--glass reveal">
-            <h3>Current DCE Groups</h3>
-            <p class="op-mini" style="color: rgba(255,255,255,.55);">Foundation groups used by SharePoint, Teams, and future app access.</p>
-            <div style="margin-top: 16px;">
-              <span class="op-badge">AllStaff</span>
-              <span class="op-badge">Managers</span>
-              <span class="op-badge">Stylists</span>
-              <span class="op-badge">Marketing</span>
-              <span class="op-badge">External</span>
+        <div class="identity-tower reveal">
+          <div class="identity-tower__card">
+            <img src="phase4-migration/assets/microsoft-icons/people-settings.svg" alt="Entra ID rules">
+            <h3>Ops updates facts, not permissions.</h3>
+            <p>Brand, company, department, title, role, location, manager, and support scope describe the person. Entra ID turns those facts into membership.</p>
+            <div style="margin-top: 20px;">
+              <span class="op-badge">companyName</span><span class="op-badge">department</span><span class="op-badge">jobTitle</span><span class="op-badge">location</span><span class="op-badge">manager</span>
             </div>
           </div>
-          <div class="card card--glass reveal">
-            <h3>Future App Provisioning</h3>
-            <ul class="op-list">
-              <li><span class="material-symbols-outlined">login</span><span>FranConnect SSO / role assignment</span></li>
-              <li><span class="material-symbols-outlined">task_alt</span><span>Monday workspace access</span></li>
-              <li><span class="material-symbols-outlined">support_agent</span><span>Freshdesk support queues</span></li>
-              <li><span class="material-symbols-outlined">mail</span><span>Distribution lists and shared mailbox routing</span></li>
-            </ul>
+          <div class="identity-flow" aria-label="Identity flow">
+            <div class="identity-flow__step"><img src="phase4-migration/assets/microsoft-icons/people-team.svg" alt="User"><div><strong>1. User enters the ecosystem</strong><span>Clean Microsoft identity with MFA/passkey-ready posture.</span></div><div class="identity-flow__arrow">→</div></div>
+            <div class="identity-flow__step"><img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="Profile"><div><strong>2. Profile attributes define context</strong><span>Delta Crown Extensions, role, department, location, support scope.</span></div><div class="identity-flow__arrow">→</div></div>
+            <div class="identity-flow__step"><img src="phase4-migration/assets/microsoft-icons/key.svg" alt="Groups"><div><strong>3. Dynamic groups activate</strong><span>AllStaff now; Managers, Stylists, Marketing when metadata is complete.</span></div><div class="identity-flow__arrow">→</div></div>
+            <div class="identity-flow__step"><img src="phase4-migration/assets/microsoft-icons/apps.svg" alt="Apps"><div><strong>4. Workspaces and apps light up</strong><span>SharePoint, Teams, mail routing, support tools, future SSO.</span></div><div class="identity-flow__arrow">✓</div></div>
           </div>
         </div>
       </div>
@@ -164,35 +113,19 @@
     <section class="section" id="architecture">
       <div class="container">
         <p class="label mb-16 reveal">Golden Child Layout</p>
-        <h2 class="mb-48 reveal">Identity invites the right architecture.</h2>
-        <div class="grid grid--2-1">
-          <div class="card card--elevated reveal">
-            <h3>SharePoint Sites</h3>
-            <table class="op-table" style="margin-top: 18px; background: var(--teal-deeper);">
-              <thead><tr><th>Site</th><th>Purpose</th><th>Primary Access</th></tr></thead>
-              <tbody>
-                <tr><td>DCE Hub</td><td>Brand landing page, navigation, announcements</td><td>AllStaff read, Managers own</td></tr>
-                <tr><td>DCE Operations</td><td>Daily ops, bookings, franchise execution</td><td>AllStaff read, Managers full control</td></tr>
-                <tr><td>DCE Client Services</td><td>Client experience lists, forms, service workflows</td><td>AllStaff read, Managers full control</td></tr>
-                <tr><td>DCE Marketing</td><td>Brand assets, campaigns, social content</td><td>Marketing edit, AllStaff read</td></tr>
-                <tr><td>DCE Docs</td><td>Policies, SOPs, training, templates</td><td>AllStaff read, Managers full control</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="card card--elevated card--gold-border reveal">
-            <h3>Teams Structure</h3>
-            <ul class="op-list">
-              <li><span class="material-symbols-outlined">forum</span><span><strong>General:</strong> operating announcements and team coordination.</span></li>
-              <li><span class="material-symbols-outlined">checklist</span><span><strong>Daily Ops:</strong> routines, issue tracking, field execution.</span></li>
-              <li><span class="material-symbols-outlined">calendar_month</span><span><strong>Bookings:</strong> service coordination and appointment support.</span></li>
-              <li><span class="material-symbols-outlined">campaign</span><span><strong>Marketing:</strong> launch assets and campaign collaboration.</span></li>
-              <li><span class="material-symbols-outlined">lock</span><span><strong>Leadership:</strong> manager-only working space.</span></li>
-            </ul>
-          </div>
+        <h2 class="mb-16 reveal">The DCE workspace is a product, not a folder.</h2>
+        <p class="text-muted mb-48 reveal" style="max-width: 720px;">Each Microsoft workspace has a job. Ops gets a clean front door, structured daily-work spaces, and access lanes that are easy to explain.</p>
+
+        <div class="op-workspaces reveal" aria-label="DCE workspaces">
+          <article class="op-workspace"><img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="Hub"><strong>DCE Hub</strong><p>Brand landing page, navigation, announcements, scoped search.</p><ul><li>AllStaff read</li><li>Managers own</li></ul></article>
+          <article class="op-workspace"><img src="phase4-migration/assets/microsoft-icons/share.svg" alt="Teams"><strong>Operations</strong><p>Daily work, bookings, task execution, franchise support rhythm.</p><ul><li>Microsoft 365 group</li><li>6 DCE members live</li></ul></article>
+          <article class="op-workspace"><img src="phase4-migration/assets/microsoft-icons/document-key.svg" alt="Client services"><strong>Client Services</strong><p>Protected client workflows, records, service history, sensitive notes.</p><ul><li>Least privilege</li><li>PII-aware</li></ul></article>
+          <article class="op-workspace"><img src="phase4-migration/assets/microsoft-icons/apps.svg" alt="Marketing"><strong>Marketing</strong><p>Campaign assets, social content, brand guidelines, launch calendars.</p><ul><li>Marketing edit</li><li>AllStaff read</li></ul></article>
+          <article class="op-workspace"><img src="phase4-migration/assets/microsoft-icons/document-multiple.svg" alt="Docs"><strong>DCE Docs</strong><p>Policies, SOPs, training, templates, leadership strategy materials.</p><ul><li>Controlled source</li><li>No HTTHQ copy</li></ul></article>
         </div>
 
         <div class="callout callout--gold reveal" style="margin-top: 32px;">
-          <p><strong>No HTTHQ document migration:</strong> the system architecture is live without copying legacy files. New information architecture is ready for clean content going forward.</p>
+          <p><strong>Important:</strong> Graph proved the Delta Crown Operations M365 group and membership. Teams channel layout still needs final verification before launch materials promise specific channel names.</p>
         </div>
       </div>
     </section>
@@ -200,24 +133,11 @@
     <section class="section section--teal" id="access">
       <div class="container">
         <p class="label mb-16 reveal">HTT Brands Corporate Access</p>
-        <h2 class="mb-24 reveal">How Delta shows up inside the Head to Toe Brands ecosystem.</h2>
-        <div class="grid grid--2">
-          <div class="card card--glass reveal">
-            <h3>Directory & Collaboration</h3>
-            <ul class="op-list">
-              <li><span class="material-symbols-outlined">sync_alt</span><span>Cross-tenant sync creates or maintains visible identities so Delta people can be found by corporate support teams.</span></li>
-              <li><span class="material-symbols-outlined">manage_search</span><span>Consistent brand attributes make search, filtering, and support routing obvious: this person belongs to Delta Crown Extensions.</span></li>
-              <li><span class="material-symbols-outlined">verified_user</span><span>Admission into the ecosystem and authorization to resources stay separate. No dynamic-group chicken-and-egg nonsense.</span></li>
-            </ul>
-          </div>
-          <div class="card card--glass reveal">
-            <h3>What Corporate Teams Do</h3>
-            <ul class="op-list">
-              <li><span class="material-symbols-outlined">support_agent</span><span>FBCs and corporate operators locate Delta users and collaborate through approved Teams/SharePoint spaces.</span></li>
-              <li><span class="material-symbols-outlined">admin_panel_settings</span><span>IT governs identity, MFA/passkeys, licensing, billing, and app access using the same attribute-driven model.</span></li>
-              <li><span class="material-symbols-outlined">insights</span><span>Executives see a repeatable brand operating system instead of another isolated Microsoft tenant island.</span></li>
-            </ul>
-          </div>
+        <h2 class="mb-24 reveal">Delta becomes visible to corporate without becoming wide open.</h2>
+        <div class="op-access-grid reveal">
+          <article class="op-access-card"><img src="phase4-migration/assets/microsoft-icons/people-team.svg" alt="Microsoft people directory icon"><h3>Find the right person</h3><p>Corporate operators can identify Delta Crown people by consistent Microsoft profile data.</p></article>
+          <article class="op-access-card"><img src="phase4-migration/assets/microsoft-icons/share.svg" alt="Collaboration"><h3>Collaborate in approved spaces</h3><p>Support teams use the correct Teams/SharePoint spaces instead of ad hoc links and folder archaeology.</p></article>
+          <article class="op-access-card"><img src="phase4-migration/assets/microsoft-icons/lock-shield.svg" alt="Security"><h3>Keep authorization separate</h3><p>Being visible in the ecosystem does not mean access to everything. Groups still decide what opens.</p></article>
         </div>
 
         <div class="card card--glass reveal" style="margin-top: 32px;">
@@ -229,47 +149,23 @@
     <section class="section" id="future">
       <div class="container">
         <p class="label mb-16 reveal">Repeatable Brand Pattern</p>
-        <h2 class="mb-48 reveal">Delta is the starting point, not the exception.</h2>
-        <div class="grid grid--2">
-          <div class="reveal">
-            <div class="op-lane">
-              <h3>1. Standardize Identity</h3>
-              <p class="text-muted">Every brand user gets consistent attributes: brand, company, department, title, role, location, manager, and support scope.</p>
-            </div>
-            <div class="op-lane">
-              <h3>2. Standardize Groups</h3>
-              <p class="text-muted">Dynamic security groups, M365 groups, distribution lists, and app roles are driven from those attributes.</p>
-            </div>
-            <div class="op-lane">
-              <h3>3. Standardize Workspaces</h3>
-              <p class="text-muted">SharePoint hubs, Teams channels, libraries, lists, and permissions are provisioned from a known pattern.</p>
-            </div>
-          </div>
-          <div class="card card--elevated card--gold-border reveal">
-            <h3>Operating Outcomes</h3>
-            <ul class="op-list">
-              <li><span class="material-symbols-outlined">payments</span><span>Licensing and billing can roll up cleanly across the cross-tenant ecosystem.</span></li>
-              <li><span class="material-symbols-outlined">key</span><span>MFA now, passkeys next, and consistent identity security across brands.</span></li>
-              <li><span class="material-symbols-outlined">apps</span><span>Enterprise apps can use Microsoft identity for SSO and lifecycle-managed access.</span></li>
-              <li><span class="material-symbols-outlined">schema</span><span>New brands get an operating framework instead of starting from a blank tenant.</span></li>
-            </ul>
-          </div>
+        <h2 class="mb-48 reveal">Delta is the operating pattern for every future brand.</h2>
+        <div class="op-future-track reveal" aria-label="Repeatable rollout pattern">
+          <article class="op-future-step"><span>01</span><strong>Standardize identity</strong><p>Brand, company, department, title, role, location, manager, support scope.</p></article>
+          <article class="op-future-step"><span>02</span><strong>Standardize groups</strong><p>Dynamic groups, M365 groups, distribution lists, and app roles.</p></article>
+          <article class="op-future-step"><span>03</span><strong>Standardize workspaces</strong><p>SharePoint hubs, Teams workspaces, libraries, lists, and permission lanes.</p></article>
+          <article class="op-future-step"><span>04</span><strong>Standardize apps</strong><p>SSO-ready access for FranConnect, Monday, Freshdesk, mail routing, and future tools.</p></article>
         </div>
       </div>
     </section>
 
     <section class="section cta-section" id="cta">
-      <div class="container text-center" style="position: relative; z-index: 1;">
-        <h2 class="reveal mb-24">The new brand operating system is identity-led.</h2>
-        <p class="reveal mb-32" style="color: rgba(255,255,255,.58); max-width: 680px; margin-left: auto; margin-right: auto;">
+      <div class="container text-center">
+        <p class="label mb-16 reveal">The Playbook</p>
+        <h2 class="reveal mb-24">Clean identity. Predictable access. Repeatable brands.</h2>
+        <p class="reveal" style="max-width: 720px; margin: 0 auto; color: rgba(255,255,255,.66);">
           Start with a clean person record. Let attributes drive groups. Let groups drive SharePoint, Teams, mail, apps, and support visibility. Then repeat the pattern for every brand.
         </p>
-        <div class="stats mb-48 reveal">
-          <div class="stat"><div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">1</div><div class="stat__label">Identity Model</div></div>
-          <div class="stat"><div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">5</div><div class="stat__label">Core Groups</div></div>
-          <div class="stat"><div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">4+</div><div class="stat__label">Brands To Scale</div></div>
-        </div>
-        <a href="./index.html" class="op-pill">Back to project status</a>
       </div>
     </section>
   </main>
