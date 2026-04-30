@@ -581,7 +581,7 @@
       <div class="audit-flow reveal" aria-label="Identity and access flow">
         <h3>Access flow: boring on purpose, because boring scales</h3>
         <ol>
-          <li><strong>Identity labels</strong><span>Collect and normalize <code>companyName</code>, <code>department</code>, <code>jobTitle</code>, <code>officeLocation</code>, <code>employeeType</code>, and extension attributes.</span></li>
+          <li><strong>Identity labels</strong><span>Collect and normalize standardized company, department, role/title, employment-type, location, and access-profile metadata.</span></li>
           <li><strong>Dynamic groups</strong><span>Let Entra resolve confirmed groups: <code>AllStaff</code>, <code>Managers</code>, <code>Stylists</code>, <code>External</code>, <code>Marketing</code>.</span></li>
           <li><strong>Resource permissions</strong><span>Assign SharePoint, Teams, shared mailbox, and app access to groups instead of sprinkling direct user permissions everywhere like confetti from hell.</span></li>
           <li><strong>Verification</strong><span>Test expected access, unexpected access denial, mailbox/app behavior, and capture exceptions as model cleanup.</span></li>
@@ -605,7 +605,7 @@
           <h3>Groups: confirmed vs planned</h3>
           <dl class="audit-definition-list">
             <div><dt>Confirmed/current</dt><dd><code>AllStaff</code>, <code>Managers</code>, <code>Stylists</code>, <code>External</code>, <code>Marketing</code>.</dd></div>
-            <div><dt>Planned/TODO</dt><dd>Functional groups such as <code>DCE-Operations</code>, <code>DCE-ClientServices</code>, <code>DCE-Marketing</code>, <code>DCE-Leadership</code>; location groups such as <code>DCE-Loc-LV</code>, <code>DCE-Loc-PHX</code>, <code>DCE-Loc-DAL</code>; <code>DCE-CrossTenant-Pilot</code>.</dd></div>
+            <div><dt>Planned/TODO</dt><dd>Functional groups such as <code>DCE-Operations</code>, <code>DCE-ClientServices</code>, <code>DCE-Marketing</code>, <code>DCE-Leadership</code>; location groups following the <code>DCE-Loc-*</code> pattern; <code>DCE-CrossTenant-Pilot</code>.</dd></div>
             <div><dt>Status note</dt><dd>Next-step functional/location groups are planned/TODO where not confirmed by the source docs.</dd></div>
           </dl>
         </article>
@@ -617,18 +617,18 @@
             <span role="listitem">External sharing disabled, guest access off, and anonymous link controls documented.</span>
             <span role="listitem">E2E testing pending for sites, navigation, permissions, Exchange, DLP, and onboarding.</span>
             <span role="listitem">No HTTHQ document migration is part of the active rollout.</span>
-            <span role="listitem">TODO — delete temp app <code>DeltaCrown-TeamsProvisioner-TEMP</code> if still present; owner confirmation needed.</span>
+            <span role="listitem">TODO — verify and remove any temporary provisioning app registrations if still present; owner confirmation needed.</span>
           </div>
         </article>
 
         <article class="audit-panel">
-          <h3>Offboarding / deprovisioning</h3>
-          <p class="audit-todo"><strong>TODO — owner confirmation needed.</strong> Exact deprovisioning docs were not present in the provided sources.</p>
+          <h3>Target deprovisioning control pending owner-approved runbook</h3>
+          <p class="audit-todo"><strong>TODO — owner confirmation needed.</strong> Exact deprovisioning docs were not present in the provided sources, so this is a target control rather than implemented process evidence.</p>
           <ul>
-            <li>Disable or remove the account.</li>
-            <li>Remove group membership, licenses, mailbox access, and app access.</li>
-            <li>Verify SharePoint and Teams access is revoked.</li>
-            <li>Archive or retain content per owner/compliance direction.</li>
+            <li>Runbook must define when to disable or remove accounts.</li>
+            <li>Runbook must remove group membership, licenses, mailbox access, and app access.</li>
+            <li>Evidence must verify SharePoint and Teams access is revoked.</li>
+            <li>Evidence must confirm archive or retention handling per owner/compliance direction.</li>
           </ul>
         </article>
 
@@ -649,7 +649,7 @@
       </div>
 
       <p class="audit-evidence reveal">
-        Source/evidence: <a href="DEPLOYMENT-STATUS.md">DEPLOYMENT-STATUS.md</a>, <a href="DEPLOYMENT-RUNBOOK.md">DEPLOYMENT-RUNBOOK.md</a>, <a href="docs/master-dce-resource-map.md">Master DCE Resource Map</a>, <a href="docs/onboarding/dce-role-location-onboarding-model.md">DCE Role + Location Onboarding Model</a>, and the existing Architecture/User Experience sections on this page.
+        Source/evidence reviewed: deployment status, deployment runbook, Master DCE resource map, DCE role + location onboarding model, and existing page architecture/user-experience content. Detailed evidence retained in the private deployment audit pack.
       </p>
     </div>
   </section>
