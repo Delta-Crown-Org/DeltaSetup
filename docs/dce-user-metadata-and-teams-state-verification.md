@@ -88,6 +88,21 @@ Direct Teams endpoint checks with the current delegated Graph context failed:
 | Channels | 403 | Failed to get license information for the user. Ensure user has a valid Office365 license assigned. |
 | Team members | 403 | Failed to get license information for the user. Ensure user has a valid Office365 license assigned. |
 
+MicrosoftTeams PowerShell was also tested after this verification pass:
+
+```powershell
+Connect-MicrosoftTeams -TenantId ce62e17d-2feb-4e67-a115-8ea4af68da30
+Get-Team -GroupId 03255d50-a52d-4b1f-a0f6-37379cc13a35
+```
+
+The connection succeeded, but the read failed:
+
+```text
+Forbidden in /v1.0/teams/ endpoint
+```
+
+So the blocker is the Teams workload read context/license, not just this script.
+
 Interpretation:
 
 - The DCE Operations group/team backing object exists and is readable as a group.
