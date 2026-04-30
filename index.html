@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Tenor+Sans&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/ops-story.css">
 </head>
 <body>
 
@@ -510,137 +511,180 @@
   <section class="section" id="users">
     <div class="container">
       <p class="label mb-16 reveal">The User Experience</p>
-      <h2 class="mb-16 reveal" style="max-width: 650px;">Add a user. Everything else is automatic.</h2>
+      <h2 class="mb-16 reveal" style="max-width: 700px;">From one profile field<br>to a complete workday.</h2>
       <p class="text-muted mb-48 reveal" style="max-width: 560px; font-size: 1.0625rem;">
-        Azure AD user properties drive dynamic security group membership. Set three fields — and the user automatically sees the right hub, the right sites, the right Teams channels.
+        This is the operational payoff: faster onboarding, fewer access mistakes, and a branded DCE workspace that appears because identity data is clean.
       </p>
 
-      <div class="grid grid--2 grid--center" style="gap: clamp(32px, 6vw, 64px);">
-        <!-- User Properties -->
-        <div class="reveal reveal--left">
-          <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="color: var(--teal);">badge</span>
-            Key Azure AD Properties
-          </h3>
-          <div class="callout callout--gold" style="margin-bottom: 24px;">
-            <p style="font-size: 0.875rem; color: var(--text-secondary);">These three fields on each user control everything:</p>
+      <div class="ops-story reveal" aria-label="Delta Crown operational user story">
+        <div class="microsoft-source-note">Microsoft-sourced architecture icons from the official Microsoft 365 icon pack, mapped to the systems this rollout actually uses.</div>
+        <div class="system-stack" aria-label="Microsoft systems used in this workflow">
+          <div class="system-stack__item">
+            <img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="Microsoft 365 architecture icon">
+            <strong>Microsoft 365</strong>
+            <span>Tenant + identity platform</span>
           </div>
+          <div class="system-stack__item">
+            <img src="phase4-migration/assets/microsoft-icons/people-settings.svg" alt="Microsoft directory rules icon">
+            <strong>Entra ID</strong>
+            <span>Dynamic group rules</span>
+          </div>
+          <div class="system-stack__item">
+            <img src="phase4-migration/assets/microsoft-icons/folder-people.svg" alt="Microsoft SharePoint workspace icon">
+            <strong>SharePoint</strong>
+            <span>Hub, docs, scoped search</span>
+          </div>
+          <div class="system-stack__item">
+            <img src="phase4-migration/assets/microsoft-icons/share.svg" alt="Microsoft collaboration icon">
+            <strong>Teams / collaboration</strong>
+            <span>Group-backed workspace</span>
+          </div>
+          <div class="system-stack__item">
+            <img src="phase4-migration/assets/microsoft-icons/lock-shield.svg" alt="Microsoft security icon">
+            <strong>Security</strong>
+            <span>Least-privilege access</span>
+          </div>
+        </div>
 
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div class="card card--elevated" style="padding: 16px; display: flex; align-items: center; gap: 12px;">
-              <span class="material-symbols-outlined" style="color: var(--teal); font-size: 24px;">apartment</span>
-              <div>
-                <strong style="font-size: 0.9375rem;">companyName</strong>
-                <p class="text-muted" style="font-size: 0.8125rem; margin-top: 2px;">"Delta Crown Extensions" → joins SG-DCE-AllStaff</p>
-              </div>
+        <div class="ops-story__hero">
+          <div class="ops-story__eyebrow">The ops story</div>
+          <h3>One profile update becomes a fully branded workday.</h3>
+          <p>Instead of hand-building access for every new person, DCE sets the right identity facts once. Microsoft 365 handles the routing. The employee just sees the tools they need.</p>
+          <div class="ops-story__hero-metrics" aria-label="Live Microsoft Graph summary">
+            <div><strong>89</strong><span>tenant users</span></div>
+            <div><strong>5</strong><span>dynamic groups</span></div>
+            <div><strong>6</strong><span>live DCE staff</span></div>
+          </div>
+        </div>
+
+        <div class="ops-flow" aria-label="Identity to experience flow">
+          <div class="ops-flow__node ops-flow__node--person">
+            <img src="phase4-migration/assets/microsoft-icons/people-team.svg" alt="Microsoft people icon">
+            <span class="ops-flow__label">New or updated user</span>
+            <strong>Sarah Miller</strong>
+            <small>companyName = Delta Crown Extensions</small>
+          </div>
+          <div class="ops-flow__arrow" aria-hidden="true">→</div>
+          <div class="ops-flow__node ops-flow__node--engine">
+            <img src="phase4-migration/assets/microsoft-icons/people-settings.svg" alt="Microsoft automation icon">
+            <span class="ops-flow__label">Entra rule engine</span>
+            <strong>AllStaff</strong>
+            <small>Automatic membership, no ticket ping-pong</small>
+          </div>
+          <div class="ops-flow__arrow" aria-hidden="true">→</div>
+          <div class="ops-flow__node ops-flow__node--workspace">
+            <img src="phase4-migration/assets/microsoft-icons/folder-people.svg" alt="Microsoft workspace icon">
+            <span class="ops-flow__label">Workday opens</span>
+            <strong>DCE workspace</strong>
+            <small>Hub, docs, ops resources, scoped search</small>
+          </div>
+        </div>
+
+        <div class="ops-scenes">
+          <article class="ops-scene ops-scene--dark">
+            <div class="ops-scene__num">01</div>
+            <img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="Microsoft 365 tenant icon">
+            <h4>Tell Microsoft who they are</h4>
+            <p>Ops updates a few identity fields: company, job title, department. That is the control panel.</p>
+            <div class="identity-card">
+              <span>companyName</span><strong>Delta Crown Extensions</strong>
+              <span>jobTitle</span><strong>Owner / Stylist / Manager</strong>
+              <span>department</span><strong>Operations / Marketing</strong>
             </div>
-            <div class="card card--elevated" style="padding: 16px; display: flex; align-items: center; gap: 12px;">
-              <span class="material-symbols-outlined" style="color: var(--teal); font-size: 24px;">work</span>
-              <div>
-                <strong style="font-size: 0.9375rem;">jobTitle</strong>
-                <p class="text-muted" style="font-size: 0.8125rem; margin-top: 2px;">Contains "Manager/Director/VP" → also joins SG-DCE-Leadership</p>
-              </div>
+          </article>
+
+          <article class="ops-scene">
+            <div class="ops-scene__num">02</div>
+            <img src="phase4-migration/assets/microsoft-icons/key.svg" alt="Microsoft access key icon">
+            <h4>Access lands automatically</h4>
+            <p>The person drops into the right groups. No shared passwords. No mystery permissions. No “can someone add me?” circus.</p>
+            <div class="route-map">
+              <span>AllStaff</span>
+              <span>Managers</span>
+              <span>Stylists</span>
+              <span>Marketing</span>
+              <span>External</span>
             </div>
-            <div class="card card--elevated" style="padding: 16px; display: flex; align-items: center; gap: 12px;">
-              <span class="material-symbols-outlined" style="color: var(--teal); font-size: 24px;">domain</span>
-              <div>
-                <strong style="font-size: 0.9375rem;">department</strong>
-                <p class="text-muted" style="font-size: 0.8125rem; margin-top: 2px;">Contains "Marketing" → also joins SG-DCE-Marketing</p>
+          </article>
+
+          <article class="ops-scene">
+            <div class="ops-scene__num">03</div>
+            <img src="phase4-migration/assets/microsoft-icons/apps.svg" alt="Microsoft apps icon">
+            <h4>The user sees a clean DCE front door</h4>
+            <p>They land in a branded, scoped experience: not the HTT junk drawer, not every brand’s documents, just the DCE operating system.</p>
+            <div class="workspace-preview" aria-label="User workspace preview">
+              <div class="workspace-preview__top">Delta Crown Hub</div>
+              <div class="workspace-preview__grid">
+                <span>Operations</span><span>Client Services</span><span>Docs</span><span>Marketing</span>
               </div>
+              <div class="workspace-preview__search">Search only DCE content…</div>
+            </div>
+          </article>
+
+          <article class="ops-scene ops-scene--gold">
+            <div class="ops-scene__num">04</div>
+            <img src="phase4-migration/assets/microsoft-icons/lock-shield.svg" alt="Microsoft security shield icon">
+            <h4>Ops gets control without becoming IT traffic control</h4>
+            <p>Safer onboarding, faster corrections, cleaner audits, and a template that can roll to future brands.</p>
+            <div class="value-stack">
+              <span>Launch faster</span>
+              <span>Reduce access mistakes</span>
+              <span>Keep brand data separated</span>
+              <span>Scale the playbook</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="access-story">
+          <div class="access-story__intro">
+            <img src="phase4-migration/assets/microsoft-icons/lock-shield.svg" alt="Microsoft security access icon">
+            <div>
+              <h3>Who sees what?</h3>
+              <p>Access is designed around the work, not around folders people have to beg for.</p>
+            </div>
+          </div>
+          <div class="access-lanes" aria-label="Access map">
+            <div class="access-lane">
+              <strong>Everyone at DCE</strong>
+              <span>DCE Hub</span>
+              <span>DCE Docs</span>
+              <span>Marketing read-only</span>
+            </div>
+            <div class="access-lane access-lane--gold">
+              <strong>Owners / leadership</strong>
+              <span>Full control</span>
+              <span>Strategy docs</span>
+              <span>Ops oversight</span>
+            </div>
+            <div class="access-lane">
+              <strong>Client services</strong>
+              <span>Client records</span>
+              <span>Service history</span>
+              <span>Protected notes</span>
+            </div>
+            <div class="access-lane access-lane--muted">
+              <strong>Not everyone</strong>
+              <span>No tenant-wide “Everyone” access</span>
+              <span>No inherited junk drawer permissions</span>
+              <span>No cross-brand sprawl</span>
             </div>
           </div>
         </div>
 
-        <!-- Simple User Access Table -->
-        <div class="reveal reveal--right">
-          <div class="simple-table">
-            <h3 style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-symbols-outlined" style="color: var(--gold-dark);">person_add</span>
-              Who Gets Access to What
-            </h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>If companyName is...</th>
-                  <th>They join...</th>
-                  <th>They can see...</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>"Delta Crown Extensions"</td>
-                  <td>SG-DCE-AllStaff</td>
-                  <td>DCE Hub + All DCE Sites</td>
-                </tr>
-                <tr>
-                  <td>+ jobTitle has "Manager"</td>
-                  <td>SG-DCE-Leadership</td>
-                  <td>+ Leadership channel</td>
-                </tr>
-                <tr>
-                  <td>+ department is "Marketing"</td>
-                  <td>SG-DCE-Marketing</td>
-                  <td>+ Marketing site edit rights</td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="ops-reality-strip">
+          <div>
+            <strong>What is live now</strong>
+            <span>AllStaff resolves to 6 real DCE users. Delta Crown Operations group exists with those users.</span>
+          </div>
+          <div>
+            <strong>What needs ops cleanup</strong>
+            <span>Fill job titles/departments so Managers, Stylists, and Marketing light up automatically.</span>
+          </div>
+          <div>
+            <strong>What not to overpromise yet</strong>
+            <span>Teams channels still need verification; Graph proved the group, not the channel layout.</span>
           </div>
         </div>
-      </div>
-
-      <!-- Permission Matrix -->
-      <div class="reveal" style="margin-top: 48px;">
-        <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
-          <span class="material-symbols-outlined" style="color: var(--teal);">security</span>
-          Permission Matrix — Who Sees What
-        </h3>
-        <div style="overflow-x: auto; border-radius: 12px; border: 1px solid rgba(0,0,0,0.08);">
-          <table class="perm-matrix" style="min-width: 600px; background: var(--surface-card);">
-            <thead>
-              <tr>
-                <th style="color: var(--text-secondary);">Site</th>
-                <th style="color: var(--text-secondary);">AllStaff</th>
-                <th style="color: var(--text-secondary);">Leadership</th>
-                <th style="color: var(--text-secondary);">Marketing</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="color: var(--text);"><strong>DCE Hub</strong></td>
-                <td class="perm-cell--read" style="color: var(--teal);">👁 Read</td>
-                <td class="perm-cell--full" style="color: #2E7D32;">⚡ Full Control</td>
-                <td class="perm-cell--none" style="color: var(--text-muted);">—</td>
-              </tr>
-              <tr>
-                <td style="color: var(--text);"><strong>DCE-Operations</strong></td>
-                <td style="color: var(--text-muted);">Teams managed</td>
-                <td style="color: var(--text-muted);">Teams managed</td>
-                <td class="perm-cell--none" style="color: var(--text-muted);">—</td>
-              </tr>
-              <tr>
-                <td style="color: var(--text);"><strong>DCE-ClientServices</strong></td>
-                <td class="perm-cell--edit" style="color: var(--gold-dark);">✏️ Contribute</td>
-                <td class="perm-cell--full" style="color: #2E7D32;">⚡ Full Control</td>
-                <td class="perm-cell--none" style="color: var(--text-muted);">—</td>
-              </tr>
-              <tr>
-                <td style="color: var(--text);"><strong>DCE-Marketing</strong></td>
-                <td class="perm-cell--read" style="color: var(--teal);">👁 Read</td>
-                <td class="perm-cell--full" style="color: #2E7D32;">⚡ Full Control</td>
-                <td class="perm-cell--edit" style="color: var(--gold-dark);">✏️ Edit</td>
-              </tr>
-              <tr>
-                <td style="color: var(--text);"><strong>DCE-Docs</strong></td>
-                <td class="perm-cell--read" style="color: var(--teal);">👁 Read</td>
-                <td class="perm-cell--full" style="color: #2E7D32;">⚡ Full Control</td>
-                <td class="perm-cell--none" style="color: var(--text-muted);">—</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="text-muted" style="font-size: 0.75rem; margin-top: 8px;">
-          "Everyone" and "All Users" groups are removed from all sites. Permissions are unique (no inheritance from parent).
-        </p>
       </div>
     </div>
   </section>
