@@ -171,6 +171,27 @@ From repo root:
 pwsh -File ./phase4-migration/scripts/audit-master-dce.ps1
 ```
 
+If browser interactive auth fails because the tenant/app registration lacks a valid reply URL, retry only with an approved client ID or one of the alternate auth modes below. Do not create or modify app registrations during the audit window.
+
+Device-code login:
+
+```powershell
+pwsh -File ./phase4-migration/scripts/audit-master-dce.ps1 -DeviceLogin
+```
+
+OS/broker login:
+
+```powershell
+pwsh -File ./phase4-migration/scripts/audit-master-dce.ps1 -OSLogin
+```
+
+With an approved client ID:
+
+```powershell
+$env:HTT_PNP_CLIENT_ID = "<approved-pnp-client-id>"
+pwsh -File ./phase4-migration/scripts/audit-master-dce.ps1 -DeviceLogin
+```
+
 Equivalent with explicit values:
 
 ```powershell
@@ -265,11 +286,37 @@ Capture:
 
 - account used, if safe to document;
 - error message summary;
+- request ID / correlation ID / timestamp from Microsoft sign-in error pages;
 - whether a PnP client ID was provided;
-- whether browser/device auth completed;
+- whether browser/device/OS auth completed;
 - next required access step.
 
 Do not retry repeatedly with random accounts. That is not troubleshooting; that is ritual.
+
+#### Known blocker: AADSTS500113
+
+If Microsoft returns:
+
+```text
+AADSTS500113: No reply address is registered for the application.
+```
+
+Stop the audit attempt. This means the PnP/Entra app registration used for delegated login does not have the required redirect/reply configuration for the auth flow. It is not a user password problem.
+
+Resolution path:
+
+1. Identify or configure an approved PnP/Entra app registration for `httbrands.onmicrosoft.com`.
+2. Confirm the app supports the chosen delegated login flow.
+3. Confirm requested permissions are read-only.
+4. Set the approved client ID locally, not in git:
+
+   ```powershell
+   $env:HTT_PNP_CLIENT_ID = "<approved-pnp-client-id>"
+   ```
+
+5. Retry with `-DeviceLogin`, `-OSLogin`, or standard interactive auth.
+
+Do not grant write scopes such as `Sites.ReadWrite.All`, `Sites.FullControl.All`, `Directory.ReadWrite.All`, or `Group.ReadWrite.All` just to make auth pass. That is how tiny audit tasks become tenant-wide chaos raccoons.
 
 ### Folder not found
 

@@ -42,7 +42,13 @@ param(
     [string]$OutputDirectory = ".local/reports/master-dce",
 
     [Parameter()]
-    [switch]$Recursive
+    [switch]$Recursive,
+
+    [Parameter()]
+    [switch]$DeviceLogin,
+
+    [Parameter()]
+    [switch]$OSLogin
 )
 
 $ErrorActionPreference = "Stop"
@@ -74,11 +80,25 @@ function Connect-HttSharePoint {
     param(
         [Parameter(Mandatory)][string]$Url,
         [Parameter()][string]$AppClientId,
-        [Parameter()][string]$TenantName
+        [Parameter()][string]$TenantName,
+        [Parameter()][bool]$UseDeviceLogin,
+        [Parameter()][bool]$UseOSLogin
     )
 
     Write-Status "Connecting to $Url"
-    if ($AppClientId) {
+    if ($UseOSLogin -and $AppClientId) {
+        Connect-PnPOnline -Url $Url -OSLogin -ClientId $AppClientId -Tenant $TenantName -ErrorAction Stop
+    }
+    elseif ($UseOSLogin) {
+        Connect-PnPOnline -Url $Url -OSLogin -Tenant $TenantName -ErrorAction Stop
+    }
+    elseif ($UseDeviceLogin -and $AppClientId) {
+        Connect-PnPOnline -Url $Url -DeviceLogin -ClientId $AppClientId -Tenant $TenantName -ErrorAction Stop
+    }
+    elseif ($UseDeviceLogin) {
+        Connect-PnPOnline -Url $Url -DeviceLogin -Tenant $TenantName -ErrorAction Stop
+    }
+    elseif ($AppClientId) {
         Connect-PnPOnline -Url $Url -Interactive -ClientId $AppClientId -Tenant $TenantName -ErrorAction Stop
     }
     else {
@@ -240,7 +260,7 @@ function Write-SummaryMarkdown {
 }
 
 Ensure-OutputDirectory -Path $OutputDirectory
-Connect-HttSharePoint -Url $SiteUrl -AppClientId $ClientId -TenantName $Tenant
+Connect-HttSharePoint -Url $SiteUrl -AppClientId $ClientId -TenantName $Tenant -UseDeviceLogin ([bool]$DeviceLogin) -UseOSLogin ([bool]$OSLogin)
 
 $rootSiteRelativeUrl = "$LibraryName/$RootFolder"
 $result = Get-FolderRows `
