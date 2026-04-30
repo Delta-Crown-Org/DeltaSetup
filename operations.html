@@ -13,26 +13,70 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/microsoft-platform.css?v=20260430-visual3">
   <link rel="stylesheet" href="css/operations.css?v=20260430-ops2">
+  <link rel="stylesheet" href="css/sidebar.css?v=20260430-sidebar1">
+  <link rel="stylesheet" href="css/exec-vision.css?v=20260430-sidebar1">
 </head>
-<body>
+<body class="has-sidebar">
   <a href="#hero" class="skip-link">Skip to content</a>
 
-  <nav class="nav" aria-label="Main navigation">
-    <div class="nav__inner">
-      <a href="./index.html">
-        <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png" alt="Delta Crown Extensions — Home" class="nav__logo">
+  <button class="sidebar__toggle" type="button" aria-controls="sidebar" aria-expanded="false" data-sidebar-toggle>
+    <span class="material-symbols-outlined">menu</span>Menu
+  </button>
+  <div class="sidebar__backdrop" data-sidebar-backdrop aria-hidden="true"></div>
+
+  <aside class="sidebar" id="sidebar" aria-label="Site navigation">
+    <div class="sidebar__brand">
+      <a href="#hero" aria-label="Delta Crown Extensions — top of page">
+        <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png" alt="Delta Crown Extensions">
       </a>
-      <div class="nav__links">
-        <a href="./index.html" class="nav__link">Project Site</a>
-        <a href="#operating-model" class="nav__link">Model</a>
-        <a href="#identity" class="nav__link">Identity</a>
-        <a href="#architecture" class="nav__link">Architecture</a>
-        <a href="#access" class="nav__link">Access</a>
-        <a href="#future" class="nav__link">Future Brands</a>
-      </div>
-      <div class="nav__progress" aria-hidden="true"></div>
+      <span class="sidebar__brand-tag">Operations View</span>
     </div>
-  </nav>
+
+    <div class="sidebar__views" role="tablist" aria-label="Switch view">
+      <a href="./index.html" class="sidebar__view" role="tab" aria-selected="false">Project Site</a>
+      <a href="./operations.html" class="sidebar__view sidebar__view--active" role="tab" aria-selected="true">Ops View</a>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Page sections">
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">flag</span>Start Here</div>
+        <div class="sidebar__list">
+          <a href="#hero" class="sidebar__link">Overview</a>
+          <a href="#operating-model" class="sidebar__link">The mission</a>
+        </div>
+      </div>
+
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">visibility</span>The Vision</div>
+        <div class="sidebar__list">
+          <a href="#identity" class="sidebar__link">Identity is the control panel</a>
+          <a href="#architecture" class="sidebar__link">The brand workspace</a>
+          <a href="#portfolio" class="sidebar__link">The brand family<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
+        </div>
+      </div>
+
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">shield</span>Security &amp; Access</div>
+        <div class="sidebar__list">
+          <a href="#sepconn" class="sidebar__link">Separated yet connected<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
+          <a href="#access" class="sidebar__link">Corporate access lane</a>
+        </div>
+      </div>
+
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">repeat</span>The Pattern</div>
+        <div class="sidebar__list">
+          <a href="#future" class="sidebar__link">Repeatable rollout</a>
+          <a href="#cta" class="sidebar__link">The playbook</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="sidebar__progress" aria-hidden="true"><div class="sidebar__progress-bar"></div></div>
+      Built for executives, directors, and managers across the brand family.
+    </div>
+  </aside>
 
   <main>
     <section class="section hero op-hero" id="hero">
@@ -126,6 +170,124 @@
 
         <div class="callout callout--gold reveal" style="margin-top: 32px;">
           <p><strong>Important:</strong> Graph proved the Delta Crown Operations M365 group and membership. Teams channel layout still needs final verification before launch materials promise specific channel names.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section portfolio" id="portfolio" aria-labelledby="ops-portfolio-title">
+      <div class="container">
+        <p class="label mb-16 reveal">The Brand Family</p>
+        <h2 class="mb-16 reveal" id="ops-portfolio-title" style="max-width: 760px;">What Delta Crown becomes is what every brand can have.</h2>
+        <p class="portfolio__lead reveal">
+          Delta Crown is the live pilot. The same operating model — clean identity in, clean access out — is the pattern designed to be reusable for Bishops, Frenchies, and TLL when (and if) HTT leadership approves. HTT corporate sits in the center as the shared-services hub. One tenant. One pattern. A platform built to scale to additional brand homes if sponsored.
+        </p>
+
+        <div class="portfolio__grid reveal" aria-label="Portfolio of brand workspaces">
+          <article class="portfolio__brand portfolio__brand--corp">
+            <span class="portfolio__status portfolio__status--hub">Corporate Hub</span>
+            <h3>HTT Brands</h3>
+            <span class="portfolio__brand-sub">Shared services for the family</span>
+            <div class="portfolio__pieces">
+              <div class="portfolio__piece"><span class="material-symbols-outlined">corporate_fare</span>HR · IT · Finance · Legal</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">supervisor_account</span>Leadership read-up</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">link</span>Hub-to-hub linking</div>
+            </div>
+          </article>
+
+          <article class="portfolio__brand portfolio__brand--pilot">
+            <span class="portfolio__status portfolio__status--live">● Live Pilot</span>
+            <h3>Delta Crown</h3>
+            <span class="portfolio__brand-sub">First brand on the platform</span>
+            <div class="portfolio__pieces">
+              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity + dynamic groups</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Hub + spokes</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Teams workspace</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">shield</span>DLP + isolation</div>
+            </div>
+          </article>
+
+          <article class="portfolio__brand">
+            <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
+            <h3>Bishops</h3>
+            <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
+            <div class="portfolio__pieces">
+              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity rules</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
+            </div>
+          </article>
+
+          <article class="portfolio__brand">
+            <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
+            <h3>Frenchies</h3>
+            <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
+            <div class="portfolio__pieces">
+              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity rules</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
+            </div>
+          </article>
+
+          <article class="portfolio__brand">
+            <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
+            <h3>TLL</h3>
+            <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
+            <div class="portfolio__pieces">
+              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity rules</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="portfolio__connection reveal">
+          <div class="portfolio__connection-icon"><span class="material-symbols-outlined">hub</span></div>
+          <div>
+            <h4>The connecting layer</h4>
+            <p>Each brand is its own room. Corporate is the hallway. Leadership walks the hallway and gets the right view for their role — without giving every brand keys to every room.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sepconn" id="sepconn" aria-labelledby="sepconn-title">
+      <div class="container">
+        <p class="label mb-16 reveal">Security + Collaboration</p>
+        <h2 class="mb-16 reveal" id="sepconn-title" style="max-width: 760px;">Separated securely. Connected securely. On purpose.</h2>
+        <p class="sepconn__lead reveal">
+          The opposite of "siloed" is not "wide open." Each brand stays in its own lane by default, with corporate connections for the things the family genuinely shares — and nothing more.
+        </p>
+
+        <div class="sepconn__grid reveal">
+          <article class="sepconn__panel sepconn__panel--separated">
+            <div class="sepconn__panel-icon"><span class="material-symbols-outlined">shield_lock</span></div>
+            <h3>Separated securely</h3>
+            <span class="sepconn__panel-sub">Each brand owns its space</span>
+            <ul class="sepconn__list">
+              <li>Each brand has its own SharePoint hub and document libraries.</li>
+              <li>Each brand has its own Teams workspace, channels, and shared mailboxes.</li>
+              <li>Data Loss Prevention (DLP) rules block accidental cross-brand sharing.</li>
+              <li>Employees of one brand do not see another brand's content by default.</li>
+              <li>External and partner access is scoped per brand, not tenant-wide.</li>
+            </ul>
+          </article>
+
+          <article class="sepconn__panel sepconn__panel--connected">
+            <div class="sepconn__panel-icon"><span class="material-symbols-outlined">hub</span></div>
+            <h3>Connected securely</h3>
+            <span class="sepconn__panel-sub">Corporate sees what corporate needs</span>
+            <ul class="sepconn__list">
+              <li>Corporate hub links every brand for shared HR, IT, Finance, Legal.</li>
+              <li>Leadership has read-up visibility for portfolio-level decisions.</li>
+              <li>Cross-brand collaboration spaces exist only when sponsored and approved.</li>
+              <li>One identity, multiple lenses — same person, different view by role.</li>
+              <li>The directory makes people findable without making data wide open.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="sepconn__bridge reveal">
+          The point isn't isolation. The point is <strong>intentional connection</strong>. Brands stay private. Leadership stays informed. Collaboration happens in approved rooms instead of forwarded emails.
         </div>
       </div>
     </section>

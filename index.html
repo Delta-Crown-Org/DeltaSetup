@@ -13,32 +13,77 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/microsoft-platform.css?v=20260430-visual3">
   <link rel="stylesheet" href="css/ops-story.css?v=20260430-visual3">
+  <link rel="stylesheet" href="css/sidebar.css?v=20260430-sidebar1">
+  <link rel="stylesheet" href="css/exec-vision.css?v=20260430-sidebar1">
 </head>
-<body>
+<body class="has-sidebar">
 
   <a href="#hero" class="skip-link">Skip to content</a>
 
-  <!-- ==================== NAV ==================== -->
-  <nav class="nav" aria-label="Main navigation">
-    <div class="nav__inner">
-      <a href="#hero">
-        <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png"
-             alt="Delta Crown Extensions — Home" class="nav__logo">
+  <!-- ==================== MOBILE MENU BUTTON ==================== -->
+  <button class="sidebar__toggle" type="button" aria-controls="sidebar" aria-expanded="false" data-sidebar-toggle>
+    <span class="material-symbols-outlined">menu</span>Menu
+  </button>
+  <div class="sidebar__backdrop" data-sidebar-backdrop aria-hidden="true"></div>
+
+  <!-- ==================== SIDEBAR NAVIGATION ==================== -->
+  <aside class="sidebar" id="sidebar" aria-label="Site navigation">
+    <div class="sidebar__brand">
+      <a href="#hero" aria-label="Delta Crown Extensions — top of page">
+        <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png" alt="Delta Crown Extensions">
       </a>
-      <div class="nav__links">
-        <a href="#status" class="nav__link">Status</a>
-        <a href="./operations.html" class="nav__link">Ops View</a>
-        <a href="#problem" class="nav__link">Problem</a>
-        <a href="#architecture" class="nav__link">Architecture</a>
-        <a href="#audited-microsoft-architecture" class="nav__link">Audit</a>
-        <a href="#migration" class="nav__link">Decision</a>
-        <a href="#users" class="nav__link">Users</a>
-        <a href="#progress" class="nav__link">Progress</a>
-        <a href="#vision" class="nav__link">Vision</a>
-      </div>
-      <div class="nav__progress" aria-hidden="true"></div>
+      <span class="sidebar__brand-tag">Brand Platform Build</span>
     </div>
-  </nav>
+
+    <div class="sidebar__views" role="tablist" aria-label="Switch view">
+      <a href="./index.html" class="sidebar__view sidebar__view--active" role="tab" aria-selected="true">Project Site</a>
+      <a href="./operations.html" class="sidebar__view" role="tab" aria-selected="false">Ops View</a>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Page sections">
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">flag</span>Start Here</div>
+        <div class="sidebar__list">
+          <a href="#hero" class="sidebar__link">Overview</a>
+          <a href="#exec-intro" class="sidebar__link">Why this matters<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
+          <a href="#status" class="sidebar__link">Live status</a>
+        </div>
+      </div>
+
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">visibility</span>The Vision</div>
+        <div class="sidebar__list">
+          <a href="#portfolio" class="sidebar__link">The brand family<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
+          <a href="#flowdir" class="sidebar__link">Top-down + bottom-up<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
+          <a href="#vision" class="sidebar__link">Long-term play</a>
+        </div>
+      </div>
+
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">architecture</span>How It Works</div>
+        <div class="sidebar__list">
+          <a href="#architecture" class="sidebar__link">Hub &amp; spoke architecture</a>
+          <a href="#audited-microsoft-architecture" class="sidebar__link">Microsoft platform audit</a>
+          <a href="#how" class="sidebar__link">How it gets built</a>
+        </div>
+      </div>
+
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">insights</span>Where We Are</div>
+        <div class="sidebar__list">
+          <a href="#problem" class="sidebar__link">The problem we're fixing</a>
+          <a href="#migration" class="sidebar__link">Decisions made</a>
+          <a href="#users" class="sidebar__link">Who gets what</a>
+          <a href="#progress" class="sidebar__link">Progress + roadmap<span class="sidebar__link-tag sidebar__link-tag--live">Live</span></a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="sidebar__progress" aria-hidden="true"><div class="sidebar__progress-bar"></div></div>
+      Microsoft 365 Business Premium · One tenant · $0 added license cost
+    </div>
+  </aside>
 
   <main>
 
@@ -125,6 +170,161 @@
           <div class="ticker__value" data-counter data-prefix="$" data-target="0">$0</div>
           <div class="ticker__label">License Cost</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EXECUTIVE INTRO ==================== -->
+  <section class="section exec-intro" id="exec-intro" aria-labelledby="exec-intro-title">
+    <div class="container">
+      <p class="label mb-16 reveal">Why This Matters</p>
+      <h2 class="mb-16 reveal" id="exec-intro-title" style="max-width: 760px;">
+        One Microsoft platform.<br>Every brand at home.<br>Connected securely. Separated cleanly.
+      </h2>
+      <p class="exec-intro__lead reveal">
+        Today, every brand fights for the same shared folders, the same permissions, and the same inboxes. We're rebuilding that as a brand platform — where each brand could have its own digital home, leadership could see from the top down, and the frontline could be heard from the bottom up. Delta Crown is piloting the model. Extending the same pattern to Bishops, Frenchies, HTT corporate, and TLL is a separate decision for HTT leadership to sponsor.
+      </p>
+      <div class="exec-intro__grid reveal">
+        <article class="exec-intro__card">
+          <div class="exec-intro__card-label">What we're solving</div>
+          <h3 class="exec-intro__card-headline">No more shared-folder chaos</h3>
+          <p>One library, every brand, broken permissions. Today's setup makes data sprawl easy and accountability hard.</p>
+        </article>
+        <article class="exec-intro__card">
+          <div class="exec-intro__card-label">What we're building</div>
+          <h3 class="exec-intro__card-headline">A repeatable brand home</h3>
+          <p>Each brand gets its own hub, its own Teams, its own document libraries — built from one secure pattern that copies cleanly.</p>
+        </article>
+        <article class="exec-intro__card">
+          <div class="exec-intro__card-label">What leadership gets</div>
+          <h3 class="exec-intro__card-headline">Visibility without leakage</h3>
+          <p>Corporate sees across brands when it needs to. Brands stay private from each other by default. Information flows by design, not accident.</p>
+        </article>
+        <article class="exec-intro__card">
+          <div class="exec-intro__card-label">What it costs</div>
+          <h3 class="exec-intro__card-headline">$0 in new licenses</h3>
+          <p>Built entirely on the Microsoft 365 Business Premium subscriptions already in place. The cost is process, not software.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== BRAND FAMILY / PORTFOLIO ==================== -->
+  <section class="section portfolio" id="portfolio" aria-labelledby="portfolio-title">
+    <div class="container">
+      <p class="label mb-16 reveal">The Brand Family</p>
+      <h2 class="mb-16 reveal" id="portfolio-title" style="max-width: 780px;">
+        What Delta Crown becomes is what every brand can have.
+      </h2>
+      <p class="portfolio__lead reveal">
+        One pattern, designed to be reusable. Each brand could keep its own people, its own data, and its own walls. Corporate could keep the visibility it needs. Nothing leaks sideways. Delta Crown is the live pilot — extending the same picture to other brands under HTT would be a sponsor-approved decision, not an automatic rollout.
+      </p>
+
+      <div class="portfolio__grid reveal" aria-label="Portfolio of brand workspaces">
+        <article class="portfolio__brand portfolio__brand--corp">
+          <span class="portfolio__status portfolio__status--hub">Corporate Hub</span>
+          <h3>HTT Brands</h3>
+          <span class="portfolio__brand-sub">Shared services for the family</span>
+          <div class="portfolio__pieces">
+            <div class="portfolio__piece"><span class="material-symbols-outlined">corporate_fare</span>HR · IT · Finance · Legal</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">supervisor_account</span>Leadership read-up</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">link</span>Hub-to-hub linking</div>
+          </div>
+        </article>
+
+        <article class="portfolio__brand portfolio__brand--pilot">
+          <span class="portfolio__status portfolio__status--live">● Live Pilot</span>
+          <h3>Delta Crown</h3>
+          <span class="portfolio__brand-sub">First brand on the platform</span>
+          <div class="portfolio__pieces">
+            <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity + dynamic groups</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>SharePoint hub + spokes</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Teams workspace</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">shield</span>DLP + brand isolation</div>
+          </div>
+        </article>
+
+        <article class="portfolio__brand">
+          <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
+          <h3>Bishops</h3>
+          <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
+          <div class="portfolio__pieces">
+            <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Brand identity rules</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
+          </div>
+        </article>
+
+        <article class="portfolio__brand">
+          <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
+          <h3>Frenchies</h3>
+          <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
+          <div class="portfolio__pieces">
+            <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Brand identity rules</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
+          </div>
+        </article>
+
+        <article class="portfolio__brand">
+          <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
+          <h3>TLL</h3>
+          <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
+          <div class="portfolio__pieces">
+            <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Brand identity rules</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
+            <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="portfolio__connection reveal">
+        <div class="portfolio__connection-icon"><span class="material-symbols-outlined">hub</span></div>
+        <div>
+          <h4>The connecting layer</h4>
+          <p>Each brand is its own room. The corporate hub is the hallway. Leadership walks the hallway, reads the room, and sees the right view for their role. Teams in different brands stay private from each other unless an approved cross-brand space is created. No more shared folders pretending to be a security model.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TOP-DOWN + BOTTOM-UP ==================== -->
+  <section class="flowdir" id="flowdir" aria-labelledby="flowdir-title">
+    <div class="container">
+      <p class="label mb-16 reveal">How Information Moves</p>
+      <h2 class="mb-16 reveal" id="flowdir-title" style="max-width: 760px;">
+        Information flows in both directions on purpose.
+      </h2>
+      <p class="flowdir__lead reveal">
+        Leadership doesn't have to chase status updates. The frontline doesn't have to email spreadsheets uphill. The same identity, the same workspaces, and the same data show up to each role through the right lens — top-down for direction, bottom-up for reality.
+      </p>
+
+      <div class="flowdir__grid reveal">
+        <article class="flowdir__lane flowdir__lane--down">
+          <h3>Top-down</h3>
+          <div class="flowdir__lane-sub">From leadership to the frontline</div>
+          <div class="flowdir__steps">
+            <div class="flowdir__step"><span class="flowdir__step-num">1</span><div><strong>Standards set at the top</strong><span>Brand voice, policies, security posture, finance rules, training expectations.</span></div></div>
+            <div class="flowdir__step"><span class="flowdir__step-num">2</span><div><strong>Cascaded to brand managers</strong><span>Each brand hub publishes the standards into a workspace its people actually use.</span></div></div>
+            <div class="flowdir__step"><span class="flowdir__step-num">3</span><div><strong>Surfaced inside daily tools</strong><span>Teams channels, SharePoint pages, and shared mailboxes carry the same source of truth.</span></div></div>
+            <div class="flowdir__step"><span class="flowdir__step-num">4</span><div><strong>Reaches the frontline consistently</strong><span>Stylists, operators, and partners see one approved version — not three forwarded PDFs.</span></div></div>
+          </div>
+        </article>
+
+        <article class="flowdir__lane flowdir__lane--up">
+          <h3>Bottom-up</h3>
+          <div class="flowdir__lane-sub">From frontline reality to leadership</div>
+          <div class="flowdir__steps">
+            <div class="flowdir__step"><span class="flowdir__step-num">1</span><div><strong>Activity captured where it happens</strong><span>Bookings, support tickets, content posts, and ops checklists land in shared workspaces.</span></div></div>
+            <div class="flowdir__step"><span class="flowdir__step-num">2</span><div><strong>Rolled into team views</strong><span>Lists, dashboards, and shared docs aggregate by team — no manual rekeying.</span></div></div>
+            <div class="flowdir__step"><span class="flowdir__step-num">3</span><div><strong>Surfaced at the brand level</strong><span>Each brand hub gives managers a clear performance and operations picture.</span></div></div>
+            <div class="flowdir__step"><span class="flowdir__step-num">4</span><div><strong>Visible to corporate leadership</strong><span>Cross-brand views give directors the comparison they need to lead, without owning every spreadsheet.</span></div></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="flowdir__bridge reveal">
+        <strong>Same data. Different views by role.</strong> The frontline sees their work. Brand managers see their brand. Corporate sees the portfolio. Nobody emails a spreadsheet around like a sad relay race.
       </div>
     </div>
   </section>

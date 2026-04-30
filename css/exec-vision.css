@@ -1,0 +1,456 @@
+/* ============================================================
+   Delta Crown Extensions — Executive Vision Sections
+   Styles for the simple-language, top-down sections that target
+   executive, director, and manager audiences:
+     - .exec-intro    Why this matters / what it costs
+     - .portfolio     Brand family / portfolio vision
+     - .flowdir       Top-down + bottom-up information flow
+     - .sepconn       Separated yet connected (security + collab)
+   ============================================================ */
+
+/* ============================================================
+   Executive intro / overview cards
+   ============================================================ */
+.exec-intro {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-dim) 100%);
+  padding: clamp(60px, 9vh, 96px) 0;
+}
+
+.exec-intro__lead {
+  max-width: 760px;
+  font-size: clamp(1.05rem, 1.6vw, 1.18rem);
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+}
+
+.exec-intro__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.exec-intro__card {
+  background: var(--surface-card);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 12px 32px rgba(10, 31, 28, 0.05);
+}
+
+.exec-intro__card-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 10px;
+}
+
+.exec-intro__card-headline {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+.exec-intro__card p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .exec-intro__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 540px) {
+  .exec-intro__grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   Brand Family / Portfolio Vision
+   "Delta Crown is what every brand could have."
+   ============================================================ */
+.portfolio {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(212, 168, 75, 0.18), transparent 36%),
+    radial-gradient(circle at 88% 10%, rgba(0, 107, 94, 0.32), transparent 36%),
+    var(--teal-deeper);
+  color: var(--text-inverse);
+}
+
+.portfolio__lead {
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 1.0625rem;
+  margin-bottom: 44px;
+}
+
+.portfolio__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.portfolio__brand {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 280px;
+  position: relative;
+  transition: transform 220ms var(--ease-out), border-color 220ms var(--ease-out);
+}
+
+.portfolio__brand:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 168, 75, 0.32);
+}
+
+.portfolio__brand--pilot {
+  background:
+    linear-gradient(160deg, rgba(212, 168, 75, 0.22), rgba(255, 255, 255, 0.05)),
+    rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 168, 75, 0.4);
+}
+
+.portfolio__brand--corp {
+  background:
+    linear-gradient(160deg, rgba(0, 107, 94, 0.42), rgba(255, 255, 255, 0.05)),
+    rgba(255, 255, 255, 0.05);
+  border-color: rgba(77, 182, 172, 0.32);
+}
+
+.portfolio__status {
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.portfolio__status--live { background: rgba(76, 175, 80, 0.22); color: #A6E0A8; }
+.portfolio__status--ready { background: rgba(212, 168, 75, 0.22); color: var(--gold-light); }
+.portfolio__status--hub { background: rgba(77, 182, 172, 0.22); color: #9DDED4; }
+
+.portfolio__brand h3 {
+  font-family: var(--font-heading);
+  font-size: 1.32rem;
+  color: #FFF;
+  margin: 4px 0 2px;
+}
+
+.portfolio__brand-sub {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.portfolio__pieces {
+  display: grid;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.portfolio__piece {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 9px;
+  padding: 7px 9px;
+}
+
+.portfolio__piece .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--gold);
+}
+
+.portfolio__brand--corp .portfolio__piece .material-symbols-outlined { color: var(--teal-light); }
+
+.portfolio__connection {
+  margin-top: 28px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 22px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.portfolio__connection-icon {
+  background: rgba(212, 168, 75, 0.16);
+  border-radius: 14px;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+}
+
+.portfolio__connection-icon .material-symbols-outlined {
+  font-size: 26px;
+  color: var(--gold-light);
+}
+
+.portfolio__connection h4 {
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
+  color: #FFF;
+  margin-bottom: 4px;
+}
+
+.portfolio__connection p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .portfolio__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+  .portfolio__grid { grid-template-columns: 1fr 1fr; }
+  .portfolio__connection { grid-template-columns: 1fr; text-align: left; }
+}
+
+/* ============================================================
+   Top-down + Bottom-up flow
+   ============================================================ */
+.flowdir {
+  padding: clamp(70px, 10vh, 110px) 0;
+  background: var(--surface);
+}
+
+.flowdir__lead {
+  max-width: 720px;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  margin-bottom: 44px;
+}
+
+.flowdir__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.flowdir__lane {
+  background: var(--surface-card);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 18px 40px rgba(10, 31, 28, 0.06);
+}
+
+.flowdir__lane h3 {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.flowdir__lane-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+  letter-spacing: 0.04em;
+}
+
+.flowdir__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flowdir__step {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 14px;
+  padding: 14px;
+  background: var(--surface-dim);
+  border-radius: 14px;
+  align-items: start;
+}
+
+.flowdir__step-num {
+  background: var(--teal-deeper);
+  color: var(--gold-light);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+}
+
+.flowdir__lane--down .flowdir__step-num { background: var(--teal); color: #FFF; }
+.flowdir__lane--up .flowdir__step-num { background: var(--gold-dark); color: #FFF; }
+
+.flowdir__step strong {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.flowdir__step span {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.flowdir__bridge {
+  margin-top: 28px;
+  padding: 20px 24px;
+  border-radius: 18px;
+  background: linear-gradient(110deg, rgba(0, 107, 94, 0.1), rgba(212, 168, 75, 0.1));
+  border: 1px solid rgba(0, 107, 94, 0.18);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.flowdir__bridge strong { color: var(--text); }
+
+@media (max-width: 800px) {
+  .flowdir__grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   Separated yet Connected (security + collaboration story)
+   ============================================================ */
+.sepconn {
+  background:
+    linear-gradient(180deg, var(--teal-deeper) 0%, var(--teal-dark) 100%);
+  color: var(--text-inverse);
+  padding: clamp(70px, 10vh, 110px) 0;
+}
+
+.sepconn__lead {
+  max-width: 720px;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 1.05rem;
+  margin-bottom: 44px;
+}
+
+.sepconn__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+.sepconn__panel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sepconn__panel--separated {
+  background: linear-gradient(165deg, rgba(212, 168, 75, 0.16), rgba(255, 255, 255, 0.03));
+  border-color: rgba(212, 168, 75, 0.26);
+}
+
+.sepconn__panel--connected {
+  background: linear-gradient(165deg, rgba(0, 107, 94, 0.36), rgba(255, 255, 255, 0.03));
+  border-color: rgba(77, 182, 172, 0.3);
+}
+
+.sepconn__panel-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+}
+
+.sepconn__panel-icon .material-symbols-outlined { font-size: 26px; color: var(--gold-light); }
+
+.sepconn__panel--connected .sepconn__panel-icon .material-symbols-outlined { color: #9DDED4; }
+
+.sepconn__panel h3 {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  color: #FFF;
+  margin-bottom: 6px;
+}
+
+.sepconn__panel-sub {
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 18px;
+}
+
+.sepconn__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sepconn__list li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 10px;
+  align-items: start;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.sepconn__list li::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 6px;
+  background: var(--gold);
+  box-shadow: 0 0 0 4px rgba(212, 168, 75, 0.18);
+}
+
+.sepconn__panel--connected .sepconn__list li::before {
+  background: var(--teal-light);
+  box-shadow: 0 0 0 4px rgba(77, 182, 172, 0.22);
+}
+
+.sepconn__bridge {
+  margin-top: 30px;
+  padding: 22px 26px;
+  background: rgba(0, 0, 0, 0.32);
+  border-radius: 18px;
+  border-left: 3px solid var(--gold);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.55;
+}
+
+@media (max-width: 800px) {
+  .sepconn__grid { grid-template-columns: 1fr; }
+}

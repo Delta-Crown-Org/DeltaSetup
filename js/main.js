@@ -72,71 +72,107 @@
     counterObserver.observe(el);
   });
 
-  // ---- Sticky Nav ----
+  // ---- Sticky Nav (legacy top-nav, only when present) ----
   const nav = document.querySelector('.nav');
   const hero = document.querySelector('.hero');
-  const progressBar = document.querySelector('.nav__progress');
+  const topProgressBar = document.querySelector('.nav__progress');
+  const sidebarProgressBar = document.querySelector('.sidebar__progress-bar');
 
-  if (nav && hero) {
+  if (hero) {
     const heroHeight = hero.offsetHeight;
 
-    function updateNav() {
+    function updateScroll() {
       const scrollY = window.scrollY;
 
-      // Solid nav after hero
-      if (scrollY > heroHeight * 0.3) {
-        nav.classList.add('nav--solid');
-      } else {
-        nav.classList.remove('nav--solid');
+      if (nav) {
+        if (scrollY > heroHeight * 0.3) {
+          nav.classList.add('nav--solid');
+        } else {
+          nav.classList.remove('nav--solid');
+        }
       }
 
-      // Progress bar
-      if (progressBar) {
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const percent = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
-        progressBar.style.width = percent + '%';
-      }
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const percent = docHeight > 0 ? Math.min(100, (scrollY / docHeight) * 100) : 0;
+      if (topProgressBar) topProgressBar.style.width = percent + '%';
+      if (sidebarProgressBar) sidebarProgressBar.style.width = percent + '%';
     }
 
-    // Throttle scroll with rAF
     let ticking = false;
     window.addEventListener('scroll', () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          updateNav();
+          updateScroll();
           ticking = false;
         });
         ticking = true;
       }
     }, { passive: true });
 
-    updateNav();
+    updateScroll();
   }
 
-  // ---- Active Nav Link Highlighting ----
-  const sections = document.querySelectorAll('.section[id]');
-  const navLinks = document.querySelectorAll('.nav__link');
+  // ---- Active Nav Link Highlighting (top nav + sidebar) ----
+  const sections = document.querySelectorAll('section[id], .section[id]');
+  const topNavLinks = document.querySelectorAll('.nav__link');
+  const sidebarLinks = document.querySelectorAll('.sidebar__link');
 
-  if (sections.length && navLinks.length) {
+  if (sections.length && (topNavLinks.length || sidebarLinks.length)) {
     const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const id = entry.target.id;
-            navLinks.forEach((link) => {
+            topNavLinks.forEach((link) => {
               link.classList.toggle(
                 'nav__link--active',
+                link.getAttribute('href') === '#' + id
+              );
+            });
+            sidebarLinks.forEach((link) => {
+              link.classList.toggle(
+                'sidebar__link--active',
                 link.getAttribute('href') === '#' + id
               );
             });
           }
         });
       },
-      { threshold: 0.3, rootMargin: '-80px 0px -40% 0px' }
+      { threshold: 0.25, rootMargin: '-80px 0px -40% 0px' }
     );
 
     sections.forEach((s) => sectionObserver.observe(s));
   }
+
+  // ---- Sidebar mobile toggle ----
+  const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
+  const sidebarBackdrop = document.querySelector('[data-sidebar-backdrop]');
+
+  function setSidebarOpen(open) {
+    document.body.classList.toggle('sidebar-open', open);
+    if (sidebarToggle) sidebarToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener('click', () => {
+      setSidebarOpen(!document.body.classList.contains('sidebar-open'));
+    });
+  }
+  if (sidebarBackdrop) {
+    sidebarBackdrop.addEventListener('click', () => setSidebarOpen(false));
+  }
+  document.querySelectorAll('.sidebar__link, .sidebar__view').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (window.matchMedia('(max-width: 1023px)').matches) {
+        setSidebarOpen(false);
+      }
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('sidebar-open')) {
+      setSidebarOpen(false);
+    }
+  });
 
   // ---- Smooth Scroll for Nav Links ----
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
