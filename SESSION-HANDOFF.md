@@ -33,3 +33,4 @@
 - Do not run Phase 4 document migration for production cutover. Migration scripts/config remain historical tooling only.
 - E2E testing should proceed without document migration assumptions.
 - Tracking: document migration work (`DeltaSetup-98`/migration portions of `DeltaSetup-117`) closed as skipped/not planned.
+- Cleanup complete on 2026-04-30: unused HTT Brands Entra app `DeltaSetup-HTT-SourceMigration-PnP` / `3657525b-b24a-43bc-9510-cbdd375da6e5` was deleted from tenant `httbrands.onmicrosoft.com`.
