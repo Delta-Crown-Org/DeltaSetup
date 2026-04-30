@@ -11,10 +11,16 @@ https://httbrands.sharepoint.com/sites/HTTHQ
 Shared Documents / Master DCE
 ```
 
-Script:
+Primary PnP script:
 
 ```text
 phase4-migration/scripts/audit-master-dce.ps1
+```
+
+Azure CLI / Graph fallback script:
+
+```text
+phase4-migration/scripts/audit_master_dce_graph.py
 ```
 
 Expected outputs:
@@ -163,7 +169,7 @@ Do not approve prompts requesting permissions such as:
 
 If a prompt looks wrong, stop. A failed audit is cheaper than an accidental permission fiesta.
 
-## Standard audit command
+## Standard PnP audit command
 
 From repo root:
 
@@ -192,7 +198,18 @@ $env:HTT_PNP_CLIENT_ID = "<approved-pnp-client-id>"
 pwsh -File ./phase4-migration/scripts/audit-master-dce.ps1 -DeviceLogin
 ```
 
-Equivalent with explicit values:
+## Azure CLI / Graph fallback command
+
+If Azure CLI is already authenticated to the HTT tenant, use the Graph fallback to avoid PnP delegated app redirect issues:
+
+```bash
+az account show
+python3 phase4-migration/scripts/audit_master_dce_graph.py
+```
+
+This fallback is read-only and writes to `.local/reports/master-dce/` by default.
+
+Equivalent PnP command with explicit values:
 
 ```powershell
 pwsh -File ./phase4-migration/scripts/audit-master-dce.ps1 `
@@ -301,9 +318,11 @@ If Microsoft returns:
 AADSTS500113: No reply address is registered for the application.
 ```
 
-Stop the audit attempt. This means the PnP/Entra app registration used for delegated login does not have the required redirect/reply configuration for the auth flow. It is not a user password problem.
+Stop the PnP audit attempt. This means the PnP/Entra app registration used for delegated login does not have the required redirect/reply configuration for the auth flow. It is not a user password problem.
 
-Resolution path:
+If Azure CLI is already logged into the HTT tenant, use `phase4-migration/scripts/audit_master_dce_graph.py` as the read-only Graph fallback.
+
+Resolution path for PnP:
 
 1. Identify or configure an approved PnP/Entra app registration for `httbrands.onmicrosoft.com`.
 2. Confirm the app supports the chosen delegated login flow.
