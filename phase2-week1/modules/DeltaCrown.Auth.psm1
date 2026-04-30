@@ -182,8 +182,15 @@ function Connect-DeltaCrownSharePoint {
         $attempt++
         
         try {
-            # Disconnect any existing sessions
-            Disconnect-PnPOnline -ErrorAction SilentlyContinue
+            # Disconnect any existing sessions. PnP.PowerShell can throw even
+            # with SilentlyContinue when no connection exists, so keep this
+            # best-effort and do not fail the actual connection attempt.
+            try {
+                Disconnect-PnPOnline -ErrorAction Stop
+            }
+            catch {
+                Write-Verbose "No existing PnP connection to disconnect"
+            }
             
             # Certificate-based authentication (Production)
             if ($AuthConfig.CertificatePath -and (Test-Path $AuthConfig.CertificatePath)) {

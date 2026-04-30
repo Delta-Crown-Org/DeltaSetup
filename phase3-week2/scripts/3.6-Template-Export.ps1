@@ -91,7 +91,14 @@ try {
     # ------------------------------------------------------------------
     # CONNECTION SETUP (A3: check if Master pre-authed)
     # ------------------------------------------------------------------
-    $existingCtx = Get-PnPContext -ErrorAction SilentlyContinue
+    $existingCtx = $null
+    try {
+        $existingCtx = Get-PnPContext -ErrorAction Stop
+    }
+    catch {
+        Write-DeltaCrownLog "No pre-established SharePoint connection found; connecting to admin site" "INFO"
+    }
+
     if (!$existingCtx) {
         Connect-DeltaCrownSharePoint -Url $AdminUrl
         $script:OwnsPnPConnection = $true
