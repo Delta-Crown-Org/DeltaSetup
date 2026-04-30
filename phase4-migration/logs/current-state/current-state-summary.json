@@ -1,0 +1,185 @@
+{
+  "exportedFrom": "Microsoft Graph live export",
+  "tenantId": "ce62e17d-2feb-4e67-a115-8ea4af68da30",
+  "usersTotal": 89,
+  "usersActive": 86,
+  "dceDomainObjects": 11,
+  "dceStaffDynamic": 6,
+  "groupsTotal": 10,
+  "dynamicGroups": 5,
+  "unifiedGroups": 4,
+  "teamsReadAsTeams": 0,
+  "groupMembershipRows": 184,
+  "dceStaff": [
+    {
+      "DisplayName": "Allynn Shepherd",
+      "UserPrincipalName": "Allynn.Shepherd@deltacrown.com",
+      "CompanyName": "Delta Crown Extensions",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "True"
+    },
+    {
+      "DisplayName": "Amit Shah",
+      "UserPrincipalName": "Amit.Shah@deltacrown.com",
+      "CompanyName": "Delta Crown Extensions",
+      "Department": "Franchisee",
+      "JobTitle": "Owner",
+      "AccountEnabled": "True"
+    },
+    {
+      "DisplayName": "DCE Bookings",
+      "UserPrincipalName": "DCEBookings@deltacrown.com",
+      "CompanyName": "",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "False"
+    },
+    {
+      "DisplayName": "DCE Info",
+      "UserPrincipalName": "DCEInfo@deltacrown.com",
+      "CompanyName": "",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "False"
+    },
+    {
+      "DisplayName": "DCE Operations",
+      "UserPrincipalName": "DCEOperations@deltacrown.com",
+      "CompanyName": "",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "False"
+    },
+    {
+      "DisplayName": "Jay Miller",
+      "UserPrincipalName": "Jay.Miller@deltacrown.com",
+      "CompanyName": "Delta Crown Extensions",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "True"
+    },
+    {
+      "DisplayName": "Lindy Sturgill",
+      "UserPrincipalName": "Lindy.Sturgill@deltacrown.com",
+      "CompanyName": "Delta Crown Extensions",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "True"
+    },
+    {
+      "DisplayName": "Megan Myrand",
+      "UserPrincipalName": "Megan.Myrand@deltacrown.com",
+      "CompanyName": "",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "True"
+    },
+    {
+      "DisplayName": "Sarah Miller",
+      "UserPrincipalName": "Sarah.Miller@deltacrown.com",
+      "CompanyName": "Delta Crown Extensions",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "True"
+    },
+    {
+      "DisplayName": "SGI Breakglass",
+      "UserPrincipalName": "SGI@deltacrown.com",
+      "CompanyName": "",
+      "Department": "",
+      "JobTitle": "",
+      "AccountEnabled": "True"
+    },
+    {
+      "DisplayName": "Toni Careccia",
+      "UserPrincipalName": "Toni.Careccia@deltacrown.com",
+      "CompanyName": "Delta Crown Extensions",
+      "Department": "Franchisee",
+      "JobTitle": "Owner",
+      "AccountEnabled": "True"
+    }
+  ],
+  "groupCounts": {
+    "AllStaff": 6,
+    "Delta Crown Extensions": 172,
+    "Delta Crown Operations": 6
+  },
+  "groups": [
+    {
+      "DisplayName": "Delta Crown Operations",
+      "Mail": "dce-operations-team@deltacrown.com",
+      "GroupTypes": "Unified",
+      "MembershipRule": "",
+      "Description": "Daily operations hub for Delta Crown Extensions franchise"
+    },
+    {
+      "DisplayName": "Delta Crown Extensions",
+      "Mail": "DeltaCrownExtensions379@deltacrown.com",
+      "GroupTypes": "Unified",
+      "MembershipRule": "",
+      "Description": "Delta Crown Extensions"
+    },
+    {
+      "DisplayName": "External",
+      "Mail": "",
+      "GroupTypes": "DynamicMembership",
+      "MembershipRule": "(user.userType -eq \"Guest\") and (user.companyName -eq \"Delta Crown Extensions\")",
+      "Description": "External partners for DCE"
+    },
+    {
+      "DisplayName": "Stylists",
+      "Mail": "",
+      "GroupTypes": "DynamicMembership",
+      "MembershipRule": "(user.companyName -eq \"Delta Crown Extensions\") and (user.jobTitle -contains \"Stylist\")",
+      "Description": "DCE stylists and technicians"
+    },
+    {
+      "DisplayName": "Marketing",
+      "Mail": "",
+      "GroupTypes": "DynamicMembership",
+      "MembershipRule": "(user.department -eq \"Delta Crown Marketing\")",
+      "Description": "Delta Crown Extensions marketing team \u2014 auto-populated by department"
+    },
+    {
+      "DisplayName": "SGI Techs",
+      "Mail": "",
+      "GroupTypes": "",
+      "MembershipRule": "",
+      "Description": ""
+    },
+    {
+      "DisplayName": "AllStaff",
+      "Mail": "",
+      "GroupTypes": "DynamicMembership",
+      "MembershipRule": "(user.companyName -eq \"Delta Crown Extensions\")",
+      "Description": "All Delta Crown Extensions staff"
+    },
+    {
+      "DisplayName": "Managers",
+      "Mail": "",
+      "GroupTypes": "DynamicMembership",
+      "MembershipRule": "(user.companyName -eq \"Delta Crown Extensions\") and (user.jobTitle -contains \"Manager\")",
+      "Description": "DCE management team"
+    },
+    {
+      "DisplayName": "Delta Crown Extensions",
+      "Mail": "DeltaCrownExtensions@deltacrown.com",
+      "GroupTypes": "Unified",
+      "MembershipRule": "",
+      "Description": "Delta Crown Extensions"
+    },
+    {
+      "DisplayName": "All Company",
+      "Mail": "allcompany@deltacrown.com",
+      "GroupTypes": "Unified",
+      "MembershipRule": "",
+      "Description": "This is the default group for everyone in the network"
+    }
+  ],
+  "knownGaps": [
+    "Only 6 users currently satisfy companyName = Delta Crown Extensions; that is why AllStaff resolves to 6 live members.",
+    "Managers/Stylists/Marketing dynamic groups exist, but their current rules resolve no members until jobTitle/department values are populated.",
+    "Graph Team lookup returned zero team objects in this session; the Delta Crown Operations Microsoft 365 group exists and is mail/security-enabled."
+  ]
+}

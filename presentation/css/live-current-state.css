@@ -1,0 +1,159 @@
+/* Live Microsoft 365 current-state visualization. Keep this small and boring. */
+.live-state {
+  display: grid;
+  gap: 24px;
+  margin: 48px 0;
+}
+
+.live-state__source {
+  align-items: center;
+  background: linear-gradient(135deg, rgba(0, 107, 94, 0.08), rgba(212, 168, 75, 0.08));
+  border: 1px solid rgba(0, 107, 94, 0.14);
+  border-radius: 18px;
+  display: flex;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.live-state__source img,
+.live-card__icon {
+  height: 42px;
+  width: 42px;
+}
+
+.live-state__stats {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.live-stat {
+  background: var(--surface-card);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+}
+
+.live-stat__value {
+  color: var(--teal);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 0.95;
+}
+
+.live-stat__label {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+
+.live-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1.15fr 0.85fr;
+}
+
+.live-card {
+  background: var(--surface-card);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.live-card__head {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.live-card__title {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.live-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.live-pill {
+  background: rgba(0, 107, 94, 0.08);
+  border: 1px solid rgba(0, 107, 94, 0.12);
+  border-radius: 999px;
+  color: var(--teal);
+  font-size: 0.76rem;
+  padding: 6px 10px;
+}
+
+.live-pill--gold {
+  background: rgba(212, 168, 75, 0.12);
+  border-color: rgba(212, 168, 75, 0.22);
+  color: var(--gold-dark);
+}
+
+.live-users {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.live-user {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.025);
+  border-radius: 12px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr auto;
+  padding: 10px 12px;
+}
+
+.live-user__name {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.live-user__meta,
+.live-rule {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+.live-rule-list {
+  display: grid;
+  gap: 12px;
+}
+
+.live-rule {
+  background: rgba(0, 0, 0, 0.025);
+  border-left: 3px solid var(--gold);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.live-rule code {
+  color: var(--teal);
+  white-space: normal;
+}
+
+.live-note {
+  background: rgba(239, 83, 80, 0.06);
+  border: 1px solid rgba(239, 83, 80, 0.12);
+  border-radius: 14px;
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  margin-top: 16px;
+  padding: 12px 14px;
+}
+
+@media (max-width: 900px) {
+  .live-state__stats,
+  .live-grid {
+    grid-template-columns: 1fr;
+  }
+}

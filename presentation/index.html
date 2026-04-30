@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Tenor+Sans&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/live-current-state.css">
 </head>
 <body>
 
@@ -451,21 +452,20 @@
         </div>
       </div>
 
-      <!-- Teams Integration -->
+      <!-- Collaboration Integration -->
       <div class="callout callout--glass reveal text-center" style="margin-top: 32px;">
         <h4 style="color: var(--gold); margin-bottom: 8px;">
           <span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle;">chat</span>
-          Teams Workspace: Delta Crown Operations
+          Collaboration Workspace: Delta Crown Operations
         </h4>
         <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; font-size: 0.8125rem;">
-          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">💬 General</span>
-          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">📊 Daily Ops</span>
-          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">📅 Bookings</span>
-          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">📣 Marketing</span>
-          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(212,168,75,0.15); color: var(--gold);">🔒 Leadership</span>
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">Microsoft 365 group exists</span>
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">dce-operations-team@deltacrown.com</span>
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06);">6 DCE members</span>
+          <span style="padding: 4px 12px; border-radius: 8px; background: rgba(212,168,75,0.15); color: var(--gold);">Team/channel object not returned by Graph export</span>
         </div>
         <p style="margin-top: 8px; font-size: 0.75rem; color: rgba(255,255,255,0.35);">
-          Each channel has SharePoint tabs connected to the relevant lists and libraries
+          Translation: the group is real; Teams channel details still need verification before launch materials promise specific channels.
         </p>
       </div>
     </div>
@@ -512,8 +512,93 @@
       <p class="label mb-16 reveal">The User Experience</p>
       <h2 class="mb-16 reveal" style="max-width: 650px;">Add a user. Everything else is automatic.</h2>
       <p class="text-muted mb-48 reveal" style="max-width: 560px; font-size: 1.0625rem;">
-        Azure AD user properties drive dynamic security group membership. Set three fields — and the user automatically sees the right hub, the right sites, the right Teams channels.
+        Microsoft Graph live export shows the DCE tenant is mostly ready: the rules exist, the groups exist, and the remaining work is filling user metadata so automation has something useful to chew on.
       </p>
+
+      <div class="live-state reveal">
+        <div class="live-state__source">
+          <img src="../phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="Microsoft 365 tenant icon">
+          <div>
+            <strong>Current state source: live Microsoft Graph export</strong>
+            <p class="text-muted" style="font-size: 0.86rem; margin-top: 4px;">Tenant ce62e17d-2feb-4e67-a115-8ea4af68da30 · exported to <code>phase4-migration/logs/current-state/</code>. Icons are from Microsoft’s official Microsoft 365 architecture icon pack.</p>
+          </div>
+        </div>
+
+        <div class="live-state__stats">
+          <div class="live-stat">
+            <div class="live-stat__value">89</div>
+            <div class="live-stat__label">Tenant users</div>
+          </div>
+          <div class="live-stat">
+            <div class="live-stat__value">10</div>
+            <div class="live-stat__label">Groups found</div>
+          </div>
+          <div class="live-stat">
+            <div class="live-stat__value">5</div>
+            <div class="live-stat__label">Dynamic groups</div>
+          </div>
+          <div class="live-stat">
+            <div class="live-stat__value">6</div>
+            <div class="live-stat__label">AllStaff members now</div>
+          </div>
+        </div>
+
+        <div class="live-grid">
+          <div class="live-card">
+            <div class="live-card__head">
+              <img class="live-card__icon" src="../phase4-migration/assets/microsoft-icons/people-team.svg" alt="People team icon">
+              <div>
+                <h3 class="live-card__title">Real DCE identities resolving through automation</h3>
+                <p class="text-muted" style="font-size: 0.82rem; margin-top: 2px;">These six currently satisfy <code>companyName = Delta Crown Extensions</code>.</p>
+              </div>
+            </div>
+            <div class="live-users">
+              <div class="live-user"><div><div class="live-user__name">Allynn Shepherd</div><div class="live-user__meta">Allynn.Shepherd@deltacrown.com · metadata gap: title + department</div></div><span class="live-pill">AllStaff</span></div>
+              <div class="live-user"><div><div class="live-user__name">Amit Shah</div><div class="live-user__meta">Owner · Franchisee</div></div><span class="live-pill live-pill--gold">Owner</span></div>
+              <div class="live-user"><div><div class="live-user__name">Jay Miller</div><div class="live-user__meta">Jay.Miller@deltacrown.com · metadata gap: title + department</div></div><span class="live-pill">AllStaff</span></div>
+              <div class="live-user"><div><div class="live-user__name">Lindy Sturgill</div><div class="live-user__meta">Lindy.Sturgill@deltacrown.com · metadata gap: title + department</div></div><span class="live-pill">AllStaff</span></div>
+              <div class="live-user"><div><div class="live-user__name">Sarah Miller</div><div class="live-user__meta">Sarah.Miller@deltacrown.com · metadata gap: title + department</div></div><span class="live-pill">AllStaff</span></div>
+              <div class="live-user"><div><div class="live-user__name">Toni Careccia</div><div class="live-user__meta">Owner · Franchisee</div></div><span class="live-pill live-pill--gold">Owner</span></div>
+            </div>
+          </div>
+
+          <div class="live-card">
+            <div class="live-card__head">
+              <img class="live-card__icon" src="../phase4-migration/assets/microsoft-icons/people-settings.svg" alt="Directory rules icon">
+              <div>
+                <h3 class="live-card__title">Dynamic security group rules live</h3>
+                <p class="text-muted" style="font-size: 0.82rem; margin-top: 2px;">Actual rules exported from Entra ID.</p>
+              </div>
+            </div>
+            <div class="live-rule-list">
+              <div class="live-rule"><strong>AllStaff</strong><br><code>user.companyName -eq "Delta Crown Extensions"</code></div>
+              <div class="live-rule"><strong>Managers</strong><br><code>companyName = DCE AND jobTitle contains "Manager"</code></div>
+              <div class="live-rule"><strong>Stylists</strong><br><code>companyName = DCE AND jobTitle contains "Stylist"</code></div>
+              <div class="live-rule"><strong>Marketing</strong><br><code>department -eq "Delta Crown Marketing"</code></div>
+              <div class="live-rule"><strong>External</strong><br><code>userType = Guest AND companyName = DCE</code></div>
+            </div>
+            <div class="live-note">
+              Managers, Stylists, Marketing, and External currently resolve no members until job titles, departments, and guest user types are populated. Tiny metadata fields, giant blast radius. Classic.
+            </div>
+          </div>
+        </div>
+
+        <div class="live-card">
+          <div class="live-card__head">
+            <img class="live-card__icon" src="../phase4-migration/assets/microsoft-icons/folder-people.svg" alt="Microsoft 365 group icon">
+            <div>
+              <h3 class="live-card__title">Collaboration objects Graph proved</h3>
+              <p class="text-muted" style="font-size: 0.84rem; margin-top: 2px;">Delta Crown Operations exists as a mail/security-enabled Microsoft 365 group with the six DCE staff members. Two separate “Delta Crown Extensions” unified groups also exist and contain the broader HTT/DCE collaboration membership.</p>
+            </div>
+          </div>
+          <div class="live-pills">
+            <span class="live-pill live-pill--gold">Delta Crown Operations · dce-operations-team@deltacrown.com · 6 members</span>
+            <span class="live-pill">Delta Crown Extensions · DeltaCrownExtensions@deltacrown.com · broad collaboration group</span>
+            <span class="live-pill">Delta Crown Extensions · DeltaCrownExtensions379@deltacrown.com · duplicate/broad collaboration group</span>
+            <span class="live-pill">All Company · allcompany@deltacrown.com</span>
+          </div>
+        </div>
+      </div>
 
       <div class="grid grid--2 grid--center" style="gap: clamp(32px, 6vw, 64px);">
         <!-- User Properties -->
