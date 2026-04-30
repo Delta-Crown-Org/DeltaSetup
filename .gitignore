@@ -44,3 +44,9 @@ phase2-week1/logs/
 phase3-week2/docs/*-results.json
 phase3-week2/logs/
 phase3-week2/templates/
+
+# Local tenant audit/inventory exports (may contain users, permissions, tenant IDs)
+.local/
+reports/raw/
+reports/**/*-raw.csv
+reports/**/*-raw.json

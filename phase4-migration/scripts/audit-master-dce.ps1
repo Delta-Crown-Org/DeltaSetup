@@ -6,10 +6,12 @@
 #   can map real folders into Delta Crown pillar resources before copying,
 #   shortcutting, or rebuilding anything in the deltacrown tenant.
 #
-# Output:
-#   reports/master-dce-folder-inventory.csv
-#   reports/master-dce-permissions.csv
-#   reports/master-dce-summary.md
+# Output defaults to local-only raw reports:
+#   .local/reports/master-dce/master-dce-folder-inventory.csv
+#   .local/reports/master-dce/master-dce-permissions.csv
+#   .local/reports/master-dce/master-dce-summary.md
+#
+# Review/redact before committing any report output.
 #
 # Notes:
 #   - This script is read-only.
@@ -37,7 +39,7 @@ param(
     [string]$Tenant = $(if ($env:HTT_TENANT_ID) { $env:HTT_TENANT_ID } else { "httbrands.onmicrosoft.com" }),
 
     [Parameter()]
-    [string]$OutputDirectory = "reports",
+    [string]$OutputDirectory = ".local/reports/master-dce",
 
     [Parameter()]
     [switch]$Recursive
@@ -82,7 +84,17 @@ function Connect-HttSharePoint {
     else {
         Connect-PnPOnline -Url $Url -Interactive -ErrorAction Stop
     }
-    Write-Status "Connected" "OK"
+
+    $web = Get-PnPWeb -Includes Url -ErrorAction Stop
+    $expected = [Uri]$Url
+    $actual = [Uri]$web.Url
+
+    if ($actual.Host -ne $expected.Host -or $actual.AbsolutePath.TrimEnd('/') -ne $expected.AbsolutePath.TrimEnd('/')) {
+        Disconnect-PnPOnline -ErrorAction SilentlyContinue
+        throw "Connected SharePoint context '$($web.Url)' does not match expected audit source '$Url'. Stopping before inventory."
+    }
+
+    Write-Status "Connected and verified source context: $($web.Url)" "OK"
 }
 
 function Convert-PrincipalToText {
