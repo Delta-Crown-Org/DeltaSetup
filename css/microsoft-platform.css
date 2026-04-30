@@ -1,0 +1,138 @@
+/* Prominent Microsoft systems visuals for the root GitHub Pages site. */
+.hero-systems {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  margin: 34px auto 0;
+  max-width: 980px;
+}
+
+.hero-system {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.22);
+  min-height: 150px;
+  padding: 18px 14px;
+  text-align: center;
+}
+
+.hero-system img {
+  height: 46px;
+  margin: 0 auto 13px;
+  width: 46px;
+}
+
+.hero-system strong,
+.hero-system span {
+  display: block;
+}
+
+.hero-system strong {
+  color: white;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+}
+
+.hero-system span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  margin-top: 7px;
+  text-transform: uppercase;
+}
+
+.hero-system--primary {
+  background: linear-gradient(160deg, rgba(212, 168, 75, 0.28), rgba(255, 255, 255, 0.1));
+  border-color: rgba(212, 168, 75, 0.38);
+}
+
+.microsoft-platform {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 48px 0;
+  position: relative;
+}
+
+.microsoft-platform__rail {
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  height: 2px;
+  left: 8%;
+  opacity: 0.5;
+  position: absolute;
+  right: 8%;
+  top: 54px;
+  z-index: 0;
+}
+
+.microsoft-platform__node {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 24px;
+  min-height: 250px;
+  padding: 22px;
+  position: relative;
+  z-index: 1;
+}
+
+.microsoft-platform__node img {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 18px;
+  height: 58px;
+  padding: 8px;
+  width: 58px;
+}
+
+.microsoft-platform__node span {
+  color: rgba(255, 255, 255, 0.26);
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  line-height: 1;
+  position: absolute;
+  right: 16px;
+  top: 13px;
+}
+
+.microsoft-platform__node strong {
+  color: white;
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.24rem;
+  margin-top: 24px;
+}
+
+.microsoft-platform__node p {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+.microsoft-platform__node--lead {
+  background: linear-gradient(160deg, rgba(0, 107, 94, 0.42), rgba(255, 255, 255, 0.08));
+}
+
+.microsoft-platform__node--secure {
+  background: linear-gradient(160deg, rgba(212, 168, 75, 0.28), rgba(255, 255, 255, 0.08));
+  border-color: rgba(212, 168, 75, 0.28);
+}
+
+@media (max-width: 1000px) {
+  .hero-systems,
+  .microsoft-platform {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .microsoft-platform__rail {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-systems,
+  .microsoft-platform {
+    grid-template-columns: 1fr;
+  }
+}
