@@ -60,17 +60,18 @@ Use this plain-language version:
 | Client records are out of Microsoft 365 scope. | Safe | Do not present Client Services/Client Experience as client data storage. |
 | Master DCE is the source folder to audit. | Safe | It lives in HTTHQ Shared Documents. |
 | Brand Resources is the intended replacement concept for legacy ClientServices assumptions. | Safe | Exact tenant implementation pending audit. |
-| Tenant resources need inventory before production cleanup. | Safe | Security policies, groups, sites, Teams, email, apps, and licenses all need review. |
+| Tenant resources need inventory before production cleanup. | Safe | Identity, SharePoint, Exchange, security singleton policies, apps/licenses, and duplicate group evidence have been inventoried; Teams/channel detail is blocked on a licensed Teams-readable context. |
 
 ## What must be phrased carefully
 
 | Topic | Careful wording |
 |---|---|
 | Brand Resources | “This is the target resource model. The audit will confirm whether we repurpose an existing resource, create a new one, or use shortcuts.” |
-| Teams channels | “The Operations group/member state is known from prior checks, but channel layout still needs verification.” |
-| Automatic role groups | "AllStaff has live membership; role-specific groups (Managers, Stylists) depend on employee data cleanup and verification." |
+| Teams channels | “The DCE Operations Microsoft 365 group exists and has known group membership, but Teams/channel layout is blocked until we use a licensed Teams-readable DCE context or owner attestation.” |
+| Automatic role groups | “AllStaff currently resolves to six users; Managers, Marketing, Stylists, and External currently resolve to zero because user metadata is incomplete.” |
 | Master DCE content | “We are auditing and mapping, not bulk-migrating.” |
-| Security posture | “Security policies are part of the inventory and readiness gates; do not claim full production readiness until verified.” |
+| Security posture | “Security defaults are disabled, admin consent request workflow is disabled, and authentication method states are documented. Do not claim the full security model is final until consolidated inventory/readiness review is complete.” |
+| Duplicate Delta Crown Extensions groups | “Two public Teams-provisioned Microsoft 365 groups have the same display name and identical member/owner sets. Do not delete either until Teams dependencies are reviewed.” |
 
 ## What not to say
 
@@ -110,45 +111,62 @@ Client records and client PII are out of scope. Do not search for, export, open,
 
 Use public pages, sanitized screenshots, or a least-privilege non-admin demo account for the showcase. Do not show live admin portals, registered app credentials, user lists, mailbox views, group membership screens, permission pages, finance/strategy folders, or tenant policy pages unless they are specifically approved and redacted for the demo.
 
+## Current evidence snapshot
+
+| Area | Evidence | Showcase impact |
+|---|---|---|
+| User metadata | `companyName` populated for 6/89 users; `department` 45/89; `jobTitle` 44/89; `employeeType` 0/89. | Explain identity-driven access as the target/control model, but state metadata cleanup is required before role groups are complete. |
+| Dynamic groups | AllStaff = 6; Managers/Marketing/Stylists/External = 0. | Safe to explain the mechanism; not safe to claim all automatic groups are fully populated. |
+| SharePoint | PnP inventory verifies DCE sites, sharing posture, ClientServices list/library detail, and permissions. | Safe to discuss audited site/resource direction; do not claim all cleanup actions are approved. |
+| ClientServices artifacts | Client Records, Consent Forms, and Feedback lists are empty and inherit broad web permissions from DCE Client Services. | Safe to say these appear to be legacy artifacts, but do not delete/repurpose until owner-approved cleanup. |
+| Duplicate groups | Two public Teams-provisioned `Delta Crown Extensions` groups exist with identical 86-member/4-owner sets and distinct SharePoint sites. | Mention as a known cleanup item only if needed; do not show as production-clean. |
+| Teams/channels | DCE Operations group is readable; Teams endpoints fail for current context due license/read access. | Do not demo or claim channel layout is verified unless owner attestation or licensed Teams-readable access is provided. |
+| Security singleton policies | Security defaults disabled; admin consent request workflow disabled; auth method states documented. | Safe to say security policy evidence has improved; not safe to claim final production governance. |
+
 ## Required evidence before final showcase signoff
 
-| Evidence | Source issue | Required for final signoff? |
-|---|---|---|
-| Master DCE audit runbook | DeltaSetup-126 | Yes |
-| Master DCE audit outputs or documented auth blocker | DeltaSetup-127 | Yes |
-| Master DCE resource map | DeltaSetup-128 | Yes |
-| Tenant inventory access matrix | DeltaSetup-131 | Yes |
-| Tenant inventory outputs or documented blockers | DeltaSetup-132 – DeltaSetup-137 | Yes |
-| Showcase-vs-tenant gap analysis | DeltaSetup-138 | Yes |
-| Team showcase runbook/FAQ/scorecard/demo script | DeltaSetup-139 | Yes |
+| Evidence | Source issue | Required for final signoff? | Current status |
+|---|---|---|---|
+| Master DCE audit runbook | DeltaSetup-126 | Yes | Complete from prior work. |
+| Master DCE audit outputs or documented auth blocker | DeltaSetup-127 | Yes | Complete/documented from prior work. |
+| Master DCE resource map | DeltaSetup-128 | Yes | Complete. |
+| Tenant inventory access matrix | DeltaSetup-131 | Yes | Complete. |
+| Identity inventory | DeltaSetup-132 / DeltaSetup-120 | Yes | Complete; metadata gaps documented. |
+| SharePoint inventory | DeltaSetup-133 / DeltaSetup-144 / DeltaSetup-149 | Yes | Complete for current accessible scope; detailed PnP evidence documented. |
+| Teams/channel inventory | DeltaSetup-134 / DeltaSetup-151 | Yes | Blocked on licensed Teams-readable context or owner attestation. |
+| Security/apps/licenses inventory | DeltaSetup-136 / DeltaSetup-147 | Yes | Security singleton gaps resolved; full consolidation still pending. |
+| Tenant inventory consolidation | DeltaSetup-137 | Yes | Blocked behind Teams inventory. |
+| Showcase-vs-tenant gap analysis | DeltaSetup-138 | Yes | Blocked behind consolidated inventory. |
+| Team showcase runbook/FAQ/scorecard/demo script | DeltaSetup-139 | Yes | Blocked behind gap analysis. |
 
 ## Go / no-go checklist
 
 ### Green: safe to showcase
 
-- [ ] Public root site loads.
-- [ ] Ops View loads.
-- [ ] Public site uses generic resource names.
-- [ ] No public-facing client-record claims remain.
-- [ ] Presenter can explain Master DCE audit status.
-- [ ] Presenter can explain tenant inventory status.
-- [ ] Known gaps are documented.
-- [ ] No sensitive live tenant screens are part of the demo flow.
+- [x] Public root site loads.
+- [x] Ops View loads.
+- [x] Public site uses generic resource names.
+- [x] No public-facing client-record claims remain.
+- [x] Presenter can explain Master DCE audit status.
+- [x] Presenter can explain tenant inventory status.
+- [x] Known gaps are documented.
+- [x] No sensitive live tenant screens are part of the demo flow.
 
 ### Yellow: mention carefully
 
-- [ ] Brand Resources implementation path is not yet final.
-- [ ] Teams/channel state may still need verification.
-- [ ] Role-specific automatic groups (Managers, Stylists) may depend on employee data cleanup.
-- [ ] Some corporate-owned resources may remain in HTT and be referenced by shortcut.
+- [x] Brand Resources implementation path is not yet final.
+- [x] Teams/channel state still needs licensed Teams-readable verification or owner attestation.
+- [x] Role-specific automatic groups (Managers, Marketing, Stylists, External) depend on employee metadata cleanup.
+- [x] Some corporate-owned resources may remain in HTT and be referenced by shortcut.
+- [x] Duplicate `Delta Crown Extensions` groups are known and must not be deleted before Teams dependency review.
 
 ### Red: do not showcase as complete
 
-- [ ] Unverified permissions.
-- [ ] Financial/strategy folders before access review.
-- [ ] Client records or client PII.
-- [ ] Admin screens exposing secrets, app credentials, or sensitive tenant details.
-- [ ] Anything requiring an unapproved live tenant change.
+- [x] Unverified permissions.
+- [x] Financial/strategy folders before access review.
+- [x] Client records or client PII.
+- [x] Admin screens exposing secrets, app credentials, or sensitive tenant details.
+- [x] Anything requiring an unapproved live tenant change.
 
 ## First sprint completion criteria
 
@@ -160,3 +178,5 @@ This issue is complete when:
 - it separates showcase-ready from production-ready;
 - it points to the audit and inventory gates;
 - no live tenant change is required to satisfy it.
+
+Status: complete for checklist/readiness framing. Final showcase signoff still depends on the remaining inventory/gap-analysis issues above. Tiny distinction, huge consequences — the kind of boring precision that keeps demos from becoming incident reports.
