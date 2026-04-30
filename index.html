@@ -30,6 +30,7 @@
         <a href="./operations.html" class="nav__link">Ops View</a>
         <a href="#problem" class="nav__link">Problem</a>
         <a href="#architecture" class="nav__link">Architecture</a>
+        <a href="#audited-microsoft-architecture" class="nav__link">Audit</a>
         <a href="#migration" class="nav__link">Decision</a>
         <a href="#users" class="nav__link">Users</a>
         <a href="#progress" class="nav__link">Progress</a>
@@ -530,6 +531,126 @@
           Graph proved the group and membership. We should verify actual Teams channel layout before promising specific channels.
         </p>
       </div>
+    </div>
+  </section>
+
+  <!-- ==================== AUDITED MICROSOFT ARCHITECTURE ==================== -->
+  <section class="section section--dark audited-architecture" id="audited-microsoft-architecture" aria-labelledby="audited-microsoft-architecture-title">
+    <div class="container">
+      <p class="label mb-16 reveal">Microsoft architecture audited so far</p>
+      <h2 class="reveal mb-16" id="audited-microsoft-architecture-title" style="max-width: 760px;">
+        Identity labels drive groups.<br>Groups drive access. Evidence closes the loop.
+      </h2>
+      <p class="text-muted mb-48 reveal" style="max-width: 720px; font-size: 1.0625rem; color: rgba(255,255,255,0.56);">
+        The current Delta Crown model is built on the Microsoft 365 Business Premium tenant <strong>deltacrown</strong>, with Entra ID, SharePoint hub/spoke sites, Teams collaboration, Exchange Online, and compliance controls tied together by repeatable identity data — not one-off manual permissions.
+      </p>
+
+      <div class="audit-hero reveal" aria-label="Audited Microsoft system map">
+        <article class="audit-hero__card audit-hero__card--tenant">
+          <img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="Microsoft 365 tenant icon">
+          <h3>Microsoft 365 Business Premium</h3>
+          <p>Tenant foundation: <code>deltacrown</code>. Existing page status keeps the license impact at <strong>$0 additional license cost</strong> for the audited platform model.</p>
+        </article>
+        <article class="audit-hero__card">
+          <img src="phase4-migration/assets/microsoft-icons/people-settings.svg" alt="Microsoft Entra ID icon">
+          <h3>Entra ID</h3>
+          <p>Identity attributes become dynamic groups. Current prefix-free groups are <code>AllStaff</code>, <code>Managers</code>, <code>Stylists</code>, <code>External</code>, and <code>Marketing</code>.</p>
+        </article>
+        <article class="audit-hero__card">
+          <img src="phase4-migration/assets/microsoft-icons/folder-people.svg" alt="Microsoft SharePoint icon">
+          <h3>SharePoint hubs + spokes</h3>
+          <p>Corp shared-services hub and Delta Crown brand hub with spoke sites for operations, marketing, docs/training, and restricted resource lanes.</p>
+        </article>
+        <article class="audit-hero__card">
+          <img src="phase4-migration/assets/microsoft-icons/share.svg" alt="Microsoft Teams collaboration icon">
+          <h3>Teams workspace</h3>
+          <p><strong>Delta Crown Operations</strong> is the collaboration workspace. Group and membership are documented; channel layout still needs end-to-end verification.</p>
+        </article>
+        <article class="audit-hero__card">
+          <img src="phase4-migration/assets/microsoft-icons/mail.svg" alt="Microsoft Exchange Online mail icon">
+          <h3>Exchange Online</h3>
+          <p>Shared mailboxes: operations@, bookings@, and info@. DDGs: allstaff@, managers@, and stylists@. Exchange activation requires at least one licensed mailbox user.</p>
+        </article>
+        <article class="audit-hero__card audit-hero__card--secure">
+          <img src="phase4-migration/assets/microsoft-icons/lock-shield.svg" alt="Microsoft security and compliance icon">
+          <h3>Security, DLP + compliance</h3>
+          <p>DLP policies, disabled external sharing, guest-off posture, and anonymous-link controls are documented. Full E2E testing remains pending before launch.</p>
+        </article>
+      </div>
+
+      <div class="audit-flow reveal" aria-label="Identity and access flow">
+        <h3>Access flow: boring on purpose, because boring scales</h3>
+        <ol>
+          <li><strong>Identity labels</strong><span>Collect and normalize <code>companyName</code>, <code>department</code>, <code>jobTitle</code>, <code>officeLocation</code>, <code>employeeType</code>, and extension attributes.</span></li>
+          <li><strong>Dynamic groups</strong><span>Let Entra resolve confirmed groups: <code>AllStaff</code>, <code>Managers</code>, <code>Stylists</code>, <code>External</code>, <code>Marketing</code>.</span></li>
+          <li><strong>Resource permissions</strong><span>Assign SharePoint, Teams, shared mailbox, and app access to groups instead of sprinkling direct user permissions everywhere like confetti from hell.</span></li>
+          <li><strong>Verification</strong><span>Test expected access, unexpected access denial, mailbox/app behavior, and capture exceptions as model cleanup.</span></li>
+        </ol>
+      </div>
+
+      <div class="audit-grid reveal">
+        <article class="audit-panel">
+          <h3>Onboarding pattern</h3>
+          <ul>
+            <li>Collect role, department, title, primary location, owned locations, profile, and internal/external/pilot status.</li>
+            <li>Normalize values before access is considered complete. No <q>Mgr</q>, <q>manager</q>, and <q>Boss Wizard</q> chaos taxonomy.</li>
+            <li>Sync or create the user, then apply identity labels.</li>
+            <li>Wait for dynamic groups to resolve.</li>
+            <li>Test SharePoint hub/site access, Teams/team/channel access, mailbox visibility where relevant, and app access where relevant.</li>
+            <li>Capture direct-assignment exceptions as technical debt.</li>
+          </ul>
+        </article>
+
+        <article class="audit-panel">
+          <h3>Groups: confirmed vs planned</h3>
+          <dl class="audit-definition-list">
+            <div><dt>Confirmed/current</dt><dd><code>AllStaff</code>, <code>Managers</code>, <code>Stylists</code>, <code>External</code>, <code>Marketing</code>.</dd></div>
+            <div><dt>Planned/TODO</dt><dd>Functional groups such as <code>DCE-Operations</code>, <code>DCE-ClientServices</code>, <code>DCE-Marketing</code>, <code>DCE-Leadership</code>; location groups such as <code>DCE-Loc-LV</code>, <code>DCE-Loc-PHX</code>, <code>DCE-Loc-DAL</code>; <code>DCE-CrossTenant-Pilot</code>.</dd></div>
+            <div><dt>Status note</dt><dd>Next-step functional/location groups are planned/TODO where not confirmed by the source docs.</dd></div>
+          </dl>
+        </article>
+
+        <article class="audit-panel audit-panel--wide">
+          <h3>Audit, compliance, and launch touchpoints</h3>
+          <div class="audit-checks" role="list">
+            <span role="listitem">DLP policies documented: DCE data protection, Corp data protection, and external-sharing block.</span>
+            <span role="listitem">External sharing disabled, guest access off, and anonymous link controls documented.</span>
+            <span role="listitem">E2E testing pending for sites, navigation, permissions, Exchange, DLP, and onboarding.</span>
+            <span role="listitem">No HTTHQ document migration is part of the active rollout.</span>
+            <span role="listitem">TODO — delete temp app <code>DeltaCrown-TeamsProvisioner-TEMP</code> if still present; owner confirmation needed.</span>
+          </div>
+        </article>
+
+        <article class="audit-panel">
+          <h3>Offboarding / deprovisioning</h3>
+          <p class="audit-todo"><strong>TODO — owner confirmation needed.</strong> Exact deprovisioning docs were not present in the provided sources.</p>
+          <ul>
+            <li>Disable or remove the account.</li>
+            <li>Remove group membership, licenses, mailbox access, and app access.</li>
+            <li>Verify SharePoint and Teams access is revoked.</li>
+            <li>Archive or retain content per owner/compliance direction.</li>
+          </ul>
+        </article>
+
+        <article class="audit-panel">
+          <h3>Ownership + escalation</h3>
+          <table class="audit-owner-table">
+            <caption>Owner logic from the resource map; named individual owners are TODO where not provided.</caption>
+            <tbody>
+              <tr><th scope="row">Operations / status</th><td>Operations lead</td></tr>
+              <tr><th scope="row">Marketing resources</th><td>Marketing lead</td></tr>
+              <tr><th scope="row">Strategy / financials</th><td>Leadership / Finance</td></tr>
+              <tr><th scope="row">Corporate references</th><td>HTT / Delta Crown leadership</td></tr>
+              <tr><th scope="row">Archive / retention</th><td>Content owner / compliance</td></tr>
+              <tr><th scope="row">Named owner gaps</th><td>TODO — owner confirmation needed</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+
+      <p class="audit-evidence reveal">
+        Source/evidence: <a href="DEPLOYMENT-STATUS.md">DEPLOYMENT-STATUS.md</a>, <a href="DEPLOYMENT-RUNBOOK.md">DEPLOYMENT-RUNBOOK.md</a>, <a href="docs/master-dce-resource-map.md">Master DCE Resource Map</a>, <a href="docs/onboarding/dce-role-location-onboarding-model.md">DCE Role + Location Onboarding Model</a>, and the existing Architecture/User Experience sections on this page.
+      </p>
     </div>
   </section>
 
