@@ -77,7 +77,13 @@ param(
 
     [Parameter()]
     [ValidateSet("Development", "Staging", "Production")]
-    [string]$Environment = "Development"
+    [string]$Environment = "Development",
+
+    [Parameter()]
+    [string]$SourceClientId = $env:HTT_PNP_CLIENT_ID,
+
+    [Parameter()]
+    [string]$SourceTenant = $(if ($env:HTT_TENANT_ID) { $env:HTT_TENANT_ID } else { "httbrands.onmicrosoft.com" })
 )
 
 # ============================================================================
@@ -87,6 +93,15 @@ param(
 $modulesPath = Join-Path $PSScriptRoot "..\..\phase2-week1\modules"
 Import-Module (Join-Path $modulesPath "DeltaCrown.Auth.psm1") -Force -ErrorAction Stop
 Import-Module (Join-Path $modulesPath "DeltaCrown.Common.psm1") -Force -ErrorAction Stop
+
+$pnpConfigPath = Join-Path $modulesPath "pnp-app-config.json"
+$script:DestPnpClientId = $null
+$script:DestTenantId = $null
+if (Test-Path $pnpConfigPath) {
+    $pnpConfig = Get-Content $pnpConfigPath -Raw | ConvertFrom-Json
+    $script:DestPnpClientId = $pnpConfig.PnPClientId
+    $script:DestTenantId = $pnpConfig.TenantId
+}
 
 # ============================================================================
 # CONFIGURATION
@@ -118,8 +133,14 @@ function Connect-SourceTenant {
     Write-DeltaCrownLog "⚠️  You will be prompted to sign in to the httbrands tenant" "WARNING"
 
     try {
-        # PnP connection to source — interactive, cached via -ReturnConnection
-        $script:SourceConnection = Connect-PnPOnline -Url $SiteUrl -Interactive -ReturnConnection -ErrorAction Stop
+        # PnP.PowerShell 3.x requires an explicit app/client ID for non-legacy auth.
+        # HTT Brands source client ID should be supplied via -SourceClientId or HTT_PNP_CLIENT_ID.
+        if ($SourceClientId) {
+            $script:SourceConnection = Connect-PnPOnline -Url $SiteUrl -DeviceLogin -ClientId $SourceClientId -Tenant $SourceTenant -ReturnConnection -ErrorAction Stop
+        }
+        else {
+            $script:SourceConnection = Connect-PnPOnline -Url $SiteUrl -Interactive -ReturnConnection -ErrorAction Stop
+        }
         Write-DeltaCrownLog "Connected to source: $SiteUrl" "SUCCESS"
     }
     catch {
@@ -142,7 +163,10 @@ function Connect-DestTenant {
             Connect-DeltaCrownSharePoint -Url $SiteUrl -AuthConfig $authConfig
         }
         else {
-            $script:DestConnection = Connect-PnPOnline -Url $SiteUrl -Interactive -ReturnConnection -ErrorAction Stop
+            if (-not $script:DestPnpClientId) {
+                throw "Destination PnP client ID not found in $pnpConfigPath"
+            }
+            $script:DestConnection = Connect-PnPOnline -Url $SiteUrl -DeviceLogin -ClientId $script:DestPnpClientId -Tenant $script:DestTenantId -ReturnConnection -ErrorAction Stop
         }
         Write-DeltaCrownLog "Connected to destination: $SiteUrl" "SUCCESS"
     }
@@ -316,11 +340,11 @@ function Format-MigrationReport {
     $totalMB = [math]::Round($script:Stats.TotalSizeBytes / 1MB, 2)
     $copiedMB = [math]::Round($script:Stats.CopiedSizeBytes / 1MB, 2)
 
-    Write-DeltaCrownLog "" "INFO"
+    Write-DeltaCrownLog " " "INFO"
     Write-DeltaCrownLog "═══════════════════════════════════════════════════" "STAGE"
     Write-DeltaCrownLog "        DOCUMENT MIGRATION REPORT" "STAGE"
     Write-DeltaCrownLog "═══════════════════════════════════════════════════" "STAGE"
-    Write-DeltaCrownLog "" "INFO"
+    Write-DeltaCrownLog " " "INFO"
     Write-DeltaCrownLog "  Total files:  $($script:Stats.TotalFiles)" "INFO"
     Write-DeltaCrownLog "  Copied:       $($script:Stats.Copied) (${copiedMB}MB)" "SUCCESS"
     Write-DeltaCrownLog "  Skipped:      $($script:Stats.Skipped)" "INFO"
@@ -328,14 +352,14 @@ function Format-MigrationReport {
     Write-DeltaCrownLog "  Total size:   ${totalMB}MB" "INFO"
 
     if ($script:Stats.Failed -gt 0) {
-        Write-DeltaCrownLog "" "INFO"
+        Write-DeltaCrownLog " " "INFO"
         Write-DeltaCrownLog "FAILED FILES:" "ERROR"
         foreach ($entry in ($script:MigrationLog | Where-Object { $_.Status -eq "Failed" })) {
             Write-DeltaCrownLog "  ❌ $($entry.FileName): $($entry.Error)" "ERROR"
         }
     }
 
-    Write-DeltaCrownLog "" "INFO"
+    Write-DeltaCrownLog " " "INFO"
     Write-DeltaCrownLog "═══════════════════════════════════════════════════" "STAGE"
 }
 
@@ -392,19 +416,19 @@ if ($mappings.Count -eq 0) {
 $sourceSites = $mappings | Select-Object -ExpandProperty SourceSite -Unique
 $destSites = $mappings | Select-Object -ExpandProperty DestinationSite -Unique
 
-Write-DeltaCrownLog "" "INFO"
+Write-DeltaCrownLog " " "INFO"
 Write-DeltaCrownLog "SOURCE sites ($($sourceSites.Count)):" "INFO"
 foreach ($s in $sourceSites) { Write-DeltaCrownLog "  📤 $s" "INFO" }
 Write-DeltaCrownLog "DESTINATION sites ($($destSites.Count)):" "INFO"
 foreach ($d in $destSites) { Write-DeltaCrownLog "  📥 $d" "INFO" }
-Write-DeltaCrownLog "" "INFO"
+Write-DeltaCrownLog " " "INFO"
 Write-DeltaCrownLog "Connections will be established on demand (auth prompt once per site)" "INFO"
 
 # Process each mapping
 $mappingIndex = 0
 foreach ($mapping in $mappings) {
     $mappingIndex++
-    Write-DeltaCrownLog "" "INFO"
+    Write-DeltaCrownLog " " "INFO"
     Write-DeltaCrownLog "[$mappingIndex/$($mappings.Count)] $($mapping.SourceFolder) → $($mapping.DestinationSite)/$($mapping.DestinationLibrary)/$($mapping.DestinationFolder)" "STAGE"
 
     if ($mapping.Notes) {

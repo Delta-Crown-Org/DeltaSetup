@@ -168,13 +168,11 @@ All 37 occurrences of `.com.au` replaced with `.com` across scripts, tests, ADRs
 
 ## Next Steps
 
-1. **Run Security Hardening** (needs PnP browser auth):
-   ```bash
-   cd ~/dev/DeltaSetup/phase3-week2/scripts
-   pwsh -File ./deploy-security-hardening.ps1
-   ```
+1. **Security Hardening** — COMPLETE ✅
+   - Completed live on 2026-04-29 via PnP DeviceLogin.
+   - Applied DCE group→role matrix and disabled external sharing across DCE + corp sites.
 
-2. **Execute Phase 4 migration** (needs PnP browser auth):
+2. **Execute Phase 4 migration** (blocked on HTT Brands source PnP auth):
    ```bash
    cd ~/dev/DeltaSetup/phase4-migration/scripts
    pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv'

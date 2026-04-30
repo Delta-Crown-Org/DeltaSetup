@@ -28,5 +28,6 @@
 - Richard/code-puppy-bf0453 patched `deploy-security-hardening.ps1` for PnP.PowerShell 3.x by loading `PnPClientId` from `phase2-week1/modules/pnp-app-config.json` and passing `-ClientId` + tenant ID to `Connect-PnPOnline -DeviceLogin`.
 - Local syntax checks passed for hardening and migration scripts.
 - Phase 3 Pester tests passed: 50/50.
-- Live execution is blocked on Tyler approving PnP DeviceLogin in the browser; generated code expired during this session.
-- Tracking issue filed: `DeltaSetup-117` blocks E2E testing (`DeltaSetup-agr`) and production launch (`DeltaSetup-e46`).
+- Live SPO security hardening was retried with Tyler present and completed successfully on 2026-04-29 for dce-docs, dce-clientservices, dce-marketing, dce-hub, corp-hub, corp-hr, corp-it, corp-finance, and corp-training.
+- Phase 4 migration dry-run copied no files and is blocked on HTT Brands source tenant auth. Legacy/no-client DeviceLogin returned `invalid_client`; historical source client `5d0381fe-0e8a-4656-80f3-fd91839667f1` returned AADSTS700016 app not found/not consented in Head to Toe Brands; browser `-Interactive` timed out in the agent shell.
+- Tracking issues: `DeltaSetup-117` for live hardening/migration execution and `DeltaSetup-118` for registering/consenting an HTT Brands PnP app/client ID. `DeltaSetup-118` blocks E2E testing (`DeltaSetup-agr`) and production launch (`DeltaSetup-e46`).
