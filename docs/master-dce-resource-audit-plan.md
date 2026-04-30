@@ -10,7 +10,7 @@ That folder is not a clean information architecture. It is a production shared-l
 
 ## Updated pillar language
 
-Because Delta Crown does **not** plan to store client records in Microsoft 365, the old `Client Services` / `Client Experience` pillar should not be presented as client-record storage.
+Because Delta Crown does **not** plan to store client records in Microsoft 365, any old client-service/client-experience pillar language should not be presented as client-record storage.
 
 Use this language instead:
 
@@ -26,13 +26,13 @@ From the current SharePoint view and existing migration mapping, Master DCE incl
 | Financials & Proforma | Brand Resources or Finance-controlled area | Needs file-by-file review; may contain finance-sensitive material. |
 | Product | Docs / Brand Resources | Reference material. |
 | Operations | Operations | Daily operating resources. |
-| DCE Marketing | Marketing | Brand assets/campaign materials. |
-| Training | Docs or Training | Could be DCE-owned or corporate training depending on content. |
+| DCE Marketing (source folder name) | Marketing | Brand assets/campaign materials. |
+| Training | Docs or Training | Could be Delta Crown-owned or corporate training depending on content. |
 | _Franchisees | Operations / Franchise Resources | Likely franchise management resources. |
 | Fran Dev | Operations or corporate development | Needs owner review. |
-| Real Estate & Construction | Corporate reference / shortcut | Likely HTT corporate owned, not DCE-owned. |
+| Real Estate & Construction | Corporate reference / shortcut | Likely HTT corporate owned, not Delta Crown-owned. |
 | _Status | Operations | Status tracking; validate current use. |
-| Corp Docs | Corporate reference / shortcut | Likely remains HTT-owned unless DCE-specific. |
+| Corp Docs | Corporate reference / shortcut | Likely remains HTT-owned unless Delta Crown-specific. |
 | zArchive | Archive | Keep read-only or migrate only if needed. |
 
 ## Recommended target model
@@ -46,7 +46,7 @@ Do not recreate the messy folder tree 1:1 unless the audit proves it is necessar
    - possibly Fran Dev
 
 2. **Marketing**
-   - DCE Marketing
+   - DCE Marketing source folder
    - brand templates and campaign assets
 
 3. **Brand Resources**
@@ -90,7 +90,7 @@ The audit should answer:
 
 Use these rules after the audit:
 
-- If content is DCE-owned and needed by Delta Crown staff, host it in the Delta Crown tenant.
+- If content is Delta Crown-owned and needed by Delta Crown staff, host it in the Delta Crown tenant.
 - If content is HTT corporate-owned and used across brands, keep it in HTT and expose a shortcut/reference from Delta Crown.
 - If content is leadership/finance/strategy-sensitive, restrict it by role, not by inherited folder accidents.
 - If content is historical, archive it rather than making it a first-class pillar.
