@@ -32,6 +32,9 @@
 
 ## ✅ Phase 3: DCE Sites — COMPLETE
 
+> **Current readiness note:** This status reflects the earlier Phase 3 ClientServices model. Current readiness planning treats ClientServices/client-record assumptions as legacy and uses Brand Resources for approved reference material. See `docs/brand-resources-target-model.md` and `docs/legacy-clientservices-cleanup-register.md` before treating this section as implementation guidance.
+
+
 ### Sites (4)
 | Site | Type | Hub | Theme |
 |------|------|-----|-------|

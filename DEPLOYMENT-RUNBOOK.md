@@ -87,6 +87,9 @@ The orchestrator has **automatic rollback** — if a step fails, it cleans up cr
 
 ## Phase 3: Brand Sites + Teams + Security (requires Phase 2 complete)
 
+> **Current readiness note:** This section contains historical ClientServices/client-record assumptions from the earlier Phase 3 model. The current Delta Crown readiness direction replaces those assumptions with the Brand Resources model documented in `docs/brand-resources-target-model.md` and `docs/clientservices-to-brand-resources-transition-plan.md`. Do not rerun ClientServices/client-record provisioning from this runbook without tenant inventory and owner approval.
+
+
 ### What It Creates
 
 | Component | Details |
