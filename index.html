@@ -578,13 +578,37 @@
         </article>
       </div>
 
-      <div class="audit-flow reveal" aria-label="Identity and access flow">
-        <h3>Access flow: boring on purpose, because boring scales</h3>
+      <div class="audit-blueprint reveal" aria-label="Microsoft architecture blueprint">
+        <div class="audit-blueprint__layer audit-blueprint__layer--identity">
+          <div class="audit-blueprint__icon"><img src="phase4-migration/assets/microsoft-icons/people-team.svg" alt="Microsoft people icon"></div>
+          <h3>1. Identity facts</h3>
+          <p><code>companyName</code>, <code>department</code>, title, location, employee type, and extension attributes describe who the person is.</p>
+          <span>Current evidence: 89 users; 6 fully land in AllStaff because metadata is incomplete.</span>
+        </div>
+        <div class="audit-blueprint__connector" aria-hidden="true">→</div>
+        <div class="audit-blueprint__layer audit-blueprint__layer--groups">
+          <div class="audit-blueprint__icon"><img src="phase4-migration/assets/microsoft-icons/people-settings.svg" alt="Microsoft Entra groups icon"></div>
+          <h3>2. Entra groups</h3>
+          <p>Dynamic groups translate clean labels into access boundaries: baseline, role, location, pilot, and future functional groups.</p>
+          <span>Confirmed: AllStaff, Managers, Marketing, Stylists, External. Planned: DCE-* and DCE-Loc-* groups.</span>
+        </div>
+        <div class="audit-blueprint__connector" aria-hidden="true">→</div>
+        <div class="audit-blueprint__layer audit-blueprint__layer--resources">
+          <div class="audit-blueprint__icon"><img src="phase4-migration/assets/microsoft-icons/apps.svg" alt="Microsoft apps icon"></div>
+          <h3>3. Resources light up</h3>
+          <p>SharePoint hubs, Teams, Exchange shared mailboxes, apps, and compliance controls inherit access from groups.</p>
+          <span>Teams channel detail still needs licensed Teams-readable verification.</span>
+        </div>
+      </div>
+
+      <div class="audit-flow reveal" aria-label="Onboarding and offboarding lifecycle flow">
+        <h3>Lifecycle flow: onboard cleanly, operate safely, offboard completely</h3>
         <ol>
-          <li><strong>Identity labels</strong><span>Collect and normalize standardized company, department, role/title, employment-type, location, and access-profile metadata.</span></li>
-          <li><strong>Dynamic groups</strong><span>Let Entra resolve confirmed groups: <code>AllStaff</code>, <code>Managers</code>, <code>Stylists</code>, <code>External</code>, <code>Marketing</code>.</span></li>
-          <li><strong>Resource permissions</strong><span>Assign SharePoint, Teams, shared mailbox, and app access to groups instead of sprinkling direct user permissions everywhere like confetti from hell.</span></li>
-          <li><strong>Verification</strong><span>Test expected access, unexpected access denial, mailbox/app behavior, and capture exceptions as model cleanup.</span></li>
+          <li><strong>Intake</strong><span>Collect role, department, title, primary location, owned locations, profile, and internal/external/pilot status.</span></li>
+          <li><strong>Label</strong><span>Normalize identity values before access is considered complete. The attribute set is the control panel.</span></li>
+          <li><strong>Resolve groups</strong><span>Let Entra resolve baseline, role, location, and pilot groups. Direct assignment is an exception, not the model.</span></li>
+          <li><strong>Grant resources</strong><span>SharePoint, Teams, shared mailbox, and app access follow groups instead of manual one-off permissions.</span></li>
+          <li><strong>Offboard</strong><span>Disable or de-scope identity, remove groups/licenses/delegation, verify access denial, and retain/archive content as approved.</span></li>
         </ol>
       </div>
 
@@ -602,11 +626,11 @@
         </article>
 
         <article class="audit-panel">
-          <h3>Groups: confirmed vs planned</h3>
+          <h3>Groups: confirmed vs target taxonomy</h3>
           <dl class="audit-definition-list">
-            <div><dt>Confirmed/current</dt><dd><code>AllStaff</code>, <code>Managers</code>, <code>Stylists</code>, <code>External</code>, <code>Marketing</code>.</dd></div>
-            <div><dt>Planned/TODO</dt><dd>Functional groups such as <code>DCE-Operations</code>, <code>DCE-ClientServices</code>, <code>DCE-Marketing</code>, <code>DCE-Leadership</code>; location groups following the <code>DCE-Loc-*</code> pattern; <code>DCE-CrossTenant-Pilot</code>.</dd></div>
-            <div><dt>Status note</dt><dd>Next-step functional/location groups are planned/TODO where not confirmed by the source docs.</dd></div>
+            <div><dt>Baseline</dt><dd><code>AllStaff</code> is confirmed and resolves to 6 users today. <code>Managers</code>, <code>Marketing</code>, <code>Stylists</code>, and <code>External</code> are confirmed but currently empty because metadata is incomplete.</dd></div>
+            <div><dt>Functional</dt><dd>Target groups: <code>DCE-Operations</code>, <code>DCE-ClientServices</code>, <code>DCE-Marketing</code>, <code>DCE-Leadership</code>, <code>DCE-Stylists</code>. These should be driven by <code>extensionAttribute1</code>.</dd></div>
+            <div><dt>Location + pilot</dt><dd>Target groups: <code>DCE-Loc-*</code>, <code>DCE-Location-Owners</code>, and <code>DCE-CrossTenant-Pilot</code>. Use these only where access truly differs. Decorative groups are access glitter, and access glitter is evil.</dd></div>
           </dl>
         </article>
 
@@ -621,14 +645,15 @@
           </div>
         </article>
 
-        <article class="audit-panel">
-          <h3>Target deprovisioning control pending owner-approved runbook</h3>
-          <p class="audit-todo"><strong>TODO — owner confirmation needed.</strong> Exact deprovisioning docs were not present in the provided sources, so this is a target control rather than implemented process evidence.</p>
+        <article class="audit-panel audit-panel--lifecycle">
+          <h3>Offboarding / deprovisioning control</h3>
+          <p class="audit-todo"><strong>Checklist now documented.</strong> The canonical flow is disable or de-scope identity, remove group/license/delegation access, verify denial, and retain/archive content by owner direction.</p>
           <ul>
-            <li>Runbook must define when to disable or remove accounts.</li>
-            <li>Runbook must remove group membership, licenses, mailbox access, and app access.</li>
-            <li>Evidence must verify SharePoint and Teams access is revoked.</li>
-            <li>Evidence must confirm archive or retention handling per owner/compliance direction.</li>
+            <li>Identity owner blocks sign-in, revokes sessions, clears lifecycle attributes, and removes static pilot exceptions.</li>
+            <li>Resource owners validate SharePoint, Teams, Exchange, app, and license cleanup.</li>
+            <li>Mail owners remove shared mailbox Full Access and Send As where no longer approved.</li>
+            <li>Compliance/content owners decide retention, archive, hold, or transfer before anything destructive happens.</li>
+            <li><a href="docs/onboarding/dce-offboarding-deprovisioning-checklist.md">Read the offboarding checklist</a>.</li>
           </ul>
         </article>
 
@@ -648,8 +673,18 @@
         </article>
       </div>
 
+      <div class="audit-next-steps reveal" aria-label="Architecture next steps">
+        <h3>Next steps from the audit</h3>
+        <div class="audit-next-steps__grid">
+          <span><strong>1</strong> Normalize user metadata so dynamic groups become trustworthy.</span>
+          <span><strong>2</strong> Provide licensed Teams-readable context for channel/member verification.</span>
+          <span><strong>3</strong> Run the approved PnP auth window to export Phase 3 templates.</span>
+          <span><strong>4</strong> Assign named owners for dynamic groups, offboarding, mailbox delegation, and retention.</span>
+        </div>
+      </div>
+
       <p class="audit-evidence reveal">
-        Source/evidence reviewed: deployment status, deployment runbook, Master DCE resource map, DCE role + location onboarding model, and existing page architecture/user-experience content. Detailed evidence retained in the private deployment audit pack.
+        Source/evidence reviewed: deployment status, tenant inventory summaries, Exchange inventory, DCE role + location onboarding model, DCE attribute/group/resource matrix, Teams access request, offboarding checklist, Master DCE resource map, and existing page architecture/user-experience content. Detailed evidence remains in local/internal audit outputs where user and permission data is sensitive.
       </p>
     </div>
   </section>
