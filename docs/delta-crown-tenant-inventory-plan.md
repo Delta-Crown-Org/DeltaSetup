@@ -158,3 +158,11 @@ A resource is safe to showcase when:
 - `DeltaSetup-122` — Audit HTTHQ Master DCE folder structure and permissions
 - `DeltaSetup-123` — Repurpose legacy client-service artifacts to Brand Resources model
 - `DeltaSetup-124` — Inventory all Delta Crown tenant resources and policies
+- `DeltaSetup-134` — Inventory Teams and channels
+- `DeltaSetup-151` — Provide licensed Teams-readable context for DCE Teams inventory
+
+Current live status dashboard:
+
+```text
+docs/delta-crown-tenant-inventory-status.md
+```
