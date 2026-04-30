@@ -29,5 +29,7 @@
 - Local syntax checks passed for hardening and migration scripts.
 - Phase 3 Pester tests passed: 50/50.
 - Live SPO security hardening was retried with Tyler present and completed successfully on 2026-04-29 for dce-docs, dce-clientservices, dce-marketing, dce-hub, corp-hub, corp-hr, corp-it, corp-finance, and corp-training.
-- Phase 4 migration dry-run copied no files and is blocked on HTT Brands source tenant auth. Legacy/no-client DeviceLogin returned `invalid_client`; historical source client `5d0381fe-0e8a-4656-80f3-fd91839667f1` returned AADSTS700016 app not found/not consented in Head to Toe Brands; browser `-Interactive` timed out in the agent shell.
-- Tracking issues: `DeltaSetup-117` for live hardening/migration execution and `DeltaSetup-118` for registering/consenting an HTT Brands PnP app/client ID. `DeltaSetup-118` blocks E2E testing (`DeltaSetup-agr`) and production launch (`DeltaSetup-e46`).
+- HTT Brands source tenant auth was fixed on 2026-04-29 by registering delegated PnP app `DeltaSetup-HTT-SourceMigration-PnP` with client ID `3657525b-b24a-43bc-9510-cbdd375da6e5`; config saved at `phase4-migration/config/htt-pnp-app-config.json`.
+- Source access verified: connected to `HTT Headquarters` and found 12 folders under `Shared Documents/Master DCE`.
+- Phase 4 migration dry-run for P1 mappings completed with zero copied files, zero failures: 5,620 files / 87,909.91 MB would be copied. Destination path bug was fixed so target paths no longer include `/sites/HTTHQ/Shared Documents/Master DCE`.
+- Tracking issues: `DeltaSetup-117` for live hardening/migration execution and `DeltaSetup-118` for registering/consenting an HTT Brands PnP app/client ID.

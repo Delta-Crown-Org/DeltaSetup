@@ -172,11 +172,14 @@ All 37 occurrences of `.com.au` replaced with `.com` across scripts, tests, ADRs
    - Completed live on 2026-04-29 via PnP DeviceLogin.
    - Applied DCE group→role matrix and disabled external sharing across DCE + corp sites.
 
-2. **Execute Phase 4 migration** (blocked on HTT Brands source PnP auth):
+2. **Execute Phase 4 migration** (source auth fixed; dry-run verified):
    ```bash
    cd ~/dev/DeltaSetup/phase4-migration/scripts
-   pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv'
+   pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv' -WhatIf
+   pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv' -Priority 1 -VerifyAfterCopy
    ```
+   - HTT source PnP app: `DeltaSetup-HTT-SourceMigration-PnP` / `3657525b-b24a-43bc-9510-cbdd375da6e5`
+   - P1 dry-run: 5,620 files / 87,909.91 MB, 0 failures
 
 3. **E2E Testing** — validate all sites, lists, permissions, mailboxes, Exchange
 

@@ -103,6 +103,13 @@ if (Test-Path $pnpConfigPath) {
     $script:DestTenantId = $pnpConfig.TenantId
 }
 
+$sourcePnpConfigPath = Join-Path $PSScriptRoot "..\config\htt-pnp-app-config.json"
+if ((-not $SourceClientId) -and (Test-Path $sourcePnpConfigPath)) {
+    $sourcePnpConfig = Get-Content $sourcePnpConfigPath -Raw | ConvertFrom-Json
+    $SourceClientId = $sourcePnpConfig.PnPClientId
+    if ($sourcePnpConfig.Tenant) { $SourceTenant = $sourcePnpConfig.Tenant }
+}
+
 # ============================================================================
 # CONFIGURATION
 # ============================================================================
@@ -185,19 +192,25 @@ function Get-SourceFiles {
     )
 
     try {
-        $serverRelativeUrl = "/$($Library)/$($FolderPath)" -replace "//", "/"
+        $folderSiteRelativeUrl = "$Library/$FolderPath" -replace "//", "/"
 
-        # Get all files in the folder recursively using stored source connection
-        $items = Get-PnPFolderItem -FolderSiteRelativeUrl "$Library/$FolderPath" -ItemType File -Recursive -Connection $script:SourceConnection -ErrorAction Stop
+        # Get all files in the folder recursively using stored source connection.
+        # ServerRelativeUrl includes the site prefix (/sites/HTTHQ/...), so strip by the
+        # site-relative folder marker instead of assuming a tenant-root library path.
+        $items = Get-PnPFolderItem -FolderSiteRelativeUrl $folderSiteRelativeUrl -ItemType File -Recursive -Connection $script:SourceConnection -ErrorAction Stop
 
+        $relativePathPattern = "^.*?/" + [regex]::Escape($folderSiteRelativeUrl) + "/?"
         $files = foreach ($item in $items) {
+            $relativePath = $item.ServerRelativeUrl -replace $relativePathPattern, ""
+            if (-not $relativePath) { $relativePath = $item.Name }
+
             [PSCustomObject]@{
                 Name             = $item.Name
                 ServerRelativeUrl = $item.ServerRelativeUrl
                 Length           = $item.Length
                 TimeCreated      = $item.TimeCreated
                 TimeLastModified = $item.TimeLastModified
-                RelativePath     = $item.ServerRelativeUrl -replace [regex]::Escape($serverRelativeUrl), "" -replace "^/", ""
+                RelativePath     = $relativePath
             }
         }
 
@@ -439,7 +452,7 @@ foreach ($mapping in $mappings) {
     if (-not $script:SourceConnection -or $script:SourceConnection.Url -ne $mapping.SourceSite) {
         Connect-SourceTenant -SiteUrl $mapping.SourceSite
     }
-    if (-not $script:DestConnection -or $script:DestConnection.Url -ne $mapping.DestinationSite) {
+    if (-not $WhatIfPreference -and (-not $script:DestConnection -or $script:DestConnection.Url -ne $mapping.DestinationSite)) {
         Connect-DestTenant -SiteUrl $mapping.DestinationSite
     }
 
