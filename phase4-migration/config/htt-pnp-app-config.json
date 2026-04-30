@@ -1,8 +1,0 @@
-{
-  "Tenant": "httbrands.onmicrosoft.com",
-  "SourceSite": "https://httbrands.sharepoint.com/sites/HTTHQ",
-  "PnPClientId": "3657525b-b24a-43bc-9510-cbdd375da6e5",
-  "ApplicationName": "DeltaSetup-HTT-SourceMigration-PnP",
-  "RegisteredAt": "2026-04-29",
-  "Purpose": "Delegated PnP.PowerShell source read access for Phase 4 HTTHQ to Delta Crown document migration"
-}

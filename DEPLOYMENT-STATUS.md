@@ -86,29 +86,16 @@
 
 ---
 
-## ✅ Phase 4: Document Migration — READY
+## ⏭️ Phase 4: Document Migration — SKIPPED BY DECISION
 
-### Migration Plan
-| Priority | Folders | Destination |
-|----------|---------|-------------|
-| P1 (Critical) | 4 | Operations, Franchisees, Financials, Marketing |
-| P2 (Standard) | 4 | Status, Fran Dev, Product, Strategy |
-| P3 (Deferred) | 4 | Training, Archive, Corp Docs, Real-Estate |
-
-### Source → Destination Mapping
-| Source (HTTHQ) | Destination (DCE) |
-|----------------|-------------------|
-| Master DCE/Operations | dce-operations/Documents/Operations |
-| Master DCE/_Franchisees | dce-operations/Documents/Franchisees |
-| Master DCE/Marketing | dce-marketing/Brand Assets/Marketing |
-| Master DCE/Training | dce-docs/Training |
-| Master DCE/Corp Docs | corp-hub/Shared Documents/Corporate |
+### Decision
+Tyler explicitly decided on 2026-04-29 that **no HTTHQ document migration will be performed** as part of this rollout.
 
 ### Status
-- ✅ Migration mapping complete (12 folders)
-- ✅ Preview scripts ready
-- ⏳ File copy pending Tyler execution
-- ⏳ E2E testing pending
+- ⏭️ No files will be copied from `httbrands.sharepoint.com/sites/HTTHQ` to `deltacrown`.
+- ⏭️ Migration scripts/config remain in the repo as historical tooling only; they are not part of the active deployment path.
+- ✅ SharePoint/Teams architecture continues without migrated HTTHQ content.
+- ⏳ E2E testing should validate sites, navigation, permissions, Exchange, DLP, and onboarding **without document migration assumptions**.
 - ⏳ User onboarding pending
 
 ---
@@ -172,16 +159,11 @@ All 37 occurrences of `.com.au` replaced with `.com` across scripts, tests, ADRs
    - Completed live on 2026-04-29 via PnP DeviceLogin.
    - Applied DCE group→role matrix and disabled external sharing across DCE + corp sites.
 
-2. **Execute Phase 4 migration** (source auth fixed; dry-run verified):
-   ```bash
-   cd ~/dev/DeltaSetup/phase4-migration/scripts
-   pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv' -WhatIf
-   pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv' -Priority 1 -VerifyAfterCopy
-   ```
-   - HTT source PnP app: `DeltaSetup-HTT-SourceMigration-PnP` / `3657525b-b24a-43bc-9510-cbdd375da6e5`
-   - P1 dry-run: 5,620 files / 87,909.91 MB, 0 failures
+2. **Document Migration** — SKIPPED ⏭️
+   - Tyler confirmed on 2026-04-29 that no HTTHQ document migration will be performed.
+   - Do not run `phase4-migration/scripts/4.3-Document-Migration.ps1` for production cutover.
 
-3. **E2E Testing** — validate all sites, lists, permissions, mailboxes, Exchange
+3. **E2E Testing** — validate all sites, lists, permissions, mailboxes, Exchange, DLP, and onboarding without document migration assumptions.
 
 4. **Delete temp app** `DeltaCrown-TeamsProvisioner-TEMP` from Azure AD (secret auto-expires 2026-04-16)
 

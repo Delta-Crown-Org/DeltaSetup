@@ -2,10 +2,20 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | Draft |
+| **Status** | Superseded / Not Implemented |
 | **Date** | 2025-07-26 |
 | **Decision Makers** | Tyler Granlund |
 | **Depends On** | ADR-001 (Hub & Spoke), ADR-002 (Phase 3 Sites & Teams) |
+
+---
+
+## 2026-04-29 Update: Migration Skipped
+
+Tyler decided that **no HTTHQ document migration will be performed** for the Delta Crown rollout.
+
+This ADR is retained as historical analysis only. The active deployment path keeps HTTHQ documents in place and proceeds with SharePoint/Teams/Exchange/security/onboarding validation without copying documents into the `deltacrown` tenant.
+
+Do **not** use this ADR as an instruction to run `phase4-migration/scripts/4.3-Document-Migration.ps1` for production cutover.
 
 ---
 
@@ -168,9 +178,9 @@ Week 5: Archive HTTHQ Master DCE
 
 ## Decision Outcome
 
-### Chosen Option: **Option B — Phased Migration with Dual-Access**
+### Chosen Option: **None — Migration Skipped**
 
-This provides the best balance of speed, safety, and user experience.
+Tyler decided on 2026-04-29 that no HTTHQ document migration will be performed for this rollout. The previous Option B recommendation is superseded and retained below only for historical reference.
 
 ---
 

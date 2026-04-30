@@ -29,7 +29,7 @@
 - Local syntax checks passed for hardening and migration scripts.
 - Phase 3 Pester tests passed: 50/50.
 - Live SPO security hardening was retried with Tyler present and completed successfully on 2026-04-29 for dce-docs, dce-clientservices, dce-marketing, dce-hub, corp-hub, corp-hr, corp-it, corp-finance, and corp-training.
-- HTT Brands source tenant auth was fixed on 2026-04-29 by registering delegated PnP app `DeltaSetup-HTT-SourceMigration-PnP` with client ID `3657525b-b24a-43bc-9510-cbdd375da6e5`; config saved at `phase4-migration/config/htt-pnp-app-config.json`.
-- Source access verified: connected to `HTT Headquarters` and found 12 folders under `Shared Documents/Master DCE`.
-- Phase 4 migration dry-run for P1 mappings completed with zero copied files, zero failures: 5,620 files / 87,909.91 MB would be copied. Destination path bug was fixed so target paths no longer include `/sites/HTTHQ/Shared Documents/Master DCE`.
-- Tracking issues: `DeltaSetup-117` for live hardening/migration execution and `DeltaSetup-118` for registering/consenting an HTT Brands PnP app/client ID.
+- HTT Brands source tenant auth was fixed on 2026-04-29 during investigation, but Tyler subsequently decided that **no HTTHQ document migration will be performed at all**.
+- Do not run Phase 4 document migration for production cutover. Migration scripts/config remain historical tooling only.
+- E2E testing should proceed without document migration assumptions.
+- Tracking: document migration work (`DeltaSetup-98`/migration portions of `DeltaSetup-117`) closed as skipped/not planned.
