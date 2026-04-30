@@ -1,4 +1,8 @@
-# Phase 4: Quick Start — Run This in PowerShell
+# Phase 4: Quick Start — User Onboarding Only
+
+> **Current decision (2026-04-29): HTTHQ document migration is skipped.**
+>
+> Do **not** run `4.3-Document-Migration.ps1` for production cutover. This folder still contains historical migration tooling, but active Phase 4 work is user audit/onboarding only.
 
 ## Step 1: Run the User Audit (read-only, safe)
 
@@ -69,36 +73,26 @@ This will:
 3. Verify users appeared in AllStaff
 4. Report results
 
-## Step 5: Run the Full Deployment (Phase 2 + 3 + 4)
+## Step 5: Continue Deployment Without Document Migration
 
-Once user properties are set, deploy the full architecture:
+Once user properties are set, continue with validation and launch readiness. The core SharePoint/Teams deployment and security hardening have already been completed live.
 
 ```powershell
-# Phase 2: Hub Foundation (~45 min)
-cd ~/dev/DeltaSetup/phase2-week1/scripts
-./2.0-Master-Provisioning.ps1 -TenantName "deltacrown" -OwnerEmail "YOUR_EMAIL" -Environment Development -SkipBusinessPremiumWarning
-
-# Phase 3: Sites + Teams + Security (~30 min)
+# Optional verification examples:
 cd ~/dev/DeltaSetup/phase3-week2/scripts
-./3.0-Master-Phase3.ps1 -TenantName "deltacrown" -Environment Development
+./deploy-security-hardening.ps1 -VerifyOnly
 
-# Phase 4: Document Migration (after Phase 2+3)
 cd ~/dev/DeltaSetup/phase4-migration/scripts
-
-# Dry run first:
-./4.3-Document-Migration.ps1 -MappingFile "../config/dce-file-mapping.csv" -WhatIf
-
-# Then for real:
-./4.3-Document-Migration.ps1 -MappingFile "../config/dce-file-mapping.csv" -VerifyAfterCopy
+./4.1-User-Property-Audit.ps1 -TenantName "deltacrown" -ExportCsv
 ```
 
 ## What Happens After
 
-Once everything is deployed:
+Once onboarding and validation are complete:
 - Users with `companyName = "Delta Crown Extensions"` automatically see the DCE Hub
 - Their dynamic group membership gives them the right site permissions
-- Documents from HTTHQ's Master DCE folder are in the new structured sites
+- HTTHQ documents remain in place; no files are copied into the `deltacrown` tenant
 - DLP policies protect against external sharing
 - Teams workspace is ready with channels and tabs
 
-**Estimated total time: ~90 minutes (mostly waiting for scripts to run)**
+**Estimated active Phase 4 time: user audit/onboarding only; document migration is intentionally skipped.**

@@ -168,5 +168,5 @@ Write-Host ""
 Write-Log "Migration Plan:" "STAGE"
 $results | Format-Table SourceFolder, FileCount, @{N='Size(MB)';E={[math]::Round($_.SizeKB/1024, 2)}}, Status -AutoSize | Out-String | Write-Host
 
-Write-Log "To execute migration for real, run:" "INFO"
-Write-Log "  pwsh ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv'" "INFO"
+Write-Log "CURRENT DECISION: document migration is skipped; do not run 4.3 for production cutover." "WARNING"
+Write-Log "This dry run is historical planning context only." "INFO"

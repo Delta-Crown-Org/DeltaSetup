@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Delta Crown Extensions — Project Status & Architecture</title>
-  <meta name="description" content="SharePoint Hub & Spoke architecture for Delta Crown Extensions. Live progress dashboard, migration roadmap, and technical architecture.">
+  <meta name="description" content="SharePoint Hub & Spoke architecture for Delta Crown Extensions. Live progress dashboard, deployment roadmap, and technical architecture.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
         <a href="#status" class="nav__link">Status</a>
         <a href="#problem" class="nav__link">Problem</a>
         <a href="#architecture" class="nav__link">Architecture</a>
-        <a href="#migration" class="nav__link">Migration</a>
+        <a href="#migration" class="nav__link">Decision</a>
         <a href="#users" class="nav__link">Users</a>
         <a href="#progress" class="nav__link">Progress</a>
         <a href="#vision" class="nav__link">Vision</a>
@@ -60,8 +60,8 @@
         </span>
       </div>
       <p class="reveal" style="margin-top: 24px; color: rgba(255,255,255,0.35); font-size: 0.875rem; max-width: 480px; margin-left: auto; margin-right: auto;">
-        32 PowerShell scripts. 9,600+ lines. 150 tests passing.<br>
-        From a single shared folder to a secure, branded hub-and-spoke architecture.
+        47 PowerShell scripts. 50 phase-3 tests passing. 50 issues closed.<br>
+        Secure, branded hub-and-spoke architecture live — without HTTHQ document migration.
       </p>
     </div>
     <div class="hero__scroll" aria-hidden="true">
@@ -75,19 +75,19 @@
     <div class="container">
       <div class="ticker reveal">
         <div class="ticker__item">
-          <div class="ticker__value" data-counter data-target="18">0</div>
-          <div class="ticker__label">Scripts Built</div>
+          <div class="ticker__value" data-counter data-target="47">0</div>
+          <div class="ticker__label">PowerShell Scripts</div>
         </div>
         <div class="ticker__item">
           <div class="ticker__value" data-counter data-target="7848">0</div>
           <div class="ticker__label">Lines of Code</div>
         </div>
         <div class="ticker__item">
-          <div class="ticker__value" data-counter data-target="150">0</div>
-          <div class="ticker__label">Tests Passing</div>
+          <div class="ticker__value" data-counter data-target="50">0</div>
+          <div class="ticker__label">Phase 3 Tests Passing</div>
         </div>
         <div class="ticker__item">
-          <div class="ticker__value" data-counter data-target="42">0</div>
+          <div class="ticker__value" data-counter data-target="50">0</div>
           <div class="ticker__label">Issues Closed</div>
         </div>
         <div class="ticker__item">
@@ -470,267 +470,37 @@
     </div>
   </section>
 
-  <!-- ==================== MIGRATION MAP ==================== -->
+  <!-- ==================== DOCUMENT MIGRATION DECISION ==================== -->
   <section class="section section--dark" id="migration">
     <div class="container">
-      <p class="label mb-16 reveal">The Migration</p>
-      <h2 class="mb-16 reveal" style="max-width: 650px;">From flat folders<br>to structured sites.</h2>
-      <p class="text-muted mb-48 reveal" style="max-width: 560px; font-size: 1.0625rem; color: rgba(255,255,255,0.5);">
-        The "Master DCE" folder on HTTHQ maps cleanly to the new hub-and-spoke sites. Corporate docs go to Corp Hub services. Brand-specific docs go to DCE sites.
+      <p class="label mb-16 reveal">Document Migration Decision</p>
+      <h2 class="mb-16 reveal" style="max-width: 650px;">HTTHQ files stay put.<br>No document migration.</h2>
+      <p class="text-muted mb-48 reveal" style="max-width: 640px; font-size: 1.0625rem; color: rgba(255,255,255,0.5);">
+        The hub-and-spoke architecture, security hardening, Teams sites, DLP posture, and onboarding work continue. Tyler decided on 2026-04-29 that HTTHQ document copy/migration is out of scope for this rollout.
       </p>
 
-      <!-- DCE Migration Map -->
-      <div class="reveal mb-48">
-        <h3 class="mb-24" style="font-size: 1.125rem; display: flex; align-items: center; gap: 8px;">
-          <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-          Master DCE → New Architecture
-        </h3>
-        <div class="migration">
-          <!-- Header Row -->
-          <div class="migration__header-row">
-            <div class="migration__header">HTTHQ / Master DCE</div>
-            <div></div>
-            <div class="migration__header">New Hub-and-Spoke Sites</div>
-          </div>
-
-          <!-- Row 1: Operations -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Operations
-              <span class="migration__item-count">10 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--site">
-              <span class="material-symbols-outlined" style="color: #4CAF50;">dashboard</span>
-              DCE-Operations
-              <span class="migration__item-count">Operations folder</span>
-            </div>
-          </div>
-
-          <!-- Row 2: Franchisees -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              _Franchisees
-              <span class="migration__item-count">5 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--site">
-              <span class="material-symbols-outlined" style="color: #4CAF50;">dashboard</span>
-              DCE-Operations
-              <span class="migration__item-count">Franchisees folder</span>
-            </div>
-          </div>
-
-          <!-- Row 3: Status -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Status
-              <span class="migration__item-count">2 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--site">
-              <span class="material-symbols-outlined" style="color: #4CAF50;">dashboard</span>
-              DCE-Operations
-              <span class="migration__item-count">Status folder</span>
-            </div>
-          </div>
-
-          <!-- Row 4: Fran Dev -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Fran Dev
-              <span class="migration__item-count">8 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--site">
-              <span class="material-symbols-outlined" style="color: #4CAF50;">dashboard</span>
-              DCE-Operations
-              <span class="migration__item-count">Franchise Dev folder</span>
-            </div>
-          </div>
-
-          <!-- Row 5: Marketing -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Marketing
-              <span class="migration__item-count">12 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--site">
-              <span class="material-symbols-outlined" style="color: #4CAF50;">campaign</span>
-              DCE-Marketing
-              <span class="migration__item-count">Marketing folder</span>
-            </div>
-          </div>
-
-          <!-- Row 6: Product -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Product
-              <span class="migration__item-count">7 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--site">
-              <span class="material-symbols-outlined" style="color: #4CAF50;">description</span>
-              DCE-Docs
-              <span class="migration__item-count">Product folder</span>
-            </div>
-          </div>
-
-          <!-- Row 7: Strategy -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Strategy
-              <span class="migration__item-count">5 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--site">
-              <span class="material-symbols-outlined" style="color: #4CAF50;">description</span>
-              DCE-Docs
-              <span class="migration__item-count">Strategy folder</span>
-            </div>
-          </div>
-
-          <!-- Row 8: Training -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Training
-              <span class="migration__item-count">1 item</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--site">
-              <span class="material-symbols-outlined" style="color: #4CAF50;">description</span>
-              DCE-Docs
-              <span class="migration__item-count">Training folder</span>
-            </div>
-          </div>
-
-          <!-- Row 9: Financials -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Financials & Proforma
-              <span class="migration__item-count">11 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--corp">
-              <span class="material-symbols-outlined" style="color: var(--teal-light);">payments</span>
-              Corp-Finance
-              <span class="migration__item-count">Financials folder</span>
-            </div>
-          </div>
-
-          <!-- Row 10: Corp Docs -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Corp Docs
-              <span class="migration__item-count">2 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--corp">
-              <span class="material-symbols-outlined" style="color: var(--teal-light);">corporate_fare</span>
-              Corp Hub
-              <span class="migration__item-count">Corp Docs folder</span>
-            </div>
-          </div>
-
-          <!-- Row 11: Real Estate -->
-          <div class="migration__row">
-            <div class="migration__item migration__item--folder">
-              <span class="material-symbols-outlined" style="color: #EF5350;">folder</span>
-              Real Estate
-              <span class="migration__item-count">3 items</span>
-            </div>
-            <div class="migration__arrow">
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </div>
-            <div class="migration__item migration__item--corp">
-              <span class="material-symbols-outlined" style="color: var(--teal-light);">corporate_fare</span>
-              Corp Hub
-              <span class="migration__item-count">Real Estate folder</span>
-            </div>
-          </div>
+      <div class="grid grid--3 stagger mb-48">
+        <div class="card card--glass reveal" style="padding: 24px;">
+          <span class="material-symbols-outlined" style="color: #4CAF50; font-size: 32px;">do_not_disturb_on</span>
+          <h3 style="margin-top: 12px; font-size: 1rem; color: #FFF;">No file copy</h3>
+          <p class="text-muted" style="font-size: 0.875rem; margin-top: 8px;">Do not run <code>phase4-migration/scripts/4.3-Document-Migration.ps1</code> for production cutover.</p>
         </div>
-
-
-      <div class="reveal">
-        <h3 class="mb-24" style="font-size: 1.125rem; display: flex; align-items: center; gap: 8px;">
-          <span class="material-symbols-outlined" style="color: var(--teal-light);">corporate_fare</span>
-          HTTHQ Corporate Folders → Corp Hub Services
-        </h3>
-        <div class="grid grid--3" style="gap: 12px;">
-          <div class="card card--glass" style="padding: 16px;">
-            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">groups</span>
-              <strong>Corp-HR</strong>
-            </div>
-            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← Employee Resources, Education</p>
-          </div>
-          <div class="card card--glass" style="padding: 16px;">
-            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">payments</span>
-              <strong>Corp-Finance</strong>
-            </div>
-            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← Finance folder</p>
-          </div>
-          <div class="card card--glass" style="padding: 16px;">
-            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">computer</span>
-              <strong>Corp-IT</strong>
-            </div>
-            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← IT-Technology folder</p>
-          </div>
-          <div class="card card--glass" style="padding: 16px;">
-            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">gavel</span>
-              <strong>Corp Hub — Legal</strong>
-            </div>
-            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← Legal folder</p>
-          </div>
-          <div class="card card--glass" style="padding: 16px;">
-            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">badge</span>
-              <strong>Corp Hub — Executive</strong>
-            </div>
-            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← C Suite, Exec Leadership</p>
-          </div>
-          <div class="card card--glass" style="padding: 16px;">
-            <div style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--teal-light);">handshake</span>
-              <strong>Corp Hub — Vendors</strong>
-            </div>
-            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 4px;">← Vendors, Real Estate</p>
-          </div>
+        <div class="card card--glass reveal" style="padding: 24px;">
+          <span class="material-symbols-outlined" style="color: var(--gold); font-size: 32px;">history_edu</span>
+          <h3 style="margin-top: 12px; font-size: 1rem; color: #FFF;">ADR superseded</h3>
+          <p class="text-muted" style="font-size: 0.875rem; margin-top: 8px;">ADR-003 is retained as historical planning only and is marked not implemented.</p>
         </div>
+        <div class="card card--glass reveal" style="padding: 24px;">
+          <span class="material-symbols-outlined" style="color: var(--teal-light); font-size: 32px;">verified_user</span>
+          <h3 style="margin-top: 12px; font-size: 1rem; color: #FFF;">Security remains live</h3>
+          <p class="text-muted" style="font-size: 0.875rem; margin-top: 8px;">Tenant sharing is locked down and DCE site permissions have been hardened without relying on migrated content.</p>
+        </div>
+      </div>
+
+      <div class="callout callout--gold reveal" style="max-width: 760px;">
+        <p style="font-size: 0.9375rem; color: var(--text-secondary);">
+          Remaining cleanup: delete the unused HTT Brands Entra app <strong>DeltaSetup-HTT-SourceMigration-PnP</strong> / <code>3657525b-b24a-43bc-9510-cbdd375da6e5</code>. Tracked as <strong>DeltaSetup-119</strong>.
+        </p>
       </div>
     </div>
   </section>
@@ -880,7 +650,7 @@
       <p class="label mb-16 reveal">Project Progress</p>
       <h2 class="mb-16 reveal text-center">What's done.<br>What's next.</h2>
       <p class="reveal text-center mb-48" style="color: rgba(255,255,255,0.45); max-width: 520px; margin-left: auto; margin-right: auto;">
-        All code is written, tested, and security-audited. The next step is running the scripts against the live tenant.
+        Core SharePoint/Teams security hardening is complete. Document migration is skipped by decision; next steps are cleanup, E2E testing, Exchange, and launch readiness.
       </p>
 
       <!-- Phase Cards -->
@@ -975,32 +745,32 @@
         </div>
 
         <!-- Phase 4 -->
-        <div class="phase-card phase-card--active reveal">
+        <div class="phase-card phase-card--done reveal">
           <div class="phase-card__header">
-            <div class="phase-card__title" style="color: var(--gold);">Phase 4</div>
-            <span class="status status--active">Ready</span>
+            <div class="phase-card__title" style="color: #4CAF50;">Phase 4</div>
+            <span class="status status--done">Skipped</span>
           </div>
           <h4 style="color: #FFF; font-size: 1rem; margin-bottom: 12px;">Document Migration</h4>
           <div class="phase-card__items">
             <div class="phase-card__item">
               <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
-              Migration plan mapped
+              Tyler decision recorded
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: #4CAF50;">do_not_disturb_on</span>
+              No HTTHQ files copied
             </div>
             <div class="phase-card__item">
               <span class="material-symbols-outlined" style="color: #4CAF50;">check_circle</span>
-              12 folders → 4 sites
+              ADR-003 superseded
+            </div>
+            <div class="phase-card__item">
+              <span class="material-symbols-outlined" style="color: var(--gold);">pending</span>
+              Delete unused HTT PnP app
             </div>
             <div class="phase-card__item">
               <span class="material-symbols-outlined" style="color: var(--gold);">pending</span>
               E2E testing
-            </div>
-            <div class="phase-card__item">
-              <span class="material-symbols-outlined" style="color: var(--gold);">pending</span>
-              Document migration
-            </div>
-            <div class="phase-card__item">
-              <span class="material-symbols-outlined" style="color: var(--gold);">pending</span>
-              User onboarding
             </div>
             <div class="phase-card__item">
               <span class="material-symbols-outlined" style="color: var(--gold);">pending</span>
@@ -1015,23 +785,23 @@
             <div class="phase-card__title" style="color: rgba(255,255,255,0.4);">Phase 5</div>
             <span class="status status--pending">Pending</span>
           </div>
-          <h4 style="color: rgba(255,255,255,0.6); font-size: 1rem; margin-bottom: 12px;">Brand Rollout</h4>
+          <h4 style="color: rgba(255,255,255,0.6); font-size: 1rem; margin-bottom: 12px;">Exchange Online</h4>
           <div class="phase-card__items">
             <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
               <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
-              Bishops (2-wk)
+              Pax8 / mailbox license
             </div>
             <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
               <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
-              Frenchies (2-wk)
+              Shared mailboxes
             </div>
             <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
               <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
-              HTT (2-wk)
+              Dynamic distribution groups
             </div>
             <div class="phase-card__item" style="color: rgba(255,255,255,0.35);">
               <span class="material-symbols-outlined" style="color: rgba(255,255,255,0.2);">radio_button_unchecked</span>
-              TLL (2-wk)
+              Mail flow verification
             </div>
           </div>
         </div>
@@ -1173,7 +943,7 @@
     <div class="container text-center" style="position: relative; z-index: 1;">
       <h2 class="reveal mb-24">Ready to Deploy.</h2>
       <p class="reveal mb-32" style="color: rgba(255,255,255,0.5); max-width: 480px; margin-left: auto; margin-right: auto;">
-        32 scripts. 150 tests. Security audited. Deployment runbook ready.
+        47 scripts. 50 phase-3 tests. Security hardened. Document migration skipped.
       </p>
 
       <div class="stats mb-48 reveal">
@@ -1182,8 +952,8 @@
           <div class="stat__label">License Cost</div>
         </div>
         <div class="stat">
-          <div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">~75m</div>
-          <div class="stat__label">To Deploy</div>
+          <div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">0GB</div>
+          <div class="stat__label">Docs To Copy</div>
         </div>
         <div class="stat">
           <div class="stat__value" style="font-size: clamp(2rem, 5vw, 3.5rem);">4+</div>
@@ -1194,7 +964,7 @@
       <div class="reveal">
         <p style="color: rgba(255,255,255,0.25); font-size: 0.8125rem;">
           Delta Crown Extensions — Operational Framework<br>
-          From chaos folder to branded excellence.
+          Secure brand platform without a document-migration detour.
         </p>
       </div>
     </div>

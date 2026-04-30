@@ -1,28 +1,28 @@
 # ============================================================================
 # 4.0-Master-Phase4.ps1
-# Master Orchestrator for Phase 4: Migration & User Onboarding
+# Master Orchestrator for Phase 4: User Onboarding
 # ============================================================================
-# PURPOSE: Execute Phase 4 scripts in correct order:
+# CURRENT DECISION: HTTHQ document migration is skipped for production cutover.
+# PURPOSE: Execute active Phase 4 scripts in correct order:
 #          1. Verify Phase 2+3 are deployed (pre-check)
 #          2. Audit existing users (4.1)
 #          3. Onboard users with correct properties (4.2)
-#          4. Migrate documents from HTTHQ (4.3)
-#          5. Verify migration completeness (4.4)
+#
+# Historical document migration tooling remains in this folder, but this
+# orchestrator will not run it unless -IncludeDocumentMigration is explicitly set.
 # ============================================================================
 # USAGE:
-#   # Full Phase 4 run:
-#   ./4.0-Master-Phase4.ps1 -UserMappingFile "../config/dce-user-mapping.csv" `
-#       -FileMappingFile "../config/dce-file-mapping.csv"
+#   # Full active Phase 4 run (audit + user onboarding only):
+#   ./4.0-Master-Phase4.ps1 -UserMappingFile "../config/dce-user-mapping.csv"
 #
 #   # Dry run:
-#   ./4.0-Master-Phase4.ps1 -UserMappingFile "../config/dce-user-mapping.csv" `
-#       -FileMappingFile "../config/dce-file-mapping.csv" -WhatIf
+#   ./4.0-Master-Phase4.ps1 -UserMappingFile "../config/dce-user-mapping.csv" -WhatIf
 #
 #   # Run only user onboarding:
 #   ./4.0-Master-Phase4.ps1 -Phase Users -UserMappingFile "../config/dce-user-mapping.csv"
 #
-#   # Run only document migration:
-#   ./4.0-Master-Phase4.ps1 -Phase Documents -FileMappingFile "../config/dce-file-mapping.csv"
+#   # Historical only — not part of current cutover:
+#   ./4.0-Master-Phase4.ps1 -Phase Documents -FileMappingFile "../config/dce-file-mapping.csv" -IncludeDocumentMigration
 # ============================================================================
 
 #Requires -Version 5.1
@@ -53,7 +53,10 @@ param(
     [switch]$SkipGroupVerification,
 
     [Parameter()]
-    [switch]$VerifyAfterCopy
+    [switch]$VerifyAfterCopy,
+
+    [Parameter()]
+    [switch]$IncludeDocumentMigration
 )
 
 # ============================================================================
@@ -122,15 +125,15 @@ if (-not $SkipPreCheck) {
 $startTime = Get-Date
 $stepResults = @{}
 
-Write-DeltaCrownLog "" "INFO"
+Write-DeltaCrownLog " " "INFO"
 Write-DeltaCrownLog "═══════════════════════════════════════════════════" "STAGE"
-Write-DeltaCrownLog "  PHASE 4: MIGRATION & USER ONBOARDING" "STAGE"
+Write-DeltaCrownLog "  PHASE 4: USER ONBOARDING" "STAGE"
 Write-DeltaCrownLog "  Tenant: $TenantName | Environment: $Environment" "STAGE"
 Write-DeltaCrownLog "═══════════════════════════════════════════════════" "STAGE"
 
 # Step 4.1: User Audit
 if ($Phase -in @("All", "Audit")) {
-    Write-DeltaCrownLog "" "INFO"
+    Write-DeltaCrownLog " " "INFO"
     Write-DeltaCrownLog "STEP 4.1: User Property Audit" "STAGE"
     Write-DeltaCrownLog "─────────────────────────────────" "INFO"
 
@@ -154,7 +157,7 @@ if ($Phase -in @("All", "Audit")) {
 
 # Step 4.2: User Onboarding
 if ($Phase -in @("All", "Users")) {
-    Write-DeltaCrownLog "" "INFO"
+    Write-DeltaCrownLog " " "INFO"
     Write-DeltaCrownLog "STEP 4.2: User Onboarding" "STAGE"
     Write-DeltaCrownLog "─────────────────────────────────" "INFO"
 
@@ -192,10 +195,19 @@ if ($Phase -in @("All", "Users")) {
     }
 }
 
-# Step 4.3: Document Migration
-if ($Phase -in @("All", "Documents")) {
-    Write-DeltaCrownLog "" "INFO"
-    Write-DeltaCrownLog "STEP 4.3: Document Migration" "STAGE"
+# Step 4.3: Document Migration (skipped by current rollout decision)
+if ($Phase -eq "All") {
+    $stepResults["4.3-Migration"] = "Skipped"
+    Write-DeltaCrownLog "STEP 4.3: Document Migration skipped by decision; no HTTHQ files will be copied." "WARNING"
+}
+elseif ($Phase -eq "Documents") {
+    if (-not $IncludeDocumentMigration) {
+        Write-DeltaCrownLog "Document migration is skipped for the current rollout." "CRITICAL"
+        Write-DeltaCrownLog "If you are intentionally running historical migration tooling, re-run with -IncludeDocumentMigration." "CRITICAL"
+        exit 2
+    }
+    Write-DeltaCrownLog " " "INFO"
+    Write-DeltaCrownLog "STEP 4.3: Document Migration — HISTORICAL/EXPLICIT OVERRIDE" "STAGE"
     Write-DeltaCrownLog "─────────────────────────────────" "INFO"
 
     if (-not $FileMappingFile) {
@@ -217,6 +229,7 @@ if ($Phase -in @("All", "Documents")) {
             Environment     = $Environment
         }
         if ($VerifyAfterCopy) { $migrationArgs["VerifyAfterCopy"] = $true }
+        if ($IncludeDocumentMigration) { $migrationArgs["AllowSkippedDocumentMigration"] = $true }
         if ($WhatIfPreference) { $migrationArgs["WhatIf"] = $true }
 
         try {
@@ -237,7 +250,7 @@ if ($Phase -in @("All", "Documents")) {
 
 $duration = (Get-Date) - $startTime
 
-Write-DeltaCrownLog "" "INFO"
+Write-DeltaCrownLog " " "INFO"
 Write-DeltaCrownLog "═══════════════════════════════════════════════════" "STAGE"
 Write-DeltaCrownLog "  PHASE 4 SUMMARY" "STAGE"
 Write-DeltaCrownLog "═══════════════════════════════════════════════════" "STAGE"
@@ -249,7 +262,7 @@ foreach ($step in $stepResults.GetEnumerator() | Sort-Object Key) {
     Write-DeltaCrownLog "  $icon $($step.Key): $($step.Value)" $level
 }
 
-Write-DeltaCrownLog "" "INFO"
+Write-DeltaCrownLog " " "INFO"
 Write-DeltaCrownLog "═══════════════════════════════════════════════════" "STAGE"
 
 # Exit code

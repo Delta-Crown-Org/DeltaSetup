@@ -83,15 +83,10 @@ Write-Host "4. Preserve metadata (Modified, Created, Author)" -ForegroundColor W
 Write-Host "5. Generate migration report" -ForegroundColor White
 Write-Host ""
 
-Write-Host "TO EXECUTE MIGRATION" -ForegroundColor Green
-Write-Host "-" -ForegroundColor Green
-Write-Host "From local machine with browser access:" -ForegroundColor Gray
-Write-Host "  cd ~/dev/DeltaSetup/phase4-migration/scripts" -ForegroundColor White
-Write-Host "  pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv'" -ForegroundColor White
-Write-Host ""
-
-Write-Host "Or run with -WhatIf for dry run:" -ForegroundColor Gray
-Write-Host "  pwsh -File ./4.3-Document-Migration.ps1 -MappingFile '../config/dce-file-mapping.csv' -WhatIf" -ForegroundColor White
+Write-Host "CURRENT DECISION: MIGRATION SKIPPED" -ForegroundColor Yellow
+Write-Host "-" -ForegroundColor Yellow
+Write-Host "Do not execute document migration for production cutover." -ForegroundColor White
+Write-Host "This report is historical planning context only." -ForegroundColor Gray
 Write-Host ""
 
 Write-Host "$('=' * 70)" -ForegroundColor Green
@@ -117,7 +112,7 @@ PRIORITY SUMMARY:
 - P3 (Deferred): $p3 folders
 
 NEXT STEPS:
-Run 4.3-Document-Migration.ps1 to execute migration
+Do not run document migration for production cutover. Migration is skipped by Tyler's 2026-04-29 decision.
 "@
 
 $reportContent | Out-File -FilePath $reportPath -Encoding UTF8

@@ -2,25 +2,29 @@
 # 4.3-Document-Migration.ps1
 # Cross-tenant document migration from HTTHQ to DCE hub-and-spoke
 # ============================================================================
+# CURRENT DECISION: HTTHQ document migration is skipped for production cutover.
+# This script is historical tooling and refuses to run unless explicitly
+# overridden with -AllowSkippedDocumentMigration.
+# ============================================================================
 # PURPOSE: Copy documents from httbrands.sharepoint.com/sites/HTTHQ
 #          "Master DCE" folder to the new hub-and-spoke sites on
 #          deltacrown.sharepoint.com
 # ============================================================================
 # USAGE:
-#   # Full migration from mapping CSV:
-#   ./4.3-Document-Migration.ps1 -MappingFile "../config/dce-file-mapping.csv"
+#   # Historical/override only — not part of current production cutover:
+#   ./4.3-Document-Migration.ps1 -MappingFile "../config/dce-file-mapping.csv" -AllowSkippedDocumentMigration
 #
 #   # Dry run (report what would be copied):
-#   ./4.3-Document-Migration.ps1 -MappingFile "../config/dce-file-mapping.csv" -WhatIf
+#   ./4.3-Document-Migration.ps1 -MappingFile "../config/dce-file-mapping.csv" -WhatIf -AllowSkippedDocumentMigration
 #
-#   # Single folder migration:
+#   # Single folder migration, historical/override only:
 #   ./4.3-Document-Migration.ps1 -SourceUrl "https://httbrands.sharepoint.com/sites/HTTHQ" `
 #       -SourceLibrary "Shared Documents" -SourceFolder "Master DCE/Marketing" `
 #       -DestUrl "https://deltacrown.sharepoint.com/sites/dce-marketing" `
-#       -DestLibrary "Brand Assets" -DestFolder "Marketing"
+#       -DestLibrary "Brand Assets" -DestFolder "Marketing" -AllowSkippedDocumentMigration
 #
 #   # Migrate only priority 1 items:
-#   ./4.3-Document-Migration.ps1 -MappingFile "../config/dce-file-mapping.csv" -Priority 1
+#   ./4.3-Document-Migration.ps1 -MappingFile "../config/dce-file-mapping.csv" -Priority 1 -AllowSkippedDocumentMigration
 # ============================================================================
 # IMPORTANT: This script requires PnP connections to BOTH tenants.
 #            You will be prompted to authenticate to httbrands (source)
@@ -83,8 +87,15 @@ param(
     [string]$SourceClientId = $env:HTT_PNP_CLIENT_ID,
 
     [Parameter()]
-    [string]$SourceTenant = $(if ($env:HTT_TENANT_ID) { $env:HTT_TENANT_ID } else { "httbrands.onmicrosoft.com" })
+    [string]$SourceTenant = $(if ($env:HTT_TENANT_ID) { $env:HTT_TENANT_ID } else { "httbrands.onmicrosoft.com" }),
+
+    [Parameter()]
+    [switch]$AllowSkippedDocumentMigration
 )
+
+if (-not $AllowSkippedDocumentMigration) {
+    throw "HTTHQ document migration is skipped for this rollout. Do not run this script for production cutover. Use -AllowSkippedDocumentMigration only for intentional historical/testing work."
+}
 
 # ============================================================================
 # MODULE IMPORTS
