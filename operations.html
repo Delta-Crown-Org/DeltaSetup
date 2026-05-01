@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/operations.css?v=20260430-ops2">
   <link rel="stylesheet" href="css/sidebar.css?v=20260430-sidebar1">
   <link rel="stylesheet" href="css/exec-vision.css?v=20260430-sidebar1">
+  <link rel="stylesheet" href="css/whiteglove.css?v=20260430-whiteglove1">
 </head>
 <body class="has-sidebar">
   <a href="#hero" class="skip-link">Skip to content</a>
@@ -24,7 +25,7 @@
   </button>
   <div class="sidebar__backdrop" data-sidebar-backdrop aria-hidden="true"></div>
 
-  <aside class="sidebar" id="sidebar" aria-label="Site navigation">
+  <div class="sidebar" id="sidebar">
     <div class="sidebar__brand">
       <a href="#hero" aria-label="Delta Crown Extensions — top of page">
         <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png" alt="Delta Crown Extensions">
@@ -32,10 +33,10 @@
       <span class="sidebar__brand-tag">Operations View</span>
     </div>
 
-    <div class="sidebar__views" role="tablist" aria-label="Switch view">
-      <a href="./index.html" class="sidebar__view" role="tab" aria-selected="false">Project Site</a>
-      <a href="./operations.html" class="sidebar__view sidebar__view--active" role="tab" aria-selected="true">Ops View</a>
-    </div>
+    <nav class="sidebar__views" aria-label="View">
+      <a href="./index.html" class="sidebar__view">Project Site</a>
+      <a href="./operations.html" class="sidebar__view sidebar__view--active" aria-current="page">Ops View</a>
+    </nav>
 
     <nav class="sidebar__nav" aria-label="Page sections">
       <div class="sidebar__chapter">
@@ -56,7 +57,7 @@
       </div>
 
       <div class="sidebar__chapter">
-        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">shield</span>Security &amp; Access</div>
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">architecture</span>How It Works</div>
         <div class="sidebar__list">
           <a href="#sepconn" class="sidebar__link">Separated yet connected<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
           <a href="#access" class="sidebar__link">Corporate access lane</a>
@@ -64,7 +65,7 @@
       </div>
 
       <div class="sidebar__chapter">
-        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">repeat</span>The Pattern</div>
+        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">trending_up</span>What's Next</div>
         <div class="sidebar__list">
           <a href="#future" class="sidebar__link">Repeatable rollout</a>
           <a href="#cta" class="sidebar__link">The playbook</a>
@@ -74,15 +75,15 @@
 
     <div class="sidebar__footer">
       <div class="sidebar__progress" aria-hidden="true"><div class="sidebar__progress-bar"></div></div>
-      Built for executives, directors, and managers across the brand family.
+      <p style="margin-bottom: 6px;">Want the project narrative? <a href="./index.html#whiteglove" style="color: var(--gold-light); text-decoration: underline;">See Day One in Five Moments &rarr;</a></p>
     </div>
-  </aside>
+  </div>
 
   <main>
     <section class="section hero op-hero" id="hero">
       <div class="hero__content container">
         <p class="op-kicker reveal">Executive & Operations View</p>
-        <h1 class="hero__title reveal">The Microsoft 365<br>Operating System.</h1>
+        <h1 class="hero__title reveal balance-text">The operating system for every brand.</h1>
         <p class="reveal" style="max-width: 780px; margin: 0 auto; color: rgba(255,255,255,.68); font-size: 1.08rem;">
           Delta Crown becomes the pilot brand for a cleaner ops model: identity tells Microsoft who someone is, Microsoft routes them into the right places, and ops gets predictable access without manually stitching the business together.
         </p>
