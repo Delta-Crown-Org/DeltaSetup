@@ -24,6 +24,30 @@
     revealObserver.observe(el);
   });
 
+  function revealSectionNow(section) {
+    if (!section) return;
+    section.classList?.add('reveal--visible');
+    section.querySelectorAll?.('.reveal').forEach((el) => {
+      el.classList.add('reveal--visible');
+      revealObserver.unobserve(el);
+    });
+  }
+
+  function revealHashTarget() {
+    const hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+    try {
+      revealSectionNow(document.querySelector(hash));
+    } catch (_) {
+      // Ignore invalid hash selectors. Browser hash URLs are chaotic little goblins.
+    }
+  }
+
+  // Deep links land inside already-built sections. Show that target immediately;
+  // do not leave stakeholders staring at pre-reveal ghost content.
+  requestAnimationFrame(revealHashTarget);
+  window.addEventListener('hashchange', revealHashTarget);
+
   // ---- Animated Number Counters ----
   function animateCounter(el) {
     const target = el.dataset.target;
@@ -199,6 +223,7 @@
       const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
+        revealSectionNow(target);
         target.scrollIntoView({
           behavior: reduceMotion ? 'auto' : 'smooth',
           block: 'start'
