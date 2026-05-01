@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="css/sidebar.css?v=20260430-sidebar1">
   <link rel="stylesheet" href="css/exec-vision.css?v=20260430-sidebar1">
   <link rel="stylesheet" href="css/whiteglove.css?v=20260430-whiteglove1">
+  <link rel="stylesheet" href="css/polish.css?v=20260430-polish1">
 </head>
 <body class="has-sidebar">
   <a href="#hero" class="skip-link">Skip to content</a>
@@ -50,6 +51,7 @@
       <div class="sidebar__chapter">
         <div class="sidebar__chapter-label"><span class="material-symbols-outlined">visibility</span>The Vision</div>
         <div class="sidebar__list">
+          <a href="#role-lens" class="sidebar__link">What changes by role<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
           <a href="#identity" class="sidebar__link">Identity is the control panel</a>
           <a href="#architecture" class="sidebar__link">The brand workspace</a>
           <a href="#portfolio" class="sidebar__link">The brand family<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
@@ -124,6 +126,20 @@
           <article class="op-impact"><img src="phase4-migration/assets/microsoft-icons/key.svg" alt="Access"><strong>Access is explainable</strong><p>Groups are driven by attributes instead of someone’s memory of a permission rabbit hole.</p></article>
           <article class="op-impact"><img src="phase4-migration/assets/microsoft-icons/folder-people.svg" alt="Workspace"><strong>Workspaces are obvious</strong><p>Users land in brand spaces, not the HTT shared-docs junk drawer.</p></article>
           <article class="op-impact"><img src="phase4-migration/assets/microsoft-icons/apps.svg" alt="Apps"><strong>Apps can follow</strong><p>The same identity model can drive FranConnect, Monday, Freshdesk, mail routing, and more.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="role-lens" id="role-lens" aria-labelledby="role-lens-title">
+      <div class="container">
+        <p class="label mb-16 reveal">What Changes By Role</p>
+        <h2 class="mb-16 reveal balance-text" id="role-lens-title" style="max-width: 820px;">Same platform. Different lens for every level.</h2>
+        <p class="role-lens__lead reveal">The point is not to make everyone look at the same dashboard. The point is to make the same operating truth show up differently for executives, directors, managers, and frontline teams.</p>
+        <div class="role-lens__grid reveal" aria-label="Operational value by role">
+          <article class="role-lens__card role-lens__card--exec"><span>Executive</span><h3>Portfolio confidence</h3><p>See brand posture, ownership gaps, launch readiness, and risk without opening every site.</p></article>
+          <article class="role-lens__card"><span>Director</span><h3>Cross-brand comparison</h3><p>Compare patterns across brands while keeping each brand’s data boundaries intact.</p></article>
+          <article class="role-lens__card"><span>Manager</span><h3>Faster onboarding</h3><p>Know who belongs where, which workspace owns the work, and what still needs cleanup.</p></article>
+          <article class="role-lens__card"><span>Frontline</span><h3>Less scavenger hunting</h3><p>Open the right Teams space, find the right files, use the right mailbox, and start working.</p></article>
         </div>
       </div>
     </section>
@@ -207,34 +223,17 @@
             </div>
           </article>
 
-          <article class="portfolio__brand">
-            <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
-            <h3>Bishops</h3>
-            <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
-            <div class="portfolio__pieces">
-              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity rules</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
+          <article class="portfolio__brand portfolio__brand--future">
+            <span class="portfolio__status portfolio__status--ready">Pattern-ready brands</span>
+            <h3>The next chapters</h3>
+            <span class="portfolio__brand-sub">Same playbook, awaiting sponsorship</span>
+            <div class="portfolio__future-chips">
+              <span class="portfolio__chip">Bishops</span>
+              <span class="portfolio__chip">Frenchies</span>
+              <span class="portfolio__chip">TLL</span>
             </div>
-          </article>
-
-          <article class="portfolio__brand">
-            <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
-            <h3>Frenchies</h3>
-            <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
             <div class="portfolio__pieces">
-              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity rules</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
-            </div>
-          </article>
-
-          <article class="portfolio__brand">
-            <span class="portfolio__status portfolio__status--ready">Pattern Ready</span>
-            <h3>TLL</h3>
-            <span class="portfolio__brand-sub">Same playbook, copy &amp; configure</span>
-            <div class="portfolio__pieces">
-              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity rules</div>
+              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Brand identity rules</div>
               <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
               <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
             </div>
@@ -312,7 +311,7 @@
     <section class="section" id="future">
       <div class="container">
         <p class="label mb-16 reveal">Repeatable Brand Pattern</p>
-        <h2 class="mb-48 reveal">Delta is the operating pattern for every future brand.</h2>
+        <h2 class="mb-48 reveal">Delta is the operating pattern other brands can sponsor next.</h2>
         <div class="op-future-track reveal" aria-label="Repeatable rollout pattern">
           <article class="op-future-step"><span>01</span><strong>Standardize identity</strong><p>Brand, company, department, title, role, location, manager, support scope.</p></article>
           <article class="op-future-step"><span>02</span><strong>Standardize groups</strong><p>Dynamic groups, M365 groups, distribution lists, and app roles.</p></article>

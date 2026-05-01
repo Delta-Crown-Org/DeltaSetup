@@ -1,0 +1,191 @@
+/* ============================================================
+   Delta Crown Extensions — Executive Polish Components
+   Small premium layers added after the IA pass:
+   - Current-state executive digest
+   - Operations role lens
+   ============================================================ */
+
+/* ----- Current Reality Digest ----- */
+.reality-digest {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 40px 0 48px;
+}
+
+.reality-digest__card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: 24px;
+  min-height: 230px;
+  position: relative;
+  overflow: hidden;
+}
+
+.reality-digest__card::after {
+  content: '';
+  position: absolute;
+  inset: auto -18% -38% auto;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.reality-digest__card--danger {
+  border-color: rgba(239, 83, 80, 0.32);
+  background: linear-gradient(145deg, rgba(239, 83, 80, 0.16), rgba(255, 255, 255, 0.04));
+}
+
+.reality-digest__card--warn {
+  border-color: rgba(251, 140, 0, 0.3);
+  background: linear-gradient(145deg, rgba(251, 140, 0, 0.14), rgba(255, 255, 255, 0.04));
+}
+
+.reality-digest__card--gold {
+  border-color: rgba(212, 168, 75, 0.32);
+  background: linear-gradient(145deg, rgba(212, 168, 75, 0.16), rgba(255, 255, 255, 0.04));
+}
+
+.reality-digest__label {
+  display: inline-flex;
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 18px;
+}
+
+.reality-digest__card strong {
+  color: #FFF;
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  line-height: 1.24;
+  margin-bottom: 12px;
+  text-wrap: balance;
+}
+
+.reality-digest__card p {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ----- Role Lens ----- */
+.role-lens {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(212, 168, 75, 0.12), transparent 32%),
+    linear-gradient(180deg, var(--surface) 0%, var(--surface-dim) 100%);
+  padding: clamp(76px, 11vh, 120px) 0;
+}
+
+.role-lens__lead {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 760px;
+  margin-bottom: 38px;
+}
+
+.role-lens__grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.role-lens__card {
+  background: var(--surface-card);
+  border: 1px solid rgba(10, 31, 28, 0.08);
+  border-radius: 22px;
+  box-shadow: 0 18px 50px rgba(10, 31, 28, 0.07);
+  min-height: 260px;
+  padding: 26px;
+  position: relative;
+  overflow: hidden;
+}
+
+.role-lens__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(212, 168, 75, 0.12), transparent 40%);
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out);
+}
+
+.role-lens__card:hover::before {
+  opacity: 1;
+}
+
+.role-lens__card--exec {
+  background: linear-gradient(145deg, rgba(10, 31, 28, 0.96), rgba(0, 107, 94, 0.88));
+  color: var(--text-inverse);
+}
+
+.role-lens__card span {
+  color: var(--gold-dark);
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.role-lens__card--exec span {
+  color: var(--gold-light);
+}
+
+.role-lens__card h3 {
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 1.42rem;
+  line-height: 1.22;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+  text-wrap: balance;
+}
+
+.role-lens__card--exec h3 {
+  color: #FFF;
+}
+
+.role-lens__card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.62;
+  position: relative;
+  z-index: 1;
+}
+
+.role-lens__card--exec p {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+@media (max-width: 1020px) {
+  .reality-digest,
+  .role-lens__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .reality-digest,
+  .role-lens__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reality-digest__card,
+  .role-lens__card {
+    min-height: auto;
+  }
+}

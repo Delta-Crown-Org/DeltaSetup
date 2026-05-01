@@ -144,6 +144,22 @@
     sections.forEach((s) => sectionObserver.observe(s));
   }
 
+  // ---- White-glove moment focus ----
+  const whitegloveMoments = document.querySelectorAll('.whiteglove__moment');
+
+  if (whitegloveMoments.length) {
+    const momentObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('is-active', entry.isIntersecting);
+        });
+      },
+      { threshold: 0.45, rootMargin: '-18% 0px -34% 0px' }
+    );
+
+    whitegloveMoments.forEach((moment) => momentObserver.observe(moment));
+  }
+
   // ---- Sidebar mobile toggle ----
   const sidebarToggle = document.querySelector('[data-sidebar-toggle]');
   const sidebarBackdrop = document.querySelector('[data-sidebar-backdrop]');
