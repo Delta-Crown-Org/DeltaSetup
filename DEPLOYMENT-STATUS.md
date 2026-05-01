@@ -1,7 +1,7 @@
 # Delta Crown Extensions — Live Deployment Status
 
 **Tenant:** deltacrown (`ce62e17d-2feb-4e67-a115-8ea4af68da30`)  
-**Last Updated:** June 14, 2025  
+**Last Updated:** April 30, 2026  
 **Deployed By:** code-puppy-1a19cb (Richard) + pack-leader
 
 ---
@@ -39,7 +39,7 @@
 | Site | Type | Hub | Theme |
 |------|------|-----|-------|
 | dce-operations | Team Site (STS#3) | ✅ DCE-Hub | ✅ Gold/Black |
-| dce-clientservices | Team Site (STS#3) | ✅ DCE-Hub | ✅ Gold/Black |
+| dce-clientservices *(legacy — see DeltaSetup-130)* | Team Site (STS#3) | ✅ DCE-Hub | ✅ Gold/Black |
 | dce-marketing | Communication Site | ✅ DCE-Hub | ✅ Gold/Black |
 | dce-docs | Document Center | ✅ DCE-Hub | ✅ Gold/Black |
 
@@ -47,7 +47,7 @@
 | Site | Libraries |
 |------|-----------|
 | dce-operations | Daily Ops |
-| dce-clientservices | Consent Forms |
+| dce-clientservices *(legacy)* | Consent Forms |
 | dce-marketing | Brand Assets, Templates |
 | dce-docs | Policies, Training, Forms, Templates, Archive |
 
@@ -55,7 +55,7 @@
 | Site | Lists |
 |------|-------|
 | dce-operations | Bookings, Staff Schedule, Tasks, Inventory, Calendar |
-| dce-clientservices | Client Records, Service Catalog, Feedback |
+| dce-clientservices *(legacy)* | Client Records, Service Catalog, Feedback |
 | dce-marketing | Campaigns, Social Calendar |
 
 ### Metadata (dce-docs)
@@ -76,7 +76,7 @@
                         ├── dce-operations (Team Site)
                         │   └── Lists: Bookings, Staff Schedule, Tasks, Inventory, Calendar
                         │   └── Library: Daily Ops
-                        ├── dce-clientservices (Team Site)
+                        ├── dce-clientservices (Team Site) [legacy — see DeltaSetup-130]
                         │   └── Lists: Client Records, Service Catalog, Feedback
                         │   └── Library: Consent Forms
                         ├── dce-marketing (Communication Site)
