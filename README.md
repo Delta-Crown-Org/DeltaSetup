@@ -1,62 +1,140 @@
 # DeltaSetup — Delta Crown Extensions
 
-> **You are looking at the `gh-pages` branch.** This branch hosts the live executive site at <https://delta-crown-org.github.io/DeltaSetup/> and contains the canonical Microsoft 365 hub-and-spoke build for Delta Crown Extensions (DCE).
+> **Branch:** `gh-pages` · **Live site:** <https://delta-crown-org.github.io/DeltaSetup/>
+> **Tenant:** `deltacrown` (Microsoft 365 Business Premium) · **Last reconciled:** 2026-05-04
 
-## What lives here
+---
 
-| Surface | Where | Purpose |
-|---|---|---|
-| Live executive site | <https://delta-crown-org.github.io/DeltaSetup/> | Public showcase of the DCE M365 operating model |
-| Project status page | `index.html` | Architecture, phases, deployment status |
-| Operations view | `operations.html` | Role-lens story for ops audiences |
-| Provisioning scripts | `phase2-week1/`, `phase3-week2/`, `phase4-migration/` | PowerShell + Python automation, ordered by phase |
-| Architecture decisions | `docs/architecture/decisions/ADR-001..004` | Hub/spoke, sites, migration, cross-tenant |
-| Tenant inventory | `docs/delta-crown-*-inventory-summary.md` | Read-only audit evidence per workload |
-| Onboarding model | `docs/onboarding/` | Identity-driven access, attribute matrix, pilot checklist |
-| Runbook & status | `DEPLOYMENT-RUNBOOK.md`, `DEPLOYMENT-STATUS.md` | Deployment instructions and live state |
-| QA plan | `QA-TEST-PLAN.md` | Validation approach |
-| Session handoff | `SESSION-HANDOFF.md` | Context for the next agent/operator |
-| Issue tracking | `.beads/` (bd) | All work tracked via `bd ready` / `bd show <id>` |
+## What's built and what remains
 
-## Quick start (read-only)
+The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, and audited**. Five workstreams are complete, one (document migration) was **skipped by decision**, and the platform is functionally ready for users. The remaining work is **operational cleanup, owner decisions, and a Teams workload read-access blocker** — not new architecture.
 
-```bash
-# View open work
-bd ready
+| Workstream | Status |
+|---|---|
+| Phase 1 — Email Trust (SPF/DKIM/DMARC) | ✅ Live on `deltacrown.com` |
+| Phase 2 — Hub Foundation (Corp-Hub + DCE-Hub + spokes) | ✅ Live |
+| Phase 3 — Brand Sites + Teams workspace + DLP | ✅ Live, security-hardened |
+| Phase 4 — HTTHQ Document Migration | ⏭️ Skipped by Tyler on 2026-04-29 |
+| Phase 5 — Exchange Online (mailboxes, DDGs) | ✅ Live |
+| Tenant inventory (read-only audit) | ✅ Substantially complete; Teams channel detail blocked |
+| User metadata cleanup | ⏳ Major gaps — blocks dynamic groups |
+| Production launch readiness | ⏳ In progress — `DeltaSetup-e46` |
 
-# Inspect a doc
-ls docs/
+### ✅ Built and live in the tenant
 
-# Browse the deployed site
-open https://delta-crown-org.github.io/DeltaSetup/
-```
+**Identity (Entra ID)**
+- 89 users (3 disabled)
+- 5 dynamic security groups configured: `AllStaff`, `Managers`, `Marketing`, `Stylists`, `External`
+- All groups are processing; only `AllStaff` is currently populated (6 users) — see metadata gap below
+
+**SharePoint**
+- **Corp-Hub** + 4 service spokes: `corp-hr`, `corp-it`, `corp-finance`, `corp-training`
+- **DCE-Hub** (gold/black brand theme) + 4 brand sites: `dce-operations`, `dce-clientservices` *(legacy — see register)*, `dce-marketing`, `dce-docs`
+- 8 document libraries, 6 SharePoint lists, hub-to-hub association
+- Permission inheritance broken on DCE sites; group → role matrix applied
+- 10 sites Graph-audited clean (no "Everyone", no anonymous links)
+
+**Microsoft Teams**
+- "Delta Crown Operations" team provisioned with 5 channels (General, Daily Ops, Bookings, Marketing, Leadership-private)
+- Group ID `03255d50-…` connected to `dce-operations-team` SharePoint site
+- Leadership private-channel site verified
+
+**Exchange Online**
+- `deltacrown.com` authoritative accepted domain
+- 3 shared mailboxes: `operations@`, `bookings@`, `info@`
+- 3 dynamic distribution groups: `allstaff@`, `managers@`, `stylists@`
+- Auto-replies enabled on `bookings@` and `info@`
+
+**Security & Compliance**
+- Tenant locked down: `existingExternalUserSharingOnly`, legacy auth disabled, anonymous resharing disabled
+- 3 DLP policies deployed: `DCE-Data-Protection`, `Corp-Data-Protection`, `External-Sharing-Block`
+- Live security hardening applied via PnP DeviceLogin on 2026-04-29
+- HTT Brands source-migration Entra app deleted on 2026-04-30
+
+**Audit / inventory (read-only, evidence-based)**
+- Identity, SharePoint (Graph + PnP), Exchange, Security/apps/licenses, Compliance — all complete
+- HTT source folder (Master DCE) audited: 13 top-level items, 275 permission rows visible — no content moved
+- ClientServices artifacts confirmed empty (no client content present)
+
+**Automation**
+- 48 PowerShell scripts across `phase2-week1/`, `phase3-week2/`, `phase4-migration/`
+- 167 tests passing: 117 Python ADR fitness tests + 50 Phase-3 Pester tests
+- Master orchestrators with idempotency + rollback
+
+**Public-facing**
+- Live executive site published from this branch
+- 4 ADRs: hub-and-spoke, sites/Teams, migration, cross-tenant access
+
+### ⏳ What still needs to happen
+
+**To make dynamic groups actually populate** *(highest leverage gap)*
+- `companyName` populated on only **6 of 89 users** → `Managers`/`Marketing`/`Stylists`/`External` all resolve to **zero**
+- `department` 45/89 · `jobTitle` 44/89 · `employeeType` 0/89
+- Bulk metadata cleanup is the prerequisite for role-driven access at scale
+- Evidence: `docs/dce-user-metadata-and-teams-state-verification.md`
+
+**Blocked on Teams read context**
+- `DeltaSetup-151` — Provide licensed Teams-readable context (current admin lacks the Teams license check Graph requires)
+- Cascade: `134` (Teams inventory) · `124` (full tenant inventory) · `137` (consolidated report) · `142` (duplicate-group review) · `rfn` (Teams integration) · `gqk` (template capture)
+
+**Owner decisions needed**
+
+| ID | What's pending |
+|---|---|
+| `DeltaSetup-165` | Fate of stale `main` branch (force-replace, switch default + delete, or banner) |
+| `DeltaSetup-150` | Brand Resources vs Brand Assets SharePoint model |
+| `DeltaSetup-143` | Owners for Delta Crown dynamic security groups |
+| `DeltaSetup-148` | DLP test-mode policies (still in `TestWithNotifications`, not `Enforce`) |
+| `DeltaSetup-145` | `DeltaCrown-TeamsProvisioner-TEMP` app — credentials expired |
+| `DeltaSetup-164` | `DEPLOYMENT-RUNBOOK.md` ClientServices deprecation banner |
+
+**Production launch path**
+- `DeltaSetup-e46` *(in progress)* — Production launch
+- `DeltaSetup-agr` — End-to-end testing
+- `DeltaSetup-140` — Cleanup roadmap and backlog
+- `DeltaSetup-137` — Consolidated tenant inventory report
+- `DeltaSetup-138` / `139` — Public-showcase gap analysis + readiness package
+- `DeltaSetup-nfb` — Governance policies implementation
+- `DeltaSetup-89t` — Security & permissions configuration
+
+**Future brand rollout** *(~2-week pattern per brand, when sponsored)*
+- `DeltaSetup-yo1` — HTT & TLL hub
+- `DeltaSetup-ql3` — Frenchies hub
+- `DeltaSetup-la0` — Bishops hub
+
+**Tooling**
+- `DeltaSetup-162` — Mitigate `bd create` parallel-write race (real-world hit during this audit; 6 of 7 issues silently dropped)
+
+### 📍 Where to look for details
+
+| Question | File / command |
+|---|---|
+| What's deployed in the tenant? | `DEPLOYMENT-STATUS.md` |
+| How do I rerun a phase? | `DEPLOYMENT-RUNBOOK.md` |
+| What did the audits find? | `docs/delta-crown-*-inventory-summary.md` |
+| Why was ClientServices retired? | `docs/legacy-clientservices-cleanup-register.md` |
+| What's the architecture? | `docs/architecture/decisions/ADR-001..004` |
+| What's the current showcase narrative? | `docs/team-showcase-readiness-checklist.md` |
+| Onboarding/offboarding model? | `docs/onboarding/` |
+| Open work? | `bd ready` · `bd list --status=open` |
+
+---
 
 ## Branch layout
 
 This repo has **two orphan branches with no shared history**:
 
 - **`gh-pages`** *(this branch)* — current canonical work: site, hub-and-spoke provisioning, audited architecture, onboarding model.
-- **`main`** — abandoned earlier architecture (cross-tenant sync between HTT Brands and DCE via `scripts/00-08`). Disposition tracked in **DeltaSetup-165**. Do not treat `main` as current.
+- **`main`** — abandoned earlier architecture (cross-tenant sync between HTT Brands and DCE via `scripts/00-08`). Disposition tracked in **`DeltaSetup-165`**. Do not treat `main` as current.
 
-If you arrived here from the GitHub repo landing page (which defaults to `main`), the README on `main` describes the old direction. Use this branch for anything current.
+If you arrived here from the GitHub repo landing page (which currently defaults to `main`), the README on `main` flags itself as legacy and points back here. Use this branch for anything current.
 
 ## Working agreements
 
 - **Issue tracking is `bd` (beads)**, not GitHub Issues — see `AGENTS.md`.
-- **Tenant changes are gated**: read-only inventory only, no production cleanup without owner approval. See `docs/legacy-clientservices-cleanup-register.md` for the cleanup posture.
+- **Tenant changes are gated**: read-only inventory only, no production cleanup without owner approval. See `docs/legacy-clientservices-cleanup-register.md`.
 - **Document migration is out of scope** for this rollout (Tyler's decision, 2026-04-29). HTTHQ files stay where they are.
 - **Do not commit** `.local/`, raw permission CSVs, or anything containing user PII.
-
-## Key facts (as of latest update)
-
-| | |
-|---|---|
-| Tenant | `deltacrown` (Microsoft 365 Business Premium) |
-| Architecture | Corp-Hub + DCE-Hub with 4 brand sites and Teams workspace |
-| Identity | Entra ID dynamic groups: AllStaff, Managers, Marketing, Stylists, External |
-| Phases live | Phase 1 (Email Trust), Phase 2 (Hubs), Phase 3 (Brand sites + Teams + DLP), Phase 5 (Exchange) |
-| Phase 4 | Document migration **skipped by decision** |
-| Security hardening | Applied 2026-04-29 via PnP DeviceLogin |
 
 ## Contact / ownership
 
