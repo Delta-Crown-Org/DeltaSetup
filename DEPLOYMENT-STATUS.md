@@ -1,8 +1,8 @@
 # Delta Crown Extensions — Live Deployment Status
 
 **Tenant:** deltacrown (`ce62e17d-2feb-4e67-a115-8ea4af68da30`)  
-**Last Updated:** April 30, 2026  
-**Deployed By:** code-puppy-1a19cb (Richard) + pack-leader
+**Last Updated:** May 4, 2026  
+**Deployed By:** code-puppy-1a19cb (Richard) + pack-leader; reconciled by code-puppy-af200a
 
 ---
 
@@ -103,25 +103,26 @@ Tyler explicitly decided on 2026-04-29 that **no HTTHQ document migration will b
 
 ---
 
-## ⏳ Phase 5: Exchange Online — READY TO DEPLOY
+## ✅ Phase 5: Exchange Online — COMPLETE
 
-### Prerequisites
-- [ ] Pax8 CSP relationship established for deltacrown tenant
-- [ ] At least one licensed mailbox user (Lindy Sturgill) to activate Exchange Online
-- [ ] DNS records (SPF, DKIM, DMARC) verified for deltacrown.com ✅
+> Verified live by `docs/delta-crown-exchange-inventory-summary.md` (read-only ExchangeOnlineManagement audit). Exchange Online is active for the `deltacrown` tenant.
 
-### Script: `phase3-week2/scripts/5.1-Exchange-Setup.ps1`
+### Verified live state
+- ✅ `deltacrown.com` is the authoritative accepted domain
+- ✅ DNS: SPF, DKIM, DMARC verified for `deltacrown.com`
+- ✅ 3 shared mailboxes exist: `operations@`, `bookings@`, `info@deltacrown.com`
+- ✅ 3 dynamic distribution groups exist: `allstaff@`, `managers@`, `stylists@deltacrown.com`
+- ✅ Auto-replies enabled on `bookings@` and `info@`
+- ⏳ Auto-reply copy owner review pending
+- ⏳ Trustee permission review pending (raw rows local-only)
 
-**Run verification first:**
+### Re-run / verify
 ```powershell
 cd ~/dev/DeltaSetup/phase3-week2/scripts
 pwsh -File ./5.1-Exchange-Setup.ps1 -VerifyOnly
 ```
 
-**Then full deployment:**
-```powershell
-pwsh -File ./5.1-Exchange-Setup.ps1
-```
+Further changes (mail flow rules, connectors, etc.) are out of scope for the current readiness pass.
 
 ### Dynamic Distribution Groups (3)
 | DDG | Email | Recipient Filter |
