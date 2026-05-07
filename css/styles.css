@@ -565,7 +565,7 @@ h4 { font-size: 1.125rem; }
   padding: 32px 0;
   background: #050E0C;
   text-align: center;
-  color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.62);
   font-size: 0.75rem;
 }
 
@@ -599,10 +599,16 @@ h4 { font-size: 1.125rem; }
 
 /* --- Status Badges --- */
 .status { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; }
-.status--done { background: rgba(46,125,50,0.12); color: #4CAF50; }
-.status--active { background: rgba(212,168,75,0.15); color: var(--gold); animation: pulse-gold 2s ease-in-out infinite; }
-.status--pending { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
-.status--danger { background: rgba(239,83,80,0.12); color: #EF5350; }
+.status--done    { background: rgba(46,125,50,0.18);   color: #66BB6A; }
+.status--success { background: rgba(46,125,50,0.18);   color: #66BB6A; }
+.status--active  { background: rgba(212,168,75,0.18);  color: var(--gold); animation: pulse-gold 2s ease-in-out infinite; }
+.status--pending { background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.78); }
+.status--skipped { background: rgba(120,144,156,0.18); color: #B0BEC5; }
+.status--blocked { background: rgba(239,83,80,0.18);   color: #EF5350; }
+.status--danger  { background: rgba(239,83,80,0.18);   color: #EF5350; }
+@media (prefers-reduced-motion: reduce) {
+  .status--active { animation: none; box-shadow: none; }
+}
 @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 0 0 rgba(212,168,75,0.3); } 50% { box-shadow: 0 0 0 8px rgba(212,168,75,0); } }
 
 /* --- Architecture Diagram --- */
@@ -708,11 +714,16 @@ h4 { font-size: 1.125rem; }
 /* --- Phase Cards --- */
 .phase-card { border-radius: 16px; padding: clamp(20px, 3vw, 32px); transition: transform 0.4s var(--ease-out); }
 .phase-card:hover { transform: translateY(-4px); }
-.phase-card--done { background: rgba(46,125,50,0.06); border: 1px solid rgba(46,125,50,0.2); }
-.phase-card--active { background: rgba(212,168,75,0.06); border: 2px solid rgba(212,168,75,0.3); }
-.phase-card--pending { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); }
+.phase-card--done    { background: rgba(46,125,50,0.08);   border: 1px solid rgba(46,125,50,0.28); }
+.phase-card--active  { background: rgba(212,168,75,0.08);  border: 2px solid rgba(212,168,75,0.35); }
+.phase-card--pending { background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.18); }
+.phase-card--skipped { background: rgba(120,144,156,0.05); border: 1px dashed rgba(120,144,156,0.32); }
 .phase-card__header { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 12px; }
 .phase-card__title { font-family: var(--font-heading); font-size: 1.125rem; font-weight: 600; white-space: nowrap; }
+.phase-card--done    .phase-card__title { color: #66BB6A; }
+.phase-card--active  .phase-card__title { color: var(--gold); }
+.phase-card--pending .phase-card__title { color: rgba(255,255,255,0.7); }
+.phase-card--skipped .phase-card__title { color: #B0BEC5; }
 .phase-card__header .status { align-self: flex-start; }
 .phase-card__items { display: flex; flex-direction: column; gap: 6px; }
 .phase-card__item { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: rgba(255,255,255,0.7); }
@@ -759,9 +770,13 @@ h4 { font-size: 1.125rem; }
 .cta-section .stat__label { white-space: nowrap; margin-top: 8px; }
 
 /* --- Responsive Grid: 5 columns for phases --- */
-.grid--5 { grid-template-columns: repeat(5, 1fr); }
-@media (max-width: 1100px) { .grid--5 { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 700px) { .grid--5 { grid-template-columns: 1fr; } }
+/* Sidebar-aware: viewport > 1407 has content well >= 1120px so 5 cols fit.
+   Below that, content well drops to ~990-1120px and 5 cols squeezes content.
+   Breakpoints align to canonical 640 / 1023 / 1407 scale (see audit H4). */
+.grid--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 1407px) { .grid--5 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1023px) { .grid--5 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px)  { .grid--5 { grid-template-columns: 1fr; } }
 
 /* --- Corporate Folders Grid --- */
 .grid--3 {

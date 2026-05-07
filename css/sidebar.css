@@ -13,7 +13,7 @@
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-text: rgba(255, 255, 255, 0.62);
   --sidebar-text-strong: #FFFFFF;
-  --sidebar-text-muted: rgba(255, 255, 255, 0.36);
+  --sidebar-text-muted: rgba(255, 255, 255, 0.62); /* WCAG AA on sidebar bg */
 }
 
 body.has-sidebar {

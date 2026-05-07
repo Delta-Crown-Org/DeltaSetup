@@ -401,7 +401,7 @@
 }
 
 .audit-owner-table caption {
-  color: rgba(255, 255, 255, 0.46);
+  color: rgba(255, 255, 255, 0.62); /* WCAG AA on translucent panel */
   font-size: 0.75rem;
   margin-bottom: 12px;
   text-align: left;
