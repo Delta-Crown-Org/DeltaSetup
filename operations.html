@@ -19,10 +19,10 @@
   <link rel="stylesheet" href="css/polish.css?v=20260506-audit2">
 </head>
 <body class="has-sidebar">
-  <a href="#hero" class="skip-link">Skip to content</a>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
   <button class="sidebar__toggle" type="button" aria-controls="sidebar" aria-expanded="false" data-sidebar-toggle>
-    <span class="material-symbols-outlined">menu</span>Menu
+    <span aria-hidden="true" class="material-symbols-outlined">menu</span>Menu
   </button>
   <div class="sidebar__backdrop" data-sidebar-backdrop aria-hidden="true"></div>
 
@@ -41,7 +41,7 @@
 
     <nav class="sidebar__nav" aria-label="Page sections">
       <div class="sidebar__chapter">
-        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">flag</span>Start Here</div>
+        <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">flag</span>Start Here</div>
         <div class="sidebar__list">
           <a href="#hero" class="sidebar__link">Overview</a>
           <a href="#operating-model" class="sidebar__link">The mission</a>
@@ -49,7 +49,7 @@
       </div>
 
       <div class="sidebar__chapter">
-        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">visibility</span>The Vision</div>
+        <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">visibility</span>The Vision</div>
         <div class="sidebar__list">
           <a href="#role-lens" class="sidebar__link">What changes by role<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
           <a href="#identity" class="sidebar__link">Identity is the control panel</a>
@@ -59,7 +59,7 @@
       </div>
 
       <div class="sidebar__chapter">
-        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">architecture</span>How It Works</div>
+        <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">architecture</span>How It Works</div>
         <div class="sidebar__list">
           <a href="#sepconn" class="sidebar__link">Separated yet connected<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
           <a href="#access" class="sidebar__link">Corporate access lane</a>
@@ -67,7 +67,7 @@
       </div>
 
       <div class="sidebar__chapter">
-        <div class="sidebar__chapter-label"><span class="material-symbols-outlined">trending_up</span>What's Next</div>
+        <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">trending_up</span>What's Next</div>
         <div class="sidebar__list">
           <a href="#future" class="sidebar__link">Repeatable rollout</a>
           <a href="#cta" class="sidebar__link">The playbook</a>
@@ -81,7 +81,7 @@
     </div>
   </div>
 
-  <main>
+  <main id="main-content" tabindex="-1">
     <section class="section hero op-hero" id="hero">
       <div class="hero__content container">
         <p class="op-kicker reveal">Executive & Operations View</p>
@@ -205,9 +205,9 @@
             <h3>HTT Brands</h3>
             <span class="portfolio__brand-sub">Shared services for the family</span>
             <div class="portfolio__pieces">
-              <div class="portfolio__piece"><span class="material-symbols-outlined">corporate_fare</span>HR · IT · Finance · Legal</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">supervisor_account</span>Leadership read-up</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">link</span>Hub-to-hub linking</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">corporate_fare</span>HR · IT · Finance · Legal</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">supervisor_account</span>Leadership read-up</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">link</span>Hub-to-hub linking</div>
             </div>
           </article>
 
@@ -216,10 +216,10 @@
             <h3>Delta Crown</h3>
             <span class="portfolio__brand-sub">First brand on the platform</span>
             <div class="portfolio__pieces">
-              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Identity + dynamic groups</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Hub + spokes</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Teams workspace</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">shield</span>DLP + isolation</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">badge</span>Identity + dynamic groups</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">folder_shared</span>Hub + spokes</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">groups</span>Teams workspace</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">shield</span>DLP + isolation</div>
             </div>
           </article>
 
@@ -233,15 +233,15 @@
               <span class="portfolio__chip">TLL</span>
             </div>
             <div class="portfolio__pieces">
-              <div class="portfolio__piece"><span class="material-symbols-outlined">badge</span>Brand identity rules</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">folder_shared</span>Brand hub</div>
-              <div class="portfolio__piece"><span class="material-symbols-outlined">groups</span>Brand Teams</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">badge</span>Brand identity rules</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">folder_shared</span>Brand hub</div>
+              <div class="portfolio__piece"><span aria-hidden="true" class="material-symbols-outlined">groups</span>Brand Teams</div>
             </div>
           </article>
         </div>
 
         <div class="portfolio__connection reveal">
-          <div class="portfolio__connection-icon"><span class="material-symbols-outlined">hub</span></div>
+          <div class="portfolio__connection-icon"><span aria-hidden="true" class="material-symbols-outlined">hub</span></div>
           <div>
             <h4>The connecting layer</h4>
             <p>Each brand is its own room. Corporate is the hallway. Leadership walks the hallway and gets the right view for their role — without giving every brand keys to every room.</p>
@@ -260,7 +260,7 @@
 
         <div class="sepconn__grid reveal">
           <article class="sepconn__panel sepconn__panel--separated">
-            <div class="sepconn__panel-icon"><span class="material-symbols-outlined">shield_lock</span></div>
+            <div class="sepconn__panel-icon"><span aria-hidden="true" class="material-symbols-outlined">shield_lock</span></div>
             <h3>Separated securely</h3>
             <span class="sepconn__panel-sub">Each brand owns its space</span>
             <ul class="sepconn__list">
@@ -273,7 +273,7 @@
           </article>
 
           <article class="sepconn__panel sepconn__panel--connected">
-            <div class="sepconn__panel-icon"><span class="material-symbols-outlined">hub</span></div>
+            <div class="sepconn__panel-icon"><span aria-hidden="true" class="material-symbols-outlined">hub</span></div>
             <h3>Connected securely</h3>
             <span class="sepconn__panel-sub">Corporate sees what corporate needs</span>
             <ul class="sepconn__list">
