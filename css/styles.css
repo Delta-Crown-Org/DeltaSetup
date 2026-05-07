@@ -237,7 +237,7 @@ h4 { font-size: 1.125rem; }
   width: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .nav__links { display: none; }
 }
 
@@ -411,7 +411,7 @@ h4 { font-size: 1.125rem; }
   font-size: 40px; margin-bottom: 8px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 640px) {
   .flow { flex-direction: column; }
   .flow__arrow { transform: rotate(90deg); }
 }
@@ -506,7 +506,7 @@ h4 { font-size: 1.125rem; }
   color: rgba(255,255,255,0.15); font-size: 18px;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 640px) {
   .cascade__item { min-width: auto; padding: 12px 20px; }
 }
 
@@ -620,7 +620,7 @@ h4 { font-size: 1.125rem; }
 .compare__row + .compare__row { border-top: 1px solid rgba(0,0,0,0.04); }
 .compare__col--after .compare__row + .compare__row { border-color: rgba(46,125,50,0.08); }
 
-@media (max-width: 700px) {
+@media (max-width: 640px) {
   .compare { grid-template-columns: 1fr; }
 }
 
@@ -682,7 +682,7 @@ h4 { font-size: 1.125rem; }
 .arch__tenant { border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: clamp(24px, 4vw, 48px); position: relative; }
 .arch__tenant-label { position: absolute; top: -12px; left: 32px; background: var(--teal-deeper); padding: 0 12px; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 .arch__hubs { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 32px); }
-@media (max-width: 800px) { .arch__hubs { grid-template-columns: 1fr; } }
+@media (max-width: 1023px) { .arch__hubs { grid-template-columns: 1fr; } }
 
 .arch__hub { border-radius: 16px; padding: clamp(16px, 2vw, 24px); }
 .arch__hub--corp { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
@@ -711,7 +711,7 @@ h4 { font-size: 1.125rem; }
   align-items: center;
   padding: 4px 0;
 }
-@media (max-width: 800px) {
+@media (max-width: 1023px) {
   .migration__row {
     grid-template-columns: 1fr;
     gap: 8px;
@@ -728,7 +728,7 @@ h4 { font-size: 1.125rem; }
   color: var(--gold);
   font-size: 20px;
 }
-@media (max-width: 800px) {
+@media (max-width: 1023px) {
   .migration__arrow { transform: rotate(90deg); }
 }
 
@@ -746,7 +746,7 @@ h4 { font-size: 1.125rem; }
   gap: clamp(8px, 2vw, 24px);
   margin-bottom: 8px;
 }
-@media (max-width: 800px) {
+@media (max-width: 1023px) {
   .migration__header-row { display: none; }
 }
 .migration__header {
@@ -816,12 +816,12 @@ h4 { font-size: 1.125rem; }
 
 /* --- Comparison Table --- */
 .transform-compare { display: grid; grid-template-columns: 1fr 48px 1fr; gap: 0; align-items: stretch; }
-@media (max-width: 800px) { .transform-compare { grid-template-columns: 1fr; } }
+@media (max-width: 1023px) { .transform-compare { grid-template-columns: 1fr; } }
 .transform-compare__col { padding: clamp(20px, 3vw, 32px); border-radius: 16px; }
 .transform-compare__before { background: rgba(239,83,80,0.06); border: 1px solid rgba(239,83,80,0.15); }
 .transform-compare__after { background: rgba(46,125,50,0.06); border: 1px solid rgba(46,125,50,0.15); }
 .transform-compare__arrow { display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 28px; }
-@media (max-width: 800px) { .transform-compare__arrow { padding: 12px 0; } .transform-compare__arrow .material-symbols-outlined { transform: rotate(90deg); } }
+@media (max-width: 1023px) { .transform-compare__arrow { padding: 12px 0; } .transform-compare__arrow .material-symbols-outlined { transform: rotate(90deg); } }
 
 /* --- Ticker/Scroll Stats Bar --- */
 .ticker { display: flex; justify-content: center; gap: clamp(24px, 4vw, 48px); flex-wrap: wrap; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -859,7 +859,7 @@ h4 { font-size: 1.125rem; }
 
 /* --- Mobile Nav Toggle --- */
 .nav__toggle { display: none; background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; padding: 8px; }
-@media (max-width: 768px) { .nav__toggle { display: block; margin-left: auto; } }
+@media (max-width: 640px) { .nav__toggle { display: block; margin-left: auto; } }
 
 /* ============================================================
    READABILITY FIXES — Added 2025-04-13

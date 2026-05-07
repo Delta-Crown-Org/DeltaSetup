@@ -238,7 +238,7 @@
 }
 
 /* ----- Responsive ----- */
-@media (max-width: 760px) {
+@media (max-width: 640px) {
   .whiteglove__sequence::before {
     left: 24px;
     top: 24px;

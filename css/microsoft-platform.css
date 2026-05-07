@@ -589,7 +589,7 @@
   color: #fff;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 640px) {
   .audit-owner-table.msp-raci thead {
     display: none;
   }
