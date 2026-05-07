@@ -483,7 +483,19 @@
   text-underline-offset: 3px;
 }
 
-@media (max-width: 1000px) {
+/* Sidebar-aware intermediate breakpoint: viewport <=1407 -> content well
+   <=1120px on sidebar pages, where 4-col audit grids and the 5-col blueprint
+   start cramming content. Drop to 3-col / collapse blueprint here. */
+@media (max-width: 1407px) {
+  .hero-systems,
+  .audit-hero,
+  .audit-checks,
+  .audit-next-steps__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
   .hero-systems,
   .microsoft-platform,
   .audit-hero,

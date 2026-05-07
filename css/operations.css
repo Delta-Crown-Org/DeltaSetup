@@ -330,7 +330,15 @@
   margin-top: 10px;
 }
 
-@media (max-width: 1100px) {
+/* Sidebar-aware: drop 4 -> 3 -> 2 -> 1 along the canonical scale (640/1023/1407). */
+@media (max-width: 1407px) {
+  .op-impact-grid,
+  .op-future-track {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
   .op-system-strip,
   .op-impact-grid,
   .op-workspaces,

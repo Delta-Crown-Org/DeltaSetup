@@ -69,8 +69,18 @@ ul { list-style: none; }
   font: 700 0.875rem var(--font-body);
 }
 .skip-link:focus { top: 16px; }
+.section--dark *:focus-visible,
+.section--teal *:focus-visible,
+.section--danger *:focus-visible,
+.sidebar *:focus-visible,
+.hero *:focus-visible {
+  outline-color: var(--gold-light);
+}
+/* Default focus indicator uses --gold-dark for >=3:1 contrast on light surfaces.
+   Dark/teal/danger sections + sidebar override to --gold-light for visibility on dark.
+   See audit H2 (WCAG SC 2.4.13 Focus Appearance). */
 *:focus-visible {
-  outline: 3px solid var(--gold);
+  outline: 3px solid var(--gold-dark);
   outline-offset: 3px;
 }
 
@@ -241,17 +251,27 @@ h4 { font-size: 1.125rem; }
 .grid {
   display: grid; gap: var(--gap);
 }
-.grid--2 { grid-template-columns: repeat(2, 1fr); }
-.grid--3 { grid-template-columns: repeat(3, 1fr); }
-.grid--4 { grid-template-columns: repeat(4, 1fr); }
-.grid--2-1 { grid-template-columns: 2fr 1fr; }
-.grid--1-2 { grid-template-columns: 1fr 2fr; }
+/* All base grid utilities use minmax(0, 1fr) so children can actually shrink
+   below their min-content (longest word) — without this, long words bust
+   columns wider than 1fr suggests. Breakpoints align to canonical scale
+   640 / 1023 / 1407 (sidebar-aware: 1407 = viewport at which sidebar pages
+   have ~1120px content well). See audit H3 + H4. */
+.grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid--2-1 { grid-template-columns: 2fr minmax(0, 1fr); }
+.grid--1-2 { grid-template-columns: minmax(0, 1fr) 2fr; }
 .grid--center { align-items: center; }
 
-@media (max-width: 900px) {
-  .grid--2, .grid--3, .grid--4, .grid--2-1, .grid--1-2 {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 1407px) {
+  .grid--4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1023px) {
+  .grid--3, .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid--2-1, .grid--1-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
 }
 
 .card {
@@ -779,19 +799,8 @@ h4 { font-size: 1.125rem; }
 @media (max-width: 640px)  { .grid--5 { grid-template-columns: 1fr; } }
 
 /* --- Corporate Folders Grid --- */
-.grid--3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-@media (max-width: 900px) {
-  .grid--3 { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-  .grid--3 { grid-template-columns: 1fr; }
-}
-
-/* Ensure corporate folder cards fit */
+/* Note: .grid--3 base columns + breakpoints are now defined once above
+   in the unified base-grid block. Only card-specific child rules remain. */
 .grid--3 .card--glass {
   min-width: 0;
   word-wrap: break-word;

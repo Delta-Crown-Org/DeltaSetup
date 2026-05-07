@@ -171,14 +171,21 @@
   color: rgba(255, 255, 255, 0.68);
 }
 
-@media (max-width: 1020px) {
+/* Sidebar-aware: 4 -> 3 -> 2 -> 1 along the canonical scale (640/1023/1407). */
+@media (max-width: 1407px) {
+  .role-lens__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
   .reality-digest,
   .role-lens__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 620px) {
+@media (max-width: 640px) {
   .reality-digest,
   .role-lens__grid {
     grid-template-columns: 1fr;

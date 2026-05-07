@@ -61,11 +61,16 @@
   line-height: 1.6;
 }
 
-@media (max-width: 900px) {
+/* Sidebar-aware: drop 4-col -> 3 -> 2 -> 1 along the canonical scale. */
+@media (max-width: 1407px) {
+  .exec-intro__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1023px) {
   .exec-intro__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 640px) {
   .exec-intro__grid { grid-template-columns: 1fr; }
 }
 
