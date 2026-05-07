@@ -1,0 +1,153 @@
+/* ============================================================
+   base.css
+   --------
+   Foundation rules: accessibility (skip-link, focus-visible,
+   reduced-motion), typography, layout container, section
+   variants, primary navigation.
+
+   Loads after tokens.css and before components.css.
+   ============================================================ */
+
+/* --- Accessibility --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+.skip-link {
+  position: absolute; top: -100px; left: 16px; z-index: 9999;
+  background: var(--gold); color: var(--teal-deeper);
+  padding: 8px 16px; border-radius: 6px;
+  font: 700 0.875rem var(--font-body);
+}
+.skip-link:focus { top: 16px; }
+.section--dark *:focus-visible,
+.section--teal *:focus-visible,
+.section--danger *:focus-visible,
+.sidebar *:focus-visible,
+.hero *:focus-visible {
+  outline-color: var(--gold-light);
+}
+/* Default focus indicator uses --gold-dark for >=3:1 contrast on light surfaces.
+   Dark/teal/danger sections + sidebar override to --gold-light for visibility on dark.
+   See audit H2 (WCAG SC 2.4.13 Focus Appearance). */
+*:focus-visible {
+  outline: 3px solid var(--gold-dark);
+  outline-offset: 3px;
+}
+
+/* --- Typography --- */
+body {
+  font-family: var(--font-body);
+  font-size: 1rem; line-height: 1.65;
+  color: var(--text);
+  background: var(--surface);
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; line-height: 1.15; }
+h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); }
+h2 { font-size: clamp(2rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
+h4 { font-size: 1.125rem; }
+
+.label {
+  font-family: var(--font-body);
+  font-size: 0.75rem; font-weight: 400;
+  text-transform: uppercase; letter-spacing: 0.18em;
+  color: var(--gold);
+}
+.section--dark .label { color: var(--gold-light); }
+
+/* --- Layout --- */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px);
+}
+
+/* --- Sections --- */
+.section {
+  padding: var(--section-pad) 0;
+  position: relative;
+  overflow: hidden;
+}
+.section--dark {
+  background: var(--teal-deeper);
+  color: var(--text-inverse);
+}
+.section--dark h2, .section--dark h3, .section--dark h4 { color: #FFF; }
+.section--dark p { color: rgba(255,255,255,0.82); }
+.section--teal {
+  background: linear-gradient(160deg, var(--teal-deeper) 0%, var(--teal-dark) 100%);
+  color: var(--text-inverse);
+}
+.section--teal h2, .section--teal h3 { color: #FFF; }
+.section--teal p { color: rgba(255,255,255,0.82); }
+
+/* Gold divider between sections */
+.section--dark + .section:not(.section--dark)::before,
+.section:not(.section--dark) + .section--dark::before,
+.section--teal + .section:not(.section--teal)::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--gold) 50%, transparent 95%);
+  opacity: 0.4;
+}
+
+/* --- Nav --- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 16px 0;
+  transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
+}
+.nav--solid {
+  background: rgba(10, 31, 28, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 10px 0;
+  box-shadow: 0 1px 0 rgba(212,168,75,0.15);
+}
+.nav__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px);
+  display: flex; align-items: center; gap: 32px;
+}
+.nav__logo { height: 28px; width: auto; transition: opacity 0.3s ease; }
+.nav__logo:hover { opacity: 0.8; }
+.nav__links {
+  display: flex; gap: 28px; margin-left: auto;
+}
+.nav__link {
+  font-size: 0.8125rem; letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+  position: relative;
+}
+.nav--solid .nav__link {
+  color: rgba(255,255,255,0.65);
+}
+.nav__link:hover, .nav__link--active { color: var(--gold); }
+.nav__link::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--gold);
+  transition: width 0.3s var(--ease-out);
+}
+.nav__link:hover::after, .nav__link--active::after { width: 100%; }
+
+/* Progress bar */
+.nav__progress {
+  position: absolute; bottom: 0; left: 0;
+  height: 2px; background: var(--gold);
+  transition: width 0.15s linear;
+  width: 0;
+}
+
+@media (max-width: 640px) {
+  .nav__links { display: none; }
+}
+

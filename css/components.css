@@ -1,0 +1,421 @@
+/* ============================================================
+   components.css
+   --------------
+   Component-level styles for the original (v1) design system:
+   hero, grid + card system, stat counters, flow diagrams,
+   timeline, kill-switch gates, brand cascade, callouts, pain
+   points, CTA, scroll-reveal animations, proof badges,
+   before/after comparison, footer, layout utilities.
+   ============================================================ */
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  background: linear-gradient(160deg, #070F0D 0%, var(--teal-deeper) 30%, var(--teal-dark) 70%, var(--teal) 100%);
+  position: relative;
+  overflow: hidden;
+}
+/* Radial glow */
+.hero::before {
+  content: ''; position: absolute;
+  top: 40%; left: 50%; transform: translate(-50%, -50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(0,107,94,0.15) 0%, transparent 65%);
+  pointer-events: none;
+}
+/* Gold bottom line */
+.hero::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 10%, var(--gold) 50%, transparent 90%);
+}
+
+.hero__content { position: relative; z-index: 1; }
+.hero__logo { width: clamp(200px, 30vw, 320px); margin: 0 auto 48px; }
+.hero__title { color: #FFF; margin-bottom: 16px; }
+.hero__subtitle {
+  font-family: var(--font-body);
+  color: var(--gold); text-transform: uppercase;
+  letter-spacing: 0.18em; font-size: clamp(0.75rem, 1.2vw, 0.9375rem);
+}
+.hero__scroll {
+  position: absolute; bottom: 40px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase;
+  animation: float 2.5s ease-in-out infinite;
+}
+.hero .hero__scroll {
+  color: rgba(255,255,255,0.35);
+}
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ============================================================
+   GRIDS & CARDS
+   ============================================================ */
+.grid {
+  display: grid; gap: var(--gap);
+}
+/* All base grid utilities use minmax(0, 1fr) so children can actually shrink
+   below their min-content (longest word) — without this, long words bust
+   columns wider than 1fr suggests. Breakpoints align to canonical scale
+   640 / 1023 / 1407 (sidebar-aware: 1407 = viewport at which sidebar pages
+   have ~1120px content well). See audit H3 + H4. */
+.grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid--2-1 { grid-template-columns: 2fr minmax(0, 1fr); }
+.grid--1-2 { grid-template-columns: minmax(0, 1fr) 2fr; }
+.grid--center { align-items: center; }
+
+@media (max-width: 1407px) {
+  .grid--4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1023px) {
+  .grid--3, .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid--2-1, .grid--1-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+}
+
+.card {
+  border-radius: 16px; padding: clamp(24px, 3vw, 36px);
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s ease;
+}
+.card--elevated {
+  background: var(--surface-card);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.card--elevated:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 16px 40px rgba(0,0,0,0.06);
+}
+.card--glass {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.card--glass:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.16);
+}
+.card--gold-border {
+  border-left: 3px solid var(--gold);
+}
+.card__icon {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 12px; margin-bottom: 16px;
+  background: rgba(0,107,94,0.08); color: var(--teal);
+  font-size: 24px;
+}
+.section--dark .card__icon {
+  background: rgba(212,168,75,0.12); color: var(--gold);
+}
+
+/* ============================================================
+   STAT COUNTERS
+   ============================================================ */
+.stats { display: flex; justify-content: center; gap: clamp(32px, 6vw, 80px); flex-wrap: wrap; }
+.stat { text-align: center; min-width: 120px; }
+.stat__value {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 8vw, 6rem); font-weight: 700;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat__label {
+  font-size: 0.8125rem; text-transform: uppercase;
+  letter-spacing: 0.1em; margin-top: 8px;
+  color: var(--text-secondary);
+}
+.section--dark .stat__label,
+.section--teal .stat__label,
+.hero .stat__label {
+  color: rgba(255,255,255,0.5);
+}
+
+/* ============================================================
+   FLOW DIAGRAM
+   ============================================================ */
+.flow {
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(12px, 2vw, 28px); flex-wrap: wrap;
+}
+.flow__step {
+  text-align: center;
+  padding: clamp(20px, 3vw, 32px);
+  border-radius: 16px; flex: 1;
+  min-width: 180px; max-width: 280px;
+  transition: transform 0.4s var(--ease-out);
+}
+.flow__step:hover { transform: translateY(-4px); }
+.flow__step--base {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.flow__step--active {
+  background: rgba(0,107,94,0.2);
+  border: 2px solid rgba(0,107,94,0.4);
+}
+.flow__arrow {
+  font-size: clamp(24px, 3vw, 36px);
+  color: var(--gold); flex-shrink: 0;
+}
+.flow__icon {
+  font-size: 40px; margin-bottom: 8px;
+}
+
+@media (max-width: 640px) {
+  .flow { flex-direction: column; }
+  .flow__arrow { transform: rotate(90deg); }
+}
+
+/* ============================================================
+   TIMELINE
+   ============================================================ */
+.timeline { position: relative; padding-left: 40px; }
+.timeline::before {
+  content: ''; position: absolute;
+  left: 15px; top: 0; bottom: 0;
+  width: 2px; background: var(--surface-dim);
+}
+.timeline__item {
+  position: relative; padding-bottom: 28px;
+}
+.timeline__dot {
+  position: absolute; left: -33px; top: 2px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--surface-dim);
+  border: 3px solid var(--surface);
+  z-index: 1;
+  transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s var(--ease-spring);
+}
+.timeline__item--done .timeline__dot {
+  background: var(--teal); border-color: var(--teal-light);
+  transform: scale(1.15);
+}
+.timeline__item--milestone .timeline__dot {
+  background: var(--gold); border-color: var(--gold-light);
+  transform: scale(1.25);
+}
+.timeline__week {
+  font-size: 0.75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--teal); margin-bottom: 2px;
+}
+.timeline__item--done .timeline__week { color: var(--teal); }
+.timeline__item--milestone .timeline__week { color: var(--gold-dark); }
+.timeline__title { font-weight: 600; font-size: 1rem; margin-bottom: 2px; }
+.timeline__desc { font-size: 0.875rem; color: var(--text-secondary); }
+
+/* ============================================================
+   KILL SWITCH / DECISION GATE
+   ============================================================ */
+.gate { display: flex; gap: 16px; flex-wrap: wrap; }
+.gate__option {
+  flex: 1; min-width: 160px;
+  padding: 20px; border-radius: 14px;
+  text-align: center;
+  transition: transform 0.3s var(--ease-out);
+}
+.gate__option:hover { transform: translateY(-2px); }
+.gate__option--go    { background: rgba(46,125,50,0.08);  border: 1px solid rgba(46,125,50,0.25); }
+.gate__option--adapt { background: rgba(251,140,0,0.06);  border: 1px solid rgba(251,140,0,0.2); }
+.gate__option--stop  { background: rgba(239,83,80,0.05);  border: 1px solid rgba(239,83,80,0.15); }
+.gate__icon { font-size: 24px; margin-bottom: 6px; }
+.gate__label { font-weight: 600; font-size: 0.9375rem; }
+.gate__desc  { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+
+/* ============================================================
+   BRAND CASCADE
+   ============================================================ */
+.cascade {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 12px;
+}
+.cascade__item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 32px; border-radius: 14px;
+  min-width: 360px; max-width: 480px; width: 100%;
+  transition: transform 0.4s var(--ease-out), opacity 0.4s ease;
+}
+.cascade__item:hover { transform: translateX(6px); }
+.cascade__item--primary {
+  background: rgba(0,107,94,0.25);
+  border: 2px solid var(--gold);
+}
+.cascade__item--future {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.cascade__name {
+  font-family: var(--font-heading); font-weight: 600;
+  font-size: 1.15rem; color: #FFF;
+}
+.cascade__time {
+  margin-left: auto; font-size: 0.8125rem;
+  color: rgba(255,255,255,0.45);
+}
+.cascade__arrow {
+  color: rgba(255,255,255,0.15); font-size: 18px;
+}
+
+@media (max-width: 640px) {
+  .cascade__item { min-width: auto; padding: 12px 20px; }
+}
+
+/* ============================================================
+   CALLOUT CARDS
+   ============================================================ */
+.callout {
+  border-radius: 14px; padding: clamp(20px, 3vw, 28px);
+}
+.callout--success {
+  background: rgba(46,125,50,0.08); border: 1px solid rgba(46,125,50,0.2);
+}
+.callout--gold {
+  background: rgba(212,168,75,0.06); border: 1px solid rgba(212,168,75,0.18);
+}
+.callout--glass {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+}
+.section--dark .callout--success {
+  background: rgba(46,125,50,0.12); border-color: rgba(46,125,50,0.3);
+}
+
+/* ============================================================
+   PAIN POINTS (Problem section)
+   ============================================================ */
+.pain { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+.pain__icon {
+  flex-shrink: 0; width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; font-size: 20px;
+}
+.pain__icon--bad  { background: rgba(239,83,80,0.08); color: #EF5350; }
+.pain__icon--good { background: rgba(46,125,50,0.08); color: #4CAF50; }
+
+/* ============================================================
+   CTA SECTION
+   ============================================================ */
+.cta-section {
+  text-align: center;
+  background: linear-gradient(160deg, var(--teal-deeper) 0%, #061512 50%, var(--teal-deeper) 100%);
+  position: relative;
+}
+.cta-section::before {
+  content: ''; position: absolute;
+  top: 30%; left: 50%; transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(212,168,75,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.cta__ask {
+  font-family: var(--font-heading);
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  color: rgba(255,255,255,0.9); font-weight: 400;
+  max-width: 480px; margin: 0 auto;
+}
+
+/* ============================================================
+   SCROLL-TRIGGERED REVEAL ANIMATIONS
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity var(--duration) var(--ease-out),
+              transform var(--duration) var(--ease-out);
+}
+.reveal--left  { transform: translateX(-40px) translateY(0); }
+.reveal--right { transform: translateX(40px) translateY(0); }
+.reveal--scale { transform: scale(0.95); }
+.reveal--visible {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Stagger delays for children */
+.stagger > *:nth-child(1) { transition-delay: 0ms; }
+.stagger > *:nth-child(2) { transition-delay: 100ms; }
+.stagger > *:nth-child(3) { transition-delay: 200ms; }
+.stagger > *:nth-child(4) { transition-delay: 300ms; }
+.stagger > *:nth-child(5) { transition-delay: 400ms; }
+.stagger > *:nth-child(6) { transition-delay: 500ms; }
+
+/* ============================================================
+   PROOF SECTION - LIVE BADGE
+   ============================================================ */
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 16px; border-radius: 20px;
+  font-size: 0.8125rem; font-weight: 600;
+}
+.badge--live  { background: rgba(46,125,50,0.1);  color: #2E7D32; }
+.badge--gold  { background: rgba(212,168,75,0.1); color: var(--gold-dark); }
+.badge--teal  { background: rgba(0,107,94,0.1);   color: var(--teal); }
+
+/* ============================================================
+   COMPARISON GRID (Before/After)
+   ============================================================ */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.compare__col { padding: clamp(24px, 3vw, 32px); border-radius: 16px; }
+.compare__col--before {
+  background: rgba(239,83,80,0.04); border: 1px solid rgba(239,83,80,0.12);
+}
+.compare__col--after {
+  background: rgba(46,125,50,0.04); border: 1px solid rgba(46,125,50,0.15);
+}
+.compare__row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 0;
+}
+.compare__row + .compare__row { border-top: 1px solid rgba(0,0,0,0.04); }
+.compare__col--after .compare__row + .compare__row { border-color: rgba(46,125,50,0.08); }
+
+@media (max-width: 640px) {
+  .compare { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  padding: 32px 0;
+  background: #050E0C;
+  text-align: center;
+  color: rgba(255,255,255,0.62);
+  font-size: 0.75rem;
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.text-center { text-align: center; }
+.text-gold   { color: var(--gold); }
+.text-muted  { color: var(--text-secondary); }
+.mb-8  { margin-bottom: 8px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-32 { margin-bottom: 32px; }
+.mb-48 { margin-bottom: 48px; }
+.mb-64 { margin-bottom: 64px; }
+.mt-auto { margin-top: auto; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.max-w-600 { max-width: 600px; }
+.max-w-500 { max-width: 500px; }
+.icon { vertical-align: middle; }
+
