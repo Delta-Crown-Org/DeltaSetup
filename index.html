@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Tenor+Sans&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/microsoft-platform.css?v=20260430-visual3">
+  <link rel="stylesheet" href="css/microsoft-platform.css?v=20260506-msp1">
   <link rel="stylesheet" href="css/ops-story.css?v=20260430-visual3">
   <link rel="stylesheet" href="css/sidebar.css?v=20260430-sidebar1">
   <link rel="stylesheet" href="css/exec-vision.css?v=20260430-sidebar1">
@@ -73,6 +73,7 @@
         <div class="sidebar__list">
           <a href="#architecture" class="sidebar__link">Hub &amp; spoke architecture</a>
           <a href="#audited-microsoft-architecture" class="sidebar__link">Microsoft platform audit</a>
+          <a href="#msp-csp-overview" class="sidebar__link">MSP &amp; CSP overview<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
         </div>
       </div>
 
@@ -982,6 +983,115 @@
 
       <p class="audit-evidence reveal">
         Source/evidence reviewed: deployment status, tenant inventory summaries, Exchange inventory, DCE role + location onboarding model, DCE attribute/group/resource matrix, Teams access request, offboarding checklist, Master DCE resource map, and existing page architecture/user-experience content. Detailed evidence remains in local/internal audit outputs where user and permission data is sensitive.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== MSP / CSP OVERVIEW ==================== -->
+  <section class="section section--dark msp-overview" id="msp-csp-overview" aria-labelledby="msp-csp-overview-title">
+    <div class="container">
+      <p class="label mb-16 reveal">How Delta Crown is operated</p>
+      <h2 class="reveal mb-16" id="msp-csp-overview-title" style="max-width: 760px;">
+        Who runs the platform.<br>Who runs the people.
+      </h2>
+      <p class="text-muted mb-48 reveal" style="max-width: 720px; font-size: 1.0625rem; color: rgba(255,255,255,0.56);">
+        Delta Crown runs on Microsoft 365 Business Premium, but software does not run itself. Two partners operate the tenant on a clear seam: a Managed Service Provider (MSP) handles people, devices, and day-to-day execution; a Cloud Solution Provider (CSP) handles licensing and billing. The architecture above is only as durable as that operating model.
+      </p>
+
+      <div class="audit-hero reveal" aria-label="Operating partners for the Delta Crown tenant">
+        <article class="audit-hero__card audit-hero__card--tenant">
+          <img src="phase4-migration/assets/microsoft-icons/people-team.svg" alt="MSP partner icon">
+          <h3>MSP &mdash; Sui Generis</h3>
+          <p>Day-to-day managed services: device shipping (Win11 Pro standard), RMM enrollment via <strong>Atera</strong>, identity execution, and Conditional Access deployment. Lead contact: Megan Myrand.</p>
+        </article>
+        <article class="audit-hero__card">
+          <img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="CSP partner icon">
+          <h3>CSP &mdash; Pax8</h3>
+          <p>License purchase, term alignment, and renewals routed through Pax8. Entra ID <strong>P2 blanket</strong> on every tenant; <code>deltacrown</code> correctly holds one P2 with no duplicates to retire.</p>
+        </article>
+        <article class="audit-hero__card">
+          <img src="phase4-migration/assets/microsoft-icons/lock-shield.svg" alt="Architecture owner icon">
+          <h3>Architecture &mdash; HTT</h3>
+          <p>Identity attribute schema, dynamic-group design, security baseline, and DLP authorship live with HTT. The MSP executes against runbooks; the architecture is owned in-house.</p>
+        </article>
+      </div>
+
+      <div class="audit-grid reveal">
+        <article class="audit-panel audit-panel--wide">
+          <h3>RACI &mdash; what each side owns for Delta Crown</h3>
+          <table class="audit-owner-table msp-raci">
+            <caption>R = Responsible &middot; A = Accountable &middot; C = Consulted &middot; I = Informed</caption>
+            <thead>
+              <tr><th scope="col">Domain</th><th scope="col">HTT (in-house)</th><th scope="col">Sui Generis (MSP)</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Identity architecture &amp; attribute schema</th><td data-label="HTT"><strong>R / A</strong></td><td data-label="Sui Generis">C / I</td></tr>
+              <tr><th scope="row">User metadata population</th><td data-label="HTT">C</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
+              <tr><th scope="row">Pax8 CSP licensing &amp; renewals</th><td data-label="HTT">I</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
+              <tr><th scope="row">Conditional Access authorship</th><td data-label="HTT"><strong>R / A</strong></td><td data-label="Sui Generis">C</td></tr>
+              <tr><th scope="row">Conditional Access deployment</th><td data-label="HTT">C</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
+              <tr><th scope="row">Device provisioning (Win11 Pro)</th><td data-label="HTT">I</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
+              <tr><th scope="row">Endpoint protection / RMM (Atera)</th><td data-label="HTT">I</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
+              <tr><th scope="row">DLP policy authorship</th><td data-label="HTT"><strong>R / A</strong></td><td data-label="Sui Generis">C</td></tr>
+              <tr><th scope="row">DLP enforce-flip approval</th><td data-label="HTT"><strong>A</strong></td><td data-label="Sui Generis">C</td></tr>
+              <tr><th scope="row">M365 backup posture</th><td data-label="HTT">C</td><td data-label="Sui Generis"><strong>R</strong> &mdash; confirmation pending</td></tr>
+              <tr><th scope="row">Cyber-insurance attestation</th><td data-label="HTT"><strong>R</strong> (collect)</td><td data-label="Sui Generis"><strong>A</strong> (provide letter)</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="audit-panel">
+          <h3>Operating seams</h3>
+          <ul>
+            <li><strong>RMM:</strong> Atera. Confirmed live on the April 10 partner call.</li>
+            <li><strong>Standard hardware:</strong> Always Windows 11 Pro from the MSP. Never Home.</li>
+            <li><strong>DCE-specific path:</strong> All-Mac strategy planned via Apple Business Manager + MDM (gated by DUNS).</li>
+            <li><strong>Identity attributes:</strong> HTT defines the schema; the MSP populates and maintains the values.</li>
+            <li><strong>Conditional Access:</strong> Authored once, deployed per tenant by the MSP. DCE policies are live.</li>
+          </ul>
+        </article>
+
+        <article class="audit-panel">
+          <h3>CSP billing posture &mdash; DCE specifics</h3>
+          <ul>
+            <li>Delta Crown is <strong>Pax8 / CSP from day one</strong>. No legacy Web-Direct entanglement on this tenant.</li>
+            <li>Microsoft 365 Business Premium covers the audited platform model with <strong>$0 additional license cost</strong>.</li>
+            <li>Renewal dates align to the per-tenant single-date model used across the brand family.</li>
+            <li>The unused HTT Brands source-migration Entra app was deleted on 2026-04-30 as part of go-live cleanup.</li>
+          </ul>
+        </article>
+
+        <article class="audit-panel audit-panel--wide">
+          <h3>The single biggest unblock &mdash; the new-user runbook</h3>
+          <p>The architecture works. The operations do not yet, because four of five dynamic groups currently resolve to zero users. Cause: only six of eighty-nine users have <code>companyName</code> populated, and other lifecycle attributes are similarly sparse.</p>
+          <p>The unblock is a one-page <strong>new-user runbook</strong> &mdash; for each role at Delta Crown, the attributes to set, the groups membership should resolve to, and the license SKU expected. HTT authors it; the MSP executes against it on every new hire and role change. Until the runbook lands, dynamic-group access is theoretical, not operational.</p>
+        </article>
+
+        <article class="audit-panel">
+          <h3>Decisions awaiting MSP / owner sign-off</h3>
+          <ul>
+            <li><strong>DLP enforce flip.</strong> Three policies sit in <code>TestWithNotifications</code>; awaiting an enforce window.</li>
+            <li><strong>Teams-licensed reader.</strong> A reviewer identity with a Teams license, to unblock the channel and membership audit.</li>
+            <li><strong>Provisioning app cleanup.</strong> <code>DeltaCrown-TeamsProvisioner-TEMP</code> credentials have expired; remove or document.</li>
+            <li><strong>Dynamic-group named owners.</strong> Who gets the escalation when membership drifts.</li>
+            <li><strong>M365 backup confirmation.</strong> The product (Datto, Veeam, etc.) and recovery posture in writing.</li>
+          </ul>
+        </article>
+
+        <article class="audit-panel audit-panel--lifecycle">
+          <h3>Why this matters beyond DCE</h3>
+          <p class="audit-todo"><strong>Delta is the template.</strong> When the MSP/CSP operating seam is documented and exercised on Delta Crown, the same pattern applies to HTT, TLL, Frenchies, and Bishops with no architectural redesign &mdash; only metadata, license, and policy variations per brand.</p>
+          <ul>
+            <li>One identity record drives access end-to-end. No per-resource manual permissions.</li>
+            <li>Hub-and-spoke gives each brand its own room without bespoke architecture.</li>
+            <li>Security baseline is portable: the same hardening JSON ships to every brand tenant.</li>
+            <li>Onboarding becomes a runbook the MSP executes, not a ticket queue.</li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="audit-evidence reveal">
+        Operating-model summary derived from the April 10 partner call notes, the cross-tenant identity analysis, the deployment status reconciliation (2026-05-04), and the Delta Crown DCE attribute/group/resource matrix. Specific billing detail, invoice numbers, and partner-private operational data remain in internal briefing documents and are not published here.
       </p>
     </div>
   </section>

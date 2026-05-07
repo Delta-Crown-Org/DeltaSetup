@@ -50,3 +50,10 @@ phase3-week2/templates/
 reports/raw/
 reports/**/*-raw.csv
 reports/**/*-raw.json
+
+# Internal MSP / partner / call-prep briefs — may contain invoice numbers,
+# tracking IDs, internal contact names, contract terms, and other partner-
+# private detail. Keep local. The sanitized version of the operating model
+# is published via the MSP/CSP overview section on index.html.
+MEGAN-*.md
+SESSION-HANDOFF.md
