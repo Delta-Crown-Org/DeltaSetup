@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="css/exec-vision.css?v=20260506-audit3">
   <link rel="stylesheet" href="css/whiteglove.css?v=20260506-audit3">
   <link rel="stylesheet" href="css/polish.css?v=20260506-audit2">
+  <link rel="stylesheet" href="css/phase3.css?v=20260507-phase3b">
 </head>
 <body class="has-sidebar">
 
@@ -53,7 +54,7 @@
         <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">flag</span>Start Here</div>
         <div class="sidebar__list">
           <a href="#hero" class="sidebar__link">Overview</a>
-          <a href="#status" class="sidebar__link">Live status</a>
+          <a href="#status" class="sidebar__link">Decision brief</a>
           <a href="#exec-intro" class="sidebar__link">Why this matters<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
         </div>
       </div>
@@ -86,6 +87,7 @@
       <div class="sidebar__chapter">
         <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">insights</span>Where We Are</div>
         <div class="sidebar__list">
+          <a href="#decision-queue" class="sidebar__link">Decision queue<span class="sidebar__link-tag sidebar__link-tag--new">New</span></a>
           <a href="#migration" class="sidebar__link">Decisions made</a>
           <a href="#users" class="sidebar__link">Who gets what</a>
           <a href="#progress" class="sidebar__link">Progress + roadmap<span class="sidebar__link-tag sidebar__link-tag--live">Live</span></a>
@@ -110,12 +112,12 @@
   <main id="main-content" tabindex="-1">
 
   <!-- ==================== HERO ==================== -->
-  <section class="section hero" id="hero">
+  <section class="section hero project-hero" id="hero">
     <div class="hero__content">
       <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png"
            alt="Delta Crown Extensions" class="hero__logo reveal reveal--scale">
-      <h1 class="hero__title reveal">Every brand, its own room.<br>Corporate, the hallway.</h1>
-      <p class="hero__subtitle reveal">A digital home for every brand &mdash; built once, on what we already pay for.</p>
+      <h1 class="hero__title reveal">Delta Crown is the pilot for a reusable Microsoft 365 brand platform.</h1>
+      <p class="hero__subtitle reveal">Each brand gets its own workspace. Corporate keeps visibility. MSP support gets a clearer operating model.</p>
       <div class="hero-systems reveal" aria-label="Microsoft systems powering the rollout">
         <div class="hero-system hero-system--primary">
           <img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="Microsoft 365 icon">
@@ -144,59 +146,64 @@
         </div>
       </div>
       <div class="reveal" style="margin-top: 28px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-        <span class="status status--done">
+        <span class="status status--success">
           <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
-          Phase 1 — Email Trust
-        </span>
-        <span class="status status--done">
-          <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
-          Phase 2 — Complete
+          Pilot live
         </span>
         <span class="status status--active">
-          <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 14px;">rocket_launch</span>
-          Phase 3 — Complete
+          <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 14px;">settings_suggest</span>
+          Operational closure underway
+        </span>
+        <span class="status status--pending">
+          <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 14px;">how_to_vote</span>
+          Expansion not yet sponsored
         </span>
       </div>
-      <p class="reveal" style="margin-top: 24px; color: rgba(255,255,255,0.62); font-size: 0.875rem; max-width: 480px; margin-left: auto; margin-right: auto;">
-        48 PowerShell scripts. 50 phase-3 tests passing. 50 issues closed.<br>
-        Secure, branded hub-and-spoke architecture live — without HTTHQ document migration.
+      <p class="hero__decision-note reveal">
+        The architecture is live. The next work is ownership, verification, metadata hygiene, and MSP handoff &mdash; the things that make a successful build durable after launch.
       </p>
-    </div>
-    <div class="hero__scroll" aria-hidden="true">
-      <span>Scroll</span>
-      <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 18px;">expand_more</span>
+      <div class="project-route-actions reveal" aria-label="Primary page routes">
+        <a class="project-route-button project-route-button--primary" href="#status"><span aria-hidden="true" class="material-symbols-outlined">fact_check</span>View decision brief</a>
+        <a class="project-route-button project-route-button--secondary" href="./operations.html"><span aria-hidden="true" class="material-symbols-outlined">route</span>Open ops model</a>
+        <a class="project-route-button project-route-button--secondary" href="./msp.html"><span aria-hidden="true" class="material-symbols-outlined">support_agent</span>Open MSP handoff</a>
+      </div>
     </div>
   </section>
 
-  <!-- ==================== LIVE STATUS TICKER ==================== -->
-  <section class="section section--dark" id="status" style="padding: 48px 0;">
+  <!-- ==================== CURRENT DECISION BRIEF ==================== -->
+  <section class="section decision-brief" id="status" aria-labelledby="status-title">
     <div class="container">
-      <div class="ticker reveal">
-        <div class="ticker__item">
-          <div class="ticker__value" data-counter data-target="47" aria-hidden="true">0</div>
-          <span class="visually-hidden">47</span>
-          <div class="ticker__label">PowerShell Scripts</div>
-        </div>
-        <div class="ticker__item">
-          <div class="ticker__value" data-counter data-suffix=" brands" data-target="5" aria-hidden="true">0</div>
-          <span class="visually-hidden">5 brands</span>
-          <div class="ticker__label">Pattern can extend to</div>
-        </div>
-        <div class="ticker__item">
-          <div class="ticker__value" data-counter data-target="50" aria-hidden="true">0</div>
-          <span class="visually-hidden">50</span>
-          <div class="ticker__label">Phase 3 Tests Passing</div>
-        </div>
-        <div class="ticker__item">
-          <div class="ticker__value" data-counter data-target="50" aria-hidden="true">0</div>
-          <span class="visually-hidden">50</span>
-          <div class="ticker__label">Issues Closed</div>
-        </div>
-        <div class="ticker__item">
-          <div class="ticker__value" data-counter data-prefix="$" data-target="0" aria-hidden="true">$0</div>
-          <span class="visually-hidden">$0</span>
-          <div class="ticker__label">License Cost</div>
-        </div>
+      <div class="decision-brief__header reveal">
+        <p class="label mb-16">Current Status</p>
+        <h2 id="status-title">Live as a pilot. Not yet a portfolio rollout.</h2>
+        <p>Delta Crown's Microsoft 365 foundation is in place. Expanding this pattern to other brands should be treated as a sponsored business decision after owner model, MSP handoff, and operational verification are accepted.</p>
+      </div>
+
+      <div class="decision-grid reveal" aria-label="Current project decision brief">
+        <article class="decision-card decision-card--live">
+          <span class="decision-card__label">Live</span>
+          <h3>Microsoft 365 foundation</h3>
+          <p>SharePoint hub/spoke, Teams workspace, DLP baseline, email trust, and dynamic-access design are in place for Delta Crown.</p>
+          <a class="decision-card__action" href="#architecture">See architecture &rarr;</a>
+        </article>
+        <article class="decision-card decision-card--blocked">
+          <span class="decision-card__label">Blocked</span>
+          <h3>Operational verification</h3>
+          <p>Teams read verification, named owners, metadata hygiene, and app provisioning need closure before this is steady state.</p>
+          <a class="decision-card__action" href="#decision-queue">See decision queue &rarr;</a>
+        </article>
+        <article class="decision-card decision-card--decision">
+          <span class="decision-card__label">Decision Needed</span>
+          <h3>Pilot or platform?</h3>
+          <p>Leadership needs to decide whether this remains a Delta Crown cleanup or becomes the reusable brand-platform pattern for HTT.</p>
+          <a class="decision-card__action" href="#vision">See long-term play &rarr;</a>
+        </article>
+        <article class="decision-card decision-card--next">
+          <span class="decision-card__label">Next Move</span>
+          <h3>Stabilize before expanding</h3>
+          <p>Confirm owners, MSP runbooks, support boundaries, and verification evidence before rolling this pattern to other brands.</p>
+          <a class="decision-card__action" href="./msp.html">Open MSP handoff &rarr;</a>
+        </article>
       </div>
     </div>
   </section>
@@ -613,6 +620,45 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DECISION QUEUE ==================== -->
+  <section class="section decision-queue" id="decision-queue" aria-labelledby="decision-queue-title">
+    <div class="container">
+      <div class="decision-queue__header reveal">
+        <p class="label mb-16">Decision Queue</p>
+        <h2 id="decision-queue-title">The decisions that make the build durable.</h2>
+        <p>These are the choices that determine whether Delta Crown becomes a stable operating model or just a successful build artifact.</p>
+      </div>
+
+      <div class="queue-grid reveal" aria-label="Open decisions for Delta Crown platform readiness">
+        <article class="queue-card">
+          <span class="queue-card__num">01</span>
+          <h3>Steady-state owner</h3>
+          <p>Who owns the platform after project close, and who handles drift when users, groups, or sites stop matching the model?</p>
+        </article>
+        <article class="queue-card">
+          <span class="queue-card__num">02</span>
+          <h3>MSP acceptance</h3>
+          <p>What will Sui Generis support, monitor, execute, and escalate once the new-user runbook is handed over?</p>
+        </article>
+        <article class="queue-card">
+          <span class="queue-card__num">03</span>
+          <h3>Brand IA model</h3>
+          <p>Should Brand Resources and Brand Assets be separated before the pattern is reused elsewhere?</p>
+        </article>
+        <article class="queue-card">
+          <span class="queue-card__num">04</span>
+          <h3>Verification blocker</h3>
+          <p>Who provides the Teams-licensed readable context needed to complete channel and membership validation?</p>
+        </article>
+        <article class="queue-card">
+          <span class="queue-card__num">05</span>
+          <h3>Expansion sponsorship</h3>
+          <p>Should Bishops, Frenchies, TLL, or HTT receive this same pattern &mdash; and who sponsors the rollout?</p>
+        </article>
       </div>
     </div>
   </section>

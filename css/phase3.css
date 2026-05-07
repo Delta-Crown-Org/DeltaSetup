@@ -1,0 +1,258 @@
+/* ============================================================
+   phase3.css
+   ----------
+   Phase 3.0 decision-tool redesign components for index.html.
+   Converts decorative status/narrative blocks into brief, actionable
+   stakeholder-facing decision surfaces.
+   ============================================================ */
+
+/* Phase 3 sections are decision surfaces. They must be readable immediately,
+   including in screenshots, deep links, and browser restore positions. */
+.project-hero .reveal,
+.decision-brief .reveal,
+.decision-queue .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.project-hero {
+  min-height: auto;
+  padding: clamp(72px, 8vh, 108px) 0 clamp(58px, 7vh, 90px);
+}
+
+.project-hero .hero__logo {
+  margin-bottom: 28px;
+  width: clamp(180px, 20vw, 260px);
+}
+
+.project-hero .hero__title {
+  font-size: clamp(3rem, 6.3vw, 6.2rem);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1050px;
+}
+
+.project-hero .hero__subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(1rem, 1.7vw, 1.28rem);
+  letter-spacing: 0.01em;
+  line-height: 1.55;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 840px;
+  text-transform: none;
+}
+
+.project-hero .hero-systems {
+  gap: 10px;
+  margin-top: 24px;
+  max-width: 860px;
+}
+
+.project-hero .hero-system {
+  border-radius: 16px;
+  min-height: 104px;
+  padding: 14px 12px;
+}
+
+.project-hero .hero-system img {
+  height: 32px;
+  margin-bottom: 8px;
+  width: 32px;
+}
+
+.project-hero .hero-system strong {
+  font-size: 0.95rem;
+}
+
+.project-hero .hero-system span {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+}
+
+.project-route-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.project-route-button {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  gap: 8px;
+  letter-spacing: 0.08em;
+  min-height: 46px;
+  padding: 13px 18px;
+  text-transform: uppercase;
+  transition: transform 180ms var(--ease-out), background 180ms ease, border-color 180ms ease;
+}
+
+.project-route-button:hover { transform: translateY(-2px); }
+.project-route-button--primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  color: var(--teal-deeper);
+}
+.project-route-button--secondary {
+  background: rgba(255, 255, 255, 0.96);
+  border: 2px solid rgba(255, 255, 255, 0.96);
+  color: var(--teal-deeper);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+}
+.project-route-button--secondary:hover { background: #fff; }
+
+.hero__decision-note {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  margin: 18px auto 0;
+  max-width: 760px;
+}
+
+.decision-brief {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(212, 168, 75, 0.13), transparent 30%),
+    linear-gradient(180deg, #071d1a 0%, #092521 100%);
+  border-bottom: 1px solid rgba(212, 168, 75, 0.22);
+  border-top: 1px solid rgba(212, 168, 75, 0.22);
+}
+
+.decision-brief__header {
+  margin-bottom: 30px;
+  max-width: 920px;
+}
+
+.decision-brief__header h2,
+.decision-queue__header h2 {
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 5vw, 4.4rem);
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin-bottom: 16px;
+}
+
+.decision-brief__header p,
+.decision-queue__header p {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 1.05rem;
+  line-height: 1.72;
+  max-width: 780px;
+}
+
+.decision-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.decision-card {
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  min-width: 0;
+  padding: clamp(20px, 2.5vw, 28px);
+}
+
+.decision-card--live { border-color: rgba(102, 187, 106, 0.45); }
+.decision-card--blocked { border-color: rgba(255, 138, 128, 0.45); }
+.decision-card--decision { border-color: rgba(212, 168, 75, 0.55); }
+.decision-card--next { border-color: rgba(93, 183, 169, 0.5); }
+
+.decision-card__label {
+  color: var(--gold-light);
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+
+.decision-card h3 {
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  line-height: 1.12;
+  margin-bottom: 12px;
+}
+
+.decision-card p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.94rem;
+  line-height: 1.62;
+}
+
+.decision-card__action {
+  color: var(--gold-light);
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-top: 16px;
+  text-transform: uppercase;
+}
+
+.decision-queue {
+  background: #071d1a;
+}
+
+.decision-queue__header {
+  margin-bottom: 34px;
+  max-width: 900px;
+}
+
+.queue-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.queue-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+  padding: 22px;
+}
+
+.queue-card__num {
+  color: var(--gold-light);
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 14px;
+}
+
+.queue-card h3 {
+  color: #fff;
+  font-size: 1.05rem;
+  line-height: 1.28;
+  margin-bottom: 10px;
+}
+
+.queue-card p {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.86rem;
+  line-height: 1.58;
+}
+
+@media (max-width: 1407px) {
+  .decision-grid,
+  .queue-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .project-route-actions { flex-direction: column; }
+  .project-route-button { justify-content: center; width: 100%; }
+  .decision-grid,
+  .queue-grid { grid-template-columns: 1fr; }
+}
