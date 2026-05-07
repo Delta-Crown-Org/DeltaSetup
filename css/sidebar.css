@@ -9,11 +9,11 @@
 :root {
   --sidebar-width: 288px;
   --sidebar-bg: #0A1F1C;
-  --sidebar-bg-elev: rgba(255, 255, 255, 0.04);
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-text: rgba(255, 255, 255, 0.62);
+  --sidebar-bg-elev: rgba(255, 255, 255, 0.075);
+  --sidebar-border: rgba(255, 255, 255, 0.16);
+  --sidebar-text: rgba(255, 255, 255, 0.82);
   --sidebar-text-strong: #FFFFFF;
-  --sidebar-text-muted: rgba(255, 255, 255, 0.62); /* WCAG AA on sidebar bg */
+  --sidebar-text-muted: rgba(255, 255, 255, 0.76);
 }
 
 body.has-sidebar {
@@ -62,37 +62,44 @@ body.has-sidebar {
   color: var(--gold);
 }
 
-/* --- View switcher (Project Site / Ops View / MSP Brief) --- */
+/* --- View switcher (Project / Ops / MSP Brief) --- */
 .sidebar__views {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  gap: 8px;
   margin: 16px 24px 0;
 }
 
 .sidebar__view {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--sidebar-border);
-  border-radius: 10px;
-  color: var(--sidebar-text);
+  align-items: center;
+  background: rgba(255, 255, 255, 0.11);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  color: #FFFFFF;
+  display: flex;
   font-family: var(--font-body);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  padding: 9px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  justify-content: center;
+  letter-spacing: 0.08em;
+  min-height: 38px;
+  padding: 9px 14px;
   text-align: center;
   text-transform: uppercase;
-  transition: background 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+  transition: background 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out), transform 200ms var(--ease-out);
 }
 
 .sidebar__view:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--sidebar-text-strong);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.44);
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 .sidebar__view--active {
-  background: rgba(212, 168, 75, 0.16);
-  border-color: rgba(212, 168, 75, 0.42);
-  color: var(--gold-light);
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-color: rgba(255, 255, 255, 0.34);
+  box-shadow: 0 10px 28px rgba(212, 168, 75, 0.20);
+  color: var(--teal-deeper);
 }
 
 /* --- Navigation chapters --- */
@@ -136,7 +143,8 @@ body.has-sidebar {
   padding: 9px 24px 9px 28px;
   color: var(--sidebar-text);
   font-family: var(--font-body);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
+  font-weight: 500;
   line-height: 1.35;
   border-left: 2px solid transparent;
   transition: color 180ms var(--ease-out), background 180ms var(--ease-out), border-color 180ms var(--ease-out);

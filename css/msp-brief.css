@@ -5,6 +5,14 @@
    Scoped to body.msp-brief-page to avoid spicy cascade nonsense.
    ============================================================ */
 
+/* Brief pages are meeting artifacts, not an animation playground. Make
+   above-the-fold content readable immediately instead of waiting on reveal
+   timing/intersection quirks. */
+.msp-brief-page .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 .msp-brief-page {
   background:
     radial-gradient(circle at 18% 4%, rgba(212, 168, 75, 0.18), transparent 30%),
@@ -74,11 +82,13 @@
 }
 
 .msp-hero__lede {
-  color: var(--text-on-dark-muted);
+  color: #FFFFFF;
   font-size: clamp(1.05rem, 2vw, 1.24rem);
+  font-weight: 500;
   line-height: 1.72;
   margin-top: 28px;
   max-width: 760px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.34);
 }
 
 .msp-hero__lede strong,
@@ -96,26 +106,30 @@
 
 .msp-button {
   align-items: center;
-  border: 1px solid rgba(212, 168, 75, 0.42);
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid rgba(255, 255, 255, 0.95);
   border-radius: 999px;
+  color: var(--teal-deeper);
   display: inline-flex;
   font-size: 0.84rem;
-  font-weight: 700;
+  font-weight: 800;
   gap: 8px;
   letter-spacing: 0.06em;
   padding: 12px 18px;
   text-transform: uppercase;
-  transition: transform 180ms var(--ease-out), border-color 180ms ease, background 180ms ease;
+  transition: transform 180ms var(--ease-out), border-color 180ms ease, background 180ms ease, color 180ms ease;
 }
 
 .msp-button:hover {
-  background: rgba(212, 168, 75, 0.12);
+  background: #fff;
   border-color: var(--gold-light);
+  color: var(--teal-deeper);
   transform: translateY(-2px);
 }
 
 .msp-button--primary {
   background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-color: rgba(255, 255, 255, 0.72);
   color: var(--teal-deeper);
 }
 
@@ -124,8 +138,8 @@
 }
 
 .msp-brief-card {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.035));
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+  border: 1px solid rgba(255, 255, 255, 0.26);
   border-radius: 28px;
   box-shadow: 0 30px 90px rgba(0, 0, 0, 0.28);
   padding: clamp(24px, 4vw, 38px);
@@ -152,7 +166,8 @@
 }
 
 .msp-brief-card p {
-  color: var(--text-on-dark-muted);
+  color: rgba(255, 255, 255, 0.94);
+  font-weight: 500;
   line-height: 1.7;
 }
 
@@ -164,8 +179,8 @@
 
 .msp-fact {
   align-items: flex-start;
-  background: rgba(255, 255, 255, 0.055);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(10, 31, 28, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 16px;
   display: grid;
   gap: 3px 12px;
@@ -184,7 +199,7 @@
 }
 
 .msp-fact span:last-child {
-  color: var(--text-on-dark-muted);
+  color: rgba(255, 255, 255, 0.92);
   font-size: 0.82rem;
   line-height: 1.5;
 }
@@ -203,8 +218,9 @@
 }
 
 .msp-section-heading p {
-  color: var(--text-on-dark-muted);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1.04rem;
+  font-weight: 500;
   line-height: 1.72;
 }
 
@@ -259,7 +275,7 @@
 
 .msp-card p,
 .msp-card li {
-  color: var(--text-on-dark-muted);
+  color: rgba(255, 255, 255, 0.92);
   font-size: 0.93rem;
   line-height: 1.64;
 }
@@ -302,7 +318,7 @@
 }
 
 .msp-status__note {
-  color: var(--text-on-dark-muted);
+  color: rgba(255, 255, 255, 0.9);
   display: block;
   font-size: 0.78rem;
   line-height: 1.45;
