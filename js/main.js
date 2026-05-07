@@ -228,6 +228,9 @@
           behavior: reduceMotion ? 'auto' : 'smooth',
           block: 'start'
         });
+        if (link.classList.contains('skip-link')) {
+          target.focus({ preventScroll: true });
+        }
       }
     });
   });

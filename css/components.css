@@ -306,7 +306,7 @@
   display: flex; align-items: center; justify-content: center;
   border-radius: 10px; font-size: 20px;
 }
-.pain__icon--bad  { background: rgba(239,83,80,0.08); color: #EF5350; }
+.pain__icon--bad  { background: rgba(239,83,80,0.08); color: var(--danger); }
 .pain__icon--good { background: rgba(46,125,50,0.08); color: #4CAF50; }
 
 /* ============================================================

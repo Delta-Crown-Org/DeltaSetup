@@ -23,9 +23,10 @@ ul { list-style: none; }
   --teal-dark:   #004D44;
   --teal-deeper: #0A1F1C;
   --teal-light:  #4A9B8E;
+  --teal-on-dark:#5DB7A9;
   --gold:        #D4A84B;
   --gold-light:  #E8C989;
-  --gold-dark:   #B8943F;
+  --gold-dark:   #6E4F0E;
   --sage:        #7A9B8A;
 
   /* Surfaces */
@@ -36,7 +37,7 @@ ul { list-style: none; }
 
   /* Text */
   --text:          #1A2A3A;
-  --text-secondary:#5A6A7A;
+  --text-secondary:#465463;
   --text-muted:    #8A96A4;
   --text-inverse:  #F5F5F3;
 
@@ -57,7 +58,8 @@ ul { list-style: none; }
   /* Semantic state colors (audit M1: stop hex leakage in HTML inline styles) */
   --success:       #66BB6A;
   --success-soft:  rgba(46, 125, 50, 0.18);
-  --danger:        #EF5350;
+  --danger:        #A51C16; /* AAA on light surfaces */
+  --danger-on-dark:#FF8A80; /* AAA on teal-deeper/dark surfaces */
   --danger-soft:   rgba(239, 83, 80, 0.18);
   --warn:          #FB8C00;
   --warn-soft:     rgba(251, 140, 0, 0.18);

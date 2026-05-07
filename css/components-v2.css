@@ -25,8 +25,8 @@
 .status--active  { background: rgba(212,168,75,0.18);  color: var(--gold); animation: pulse-gold 2s ease-in-out infinite; }
 .status--pending { background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.78); }
 .status--skipped { background: rgba(120,144,156,0.18); color: #B0BEC5; }
-.status--blocked { background: rgba(239,83,80,0.18);   color: #EF5350; }
-.status--danger  { background: rgba(239,83,80,0.18);   color: #EF5350; }
+.status--blocked { background: rgba(239,83,80,0.18);   color: var(--danger-on-dark); }
+.status--danger  { background: rgba(239,83,80,0.18);   color: var(--danger-on-dark); }
 @media (prefers-reduced-motion: reduce) {
   .status--active { animation: none; box-shadow: none; }
 }
@@ -116,7 +116,7 @@
 .chaos { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
 .chaos__folder { padding: 12px; border-radius: 10px; text-align: center; font-size: 0.75rem; transition: transform 0.3s ease; }
 .chaos__folder:hover { transform: scale(1.05); }
-.chaos__folder--danger { background: rgba(239,83,80,0.1); border: 1px solid rgba(239,83,80,0.2); color: #EF5350; }
+.chaos__folder--danger { background: rgba(239,83,80,0.1); border: 1px solid rgba(239,83,80,0.2); color: var(--danger-on-dark); }
 .chaos__folder--warn { background: rgba(251,140,0,0.08); border: 1px solid rgba(251,140,0,0.15); color: #FB8C00; }
 .chaos__folder--ok { background: rgba(46,125,50,0.08); border: 1px solid rgba(46,125,50,0.15); color: #4CAF50; }
 .chaos__folder-icon { font-size: 28px; margin-bottom: 4px; display: block; }
@@ -130,7 +130,7 @@
 .journey__step-content { flex: 1; }
 .journey__step-title { font-weight: 600; font-size: 0.9375rem; color: #FFF; margin-bottom: 2px; }
 .journey__step-desc { font-size: 0.8125rem; color: rgba(255,255,255,0.5); }
-.journey__step-prop { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; font-size: 0.6875rem; background: rgba(0,107,94,0.15); color: var(--teal-light); margin-top: 4px; }
+.journey__step-prop { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; font-size: 0.6875rem; background: rgba(0,107,94,0.15); color: var(--teal-on-dark); margin-top: 4px; }
 
 /* --- Phase Cards --- */
 .phase-card { border-radius: 16px; padding: clamp(20px, 3vw, 32px); transition: transform 0.4s var(--ease-out); }
@@ -157,7 +157,7 @@
 .perm-matrix tr:hover td { background: rgba(255,255,255,0.03); }
 .perm-cell--full { color: #4CAF50; }
 .perm-cell--edit { color: var(--gold); }
-.perm-cell--read { color: var(--teal-light); }
+.perm-cell--read { color: var(--teal-on-dark); }
 .perm-cell--none { color: rgba(255,255,255,0.15); }
 
 /* --- Section Variant: Danger/Red --- */
@@ -167,7 +167,7 @@
 }
 .section--danger h2, .section--danger h3, .section--danger h4 { color: #FFF; }
 .section--danger p { color: rgba(255,255,255,0.82); }
-.section--danger .label { color: #EF5350; }
+.section--danger .label { color: var(--danger-on-dark); }
 
 /* --- Comparison Table --- */
 .transform-compare { display: grid; grid-template-columns: 1fr 48px 1fr; gap: 0; align-items: stretch; }

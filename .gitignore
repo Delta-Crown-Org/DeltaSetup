@@ -57,3 +57,8 @@ reports/**/*-raw.json
 # is published via the MSP/CSP overview section on index.html.
 MEGAN-*.md
 SESSION-HANDOFF.md
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
