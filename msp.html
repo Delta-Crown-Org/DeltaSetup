@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delta Crown Extensions — MSP Partner Brief</title>
+  <meta name="description" content="MSP-specific brief for Sui Generis: Delta Crown Microsoft 365 state, operating seam, RACI, blockers, and action list.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Tenor+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <!-- Cascade order is load-order-critical: tokens -> base -> components -> v2/overrides -> page-specific -->
+  <link rel="stylesheet" href="css/tokens.css?v=20260506-split1">
+  <link rel="stylesheet" href="css/base.css?v=20260506-split1">
+  <link rel="stylesheet" href="css/components.css?v=20260506-split1">
+  <link rel="stylesheet" href="css/components-v2.css?v=20260506-split1">
+  <link rel="stylesheet" href="css/microsoft-platform.css?v=20260506-split1">
+  <link rel="stylesheet" href="css/sidebar.css?v=20260507-brief1">
+  <link rel="stylesheet" href="css/msp-brief.css?v=20260507-brief1">
+</head>
+<body class="has-sidebar msp-brief-page">
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <button class="sidebar__toggle" type="button" aria-controls="sidebar" aria-expanded="false" data-sidebar-toggle>
+    <span aria-hidden="true" class="material-symbols-outlined">menu</span>Menu
+  </button>
+  <div class="sidebar__backdrop" data-sidebar-backdrop aria-hidden="true"></div>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <a href="#hero" aria-label="Delta Crown Extensions MSP brief — top of page">
+        <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png" alt="Delta Crown Extensions">
+      </a>
+      <span class="sidebar__brand-tag">MSP Partner Brief</span>
+    </div>
+
+    <nav class="sidebar__views" aria-label="View">
+      <a href="./index.html" class="sidebar__view">Project</a>
+      <a href="./operations.html" class="sidebar__view">Ops</a>
+      <a href="./msp.html" class="sidebar__view sidebar__view--active" aria-current="page">MSP Brief</a>
+    </nav>
+
+    <nav class="sidebar__nav" aria-label="Page sections">
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">flag</span>Brief</div>
+        <div class="sidebar__list">
+          <a href="#hero" class="sidebar__link">One-line frame</a>
+          <a href="#state" class="sidebar__link">Current state</a>
+          <a href="#seam" class="sidebar__link">Operating seam</a>
+        </div>
+      </div>
+
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">account_tree</span>Ownership</div>
+        <div class="sidebar__list">
+          <a href="#raci" class="sidebar__link">RACI</a>
+          <a href="#unblock" class="sidebar__link">Biggest unblock</a>
+          <a href="#asks" class="sidebar__link">Asks for Megan</a>
+        </div>
+      </div>
+
+      <div class="sidebar__chapter">
+        <div class="sidebar__chapter-label"><span aria-hidden="true" class="material-symbols-outlined">verified</span>Close</div>
+        <div class="sidebar__list">
+          <a href="#land" class="sidebar__link">Sentence to land</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="sidebar__progress" aria-hidden="true"><div class="sidebar__progress-bar"></div></div>
+      Delta Crown MSP brief · scoped to <code>deltacrown</code> only
+    </div>
+  </div>
+
+  <main id="main-content" tabindex="-1">
+    <section class="section msp-hero" id="hero">
+      <div class="container msp-hero__grid">
+        <div>
+          <p class="msp-eyebrow reveal"><span aria-hidden="true" class="material-symbols-outlined">partner_exchange</span>Sui Generis / Megan Myrand</p>
+          <h1 class="msp-hero__title reveal balance-text">Delta is the template. The runbook makes it real.</h1>
+          <p class="msp-hero__lede reveal">
+            This is the MSP-only brief for Delta Crown Extensions. No org-wide billing detours, no cross-tenant archaeology, no “while we're here” swamp monsters. Just what Megan needs to know to operate <strong>the deltacrown tenant</strong> cleanly.
+          </p>
+          <div class="msp-hero__actions reveal">
+            <a class="msp-button msp-button--primary" href="#asks"><span aria-hidden="true" class="material-symbols-outlined">checklist</span>Jump to asks</a>
+            <a class="msp-button" href="./index.html#msp-csp-overview"><span aria-hidden="true" class="material-symbols-outlined">public</span>Public overview</a>
+          </div>
+        </div>
+
+        <aside class="msp-brief-card reveal" aria-labelledby="brief-card-title">
+          <p class="msp-brief-card__topline"><span aria-hidden="true" class="material-symbols-outlined">bolt</span>Bottom line</p>
+          <h2 id="brief-card-title">Built. Audited. Waiting on operations.</h2>
+          <p>
+            The Microsoft 365 architecture is live. The durable operating model depends on a simple handoff: HTT defines identity and access rules; Sui Generis executes the user/device lifecycle against a runbook.
+          </p>
+          <div class="msp-fact-list">
+            <div class="msp-fact"><span aria-hidden="true" class="material-symbols-outlined">license</span><strong>$0 added license cost</strong><span>Business Premium covers the audited platform model.</span></div>
+            <div class="msp-fact"><span aria-hidden="true" class="material-symbols-outlined">hub</span><strong>Hub-and-spoke live</strong><span>Corporate hub, DCE hub, and spoke sites are provisioned.</span></div>
+            <div class="msp-fact"><span aria-hidden="true" class="material-symbols-outlined">key</span><strong>Metadata is the unlock</strong><span>Dynamic groups need populated user attributes to resolve correctly.</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section--dark" id="state">
+      <div class="container">
+        <div class="msp-section-heading reveal">
+          <p class="label mb-16">Current state</p>
+          <h2>What is live in Delta Crown.</h2>
+          <p>Use this as the quick level-set. It is intentionally DCE-specific; the HTT direct-bill, BCC MOSA, Teams Premium, and AppRiver migration threads belong in the org-wide brief, not this page.</p>
+        </div>
+
+        <div class="msp-status-grid reveal" aria-label="Delta Crown tenant status summary">
+          <div class="msp-status"><span class="msp-status__label">Tenant</span><span class="msp-status__value">Active</span><span class="msp-status__note">Microsoft 365 Business Premium; Pax8/CSP clean slate.</span></div>
+          <div class="msp-status"><span class="msp-status__label">Users</span><span class="msp-status__value">89</span><span class="msp-status__note">3 disabled. Metadata population remains sparse.</span></div>
+          <div class="msp-status"><span class="msp-status__label">Dynamic groups</span><span class="msp-status__value">5</span><span class="msp-status__note">Only AllStaff populates today because attributes are missing.</span></div>
+          <div class="msp-status"><span class="msp-status__label">DLP policies</span><span class="msp-status__value">3</span><span class="msp-status__note">Deployed in TestWithNotifications; enforce flip pending.</span></div>
+        </div>
+
+        <div class="msp-card-grid reveal mt-48">
+          <article class="msp-card">
+            <span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">corporate_fare</span></span>
+            <h3>SharePoint is live</h3>
+            <p>Corp-Hub, DCE-Hub, and eight spoke sites are provisioned, hardened, and hub-associated. HTTHQ document migration was deliberately skipped and should not be reopened.</p>
+          </article>
+          <article class="msp-card">
+            <span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">groups</span></span>
+            <h3>Teams exists, audit needs a reader</h3>
+            <p>Delta Crown Operations is live. Channel and membership validation needs a Teams-licensed reviewer identity so we can finish the audit cleanly.</p>
+          </article>
+          <article class="msp-card">
+            <span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">shield_lock</span></span>
+            <h3>Security baseline is in place</h3>
+            <p>External sharing is restricted, legacy auth is disabled, anonymous resharing is off, and DLP is ready for its enforce-window decision.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--teal" id="seam">
+      <div class="container">
+        <div class="msp-section-heading reveal">
+          <p class="label mb-16">Operating seam</p>
+          <h2>Who runs the platform. Who runs the people.</h2>
+          <p>Architecture ownership and managed-services execution are different jobs. Mixing them is how tenants become haunted houses with invoices.</p>
+        </div>
+
+        <div class="msp-card-grid reveal">
+          <article class="msp-card msp-card--gold">
+            <span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">architecture</span></span>
+            <h3>HTT owns architecture</h3>
+            <ul>
+              <li>Identity attribute schema</li>
+              <li>Dynamic-group design</li>
+              <li>Security baseline and DLP authorship</li>
+              <li>New-user runbook definition</li>
+            </ul>
+          </article>
+          <article class="msp-card">
+            <span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">support_agent</span></span>
+            <h3>Sui Generis executes</h3>
+            <ul>
+              <li>User metadata population</li>
+              <li>Device shipping and Atera RMM enrollment</li>
+              <li>Conditional Access deployment</li>
+              <li>Lifecycle tasks once the runbook is handed over</li>
+            </ul>
+          </article>
+          <article class="msp-card">
+            <span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">payments</span></span>
+            <h3>Pax8 carries CSP</h3>
+            <ul>
+              <li>License purchasing</li>
+              <li>Term alignment and renewals</li>
+              <li>Entra ID P2 blanket posture</li>
+              <li>No DCE Web-Direct cleanup needed</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark" id="raci">
+      <div class="container">
+        <div class="msp-section-heading reveal">
+          <p class="label mb-16">RACI</p>
+          <h2>The ownership table Megan actually needs.</h2>
+          <p>Short, scoped, and operational. If a topic is not needed to run Delta Crown day-to-day, it does not belong here. Revolutionary, apparently.</p>
+        </div>
+
+        <div class="msp-raci-wrap reveal">
+          <table class="msp-raci-table">
+            <caption>R = Responsible · A = Accountable · C = Consulted · I = Informed</caption>
+            <thead>
+              <tr><th scope="col">Domain</th><th scope="col">HTT / Tyler</th><th scope="col">Sui Generis / Megan</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Identity architecture, attribute schema, dynamic-group design</th><td><strong>R / A</strong></td><td>C / I</td></tr>
+              <tr><th scope="row">User metadata population: companyName, department, jobTitle, employeeType</th><td>C</td><td><strong>R / A</strong></td></tr>
+              <tr><th scope="row">Pax8 CSP licensing, renewal alignment, P2 blanket</th><td>I</td><td><strong>R / A</strong></td></tr>
+              <tr><th scope="row">Conditional Access policy authorship</th><td><strong>R / A</strong></td><td>C</td></tr>
+              <tr><th scope="row">Conditional Access deployment on DCE</th><td>C</td><td><strong>R / A</strong></td></tr>
+              <tr><th scope="row">New-user device shipping and Atera RMM enrollment</th><td>I</td><td><strong>R / A</strong></td></tr>
+              <tr><th scope="row">New-user runbook</th><td><strong>R</strong> define</td><td><strong>A</strong> execute</td></tr>
+              <tr><th scope="row">DLP policy authorship and enforce approval</th><td><strong>R / A</strong></td><td>C</td></tr>
+              <tr><th scope="row">M365 backup posture</th><td>C</td><td><strong>R?</strong> confirm product and recovery scope</td></tr>
+              <tr><th scope="row">Cyber-insurance attestation letter</th><td><strong>R</strong> collect</td><td><strong>A</strong> provide</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark" id="unblock">
+      <div class="container">
+        <div class="msp-card-grid msp-card-grid--two reveal">
+          <article class="msp-card msp-card--danger">
+            <span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">report</span></span>
+            <h3>The biggest unblock</h3>
+            <p><strong>The new-user runbook.</strong> Megan already offered the right operating motion: “If there's a list of when you create a new user, add to these groups — tell me.” We owe the list.</p>
+            <p>Until it exists, four of five dynamic groups resolve to zero users and role-based access is architecture-only instead of operations-ready.</p>
+          </article>
+          <article class="msp-card msp-card--gold">
+            <span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">task_alt</span></span>
+            <h3>What the runbook must contain</h3>
+            <ul>
+              <li>Role → required attributes</li>
+              <li>Attributes → expected dynamic groups</li>
+              <li>Role → expected license SKU</li>
+              <li>Device type and RMM enrollment expectation</li>
+              <li>Escalation owner when membership does not resolve</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--teal" id="asks">
+      <div class="container">
+        <div class="msp-section-heading reveal">
+          <p class="label mb-16">Asks for Megan</p>
+          <h2>Five decisions. Fifteen minutes. No wandering.</h2>
+          <p>These are the DCE-specific asks. If the conversation starts drifting into HTT billing migration, Teams Premium repurchase, or BCC MOSA cleanup, politely punt to the org-wide brief.</p>
+        </div>
+
+        <div class="msp-card-grid reveal">
+          <article class="msp-card"><span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">policy</span></span><h3>DLP enforce window</h3><p>Confirm when the three DLP policies can move from TestWithNotifications to Enforce.</p></article>
+          <article class="msp-card"><span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">badge</span></span><h3>Teams-licensed reader</h3><p>Provide a reviewer-class identity with Teams licensing to finish the channel and membership audit.</p></article>
+          <article class="msp-card"><span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">delete</span></span><h3>Temp app cleanup</h3><p>Remove or explicitly document <code>DeltaCrown-TeamsProvisioner-TEMP</code>; credentials are expired.</p></article>
+          <article class="msp-card"><span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">supervisor_account</span></span><h3>Named group owners</h3><p>Name the escalation owner for dynamic security groups when membership drifts or fails to resolve.</p></article>
+          <article class="msp-card"><span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">backup</span></span><h3>M365 backup posture</h3><p>Confirm product, coverage, restore expectations, and whether Sui Generis owns the service.</p></article>
+          <article class="msp-card"><span class="msp-card__icon"><span aria-hidden="true" class="material-symbols-outlined">description</span></span><h3>Attestation letter</h3><p>Provide cyber-insurance language for EDR, patching, firewall posture, backup, and RMM coverage.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark" id="land">
+      <div class="container">
+        <div class="msp-callout reveal">
+          <p class="label mb-16">The sentence to land</p>
+          <h2>Delta Crown is the golden-child pattern.</h2>
+          <p>It proves the Microsoft 365 architecture works on a clean tenant. The only thing separating “built” from “repeatable” is operational handoff: attributes, runbook, owners, enforcement window, and audit identity.</p>
+          <div class="msp-script">
+            “Delta is built, audited, and security-hardened. Hand me the new-user runbook to execute, sign off the DLP enforce flip, give me a Teams-licensed reader for the audit, and DCE is the template every other brand inherits from.”
+          </div>
+          <p class="msp-footer-note">
+            Source: DCE deployment reconciliation, MSP brief notes, April 10 partner-call context, and the public project site. Sensitive billing details and partner-private operational notes intentionally stay out of this public-facing page.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Delta Crown Extensions — MSP Partner Brief &copy; 2026</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
