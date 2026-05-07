@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="css/exec-vision.css?v=20260506-audit3">
   <link rel="stylesheet" href="css/whiteglove.css?v=20260506-audit3">
   <link rel="stylesheet" href="css/polish.css?v=20260506-audit2">
-  <link rel="stylesheet" href="css/phase3.css?v=20260507-phase3b">
+  <link rel="stylesheet" href="css/phase3.css?v=20260507-phase3c">
 </head>
 <body class="has-sidebar">
 
@@ -346,281 +346,93 @@
     </div>
   </section>
 
-  <!-- ==================== WHITE-GLOVE ONBOARDING (Day One) ==================== -->
-  <section class="whiteglove" id="whiteglove" aria-labelledby="whiteglove-title">
+  <!-- ==================== TARGET DAY-ONE EXPERIENCE ==================== -->
+  <section class="section target-dayone" id="whiteglove" aria-labelledby="whiteglove-title">
     <div class="container">
-      <p class="label mb-16 reveal">The White-Glove Moment</p>
-      <h2 class="mb-16 reveal balance-text" id="whiteglove-title" style="max-width: 820px;">
-        Day one, in five moments.
-      </h2>
-      <p class="whiteglove__lead reveal">
-        <strong style="color: var(--gold-light);">This is the target experience the platform is being built for.</strong> Today's pilot is partway there &mdash; the architecture is live, but several pieces (clean metadata, dynamic groups, app provisioning, named owners) are still being completed. Here's what onboarding becomes when identity, access, and workspace are designed together instead of stitched together by tickets, shared passwords, and a 47-page PDF.
-      </p>
+      <div class="target-dayone__grid">
+        <div class="target-dayone__copy reveal">
+          <p class="label mb-16">Target Day-One Experience</p>
+          <h2 class="mb-16 balance-text" id="whiteglove-title">What onboarding becomes when the operating model is finished.</h2>
+          <p>
+            The goal is not a prettier first-day PDF. The goal is one identity, one workspace, role-based access, and a runbook the MSP can execute without guessing.
+          </p>
+        </div>
 
-      <ol class="whiteglove__sequence" aria-label="A new person's first day on the platform">
-        <li class="whiteglove__moment reveal">
-          <div class="whiteglove__num">01</div>
-          <div class="whiteglove__body">
-            <h3>The invitation arrives</h3>
-            <p>One email. Your name. Your brand. Your role. A single sign-in link. No scavenger hunt. No "let me cc IT." Already, the experience is different.</p>
-            <div class="whiteglove__chip-row">
-              <span class="whiteglove__chip">One email</span>
-              <span class="whiteglove__chip">One link</span>
-              <span class="whiteglove__chip">Zero attachments</span>
-            </div>
-          </div>
-        </li>
-        <li class="whiteglove__moment reveal">
-          <div class="whiteglove__num">02</div>
-          <div class="whiteglove__body">
-            <h3>You sign in once</h3>
-            <p>One identity. One MFA setup. Microsoft's authenticator. Done. Every system that matters now knows who you are and what brand you belong to &mdash; before you've touched a single file.</p>
-            <div class="whiteglove__chip-row">
-              <span class="whiteglove__chip">One identity</span>
-              <span class="whiteglove__chip">MFA-ready</span>
-              <span class="whiteglove__chip">No reused passwords</span>
-            </div>
-          </div>
-        </li>
-        <li class="whiteglove__moment reveal">
-          <div class="whiteglove__num">03</div>
-          <div class="whiteglove__body">
-            <h3>Your workspace is already there</h3>
-            <p>You don't request access. You don't email IT. You open Teams, and your brand's space is sitting there waiting &mdash; with the channels you need, the people you'll work with, and the documents you'll reference.</p>
-            <div class="whiteglove__chip-row">
-              <span class="whiteglove__chip">Brand Teams ready</span>
-              <span class="whiteglove__chip">SharePoint hub waiting</span>
-              <span class="whiteglove__chip">Right people, right channels</span>
-            </div>
-          </div>
-        </li>
-        <li class="whiteglove__moment reveal">
-          <div class="whiteglove__num">04</div>
-          <div class="whiteglove__body">
-            <h3>Tools light up automatically</h3>
-            <p>Your role's apps and resources will be provisioned by group, not by ticket. No "can someone add me to&hellip;" Slack messages. The right tools, on the right day, because identity drove the access &mdash; not someone's memory.</p>
-            <div class="whiteglove__chip-row">
-              <span class="whiteglove__chip">Provisioned by group</span>
-              <span class="whiteglove__chip">Not by ticket</span>
-              <span class="whiteglove__chip">No mystery permissions</span>
-            </div>
-          </div>
-        </li>
-        <li class="whiteglove__moment reveal whiteglove__moment--final">
-          <div class="whiteglove__num">05</div>
-          <div class="whiteglove__body">
-            <h3>You start working</h3>
-            <p>By mid-morning you've made your first contribution. By lunch, you've onboarded yourself end-to-end &mdash; self-served by default, with corporate IT as a backstop instead of a bottleneck. The platform does the heavy lifting so you can do the actual job.</p>
-            <div class="whiteglove__chip-row">
-              <span class="whiteglove__chip">Mid-morning first contribution</span>
-              <span class="whiteglove__chip">Self-served by default</span>
-              <span class="whiteglove__chip">IT as backstop, not bottleneck</span>
-            </div>
-          </div>
-        </li>
-      </ol>
+        <div class="target-dayone__card reveal" aria-label="Target onboarding sequence and current gaps">
+          <ol class="target-steps">
+            <li><span>01</span><strong>One invitation arrives</strong><p>Name, brand, role, and sign-in link in one place.</p></li>
+            <li><span>02</span><strong>Identity and MFA happen once</strong><p>Microsoft authentication becomes the front door.</p></li>
+            <li><span>03</span><strong>Brand workspace appears</strong><p>Teams and SharePoint are already aligned to the user.</p></li>
+            <li><span>04</span><strong>Tools follow the role</strong><p>Groups provision access instead of ticket archaeology.</p></li>
+            <li><span>05</span><strong>Work starts without access-chasing</strong><p>IT is the backstop, not the bottleneck.</p></li>
+          </ol>
 
-      <div class="whiteglove__bridge reveal">
-        <p>Compare that to today &mdash; where your first day means inheriting a folder full of ghost permissions, a shared mailbox you can't actually access, and a Slack channel of seven people pinging IT to add you to things. We're not optimizing that. We're <strong>retiring it</strong>.</p>
-        <p class="whiteglove__bridge-link"><a href="./operations.html#sepconn">See how separation and connection work together &rarr;</a></p>
+          <div class="target-gap">
+            <strong>Current gap:</strong> metadata hygiene, app provisioning, named owners, Teams-readable verification, and MSP runbooks still need closure before this is fully real.
+          </div>
+
+          <a class="project-route-button project-route-button--primary" href="./operations.html">See the full ops model</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== THE PROBLEM ==================== -->
-  <section class="section section--danger" id="problem">
+  <!-- ==================== CURRENT-STATE EVIDENCE ==================== -->
+  <section class="section evidence-digest" id="problem" aria-labelledby="problem-title">
     <div class="container">
-      <p class="label mb-16 reveal">The Current Reality</p>
-      <h2 class="mb-16 reveal" style="max-width: 700px;">Everything lives in one folder.<br>Permissions are broken.</h2>
-      <p class="reveal mb-48" style="color: rgba(255,255,255,0.7); max-width: 580px; font-size: 1.0625rem;">
-        The <strong style="color: rgba(255,255,255,0.8);">HTT Headquarters</strong> SharePoint site has every brand's documents in a single Shared Documents library.
-        41 members. 17 folders. 16 with broken inheritance. Zero DLP policies.
-      </p>
+      <div class="evidence-digest__header reveal">
+        <p class="label mb-16">Current-State Evidence</p>
+        <h2 id="problem-title">The old model depends on perfect manual permissions. Cute theory. Bad control.</h2>
+        <p>The HTT Headquarters SharePoint site keeps every brand's documents in one Shared Documents library. The audit shows why Delta Crown should be built cleanly instead of copying that pattern forward.</p>
+      </div>
 
-      <div class="reality-digest reveal" aria-label="Current-state executive digest">
-        <article class="reality-digest__card reality-digest__card--danger">
-          <span class="reality-digest__label">Risk</span>
-          <strong>Brand boundaries are folder names, not controls.</strong>
-          <p>When every brand lives in one library, visibility depends on manual permissions staying perfect forever. Cute theory. Terrible operating model.</p>
+      <div class="evidence-metrics reveal" aria-label="Audited current-state SharePoint evidence">
+        <article><strong>41</strong><span>members in scope</span></article>
+        <article><strong>17</strong><span>top-level folders</span></article>
+        <article><strong>16</strong><span>folders with broken inheritance</span></article>
+        <article><strong>0</strong><span>DLP policies at audit time</span></article>
+      </div>
+
+      <div class="evidence-actions reveal">
+        <article class="evidence-action evidence-action--risk">
+          <span>Operational implication</span>
+          <h3>Brand separation cannot depend on folder hygiene.</h3>
+          <p>Manual permissions drift, inherited access surprises people, and nobody wants to explain to leadership why “shared documents” became the security boundary. That's not governance; that's vibes with ACLs.</p>
         </article>
-        <article class="reality-digest__card reality-digest__card--warn">
-          <span class="reality-digest__label">Operations</span>
-          <strong>Onboarding becomes tribal knowledge.</strong>
-          <p>New people need someone to remember which folder, mailbox, Teams space, and app they should touch. That does not scale past heroics.</p>
-        </article>
-        <article class="reality-digest__card reality-digest__card--gold">
-          <span class="reality-digest__label">Leadership</span>
-          <strong>The portfolio is hard to see cleanly.</strong>
-          <p>Corporate needs visibility across brands without flattening them into one shared junk drawer. That is the platform problem.</p>
+        <article class="evidence-action evidence-action--next">
+          <span>Recommended action</span>
+          <h3>Build Delta Crown cleanly; do not migrate HTTHQ wholesale.</h3>
+          <p>Use DCE as the clean operating pilot. Remediate or replace legacy HTTHQ content later with a separate owner-approved plan.</p>
         </article>
       </div>
 
-      <!-- Folder Chaos Grid -->
-      <div class="reveal mb-48">
-        <h3 class="mb-16" style="font-size: 1.125rem; display: flex; align-items: center; gap: 8px;">
-          <span class="material-symbols-outlined text-danger" aria-hidden="true">folder_off</span>
-          httbrands.sharepoint.com/sites/HTTHQ — Shared Documents
-        </h3>
-        <div class="chaos">
-          <div class="chaos__folder chaos__folder--danger">
-            <span class="chaos__folder-icon">📁</span>
-            C Suite
-            <div class="chaos__folder-perms">8 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--danger">
-            <span class="chaos__folder-icon">📁</span>
-            Exec Leadership
-            <div class="chaos__folder-perms">11 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--warn">
-            <span class="chaos__folder-icon">📁</span>
-            Brand Leads
-            <div class="chaos__folder-perms">18 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--warn">
-            <span class="chaos__folder-icon">📁</span>
-            Employee Resources
-            <div class="chaos__folder-perms">11 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--danger">
-            <span class="chaos__folder-icon">📁</span>
-            Finance
-            <div class="chaos__folder-perms">11 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--warn">
-            <span class="chaos__folder-icon">📁</span>
-            Fran Dev
-            <div class="chaos__folder-perms">50 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--danger">
-            <span class="chaos__folder-icon">📁</span>
-            IT-Technology
-            <div class="chaos__folder-perms">17 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--danger">
-            <span class="chaos__folder-icon">📁</span>
-            Legal
-            <div class="chaos__folder-perms">13 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--warn">
-            <span class="chaos__folder-icon">📁</span>
-            Master BCC
-            <div class="chaos__folder-perms">41 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--warn">
-            <span class="chaos__folder-icon">📁</span>
-            Master DCE
-            <div class="chaos__folder-perms">? perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--warn">
-            <span class="chaos__folder-icon">📁</span>
-            Master FMN
-            <div class="chaos__folder-perms">39 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--danger">
-            <span class="chaos__folder-icon">📁</span>
-            Master TLL
-            <div class="chaos__folder-perms">52 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--ok">
-            <span class="chaos__folder-icon">📁</span>
-            Product
-            <div class="chaos__folder-perms">6 perms · inheriting</div>
-          </div>
-          <div class="chaos__folder chaos__folder--danger">
-            <span class="chaos__folder-icon">📁</span>
-            Real Estate
-            <div class="chaos__folder-perms">7 perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--warn">
-            <span class="chaos__folder-icon">📁</span>
-            Education
-            <div class="chaos__folder-perms">? perms · broken</div>
-          </div>
-          <div class="chaos__folder chaos__folder--warn">
-            <span class="chaos__folder-icon">📁</span>
-            Vendors
-            <div class="chaos__folder-perms">? perms · broken</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Before/After Security Comparison -->
-      <div class="transform-compare reveal">
-        <div class="transform-compare__col transform-compare__before">
-          <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined text-danger" aria-hidden="true">gpp_bad</span>
-            Today's Security
+      <details class="evidence-details reveal">
+        <summary>View audited folder examples</summary>
+        <div class="evidence-details__inner">
+          <h3>
+            <span class="material-symbols-outlined text-danger" aria-hidden="true">folder_off</span>
+            httbrands.sharepoint.com/sites/HTTHQ — Shared Documents
           </h3>
-          <div class="pain">
-            <div class="pain__icon pain__icon--bad"><span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">close</span></div>
-            <div>
-              <strong style="color: rgba(255,255,255,0.9);">All brands in one library</strong>
-              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); margin-top: 2px;">Delta Crown, TLL, BCC, FMN docs are sibling folders with no isolation</p>
-            </div>
-          </div>
-          <div class="pain">
-            <div class="pain__icon pain__icon--bad"><span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">close</span></div>
-            <div>
-              <strong style="color: rgba(255,255,255,0.9);">16 of 17 folders with broken inheritance</strong>
-              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); margin-top: 2px;">Each folder manually permissioned — no consistency, no audit trail</p>
-            </div>
-          </div>
-          <div class="pain">
-            <div class="pain__icon pain__icon--bad"><span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">close</span></div>
-            <div>
-              <strong style="color: rgba(255,255,255,0.9);">No DLP policies, no sensitivity labels</strong>
-              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); margin-top: 2px;">Financial data, client records, legal docs — all unprotected</p>
-            </div>
-          </div>
-          <div class="pain">
-            <div class="pain__icon pain__icon--bad"><span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">close</span></div>
-            <div>
-              <strong style="color: rgba(255,255,255,0.9);">127 external sharing links without expiration</strong>
-              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); margin-top: 2px;">Unknown who has access to what externally</p>
-            </div>
+          <div class="chaos">
+            <div class="chaos__folder chaos__folder--danger"><span class="chaos__folder-icon">📁</span>C Suite<div class="chaos__folder-perms">8 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--danger"><span class="chaos__folder-icon">📁</span>Exec Leadership<div class="chaos__folder-perms">11 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--warn"><span class="chaos__folder-icon">📁</span>Brand Leads<div class="chaos__folder-perms">18 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--warn"><span class="chaos__folder-icon">📁</span>Employee Resources<div class="chaos__folder-perms">11 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--danger"><span class="chaos__folder-icon">📁</span>Finance<div class="chaos__folder-perms">11 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--warn"><span class="chaos__folder-icon">📁</span>Fran Dev<div class="chaos__folder-perms">50 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--danger"><span class="chaos__folder-icon">📁</span>IT-Technology<div class="chaos__folder-perms">17 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--danger"><span class="chaos__folder-icon">📁</span>Legal<div class="chaos__folder-perms">13 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--warn"><span class="chaos__folder-icon">📁</span>Master BCC<div class="chaos__folder-perms">41 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--warn"><span class="chaos__folder-icon">📁</span>Master DCE<div class="chaos__folder-perms">? perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--warn"><span class="chaos__folder-icon">📁</span>Master FMN<div class="chaos__folder-perms">39 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--danger"><span class="chaos__folder-icon">📁</span>Master TLL<div class="chaos__folder-perms">52 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--ok"><span class="chaos__folder-icon">📁</span>Product<div class="chaos__folder-perms">6 perms · inheriting</div></div>
+            <div class="chaos__folder chaos__folder--danger"><span class="chaos__folder-icon">📁</span>Real Estate<div class="chaos__folder-perms">7 perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--warn"><span class="chaos__folder-icon">📁</span>Education<div class="chaos__folder-perms">? perms · broken</div></div>
+            <div class="chaos__folder chaos__folder--warn"><span class="chaos__folder-icon">📁</span>Vendors<div class="chaos__folder-perms">? perms · broken</div></div>
           </div>
         </div>
-
-        <div class="transform-compare__arrow">
-          <span aria-hidden="true" class="material-symbols-outlined">arrow_forward</span>
-        </div>
-
-        <div class="transform-compare__col transform-compare__after">
-          <h3 class="mb-16" style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined text-success" aria-hidden="true">verified_user</span>
-            After Deployment
-          </h3>
-          <div class="pain">
-            <div class="pain__icon pain__icon--good"><span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">check</span></div>
-            <div>
-              <strong style="color: rgba(255,255,255,0.9);">Dedicated hub per brand with site-level isolation</strong>
-              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); margin-top: 2px;">Delta Crown users see only Delta Crown. No cross-brand data leakage.</p>
-            </div>
-          </div>
-          <div class="pain">
-            <div class="pain__icon pain__icon--good"><span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">check</span></div>
-            <div>
-              <strong style="color: rgba(255,255,255,0.9);">Dynamic security groups from Azure AD properties</strong>
-              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); margin-top: 2px;">Automated: add user to tenant → auto-joins correct groups → sees correct sites</p>
-            </div>
-          </div>
-          <div class="pain">
-            <div class="pain__icon pain__icon--good"><span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">check</span></div>
-            <div>
-              <strong style="color: rgba(255,255,255,0.9);">3 DLP policies enforcing data boundaries</strong>
-              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); margin-top: 2px;">Block external sharing, warn on cross-brand, enforce on anonymous links</p>
-            </div>
-          </div>
-          <div class="pain">
-            <div class="pain__icon pain__icon--good"><span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">check</span></div>
-            <div>
-              <strong style="color: rgba(255,255,255,0.9);">External sharing disabled, guest access off</strong>
-              <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.7); margin-top: 2px;">Zero anonymous links. All access requires authenticated tenant identity.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      </details>
     </div>
   </section>
 
@@ -1044,112 +856,39 @@
     </div>
   </section>
 
-  <!-- ==================== MSP / CSP OVERVIEW ==================== -->
-  <section class="section section--dark msp-overview" id="msp-csp-overview" aria-labelledby="msp-csp-overview-title">
+  <!-- ==================== MSP / CSP ROUTE ==================== -->
+  <section class="section msp-route" id="msp-csp-overview" aria-labelledby="msp-csp-overview-title">
     <div class="container">
-      <p class="label mb-16 reveal">How Delta Crown is operated</p>
-      <h2 class="reveal mb-16" id="msp-csp-overview-title" style="max-width: 760px;">
-        Who runs the platform.<br>Who runs the people.
-      </h2>
-      <p class="text-muted mb-48 reveal" style="max-width: 720px; font-size: 1.0625rem; color: rgba(255,255,255,0.7);">
-        Delta Crown runs on Microsoft 365 Business Premium, but software does not run itself. Two partners operate the tenant on a clear seam: a Managed Service Provider (MSP) handles people, devices, and day-to-day execution; a Cloud Solution Provider (CSP) handles licensing and billing. The architecture above is only as durable as that operating model.
-      </p>
+      <div class="msp-route__shell reveal">
+        <div class="msp-route__copy">
+          <p class="label mb-16">MSP / CSP handoff</p>
+          <h2 id="msp-csp-overview-title">MSP responsibilities live in the handoff brief.</h2>
+          <p>Delta Crown's durable operating model depends on a clean seam: HTT owns architecture, Sui Generis executes user/device lifecycle against runbooks, and Pax8 handles CSP licensing. Use the MSP brief for the detailed RACI, acceptance checklist, and Megan-specific operating asks.</p>
+        </div>
 
-      <div class="audit-hero reveal" aria-label="Operating partners for the Delta Crown tenant">
-        <article class="audit-hero__card audit-hero__card--tenant">
-          <img src="phase4-migration/assets/microsoft-icons/people-team.svg" alt="MSP partner icon">
-          <h3>MSP &mdash; Sui Generis</h3>
-          <p>Day-to-day managed services: device shipping (Win11 Pro standard), RMM enrollment via <strong>Atera</strong>, identity execution, and Conditional Access deployment. Lead contact: Megan Myrand.</p>
-        </article>
-        <article class="audit-hero__card">
-          <img src="phase4-migration/assets/microsoft-icons/building-cloud.svg" alt="CSP partner icon">
-          <h3>CSP &mdash; Pax8</h3>
-          <p>License purchase, term alignment, and renewals routed through Pax8. Entra ID <strong>P2 blanket</strong> on every tenant; <code>deltacrown</code> correctly holds one P2 with no duplicates to retire.</p>
-        </article>
-        <article class="audit-hero__card">
-          <img src="phase4-migration/assets/microsoft-icons/lock-shield.svg" alt="Architecture owner icon">
-          <h3>Architecture &mdash; HTT</h3>
-          <p>Identity attribute schema, dynamic-group design, security baseline, and DLP authorship live with HTT. The MSP executes against runbooks; the architecture is owned in-house.</p>
-        </article>
+        <div class="msp-route__cards" aria-label="Operating ownership summary">
+          <article>
+            <span aria-hidden="true" class="material-symbols-outlined">architecture</span>
+            <strong>HTT owns the design</strong>
+            <p>Identity schema, dynamic-group logic, DLP/security posture, and architectural exceptions.</p>
+          </article>
+          <article>
+            <span aria-hidden="true" class="material-symbols-outlined">support_agent</span>
+            <strong>Sui Generis operates</strong>
+            <p>User metadata, devices, RMM, Conditional Access deployment, break/fix, and lifecycle tasks.</p>
+          </article>
+          <article>
+            <span aria-hidden="true" class="material-symbols-outlined">receipt_long</span>
+            <strong>Pax8 bills/licenses</strong>
+            <p>Business Premium covers the platform model with no added license cost for the audited design.</p>
+          </article>
+        </div>
+
+        <div class="msp-route__actions">
+          <a class="project-route-button project-route-button--primary" href="./msp.html">Open MSP brief</a>
+          <a class="project-route-button project-route-button--secondary" href="./operations.html">Open ops model</a>
+        </div>
       </div>
-
-      <div class="audit-grid reveal">
-        <article class="audit-panel audit-panel--wide">
-          <h3>RACI &mdash; what each side owns for Delta Crown</h3>
-          <table class="audit-owner-table msp-raci">
-            <caption>R = Responsible &middot; A = Accountable &middot; C = Consulted &middot; I = Informed</caption>
-            <thead>
-              <tr><th scope="col">Domain</th><th scope="col">HTT (in-house)</th><th scope="col">Sui Generis (MSP)</th></tr>
-            </thead>
-            <tbody>
-              <tr><th scope="row">Identity architecture &amp; attribute schema</th><td data-label="HTT"><strong>R / A</strong></td><td data-label="Sui Generis">C / I</td></tr>
-              <tr><th scope="row">User metadata population</th><td data-label="HTT">C</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
-              <tr><th scope="row">Pax8 CSP licensing &amp; renewals</th><td data-label="HTT">I</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
-              <tr><th scope="row">Conditional Access authorship</th><td data-label="HTT"><strong>R / A</strong></td><td data-label="Sui Generis">C</td></tr>
-              <tr><th scope="row">Conditional Access deployment</th><td data-label="HTT">C</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
-              <tr><th scope="row">Device provisioning (Win11 Pro)</th><td data-label="HTT">I</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
-              <tr><th scope="row">Endpoint protection / RMM (Atera)</th><td data-label="HTT">I</td><td data-label="Sui Generis"><strong>R / A</strong></td></tr>
-              <tr><th scope="row">DLP policy authorship</th><td data-label="HTT"><strong>R / A</strong></td><td data-label="Sui Generis">C</td></tr>
-              <tr><th scope="row">DLP enforce-flip approval</th><td data-label="HTT"><strong>A</strong></td><td data-label="Sui Generis">C</td></tr>
-              <tr><th scope="row">M365 backup posture</th><td data-label="HTT">C</td><td data-label="Sui Generis"><strong>R</strong> &mdash; confirmation pending</td></tr>
-              <tr><th scope="row">Cyber-insurance attestation</th><td data-label="HTT"><strong>R</strong> (collect)</td><td data-label="Sui Generis"><strong>A</strong> (provide letter)</td></tr>
-            </tbody>
-          </table>
-        </article>
-
-        <article class="audit-panel">
-          <h3>Operating seams</h3>
-          <ul>
-            <li><strong>RMM:</strong> Atera. Confirmed live on the April 10 partner call.</li>
-            <li><strong>Standard hardware:</strong> Always Windows 11 Pro from the MSP. Never Home.</li>
-            <li><strong>DCE-specific path:</strong> All-Mac strategy planned via Apple Business Manager + MDM (gated by DUNS).</li>
-            <li><strong>Identity attributes:</strong> HTT defines the schema; the MSP populates and maintains the values.</li>
-            <li><strong>Conditional Access:</strong> Authored once, deployed per tenant by the MSP. DCE policies are live.</li>
-          </ul>
-        </article>
-
-        <article class="audit-panel">
-          <h3>CSP billing posture &mdash; DCE specifics</h3>
-          <ul>
-            <li>Delta Crown is <strong>Pax8 / CSP from day one</strong>. No legacy Web-Direct entanglement on this tenant.</li>
-            <li>Microsoft 365 Business Premium covers the audited platform model with <strong>$0 additional license cost</strong>.</li>
-            <li>Renewal dates align to the per-tenant single-date model used across the brand family.</li>
-            <li>The unused HTT Brands source-migration Entra app was deleted on 2026-04-30 as part of go-live cleanup.</li>
-          </ul>
-        </article>
-
-        <article class="audit-panel audit-panel--wide">
-          <h3>The single biggest unblock &mdash; the new-user runbook</h3>
-          <p>The architecture works. The operations do not yet, because four of five dynamic groups currently resolve to zero users. Cause: only six of eighty-nine users have <code>companyName</code> populated, and other lifecycle attributes are similarly sparse.</p>
-          <p>The unblock is a one-page <strong>new-user runbook</strong> &mdash; for each role at Delta Crown, the attributes to set, the groups membership should resolve to, and the license SKU expected. HTT authors it; the MSP executes against it on every new hire and role change. Until the runbook lands, dynamic-group access is theoretical, not operational.</p>
-        </article>
-
-        <article class="audit-panel">
-          <h3>Decisions awaiting MSP / owner sign-off</h3>
-          <ul>
-            <li><strong>DLP enforce flip.</strong> Three policies sit in <code>TestWithNotifications</code>; awaiting an enforce window.</li>
-            <li><strong>Teams-licensed reader.</strong> A reviewer identity with a Teams license, to unblock the channel and membership audit.</li>
-            <li><strong>Provisioning app cleanup.</strong> <code>DeltaCrown-TeamsProvisioner-TEMP</code> credentials have expired; remove or document.</li>
-            <li><strong>Dynamic-group named owners.</strong> Who gets the escalation when membership drifts.</li>
-            <li><strong>M365 backup confirmation.</strong> The product (Datto, Veeam, etc.) and recovery posture in writing.</li>
-          </ul>
-        </article>
-
-        <article class="audit-panel audit-panel--lifecycle">
-          <h3>Why this matters beyond DCE</h3>
-          <p class="audit-todo"><strong>Delta is the template.</strong> When the MSP/CSP operating seam is documented and exercised on Delta Crown, the same pattern applies to HTT, TLL, Frenchies, and Bishops with no architectural redesign &mdash; only metadata, license, and policy variations per brand.</p>
-          <ul>
-            <li>One identity record drives access end-to-end. No per-resource manual permissions.</li>
-            <li>Hub-and-spoke gives each brand its own room without bespoke architecture.</li>
-            <li>Security baseline is portable: the same hardening JSON ships to every brand tenant.</li>
-            <li>Onboarding becomes a runbook the MSP executes, not a ticket queue.</li>
-          </ul>
-        </article>
-      </div>
-
-      <p class="audit-evidence reveal">
-        Operating-model summary derived from the April 10 partner call notes, the cross-tenant identity analysis, the deployment status reconciliation (2026-05-04), and the Delta Crown DCE attribute/group/resource matrix. Specific billing detail, invoice numbers, and partner-private operational data remain in internal briefing documents and are not published here.
-      </p>
     </div>
   </section>
 
