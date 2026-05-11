@@ -294,7 +294,7 @@ a clean AAA claim. Track each as its own bead if pursued.
 |---|---|---|---|---|
 | D1 | No `<abbr>` markup for 33 abbreviations | 3.1.4 | Wrap first occurrence per page in `<abbr title="…">…</abbr>` for non-brand acronyms; document brand names in a brief glossary block | (file if pursued) |
 | D2 | Body copy reading level grade 10–13 vs AAA target ~grade 9 | 3.1.5 | Either treat the existing decision/command-brief blocks as the supplementary plain-language version and *label them as such*, or simplify body prose, or document as an AAA exception | (file if pursued) |
-| D3 | `aria-label` on plain `<div>` containers (28 nodes) | 4.1.2 / ARIA-in-HTML | Replace with `<section>` + `aria-labelledby`, or add an explicit `role` | `DeltaSetup-1kp` *(filed)* |
+| D3 | ~~`aria-label` on plain `<div>` containers (28 nodes)~~ ✅ Resolved | 4.1.2 / ARIA-in-HTML | Added `role="group"` to all 28 affected containers across the three pages. axe `aria-prohibited-attr` incomplete count: 28 → 0. | `DeltaSetup-1kp` *(closed)* |
 | D4 | axe `color-contrast(-enhanced)` incomplete on gradient surfaces | 1.4.6 | Pixel-level verification with a color picker for each flagged region | (resolve via B16) |
 
 ---

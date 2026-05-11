@@ -38,7 +38,7 @@ Do **not** publish “WCAG 2.2 AAA compliant” until `DeltaSetup-9gq` is comple
 | Skip-link focus behavior | ✅ Fixed | `js/main.js` now focuses `#main-content` on skip-link activation. |
 | Heading-order smoke check | ✅ Fixed | Static parser reports no heading-skip warnings after targeted `h4`→`h3` fixes. |
 | Formal WCAG 2.2 AAA certification | ⚠️ Pending | Manual issue filed: `DeltaSetup-9gq`. |
-| Automated axe/pa11y gate | ✅ Passing | `python3 tests/accessibility_axe_audit.py` → `0 violation rule(s)` across `index.html`, `operations.html`, `msp.html` for WCAG 2.0/2.1/2.2 A+AA+AAA. Uses vendored axe-core 4.10.2. Surfaces 9 incomplete findings (color-contrast on gradient surfaces and aria-prohibited-attr on labeled `<div>`s) as warnings for the manual cert pass. |
+| Automated axe/pa11y gate | ✅ Passing | `python3 tests/accessibility_axe_audit.py` → `0 violation rule(s)` across `index.html`, `operations.html`, `msp.html` for WCAG 2.0/2.1/2.2 A+AA+AAA. Uses vendored axe-core 4.10.2. Surfaces 6 incomplete findings (color-contrast on gradient surfaces only — axe cannot programmatically inspect computed backgrounds; verify pixel-level during manual cert per Section B16). |
 
 ---
 
@@ -105,7 +105,7 @@ Latest results:
 ```text
 Static audit:  0 FAIL, 0 WARN, 14 PASS
 Browser audit: passed
-Axe audit:     0 violations, 9 incomplete (manual review), 83 passes
+Axe audit:     0 violations, 6 incomplete (color-contrast on gradient surfaces only), 89 passes
 ```
 
 Browser audit coverage:
