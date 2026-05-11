@@ -152,6 +152,16 @@ WCAG 2.2 AAA includes criteria that require human judgment or real assistive-tec
 ### `DeltaSetup-9gq` — Complete manual WCAG 2.2 AAA certification pass
 
 Manual/browser-assisted final review before making any public AAA claim.
+Structured checklist scaffolded in `AAA-CERTIFICATION-CHECKLIST.md` (this folder).
+Pre-filled sections:
+
+- **Section A** — 15 items already verified by the three Python audits.
+- **Section B** — 16 AAA items requiring human review, each with how-to-test, expected, and evidence slots.
+- **Section C** — N/A items (audio/video, forms, timing, flashing) with rationale.
+- **Section D** — Two pre-flagged honest gaps:
+  - **3.1.4 Abbreviations**: 33 distinct uppercase abbreviations in body copy, zero `<abbr>` markup.
+  - **3.1.5 Reading Level**: Flesch-Kincaid grade 10.4 / 12.1 / 12.9 vs AAA target ~grade 9. The realistic cert claim is therefore likely "AAA-ready with documented 3.1.5 exception" unless body copy is simplified or the existing decision/command-brief blocks are explicitly labeled as the supplementary plain-language version.
+- **Section E** — Final-decision form for the reviewer to sign.
 
 ### `DeltaSetup-did` — Add automated axe/pa11y accessibility regression to quality gates
 
