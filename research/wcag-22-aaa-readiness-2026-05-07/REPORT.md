@@ -38,7 +38,7 @@ Do **not** publish “WCAG 2.2 AAA compliant” until `DeltaSetup-9gq` is comple
 | Skip-link focus behavior | ✅ Fixed | `js/main.js` now focuses `#main-content` on skip-link activation. |
 | Heading-order smoke check | ✅ Fixed | Static parser reports no heading-skip warnings after targeted `h4`→`h3` fixes. |
 | Formal WCAG 2.2 AAA certification | ⚠️ Pending | Manual issue filed: `DeltaSetup-9gq`. |
-| Automated axe/pa11y gate | ⚠️ Pending | Follow-up issue filed: `DeltaSetup-did`. |
+| Automated axe/pa11y gate | ✅ Passing | `python3 tests/accessibility_axe_audit.py` → `0 violation rule(s)` across `index.html`, `operations.html`, `msp.html` for WCAG 2.0/2.1/2.2 A+AA+AAA. Uses vendored axe-core 4.10.2. Surfaces 9 incomplete findings (color-contrast on gradient surfaces and aria-prohibited-attr on labeled `<div>`s) as warnings for the manual cert pass. |
 
 ---
 
@@ -97,6 +97,7 @@ The static audit flagged three `h2 → h4` jumps in `index.html`. These were pro
 ```bash
 python3 tests/accessibility_static_audit.py
 python3 tests/browser_smoke_audit.py
+python3 tests/accessibility_axe_audit.py
 ```
 
 Latest results:
@@ -104,6 +105,7 @@ Latest results:
 ```text
 Static audit:  0 FAIL, 0 WARN, 14 PASS
 Browser audit: passed
+Axe audit:     0 violations, 9 incomplete (manual review), 83 passes
 ```
 
 Browser audit coverage:
@@ -153,7 +155,7 @@ Manual/browser-assisted final review before making any public AAA claim.
 
 ### `DeltaSetup-did` — Add automated axe/pa11y accessibility regression to quality gates
 
-Add axe-core, pa11y, or equivalent browser-based rule checks to complement the current static + smoke scripts.
+✅ Closed. Implemented as `tests/accessibility_axe_audit.py` (Playwright + vendored axe-core 4.10.2). Wired into `AGENTS.md` quality-gate list. Zero violations on first run.
 
 ---
 
@@ -167,4 +169,5 @@ Add axe-core, pa11y, or equivalent browser-based rule checks to complement the c
 - ✅ Obvious AAA contrast/token issues found in this pass were fixed.
 - ✅ Browser smoke audit passes across the three public pages.
 - ⚠️ Formal WCAG 2.2 AAA compliance is **not certified yet**.
-- 📌 The only honest next step is manual AAA certification (`DeltaSetup-9gq`) plus an axe/pa11y automation gate (`DeltaSetup-did`).
+- ✅ Automated axe/pa11y gate landed (`DeltaSetup-did`).
+- 📌 The only honest next step is manual AAA certification (`DeltaSetup-9gq`).

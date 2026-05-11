@@ -38,3 +38,19 @@ bd sync               # Sync with git
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 
+## Public-page quality gates
+
+Any change touching `index.html`, `operations.html`, `msp.html`, `css/`, or `js/` MUST pass all three before push:
+
+```bash
+python3 tests/accessibility_static_audit.py   # HTML structure + design-token contrast
+python3 tests/browser_smoke_audit.py          # Layout/console/skip-link across viewports
+python3 tests/accessibility_axe_audit.py      # axe-core WCAG 2.0/2.1/2.2 A+AA+AAA rule pass
+```
+
+All three exit non-zero on failure. The axe runner uses a vendored copy of
+axe-core at `tests/vendor/axe.min.js` — no network needed at test time.
+Incomplete (axe "could not auto-determine") findings are surfaced as WARN and
+do not fail the gate; they belong in the manual AAA cert checklist
+(`DeltaSetup-9gq`).
+
