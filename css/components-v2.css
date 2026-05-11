@@ -264,3 +264,120 @@
 .simple-table tr:hover td {
   background: var(--surface-dim);
 }
+
+/* ============================================================
+   Plain-language summary (WCAG 3.1.5 supplementary version)
+   ------------------------------------------------------------
+   A small, refined disclosure pill that sits at the top of <main>
+   on every public page. Opening it reveals a deliberately simple
+   (Flesch-Kincaid ~3-4) version of the page content.
+
+   This file is loaded by index.html, operations.html, AND msp.html
+   so the styling applies on all three pages.
+
+   Verified color pairs (see tests/accessibility_static_audit.py):
+   - rgba(255,255,255,0.92) on var(--teal-deeper) = 12.59:1 (AAA)
+   - var(--gold-light)      on var(--teal-deeper) =  9.50:1 (AAA)
+   ============================================================ */
+
+.plain-summary {
+  background: var(--teal-deeper);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.plain-summary .container {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.plain-summary__details {
+  font-family: var(--font-body);
+}
+
+/* Native <summary> defaults to display:list-item which paints the ▶/▼
+   disclosure marker. Switching display kills that, and the explicit
+   ::-webkit/::marker rules belt-and-suspenders it across all engines. */
+.plain-summary__details > summary.plain-summary__summary {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(232, 201, 137, 0.28);
+  border-radius: 999px;
+  color: var(--gold-light);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  gap: 9px;
+  letter-spacing: 0.06em;
+  list-style: none;
+  padding: 6px 14px 6px 12px;
+  text-transform: uppercase;
+  transition: background 180ms var(--ease-out), border-color 180ms var(--ease-out), color 180ms var(--ease-out);
+  user-select: none;
+}
+
+.plain-summary__summary::-webkit-details-marker { display: none; }
+.plain-summary__summary::marker { content: ''; display: none; }
+
+.plain-summary__summary:hover,
+.plain-summary__details[open] > .plain-summary__summary {
+  background: rgba(232, 201, 137, 0.12);
+  border-color: rgba(232, 201, 137, 0.55);
+  color: #FFFFFF;
+}
+
+.plain-summary__summary:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+}
+
+.plain-summary__summary::after {
+  content: '\002B'; /* + */
+  color: var(--gold-light);
+  font-size: 1.05em;
+  font-weight: 700;
+  line-height: 1;
+  margin-left: 2px;
+}
+
+.plain-summary__details[open] .plain-summary__summary::after {
+  content: '\2212'; /* − */
+}
+
+.plain-summary__details[open] .plain-summary__summary::after,
+.plain-summary__details[open]:hover .plain-summary__summary::after {
+  color: #FFFFFF;
+}
+
+.plain-summary__icon {
+  color: var(--gold-light);
+  font-size: 1.05rem;
+  transition: color 180ms var(--ease-out);
+}
+
+.plain-summary__summary:hover .plain-summary__icon,
+.plain-summary__details[open] .plain-summary__icon {
+  color: #FFFFFF;
+}
+
+.plain-summary__body {
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  margin-top: 14px;
+  max-width: 720px;
+  padding: 18px 22px;
+}
+
+.plain-summary__body p {
+  margin: 0 0 8px;
+}
+
+.plain-summary__body p:last-child {
+  margin-bottom: 0;
+}
