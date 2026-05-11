@@ -196,3 +196,75 @@
     min-height: auto;
   }
 }
+
+/* ----- Plain-language summary (WCAG 3.1.5 supplementary version) -----
+   A small disclosure at the top of <main> on each public page that
+   contains a short, deliberately simple version of the page content.
+   Targets Flesch-Kincaid grade <= 9 for non-technical readers. */
+.plain-summary {
+  background: var(--surface);
+  border-bottom: 1px solid rgba(10, 31, 28, 0.08);
+  color: var(--text);
+}
+
+.plain-summary .container {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.plain-summary__details {
+  font-family: var(--font-body);
+}
+
+.plain-summary__summary {
+  align-items: center;
+  color: var(--gold-dark);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.92rem;
+  font-weight: 600;
+  gap: 8px;
+  letter-spacing: 0.01em;
+  list-style: none;
+  padding: 6px 4px;
+  user-select: none;
+}
+
+.plain-summary__summary::-webkit-details-marker { display: none; }
+
+.plain-summary__summary::after {
+  content: '\002B'; /* + */
+  color: var(--gold-dark);
+  font-weight: 700;
+  margin-left: 4px;
+  transition: transform 180ms var(--ease-out);
+}
+
+.plain-summary__details[open] .plain-summary__summary::after {
+  content: '\2212'; /* − */
+}
+
+.plain-summary__icon {
+  color: var(--gold-dark);
+  font-size: 1.2rem;
+}
+
+.plain-summary__body {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.65;
+  margin-top: 14px;
+  max-width: 720px;
+}
+
+.plain-summary__body p {
+  margin: 0 0 10px;
+}
+
+.plain-summary__body p:last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plain-summary__summary::after { transition: none; }
+}

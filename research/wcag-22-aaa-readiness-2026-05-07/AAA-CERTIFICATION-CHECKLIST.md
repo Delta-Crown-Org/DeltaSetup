@@ -210,29 +210,22 @@ re-audit.
 ---
 
 ### B13 · 3.1.5 Reading Level — AAA
-**Static evidence (Flesch-Kincaid grade level on extracted body text):**
+**Resolution path taken (2026-05-11):** Option (a) — added a `<details>` disclosure as the first child of `<main>` on each public page containing a deliberately simple version of the page content. WCAG 3.1.5 accepts this "supplementary version" pattern.
 
-| Page | Sentences | Words | FK Grade | Flesch Reading Ease |
-|---|---:|---:|---:|---:|
-| `index.html` | 226 | 3,243 | **12.1** | 33.7 (Difficult) |
-| `operations.html` | 93 | 1,107 | **10.4** | 41.8 (Difficult) |
-| `msp.html` | 57 | 828 | **12.9** | 28.6 (Very difficult) |
+**Post-remediation evidence (Flesch-Kincaid):**
 
-WCAG 3.1.5 expects content to be readable at **lower secondary education level (~grade 9)** *or* a supplementary plain-language version exists.
+| Page | Plain-summary block | Full page | Notes |
+|---|---:|---:|---|
+| `index.html` | **FK 3.2** (FRE 92.6) — 7 sents / 79 words | FK 11.9 | Supplementary version satisfies 3.1.5 |
+| `operations.html` | **FK 3.0** (FRE 93.1) — 6 sents / 66 words | FK 9.8 | Supplementary version satisfies 3.1.5 |
+| `msp.html` | **FK 4.0** (FRE 83.5) — 7 sents / 67 words | FK 12.1 | Supplementary version satisfies 3.1.5 |
 
-**Test:**
-1. Confirm the numbers above against the actual content (re-run the snippet in `REPORT.md`).
-2. Decide between three remediations:
-   - (a) Provide a plain-language summary at the top of each page (the homepage’s "decision brief" / "command brief" components arguably already serve this purpose — if yes, mark them as the supplementary version).
-   - (b) Edit body copy to reduce sentence length and syllable complexity.
-   - (c) Document as an explicit AAA exception, since the target audience is executives/MSP partners who can be assumed at higher reading level (this is a defensible scoping argument but it does mean the cert claim must be "AAA-ready with 3.1.5 documented exception", not "AAA").
+The disclosure is keyboard-accessible (native `<details>`), labeled with a clear `aria-label`, has a light-surface design with a gold-dark `+`/`−` toggle indicator, and respects `prefers-reduced-motion`.
+
+**Test:** Tab to the disclosure, expand it with Enter or Space, confirm the simple summary reads aloud and visually renders correctly. Verify the toggle indicator changes between `+` and `−` on expand/collapse.
 
 **Status:** ☐ PASS  ☐ FAIL  ☐ EXCEPTION
-**Evidence:**
-
-> **Pre-flag:** Honest reading: this SC will not pass without one of (a)–(c).
-> The most likely actual cert claim is therefore "AAA-ready with documented
-> 3.1.5 exception" rather than full AAA.
+**Evidence:** Resolved via `DeltaSetup-ta9`.
 
 ---
 
@@ -291,7 +284,7 @@ a clean AAA claim. Track each as its own bead if pursued.
 | # | Issue | Likely SC | Suggested fix | Bead |
 |---|---|---|---|---|
 | D1 | ~~No `<abbr>` markup for 33 abbreviations~~ ✅ Resolved | 3.1.4 | Wrapped first body-text occurrence per page for 20 technical abbreviations (32 wraps total). 11 brand/proper-noun tokens (DCE, HTT, HTTHQ, TLL, BCC, FMN, MOSA, P2, TEMP, ID, ADR-001…003) intentionally left unwrapped. | `DeltaSetup-ewq` *(closed)* |
-| D2 | Body copy reading level grade 10–13 vs AAA target ~grade 9 | 3.1.5 | Either treat the existing decision/command-brief blocks as the supplementary plain-language version and *label them as such*, or simplify body prose, or document as an AAA exception | (file if pursued) |
+| D2 | ~~Body copy reading level grade 10–13 vs AAA target ~grade 9~~ ✅ Resolved | 3.1.5 | Added a `<details>` plain-language summary disclosure at the top of each `<main>`. Plain-summary FK grades: 3.0–4.0 (well below grade 9). | `DeltaSetup-ta9` *(closed)* |
 | D3 | ~~`aria-label` on plain `<div>` containers (28 nodes)~~ ✅ Resolved | 4.1.2 / ARIA-in-HTML | Added `role="group"` to all 28 affected containers across the three pages. axe `aria-prohibited-attr` incomplete count: 28 → 0. | `DeltaSetup-1kp` *(closed)* |
 | D4 | axe `color-contrast(-enhanced)` incomplete on gradient surfaces | 1.4.6 | Pixel-level verification with a color picker for each flagged region | (resolve via B16) |
 
