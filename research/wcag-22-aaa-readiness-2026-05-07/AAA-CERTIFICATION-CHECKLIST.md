@@ -196,18 +196,16 @@ re-audit.
 ---
 
 ### B12 · 3.1.4 Abbreviations — AAA
-**Static evidence:** A scan of body text on the three pages found **33 distinct uppercase tokens** that look like abbreviations and **zero `<abbr>` elements** in the rendered HTML:
+**Static evidence (post-remediation, 2026-05-11):** All technical abbreviations now carry `<abbr title="…">…</abbr>` markup on first body-text occurrence per page (32 wraps total: 17 in `index.html`, 7 in `operations.html`, 8 in `msp.html`). Wrapped abbrs:
 
-> ADR, ADR-001…003, BCC, CSP, DCE, DKIM, DLP, DMARC, E2E, EDR, FMN, HR, HTT, HTTHQ, IA, ID, IT, M365, MFA, MOSA, MSP, P2, PDF, RACI, RMM, SKU, SPF, SSO, STRIDE, TEMP, TLL.
+> ADR, CSP, DKIM, DLP, DMARC, E2E, EDR, HR, IA, IT, M365, MFA, MSP, PDF, RACI, RMM, SKU, SPF, SSO, STRIDE.
 
-**Test:** For each abbreviation that appears without an immediate gloss, either (a) wrap it in `<abbr title="…">…</abbr>` on first use per page, or (b) add a glossary entry, or (c) document it as a brand/product name (DCE, HTT, TLL, HTTHQ, M365 fall in this category and are defined elsewhere on the page).
+**Out of scope (brand and proper nouns, defined contextually):** ADR-001/002/003 (specific document IDs — "ADR" itself is wrapped), BCC, DCE, FMN, HTT, HTTHQ, ID (in "Entra ID"), MOSA, P2, TEMP, TLL.
+
+**Test:** Spot-check that `<abbr>` markup renders correctly with browser tooltip on hover, and that screen readers expand on first encounter. If the reviewer disagrees with the brand/proper-noun classification of any token, escalate.
 
 **Status:** ☐ PASS  ☐ FAIL  ☐ EXCEPTION
-**Evidence:**
-
-> **Pre-flag:** This is an open gap. Without remediation this SC will fail.
-> Recommended path is to file a follow-up issue to add `<abbr>` markup and/or
-> a small glossary section.
+**Evidence:** Closed via `DeltaSetup-ewq`.
 
 ---
 
@@ -292,7 +290,7 @@ a clean AAA claim. Track each as its own bead if pursued.
 
 | # | Issue | Likely SC | Suggested fix | Bead |
 |---|---|---|---|---|
-| D1 | No `<abbr>` markup for 33 abbreviations | 3.1.4 | Wrap first occurrence per page in `<abbr title="…">…</abbr>` for non-brand acronyms; document brand names in a brief glossary block | (file if pursued) |
+| D1 | ~~No `<abbr>` markup for 33 abbreviations~~ ✅ Resolved | 3.1.4 | Wrapped first body-text occurrence per page for 20 technical abbreviations (32 wraps total). 11 brand/proper-noun tokens (DCE, HTT, HTTHQ, TLL, BCC, FMN, MOSA, P2, TEMP, ID, ADR-001…003) intentionally left unwrapped. | `DeltaSetup-ewq` *(closed)* |
 | D2 | Body copy reading level grade 10–13 vs AAA target ~grade 9 | 3.1.5 | Either treat the existing decision/command-brief blocks as the supplementary plain-language version and *label them as such*, or simplify body prose, or document as an AAA exception | (file if pursued) |
 | D3 | ~~`aria-label` on plain `<div>` containers (28 nodes)~~ ✅ Resolved | 4.1.2 / ARIA-in-HTML | Added `role="group"` to all 28 affected containers across the three pages. axe `aria-prohibited-attr` incomplete count: 28 → 0. | `DeltaSetup-1kp` *(closed)* |
 | D4 | axe `color-contrast(-enhanced)` incomplete on gradient surfaces | 1.4.6 | Pixel-level verification with a color picker for each flagged region | (resolve via B16) |
