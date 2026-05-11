@@ -197,14 +197,27 @@
   }
 }
 
+
+
 /* ----- Plain-language summary (WCAG 3.1.5 supplementary version) -----
-   A small disclosure at the top of <main> on each public page that
-   contains a short, deliberately simple version of the page content.
-   Targets Flesch-Kincaid grade <= 9 for non-technical readers. */
+   A discreet info strip at the top of <main> on each public page
+   containing a deliberately simple version of the page content.
+   Targets Flesch-Kincaid grade <= 9 for non-technical readers.
+
+   Designed to sit on a DARK surface — works for all three public pages
+   (body.msp-brief-page is dark; index/operations have a dark hero
+   immediately below, so the strip flows visually into the hero).
+
+   Color choices reuse already-audited 7:1+ pairs:
+   - rgba(255,255,255,0.92) on var(--teal-deeper) = 12.59:1 (AAA)
+   - var(--gold-light)      on var(--teal-deeper) = 9.50:1 (AAA) */
 .plain-summary {
-  background: var(--surface);
-  border-bottom: 1px solid rgba(10, 31, 28, 0.08);
-  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(212, 168, 75, 0.06) 0%, rgba(10, 31, 28, 0) 100%),
+    var(--teal-deeper);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .plain-summary .container {
@@ -216,28 +229,41 @@
   font-family: var(--font-body);
 }
 
+/* Hide the native disclosure marker across browsers. The list-style trick
+   covers Firefox + modern Chrome; the ::-webkit pseudo-element covers
+   older Safari/Chrome where summary still uses the legacy marker. */
 .plain-summary__summary {
   align-items: center;
-  color: var(--gold-dark);
+  color: var(--gold-light);
   cursor: pointer;
   display: inline-flex;
   font-size: 0.92rem;
   font-weight: 600;
-  gap: 8px;
-  letter-spacing: 0.01em;
+  gap: 10px;
+  letter-spacing: 0.02em;
   list-style: none;
   padding: 6px 4px;
   user-select: none;
 }
 
 .plain-summary__summary::-webkit-details-marker { display: none; }
+.plain-summary__summary::marker { content: ''; }
+
+.plain-summary__summary:hover {
+  color: #FFFFFF;
+}
+
+.plain-summary__summary:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
 
 .plain-summary__summary::after {
   content: '\002B'; /* + */
-  color: var(--gold-dark);
+  color: var(--gold-light);
   font-weight: 700;
   margin-left: 4px;
-  transition: transform 180ms var(--ease-out);
 }
 
 .plain-summary__details[open] .plain-summary__summary::after {
@@ -245,12 +271,12 @@
 }
 
 .plain-summary__icon {
-  color: var(--gold-dark);
+  color: var(--gold-light);
   font-size: 1.2rem;
 }
 
 .plain-summary__body {
-  color: var(--text);
+  color: rgba(255, 255, 255, 0.92);
   font-size: 1rem;
   line-height: 1.65;
   margin-top: 14px;
@@ -263,8 +289,4 @@
 
 .plain-summary__body p:last-child {
   margin-bottom: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .plain-summary__summary::after { transition: none; }
 }
