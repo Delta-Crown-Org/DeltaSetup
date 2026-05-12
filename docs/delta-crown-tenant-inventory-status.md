@@ -26,8 +26,8 @@ No tenant resources were changed as part of these inventory passes.
 |---|---|---|---|
 | Inventory access matrix | Complete | `docs/tenant-inventory-access-matrix.md` | Defines scopes, commands, guardrails, and output handling. |
 | Identity/users/groups/roles | Complete for current Graph scope | `docs/delta-crown-identity-inventory-summary.md`; `docs/dce-user-metadata-and-teams-state-verification.md` | Metadata gaps and dynamic group counts are documented. |
-| User metadata verification | Complete | `docs/dce-user-metadata-and-teams-state-verification.md` | `companyName` 6/89; `department` 45/89; `jobTitle` 44/89; `employeeType` 0/89. |
-| Dynamic group state | Complete | `docs/dce-user-metadata-and-teams-state-verification.md` | AllStaff = 6; Managers/Marketing/Stylists/External = 0. |
+| User metadata verification | Complete for current validated DCE users; broader tenant cleanup still open | `docs/dce-user-metadata-and-teams-state-verification.md` | `companyName` 6/89; `department` 49/89; `jobTitle` 48/89; `officeLocation` 22/89; `employeeType` 6/89. |
+| Dynamic group state | Complete for current Graph scope | `docs/dce-user-metadata-and-teams-state-verification.md` | AllStaff = 6; Managers = 1; Marketing/Stylists/External = 0. |
 | SharePoint Graph inventory | Complete for known paths/group sites | `docs/delta-crown-sharepoint-inventory-summary.md` | Tenant-wide Graph site search was access-limited, so known paths and group-connected sites were inventoried. |
 | SharePoint PnP/admin inventory | Complete for current accessible scope | `docs/delta-crown-sharepoint-pnp-inventory-summary.md` | Includes sites, sharing, list/library summaries, ClientServices artifacts, site groups, members, and role assignments. |
 | ClientServices artifact review | Complete for metadata/access evidence | `docs/delta-crown-sharepoint-pnp-inventory-summary.md`; `docs/team-showcase-readiness-checklist.md` | Client Records, Consent Forms, and Feedback lists are empty and inherit broad web permissions. No content was opened. |
@@ -68,8 +68,8 @@ docs/teams-inventory-access-request.md
 
 | Finding | Status | Cleanup posture |
 |---|---|---|
-| User metadata incomplete | Confirmed | Fix metadata before relying on dynamic role groups. |
-| Role-specific dynamic groups empty | Confirmed | Do not claim Managers/Marketing/Stylists/External are operationally populated. |
+| User metadata incomplete beyond validated DCE users | Confirmed | Full-tenant metadata cleanup still needed before relying on all dynamic role groups. |
+| Some role-specific dynamic groups empty | Confirmed | Managers now has 1 member; do not claim Marketing/Stylists/External are operationally populated. |
 | Duplicate `Delta Crown Extensions` M365 groups | Confirmed | Do not delete; Teams dependency review first. Rename only with owner approval. |
 | ClientServices legacy artifacts | Confirmed metadata-only | Empty lists/libraries exist; broad inherited permissions exist; owner-approved cleanup required. |
 | Security defaults disabled | Confirmed | Conditional Access/security governance must be reviewed before production readiness claims. |

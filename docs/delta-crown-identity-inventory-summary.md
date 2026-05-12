@@ -38,7 +38,7 @@ Raw local outputs:
 
 Raw outputs are local-only because they contain user names, UPNs, group memberships, owners, and role assignments.
 
-No users, groups, roles, licenses, or tenant settings were changed.
+The original inventory was read-only. On 2026-05-12, validated metadata was applied to the six current Delta Crown Extensions users under `DeltaSetup-1b3`; this summary reflects that reconciled live state.
 
 ## Totals
 
@@ -62,10 +62,10 @@ No users, groups, roles, licenses, or tenant settings were changed.
 | Field | Populated users | Gap |
 |---|---:|---:|
 | `companyName` | 6 / 89 | 83 missing |
-| `department` | 45 / 89 | 44 missing |
-| `jobTitle` | 44 / 89 | 45 missing |
-| `officeLocation` | 16 / 89 | 73 missing |
-| `employeeType` | 0 / 89 | 89 missing |
+| `department` | 49 / 89 | 40 missing |
+| `jobTitle` | 48 / 89 | 41 missing |
+| `officeLocation` | 22 / 89 | 67 missing |
+| `employeeType` | 6 / 89 | 83 missing |
 
 ## Immediate identity findings
 
@@ -82,22 +82,22 @@ Only 6 of 89 users currently have `companyName` populated, so `AllStaff` resolve
 Impact:
 
 - any access model that depends on `AllStaff` is only as complete as `companyName` coverage;
-- this matches the earlier follow-up tracked by `DeltaSetup-120`.
+- broader tenant metadata cleanup remains tracked by `DeltaSetup-1b3`.
 
-### 2. Role-specific dynamic groups are empty
+### 2. Role-specific dynamic groups are partially populated
 
 | Group | Members | Dynamic rule |
 |---|---:|---|
-| Managers | 0 | `(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Manager")` |
+| Managers | 1 | `(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Manager")` |
 | Marketing | 0 | `(user.department -eq "Delta Crown Marketing")` |
 | Stylists | 0 | `(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Stylist")` |
 | External | 0 | `(user.userType -eq "Guest") and (user.companyName -eq "Delta Crown Extensions")` |
 
 Impact:
 
-- role-specific access is not ready to trust until employee metadata is normalized;
+- Managers is now active after validated metadata was applied for Lindy Sturgill (`jobTitle = Salon Manager`);
 - Marketing may be empty because no users currently match exactly `Delta Crown Marketing`;
-- Managers/Stylists depend on both `companyName` and title text.
+- Stylists and External still depend on future onboarding metadata.
 
 ### 3. Duplicate “Delta Crown Extensions” Microsoft 365 groups exist
 
@@ -161,7 +161,7 @@ Impact:
 | Delta Crown Extensions | `DeltaCrownExtensions@deltacrown.com` | Microsoft 365 / Unified | 86 | 4 | No |
 | Delta Crown Operations | `dce-operations-team@deltacrown.com` | Microsoft 365 / Unified + security-enabled | 6 | 2 | No |
 | External | n/a | Dynamic security | 0 | 0 | Yes |
-| Managers | n/a | Dynamic security | 0 | 0 | Yes |
+| Managers | n/a | Dynamic security | 1 | 0 | Yes |
 | Marketing | n/a | Dynamic security | 0 | 0 | Yes |
 | SGI Techs | n/a | Security | 9 | 0 | No |
 | Stylists | n/a | Dynamic security | 0 | 0 | Yes |
@@ -182,7 +182,7 @@ The identity inventory supports the Brand Resources transition plan, but it also
 | Normalize user metadata for `companyName`, `department`, `jobTitle`, `officeLocation`, and optionally `employeeType`. | Dynamic groups depend on these fields. | `DeltaSetup-120` or dedicated metadata remediation issue. |
 | Review duplicate `Delta Crown Extensions` Microsoft 365 groups. | Duplicate display names create access/navigation ambiguity. | New cleanup issue after SharePoint/Teams inventory. |
 | Decide owners for dynamic security groups. | Ownerless groups are governance risk. | Security/governance cleanup roadmap. |
-| Re-check Managers/Marketing/Stylists after metadata cleanup. | Current membership is zero. | `DeltaSetup-120`. |
+| Re-check Marketing/Stylists/External after broader metadata cleanup. | Managers now has 1 member; Marketing/Stylists/External remain zero. | `DeltaSetup-1b3`. |
 | Feed identity results into consolidated tenant inventory. | Required for showcase-vs-tenant gap analysis. | `DeltaSetup-137`. |
 
 ## Safety notes

@@ -111,7 +111,7 @@ Tyler explicitly decided on 2026-04-29 that **no HTTHQ document migration will b
 - ✅ `deltacrown.com` is the authoritative accepted domain
 - ✅ DNS: SPF, DKIM, DMARC verified for `deltacrown.com`
 - ✅ 3 shared mailboxes exist: `operations@`, `bookings@`, `info@deltacrown.com`
-- ✅ 3 dynamic distribution groups exist: `allstaff@`, `managers@`, `stylists@deltacrown.com`
+- ✅ 4 dynamic distribution groups exist: `allstaff@`, `managers@`, `stylists@`, `franchise_owners@deltacrown.com`
 - ✅ Auto-replies enabled on `bookings@` and `info@`
 - ⏳ Auto-reply copy owner review pending
 - ⏳ Trustee permission review pending (raw rows local-only)

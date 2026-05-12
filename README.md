@@ -1,7 +1,7 @@
 # DeltaSetup — Delta Crown Extensions
 
 > **Branch:** `gh-pages` · **Live site:** <https://delta-crown-org.github.io/DeltaSetup/>
-> **Tenant:** `deltacrown` (Microsoft 365 Business Premium) · **Last reconciled:** 2026-05-04
+> **Tenant:** `deltacrown` (Microsoft 365 Business Premium) · **Last reconciled:** 2026-05-12
 
 ---
 
@@ -25,7 +25,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 **Identity (Entra ID)**
 - 89 users (3 disabled)
 - 5 dynamic security groups configured: `AllStaff`, `Managers`, `Marketing`, `Stylists`, `External`
-- All groups are processing; only `AllStaff` is currently populated (6 users) — see metadata gap below
+- All groups are processing; `AllStaff` is populated (6 users) and `Managers` now has 1 member after validated DCE metadata cleanup — see metadata gap below
 
 **SharePoint**
 - **Corp-Hub** + 4 service spokes: `corp-hr`, `corp-it`, `corp-finance`, `corp-training`
@@ -117,7 +117,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 This repo has **two orphan branches with no shared history**:
 
 - **`gh-pages`** *(this branch)* — current canonical work: site, hub-and-spoke provisioning, audited architecture, onboarding model.
-- **`main`** — abandoned earlier architecture (cross-tenant sync between HTT Brands and DCE via `scripts/00-08`). Disposition tracked in **`DeltaSetup-165`**. Do not treat `main` as current.
+- **`main`** — abandoned earlier architecture (cross-tenant sync between HTT Brands and DCE via `scripts/00-08`). Disposition is tracked in the owner-decision cleanup bucket **`DeltaSetup-gf9`**. Do not treat `main` as current.
 
 If you arrived here from the GitHub repo landing page (which currently defaults to `main`), the README on `main` flags itself as legacy and points back here. Use this branch for anything current.
 

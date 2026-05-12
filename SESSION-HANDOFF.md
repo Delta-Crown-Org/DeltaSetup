@@ -14,7 +14,7 @@
 | isLegacyAuthProtocolsEnabled | true | **false** |
 
 ### Graph API Audit Results
-- ✅ All 4 security groups verified (AllStaff=6, Managers=0, Marketing=0, Stylists=0)
+- ✅ Original 2026-04-29 security group snapshot verified (AllStaff=6, Managers=0, Marketing=0, Stylists=0); current 2026-05-12 dynamic group state is documented below.
 - ✅ No "Everyone" / forbidden groups in Azure AD
 - ✅ No forbidden groups in Graph-level site permissions
 - ✅ 10 sites audited clean
@@ -68,7 +68,36 @@ All four pre-flagged Section D gaps either resolved or routed:
 - https://delta-crown-org.github.io/DeltaSetup/ verified live with all changes at 2026-05-11 15:22:07Z.
 - All commits on `gh-pages` are pushed to `origin/gh-pages`.
 
+---
+
+## 2026-05-12 — DCE metadata + Exchange DDG live update (code-puppy-e7999e / Richard)
+
+### Live tenant changes completed
+- Applied validated metadata to the six current Delta Crown Extensions users via `phase4-migration/scripts/apply-dce-user-metadata.ps1 -Apply`.
+- Live result: 6 rows updated, 20 field changes, 0 errors.
+- Created live Exchange Dynamic Distribution Group `DCE Franchise Owners <franchise_owners@deltacrown.com>`.
+- Exchange recipient preview returned 5 owner mailboxes: Allynn Shepherd, Amit Shah, Jay Miller, Sarah Miller, and Toni Careccia.
+- Lindy Sturgill is intentionally excluded from `franchise_owners@` because her metadata is `Department = Salon Operations`, `Title = Salon Manager`, `EmployeeType = Franchisee`.
+
+### Current dynamic group state
+| Group | Count | Notes |
+|---|---:|---|
+| AllStaff | 6 | `companyName = Delta Crown Extensions` |
+| Managers | 1 | Lindy matches title contains `Manager` |
+| Marketing | 0 | No current exact `Delta Crown Marketing` department matches |
+| Stylists | 0 | No current DCE title contains `Stylist` |
+| External | 0 | No matching DCE guest users |
+
+### Docs/site reconciled
+- README, deployment docs, Exchange quickstart, tenant inventory summaries, showcase checklist, and public pages were updated to reflect the 2026-05-12 live state.
+- Public-page gates passed after touching `index.html`, `operations.html`, and `msp.html`.
+
+### Open beads at handoff
+- `DeltaSetup-1b3` — still in progress/blocked for broader full-tenant metadata cleanup beyond the six validated DCE users.
+- `DeltaSetup-nge` — production launch readiness and E2E validation.
+- `DeltaSetup-4ay` — Teams read-context blocker and Teams/channel inventory completion.
+- `DeltaSetup-gf9` — owner-decision cleanup bucket.
+
 ### What next-session-Richard should pick up
-- If `DeltaSetup-9gq` has been worked: read Section E of the checklist, file follow-ups for any FAIL items, copy decision into REPORT.md.
-- If still in progress: nothing to do on the AAA track.
-- For other workstreams, run `bd list` and `bd ready` and pick from there.
+- Run `bd ready` / `bd list` and choose between production launch validation, Teams read-context resolution, or owner-decision cleanup.
+- For the GitHub Pages accuracy pass, verify live page copy against `README.md`, `DEPLOYMENT-STATUS.md`, and the inventory docs after GitHub Pages finishes deploying the latest `gh-pages` push.

@@ -135,7 +135,7 @@ pwsh -File ./5.1-Exchange-Setup.ps1
 |------|-------------|------|
 | **Step 1** | Connects to Exchange Online (browser auth prompt) | ~10s |
 | **Step 2** | Connects to Microsoft Graph (browser auth prompt) | ~10s |
-| **Step 3** | Creates 3 Dynamic Distribution Groups | ~15s |
+| **Step 3** | Creates 4 Dynamic Distribution Groups | ~15s |
 | **Step 4** | Creates 3 Shared Mailboxes + sets permissions (Send-As & Full Access) | ~45s (includes 10s provisioning wait per mailbox) |
 | **Step 5** | Configures auto-replies on `bookings@` and `info@` | ~10s |
 | **Step 6** | Runs a verification sweep of everything just created | ~15s |
@@ -152,10 +152,11 @@ Both connect cross-tenant to the deltacrown.com organization.
 
 ### What Gets Created
 
-**3 Dynamic Distribution Groups:**
+**4 Dynamic Distribution Groups:**
 - `allstaff@deltacrown.com` — all DCE user mailboxes
 - `managers@deltacrown.com` — DCE users with "Manager" in their title
 - `stylists@deltacrown.com` — DCE users with "Stylist" in their title
+- `franchise_owners@deltacrown.com` — DCE users with Department = Franchisee and Title = Owner
 
 **3 Shared Mailboxes:**
 - `operations@deltacrown.com` — Send-As: AllStaff, Full Access: Managers

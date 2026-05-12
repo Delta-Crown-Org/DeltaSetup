@@ -115,8 +115,8 @@ Use public pages, sanitized screenshots, or a least-privilege non-admin demo acc
 
 | Area | Evidence | Showcase impact |
 |---|---|---|
-| User metadata | `companyName` populated for 6/89 users; `department` 45/89; `jobTitle` 44/89; `employeeType` 0/89. | Explain identity-driven access as the target/control model, but state metadata cleanup is required before role groups are complete. |
-| Dynamic groups | AllStaff = 6; Managers/Marketing/Stylists/External = 0. | Safe to explain the mechanism; not safe to claim all automatic groups are fully populated. |
+| User metadata | `companyName` populated for 6/89 users; `department` 49/89; `jobTitle` 48/89; `officeLocation` 22/89; `employeeType` 6/89. | Explain identity-driven access as the target/control model, but state broader metadata cleanup is required before all role groups are complete. |
+| Dynamic groups | AllStaff = 6; Managers = 1; Marketing/Stylists/External = 0. | Safe to explain the mechanism; not safe to claim all automatic groups are fully populated. |
 | SharePoint | PnP inventory verifies DCE sites, sharing posture, ClientServices list/library detail, and permissions. | Safe to discuss audited site/resource direction; do not claim all cleanup actions are approved. |
 | ClientServices artifacts | Client Records, Consent Forms, and Feedback lists are empty and inherit broad web permissions from DCE Client Services. | Safe to say these appear to be legacy artifacts, but do not delete/repurpose until owner-approved cleanup. |
 | Duplicate groups | Two public Teams-provisioned `Delta Crown Extensions` groups exist with identical 86-member/4-owner sets and distinct SharePoint sites. | Mention as a known cleanup item only if needed; do not show as production-clean. |
