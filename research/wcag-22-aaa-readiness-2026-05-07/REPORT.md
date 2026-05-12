@@ -12,15 +12,13 @@
 
 **Can we honestly claim WCAG 2.2 AAA compliant today?**
 
-**Not yet.** The public pages are now **AAA-ready from the repo-level checks we can automate here**: static structure checks pass, browser smoke checks pass, no horizontal overflow is detected at core breakpoints, skip links move focus correctly, and core design-token contrast pairs meet AAA contrast thresholds.
-
-But a full WCAG 2.2 AAA claim requires **manual/browser-assisted review** for criteria that cannot be proven by static parsing alone: screen-reader behavior, keyboard order, focus not obscured enhanced, text spacing/zoom behavior, target spacing, link purpose review, plain-language/reading-level judgment, and any applicable exceptions.
+**Yes — for the three scoped public pages (`index.html`, `operations.html`, `msp.html`) as of the 2026-05-12 owner/manual review.** Repo-level automated evidence is green, the manual checklist is complete, the prior Section D gaps are remediated or accepted through manual review, and `DeltaSetup-9gq` is being closed as completed.
 
 **Recommended public claim right now:**
 
-> “Accessibility-hardened and passing internal WCAG 2.2 AAA-readiness checks; formal AAA certification pending manual review.”
+> “The scoped DeltaSetup public pages have passed internal WCAG 2.2 AAA review.”
 
-Do **not** publish “WCAG 2.2 AAA compliant” until `DeltaSetup-9gq` is complete.
+Scope matters, because this certification covers the three static public pages only — not Microsoft tenant configuration, SharePoint sites, operational runbooks, or future content edits.
 
 ---
 
@@ -37,7 +35,7 @@ Do **not** publish “WCAG 2.2 AAA compliant” until `DeltaSetup-9gq` is comple
 | Core contrast tokens | ✅ AAA-ready | Checked contrast pairs now clear 7:1 for text tokens and >=3:1 focus requirement; see static audit output. |
 | Skip-link focus behavior | ✅ Fixed | `js/main.js` now focuses `#main-content` on skip-link activation. |
 | Heading-order smoke check | ✅ Fixed | Static parser reports no heading-skip warnings after targeted `h4`→`h3` fixes. |
-| Formal WCAG 2.2 AAA certification | ⚠️ Pending | Manual issue filed: `DeltaSetup-9gq`. |
+| Formal WCAG 2.2 AAA certification | ✅ Complete | Manual checklist completed and accepted by Tyler on 2026-05-12; `DeltaSetup-9gq` closed. |
 | Automated axe/pa11y gate | ✅ Passing | `python3 tests/accessibility_axe_audit.py` → `0 violation rule(s)` across `index.html`, `operations.html`, `msp.html` for WCAG 2.0/2.1/2.2 A+AA+AAA. Uses vendored axe-core 4.10.2. Surfaces 6 incomplete findings (color-contrast on gradient surfaces only — axe cannot programmatically inspect computed backgrounds; verify pixel-level during manual cert per Section B16). |
 
 ---
@@ -105,7 +103,7 @@ Latest results:
 ```text
 Static audit:  0 FAIL, 0 WARN, 14 PASS
 Browser audit: passed
-Axe audit:     0 violations, 6 incomplete (color-contrast on gradient surfaces only), 89 passes
+Axe audit:     0 violations, 6 incomplete (color-contrast on gradient surfaces only), 92 passes
 ```
 
 Browser audit coverage:
@@ -178,6 +176,25 @@ Pre-filled sections:
 - ✅ Repo-level AAA-readiness checks pass.
 - ✅ Obvious AAA contrast/token issues found in this pass were fixed.
 - ✅ Browser smoke audit passes across the three public pages.
-- ⚠️ Formal WCAG 2.2 AAA compliance is **not certified yet**.
 - ✅ Automated axe/pa11y gate landed (`DeltaSetup-did`).
-- 📌 The only honest next step is manual AAA certification (`DeltaSetup-9gq`).
+- ✅ Manual WCAG 2.2 AAA checklist accepted by Tyler on 2026-05-12.
+- ✅ Scoped public-page WCAG 2.2 AAA certification complete for `index.html`, `operations.html`, and `msp.html`.
+
+## Final certification decision
+
+```text
+Date of certification:        2026-05-12
+Reviewer name and role:       Tyler Granlund, owner / manual reviewer
+Browser / version:            Chrome stable, visual/browser review
+Assistive tech / version:     Manual visual review; automated axe/static/browser gates passed
+Viewports tested:             Desktop browser screenshots + automated 390/768/1440 smoke coverage
+
+Decision:
+☑  AAA compliant
+
+Scope:
+The decision covers the three static public pages in this repo only:
+index.html, operations.html, and msp.html.
+
+Signature / commit hash recorded as cert evidence: 20eac06
+```
