@@ -9,7 +9,7 @@ This worksheet does **not** authorize tenant changes by itself. It gives Tyler /
 An Excel version is available at `generated/delta-crown-owner-decision-workbook.xlsx`. Regenerate it with:
 
 ```bash
-uv run --with openpyxl python tools/generate_owner_decision_workbook.py
+uv run --with XlsxWriter --with openpyxl python tools/generate_owner_decision_workbook.py
 ```
 
 Workbook-generation notes live in `tools/EXCEL-WORKBOOKS.md`.

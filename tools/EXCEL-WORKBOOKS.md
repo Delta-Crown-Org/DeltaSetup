@@ -4,19 +4,20 @@
 
 Do **not** hand-roll `.xlsx` files by writing raw workbook XML unless there is no other option. Excel is stricter than a simple ZIP integrity check, and a package that unzips cleanly can still be corrupt.
 
-Use `openpyxl` for generated workbooks.
+Use `XlsxWriter` for generated workbooks and `openpyxl` for load validation.
 
 ## Dependency
 
 This repo does not currently vendor Python dependencies. Use `uv` for an ephemeral dependency environment:
 
 ```bash
-uv run --with openpyxl python tools/generate_owner_decision_workbook.py
+uv run --with XlsxWriter --with openpyxl python tools/generate_owner_decision_workbook.py
 ```
 
 If the project later adds a committed Python dependency file, pin:
 
 ```text
+XlsxWriter>=3.2,<4
 openpyxl>=3.1,<4
 ```
 
@@ -51,5 +52,5 @@ generated/delta-crown-owner-decision-workbook.xlsx
 Regenerate with:
 
 ```bash
-uv run --with openpyxl python tools/generate_owner_decision_workbook.py
+uv run --with XlsxWriter --with openpyxl python tools/generate_owner_decision_workbook.py
 ```
