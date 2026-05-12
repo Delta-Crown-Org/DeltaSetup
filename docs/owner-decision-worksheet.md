@@ -6,6 +6,12 @@
 
 This worksheet does **not** authorize tenant changes by itself. It gives Tyler / Megan / owners a short list of decisions needed before full production launch claims are safe.
 
+An Excel version is available at `generated/delta-crown-owner-decision-workbook.xlsx`. Regenerate it with:
+
+```bash
+python3 tools/generate_owner_decision_workbook.py
+```
+
 ## Decision summary
 
 | ID | Decision | Current state | Recommended default | Owner needed |

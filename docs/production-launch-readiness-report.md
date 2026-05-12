@@ -81,7 +81,7 @@ Still open:
 
 ### 3. Owner-decision cleanup bucket
 
-`DeltaSetup-gf9` remains open. Use `docs/owner-decision-worksheet.md` as the owner-facing decision packet.
+`DeltaSetup-gf9` remains open. Use `docs/owner-decision-worksheet.md` and the formatted Excel workbook at `generated/delta-crown-owner-decision-workbook.xlsx` as the owner-facing decision packet.
 
 Owner decisions still needed:
 

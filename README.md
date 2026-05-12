@@ -107,7 +107,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 | Why was ClientServices retired? | `docs/legacy-clientservices-cleanup-register.md` |
 | What's the architecture? | `docs/architecture/decisions/ADR-001..004` |
 | What's the production launch posture? | `docs/production-launch-readiness-report.md` |
-| What owner decisions are blocking launch? | `docs/owner-decision-worksheet.md` |
+| What owner decisions are blocking launch? | `docs/owner-decision-worksheet.md` and `generated/delta-crown-owner-decision-workbook.xlsx` |
 | What's the current showcase narrative? | `docs/team-showcase-readiness-checklist.md` |
 | Onboarding/offboarding model? | `docs/onboarding/` |
 | Open work? | `bd ready` · `bd list --status=open` |
