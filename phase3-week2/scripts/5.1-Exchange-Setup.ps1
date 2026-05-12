@@ -111,6 +111,12 @@ $DynamicDistributionGroups = @(
         Alias           = "stylists"
         Email           = "stylists@$Organization"
         RecipientFilter = "((RecipientType -eq 'UserMailbox') -and (Company -eq 'Delta Crown Extensions') -and (Title -like 'Stylist*'))"
+    },
+    @{
+        Name            = "DCE Franchise Owners"
+        Alias           = "franchise_owners"
+        Email           = "franchise_owners@$Organization"
+        RecipientFilter = "((RecipientType -eq 'UserMailbox') -and (Company -eq 'Delta Crown Extensions') -and (Department -eq 'Franchisee') -and (Title -eq 'Owner'))"
     }
 )
 

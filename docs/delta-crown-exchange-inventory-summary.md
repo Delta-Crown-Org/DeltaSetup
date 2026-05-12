@@ -66,7 +66,7 @@ This guardrail exists because cross-tenant Exchange context mistakes are extreme
 | Discovery mailboxes | 1 |
 | Recipients | 93 |
 | Distribution groups | 0 |
-| Dynamic distribution groups | 3 |
+| Dynamic distribution groups | 3 live; 4 targeted after script rerun |
 | Transport rules | 0 |
 | Inbound connectors | 0 |
 | Outbound connectors | 0 |
@@ -104,8 +104,9 @@ The committed summary intentionally does not list trustees/users.
 | DCE All Staff | `allstaff@deltacrown.com` | User mailboxes where `Company` equals `Delta Crown Extensions` |
 | DCE Managers | `managers@deltacrown.com` | User mailboxes where `Company` equals `Delta Crown Extensions` and `Title` starts with `Manager` |
 | DCE Stylists | `stylists@deltacrown.com` | User mailboxes where `Company` equals `Delta Crown Extensions` and `Title` starts with `Stylist` |
+| DCE Franchise Owners | `franchise_owners@deltacrown.com` | **Pending script rerun**: user mailboxes where `Company` equals `Delta Crown Extensions`, `Department` equals `Franchisee`, and `Title` equals `Owner` |
 
-These filters depend on the same metadata completeness issues found in `docs/delta-crown-identity-inventory-summary.md`.
+These filters depend on the same metadata completeness issues found in `docs/delta-crown-identity-inventory-summary.md`. The inventory captured 3 live DDGs before the `franchise_owners@deltacrown.com` target was added to `phase3-week2/scripts/5.1-Exchange-Setup.ps1`; rerun Exchange setup to create the fourth group.
 
 Important difference from Entra dynamic groups:
 

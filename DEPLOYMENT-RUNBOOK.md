@@ -103,7 +103,7 @@ The orchestrator has **automatic rollback** — if a step fails, it cleans up cr
 | **Security Hardening** | Unique permissions on all sites, "Everyone" groups removed, permission matrix applied |
 | **DLP Policies** | DCE-Data-Protection (test), Corp-Data-Protection (test), External-Sharing-Block (enforce) |
 | **Shared Mailboxes** | operations@, bookings@, info@ (deltacrown.com) — created by `5.1-Exchange-Setup.ps1` |
-| **Dynamic Distribution Groups** | allstaff@, managers@, stylists@ (deltacrown.com) — created by `5.1-Exchange-Setup.ps1` |
+| **Dynamic Distribution Groups** | allstaff@, managers@, stylists@, franchise_owners@ (deltacrown.com) — created by `5.1-Exchange-Setup.ps1` |
 | **Marketing** | New dynamic security group for marketing staff |
 | **PnP Templates** | Exported templates for brand replication |
 
