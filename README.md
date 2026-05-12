@@ -17,8 +17,8 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 | Phase 4 — HTTHQ Document Migration | ⏭️ Skipped by Tyler on 2026-04-29 |
 | Phase 5 — Exchange Online (mailboxes, DDGs) | ✅ Live |
 | Tenant inventory (read-only audit) | ✅ Substantially complete; Teams channel detail blocked |
-| User metadata cleanup | ⏳ Major gaps — blocks dynamic groups |
-| Production launch readiness | ⏳ In progress — `DeltaSetup-e46` |
+| User metadata cleanup | ⏳ Major gaps — blocks dynamic groups (`DeltaSetup-1b3`) |
+| Production launch readiness | ⏳ Open — `DeltaSetup-nge` |
 
 ### ✅ Built and live in the tenant
 
@@ -74,28 +74,19 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 - Evidence: `docs/dce-user-metadata-and-teams-state-verification.md`
 
 **Blocked on Teams read context**
-- `DeltaSetup-151` — Provide licensed Teams-readable context (current admin lacks the Teams license check Graph requires)
-- Cascade: `134` (Teams inventory) · `124` (full tenant inventory) · `137` (consolidated report) · `142` (duplicate-group review) · `rfn` (Teams integration) · `gqk` (template capture)
+- `DeltaSetup-4ay` — Provide licensed Teams-readable context, finish Teams/channel inventory, and update consolidated evidence. Current admin context lacks the Teams license/read check Graph requires.
 
 **Owner decisions needed**
 
 | ID | What's pending |
 |---|---|
-| `DeltaSetup-165` | Fate of stale `main` branch (force-replace, switch default + delete, or banner) |
-| `DeltaSetup-150` | Brand Resources vs Brand Assets SharePoint model |
-| `DeltaSetup-143` | Owners for Delta Crown dynamic security groups |
-| `DeltaSetup-148` | DLP test-mode policies (still in `TestWithNotifications`, not `Enforce`) |
-| `DeltaSetup-145` | `DeltaCrown-TeamsProvisioner-TEMP` app — credentials expired |
-| `DeltaSetup-164` | `DEPLOYMENT-RUNBOOK.md` ClientServices deprecation banner |
+| `DeltaSetup-gf9` | Owner-decision cleanup bucket: stale `main` branch disposition; Brand Resources vs Brand Assets model; dynamic security-group owners; DLP test-mode vs enforce decision; expired `DeltaCrown-TeamsProvisioner-TEMP` app; ClientServices deprecation banner. |
 
 **Production launch path**
-- `DeltaSetup-e46` *(in progress)* — Production launch
-- `DeltaSetup-agr` — End-to-end testing
-- `DeltaSetup-140` — Cleanup roadmap and backlog
-- `DeltaSetup-137` — Consolidated tenant inventory report
-- `DeltaSetup-138` / `139` — Public-showcase gap analysis + readiness package
-- `DeltaSetup-nfb` — Governance policies implementation
-- `DeltaSetup-89t` — Security & permissions configuration
+- `DeltaSetup-nge` — Production launch readiness and end-to-end validation: access tests, owner acceptance, onboarding/offboarding smoke, DLP posture decision, and final readiness package.
+- `DeltaSetup-1b3` — Metadata cleanup so dynamic groups populate.
+- `DeltaSetup-4ay` — Teams read-context blocker and inventory completion.
+- `DeltaSetup-gf9` — Owner-decision cleanup bucket.
 
 **Future brand rollout** *(~2-week pattern per brand, when sponsored)*
 - `DeltaSetup-yo1` — HTT & TLL hub
@@ -103,7 +94,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 - `DeltaSetup-la0` — Bishops hub
 
 **Tooling**
-- `DeltaSetup-162` — Mitigate `bd create` parallel-write race (real-world hit during this audit; 6 of 7 issues silently dropped)
+- No open tooling bead right now. If parallel `bd create` races recur, re-file a small tooling issue; this session created follow-up beads serially to avoid the race.
 
 ### 📍 Where to look for details
 
