@@ -34,3 +34,41 @@
 - E2E testing should proceed without document migration assumptions.
 - Tracking: document migration work (`DeltaSetup-98`/migration portions of `DeltaSetup-117`) closed as skipped/not planned.
 - Cleanup complete on 2026-04-30: unused HTT Brands Entra app `DeltaSetup-HTT-SourceMigration-PnP` / `3657525b-b24a-43bc-9510-cbdd375da6e5` was deleted from tenant `httbrands.onmicrosoft.com`.
+
+---
+
+## 2026-05-11 — WCAG 2.2 AAA push (code-puppy-e7999e / Richard)
+
+### Closed beads (4)
+| Bead | Pri | Outcome |
+|---|---|---|
+| `DeltaSetup-did` | P2 | Automated axe/pa11y regression gate (`tests/accessibility_axe_audit.py` + vendored axe-core 4.10.2). |
+| `DeltaSetup-1kp` | P2 | Added `role="group"` to 28 labeled `<div>` containers across all 3 public pages. |
+| `DeltaSetup-ewq` | P2 | Wrapped 32 first-occurrence technical abbreviations in `<abbr>` markup. |
+| `DeltaSetup-ta9` | P2 | Added `<details>` plain-language summary disclosure to all 3 public pages (FK 3.0–4.0). |
+
+### Open beads (1)
+- `DeltaSetup-9gq` (P1, in_progress, assigned to Tyler) — manual WCAG 2.2 AAA cert pass. Blocked on human/browser/AT testing per the structured checklist at `research/wcag-22-aaa-readiness-2026-05-07/AAA-CERTIFICATION-CHECKLIST.md`.
+
+### Quality gate state at session end
+```
+python3 tests/accessibility_static_audit.py    # 0 FAIL, 0 WARN, 14 PASS
+python3 tests/browser_smoke_audit.py           # passed
+python3 tests/accessibility_axe_audit.py       # 0 violations, 6 incomplete (color-contrast on gradient surfaces; routed to Section B16 of cert checklist), 92 passes
+```
+
+### AAA cert checklist Section D status
+All four pre-flagged Section D gaps either resolved or routed:
+- D1 (abbreviations) ✅ closed via DeltaSetup-ewq
+- D2 (reading level) ✅ closed via DeltaSetup-ta9
+- D3 (`aria-prohibited-attr`) ✅ closed via DeltaSetup-1kp
+- D4 (color-contrast incomplete) → manual cert Section B16 (pixel-level color-picker check)
+
+### Live deploy
+- https://delta-crown-org.github.io/DeltaSetup/ verified live with all changes at 2026-05-11 15:22:07Z.
+- All commits on `gh-pages` are pushed to `origin/gh-pages`.
+
+### What next-session-Richard should pick up
+- If `DeltaSetup-9gq` has been worked: read Section E of the checklist, file follow-ups for any FAIL items, copy decision into REPORT.md.
+- If still in progress: nothing to do on the AAA track.
+- For other workstreams, run `bd list` and `bd ready` and pick from there.
