@@ -318,7 +318,7 @@ Decision (check one):
      - ___________________________________________________________
      - ___________________________________________________________
 
-Signature / commit hash recorded as cert evidence: 20eac06
+Signature / commit hash recorded as cert evidence: 750bd9d
 ```
 
 After signing, copy this section verbatim into `REPORT.md` under a new

@@ -196,5 +196,5 @@ Scope:
 The decision covers the three static public pages in this repo only:
 index.html, operations.html, and msp.html.
 
-Signature / commit hash recorded as cert evidence: 20eac06
+Signature / commit hash recorded as cert evidence: 750bd9d
 ```
