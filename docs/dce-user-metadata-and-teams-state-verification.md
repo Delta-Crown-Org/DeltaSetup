@@ -34,10 +34,10 @@ No users, groups, Teams, channels, SharePoint sites, or tenant settings were cha
 | Field | Populated users | Gap |
 |---|---:|---:|
 | `companyName` | 6 / 89 | 83 missing |
-| `department` | 45 / 89 | 44 missing |
-| `jobTitle` | 44 / 89 | 45 missing |
-| `officeLocation` | 16 / 89 | 73 missing |
-| `employeeType` | 0 / 89 | 89 missing |
+| `department` | 49 / 89 | 40 missing |
+| `jobTitle` | 48 / 89 | 41 missing |
+| `officeLocation` | 22 / 89 | 67 missing |
+| `employeeType` | 6 / 89 | 83 missing |
 
 Additional counts:
 
@@ -51,15 +51,16 @@ Additional counts:
 | Group | Members | Processing state | Rule |
 |---|---:|---|---|
 | AllStaff | 6 | On | `(user.companyName -eq "Delta Crown Extensions")` |
-| Managers | 0 | On | `(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Manager")` |
+| Managers | 1 | On | `(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Manager")` |
 | Marketing | 0 | On | `(user.department -eq "Delta Crown Marketing")` |
 | Stylists | 0 | On | `(user.companyName -eq "Delta Crown Extensions") and (user.jobTitle -contains "Stylist")` |
 | External | 0 | On | `(user.userType -eq "Guest") and (user.companyName -eq "Delta Crown Extensions")` |
 
 Implication:
 
-- `AllStaff` is live but only includes the six users with `companyName = Delta Crown Extensions`.
-- Role-specific groups are configured and processing, but currently empty.
+- `AllStaff` is live and includes the six users with `companyName = Delta Crown Extensions`.
+- `Managers` is now live with one member after applying validated metadata for Lindy Sturgill (`jobTitle = Salon Manager`).
+- `Marketing`, `Stylists`, and `External` are configured and processing but remain empty.
 - SharePoint currently grants `AllStaff` and `Managers` access to some resources, including `DCE Client Services`; those grants are only as accurate as this metadata.
 
 ## Teams state verification
@@ -111,9 +112,9 @@ Interpretation:
 
 ## Readiness implications
 
-1. User metadata gaps are confirmed and still need remediation before dynamic role groups can be trusted.
+1. User metadata gaps remain across the full tenant, but the six current Delta Crown Extensions users now have validated `department`, `jobTitle`, `officeLocation`, and `employeeType` values.
 2. `AllStaff` currently resolves to six users.
-3. Managers/Marketing/Stylists/External resolve to zero users.
+3. `Managers` currently resolves to one user; `Marketing`/`Stylists`/`External` resolve to zero users.
 4. DCE Operations group-backed Team evidence exists, but channel-level inventory requires a licensed Teams-readable account/context.
 5. This verification is enough to unblock the dedicated Teams inventory issue with a clear access requirement.
 

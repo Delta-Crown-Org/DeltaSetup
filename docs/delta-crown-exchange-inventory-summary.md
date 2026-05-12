@@ -64,9 +64,9 @@ This guardrail exists because cross-tenant Exchange context mistakes are extreme
 | User mailboxes | 6 |
 | Shared mailboxes | 3 |
 | Discovery mailboxes | 1 |
-| Recipients | 93 |
+| Recipients | 94 after franchise-owners DDG creation |
 | Distribution groups | 0 |
-| Dynamic distribution groups | 3 live; 4 targeted after script rerun |
+| Dynamic distribution groups | 4 |
 | Transport rules | 0 |
 | Inbound connectors | 0 |
 | Outbound connectors | 0 |
@@ -104,9 +104,9 @@ The committed summary intentionally does not list trustees/users.
 | DCE All Staff | `allstaff@deltacrown.com` | User mailboxes where `Company` equals `Delta Crown Extensions` |
 | DCE Managers | `managers@deltacrown.com` | User mailboxes where `Company` equals `Delta Crown Extensions` and `Title` starts with `Manager` |
 | DCE Stylists | `stylists@deltacrown.com` | User mailboxes where `Company` equals `Delta Crown Extensions` and `Title` starts with `Stylist` |
-| DCE Franchise Owners | `franchise_owners@deltacrown.com` | **Pending script rerun**: user mailboxes where `Company` equals `Delta Crown Extensions`, `Department` equals `Franchisee`, and `Title` equals `Owner` |
+| DCE Franchise Owners | `franchise_owners@deltacrown.com` | User mailboxes where `Company` equals `Delta Crown Extensions`, `Department` equals `Franchisee`, and `Title` equals `Owner` |
 
-These filters depend on the same metadata completeness issues found in `docs/delta-crown-identity-inventory-summary.md`. The inventory captured 3 live DDGs before the `franchise_owners@deltacrown.com` target was added to `phase3-week2/scripts/5.1-Exchange-Setup.ps1`; rerun Exchange setup to create the fourth group.
+These filters depend on the same metadata completeness issues found in `docs/delta-crown-identity-inventory-summary.md`. `franchise_owners@deltacrown.com` was created after applying validated user metadata; recipient preview returned five owner mailboxes.
 
 Important difference from Entra dynamic groups:
 
@@ -129,7 +129,7 @@ Important difference from Entra dynamic groups:
 2. The expected shared mailboxes exist.
 3. `bookings@` and `info@` auto-replies are enabled; `operations@` is disabled.
 4. Shared mailbox permission rows exist, but trustee details are local-only and should be reviewed before public/team-showcase claims.
-5. Dynamic distribution groups exist, but their usefulness depends on user metadata quality.
+5. Dynamic distribution groups exist; franchise-owner routing now resolves to five owner mailboxes after validated metadata cleanup.
 6. No mail flow rules or connectors were found, so there is no obvious custom routing layer in this inventory.
 
 ## Follow-up needed
@@ -137,7 +137,7 @@ Important difference from Entra dynamic groups:
 | Follow-up | Reason |
 |---|---|
 | Review shared mailbox trustees locally before showcase claims. | Raw permission rows are intentionally not committed. |
-| Re-check DDG membership after identity metadata cleanup. | `companyName` and title metadata gaps can cause incomplete recipient sets. |
+| Re-check DDG membership after future identity metadata cleanup. | `companyName`, `department`, and title metadata gaps can cause incomplete recipient sets as new users are onboarded. |
 | Confirm auto-reply text with business owner. | This inventory captured state, not content review or copy approval. |
 | Include Exchange findings in consolidated tenant inventory. | Required for `DeltaSetup-137`. |
 

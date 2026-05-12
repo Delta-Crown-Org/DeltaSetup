@@ -126,15 +126,14 @@ Further changes (mail flow rules, connectors, etc.) are out of scope for the cur
 
 ### Dynamic Distribution Groups
 
-**Live inventory:** 3 DDGs currently confirmed.  
-**Script target:** 4 DDGs after rerunning `phase3-week2/scripts/5.1-Exchange-Setup.ps1`.
+**Live inventory:** 4 DDGs currently confirmed.
 
 | DDG | Email | Recipient Filter | Status |
 |-----|-------|------------------|--------|
 | DCE All Staff | allstaff@deltacrown.com | Company = "Delta Crown Extensions" | Live |
 | DCE Managers | managers@deltacrown.com | Company = "Delta Crown Extensions" + Title starts with "Manager" | Live |
 | DCE Stylists | stylists@deltacrown.com | Company = "Delta Crown Extensions" + Title starts with "Stylist" | Live |
-| DCE Franchise Owners | franchise_owners@deltacrown.com | Company = "Delta Crown Extensions" + Department = "Franchisee" + Title = "Owner" | Pending script rerun |
+| DCE Franchise Owners | franchise_owners@deltacrown.com | Company = "Delta Crown Extensions" + Department = "Franchisee" + Title = "Owner" | Live — preview count 5 |
 
 ### Shared Mailboxes (3)
 | Mailbox | Email | Send-As | Full Access | Auto-Reply |

@@ -42,7 +42,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 **Exchange Online**
 - `deltacrown.com` authoritative accepted domain
 - 3 shared mailboxes: `operations@`, `bookings@`, `info@`
-- 3 dynamic distribution groups: `allstaff@`, `managers@`, `stylists@`
+- 4 dynamic distribution groups: `allstaff@`, `managers@`, `stylists@`, `franchise_owners@`
 - Auto-replies enabled on `bookings@` and `info@`
 
 **Security & Compliance**
@@ -68,9 +68,10 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 ### ⏳ What still needs to happen
 
 **To make dynamic groups actually populate** *(highest leverage gap)*
-- `companyName` populated on only **6 of 89 users** → `Managers`/`Marketing`/`Stylists`/`External` all resolve to **zero**
-- `department` 45/89 · `jobTitle` 44/89 · `employeeType` 0/89
-- Bulk metadata cleanup is the prerequisite for role-driven access at scale
+- `companyName` populated on only **6 of 89 users**; those six DCE users now have validated department/title/location/type metadata
+- `department` 49/89 · `jobTitle` 48/89 · `officeLocation` 22/89 · `employeeType` 6/89
+- `AllStaff` resolves to 6 and `Managers` now resolves to 1; `Marketing`/`Stylists`/`External` remain 0
+- Full-tenant bulk metadata cleanup is still the prerequisite for role-driven access at scale
 - Evidence: `docs/dce-user-metadata-and-teams-state-verification.md`
 
 **Blocked on Teams read context**
