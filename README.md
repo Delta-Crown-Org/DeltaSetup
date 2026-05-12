@@ -81,7 +81,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 
 | ID | What's pending |
 |---|---|
-| `DeltaSetup-gf9` | Owner-decision cleanup bucket: stale `main` branch disposition; Brand Resources vs Brand Assets model; dynamic security-group owners; DLP test-mode vs enforce decision; expired `DeltaCrown-TeamsProvisioner-TEMP` app; ClientServices deprecation banner. |
+| `DeltaSetup-gf9` | Owner-decision cleanup bucket: stale `main` branch disposition; Brand Resources vs Brand Assets model; dynamic security-group owners; DLP test-mode vs enforce decision; expired `DeltaCrown-TeamsProvisioner-TEMP` app; ClientServices deprecation banner. Decision worksheet: `docs/owner-decision-worksheet.md`. |
 
 **Production launch path**
 - `DeltaSetup-nge` — Production launch readiness and end-to-end validation: access tests, owner acceptance, onboarding/offboarding smoke, DLP posture decision, and final readiness package.
@@ -107,6 +107,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 | Why was ClientServices retired? | `docs/legacy-clientservices-cleanup-register.md` |
 | What's the architecture? | `docs/architecture/decisions/ADR-001..004` |
 | What's the production launch posture? | `docs/production-launch-readiness-report.md` |
+| What owner decisions are blocking launch? | `docs/owner-decision-worksheet.md` |
 | What's the current showcase narrative? | `docs/team-showcase-readiness-checklist.md` |
 | Onboarding/offboarding model? | `docs/onboarding/` |
 | Open work? | `bd ready` · `bd list --status=open` |

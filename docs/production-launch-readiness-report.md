@@ -81,7 +81,7 @@ Still open:
 
 ### 3. Owner-decision cleanup bucket
 
-`DeltaSetup-gf9` remains open.
+`DeltaSetup-gf9` remains open. Use `docs/owner-decision-worksheet.md` as the owner-facing decision packet.
 
 Owner decisions still needed:
 
@@ -115,7 +115,7 @@ These are safe and actionable without changing tenant resources:
 2. Update stale stakeholder docs, especially `MEGAN-DELTASETUP-MSP-BRIEF.md`, to match the 2026-05-12 metadata and Exchange state.
 3. Record the Teams partial-read result in `DeltaSetup-4ay` and docs.
 4. Use this report as the launch readiness source of truth.
-5. Prepare a concise owner-decision worksheet for `DeltaSetup-gf9`.
+5. Use `docs/owner-decision-worksheet.md` to capture Tyler/Megan decisions and split approved tenant changes into separate small change issues.
 
 ## What needs Tyler / owner / tenant action
 
