@@ -35,7 +35,7 @@ No tenant resources were changed as part of these inventory passes.
 | Security/app/license inventory | Complete for accessible Graph scope | Existing security/apps/licenses inventory docs and follow-up issues | Follow-up singleton policy gaps were closed by `DeltaSetup-147`. |
 | Security defaults / auth methods / admin consent request | Complete | `docs/delta-crown-security-policy-confirmation.md` | Security defaults disabled; admin consent request disabled; auth method states documented. |
 | Duplicate Delta Crown Extensions groups | Partial; SharePoint/Graph complete, Teams dependency blocked | `docs/duplicate-delta-crown-extensions-groups-review.md` | Two public Teams-provisioned groups have identical member/owner sets and distinct SharePoint sites; do not delete until Teams dependencies are reviewed. |
-| Teams/channels | Blocked | `docs/dce-user-metadata-and-teams-state-verification.md`; `docs/teams-inventory-access-request.md` | Graph Teams endpoints and MicrosoftTeams PowerShell reads return 403/license/read-context errors. |
+| Teams/channels | Blocked for team/channel detail; member read partially works | `docs/dce-user-metadata-and-teams-state-verification.md`; `docs/teams-inventory-access-request.md` | MicrosoftTeams `Get-TeamUser` returns team members, but `Get-Team` and `Get-TeamChannel` still return 403/license/read-context errors. |
 | DLP/Purview policy detail | Follow-up tracked | `DeltaSetup-148` | Existing finding: DLP policies in test mode; full review is blocked behind consolidated inventory/roadmap flow. |
 | TeamsProvisioner TEMP app registration | Follow-up tracked | `DeltaSetup-145` | Existing finding: expired credentials; review is blocked behind consolidated inventory/roadmap flow. |
 | Brand Assets vs Brand Resources model | Follow-up tracked | `DeltaSetup-150` | SharePoint inventory found Brand Assets, not an exact Brand Resources implementation; decision blocked behind consolidated inventory. |
@@ -51,6 +51,8 @@ Observed failures:
 ```text
 Graph /teams/{id}: 403 — Failed to get license information for the user.
 MicrosoftTeams Get-Team: Forbidden in /v1.0/teams/ endpoint
+MicrosoftTeams Get-TeamChannel: failed to get license information for the user
+MicrosoftTeams Get-TeamUser: succeeds for DCE Operations membership
 ```
 
 Required action:
@@ -74,7 +76,7 @@ docs/teams-inventory-access-request.md
 | ClientServices legacy artifacts | Confirmed metadata-only | Empty lists/libraries exist; broad inherited permissions exist; owner-approved cleanup required. |
 | Security defaults disabled | Confirmed | Conditional Access/security governance must be reviewed before production readiness claims. |
 | Admin consent request workflow disabled | Confirmed | App consent governance review remains important. |
-| DCE Operations Teams/channel detail | Blocked | Requires Teams-readable context or owner attestation. |
+| DCE Operations Teams/channel detail | Blocked / partial | Team membership is readable; team properties and channel detail still require Teams-readable context or owner attestation. |
 
 ## Raw evidence locations
 

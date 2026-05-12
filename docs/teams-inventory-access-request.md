@@ -15,17 +15,13 @@ Graph Teams endpoint checks return:
 Failed to get license information for the user. Ensure user has a valid Office365 license assigned to them.
 ```
 
-MicrosoftTeams PowerShell connects, but read calls fail:
+MicrosoftTeams PowerShell connects. As of the 2026-05-12 probe, member read works but team/channel reads still fail:
 
 ```powershell
 Connect-MicrosoftTeams -TenantId ce62e17d-2feb-4e67-a115-8ea4af68da30
-Get-Team -GroupId 03255d50-a52d-4b1f-a0f6-37379cc13a35
-```
-
-Result:
-
-```text
-Forbidden in /v1.0/teams/ endpoint
+Get-Team -GroupId 03255d50-a52d-4b1f-a0f6-37379cc13a35        # Forbidden in /v1.0/teams/ endpoint
+Get-TeamChannel -GroupId 03255d50-a52d-4b1f-a0f6-37379cc13a35 # Failed to get license information for the user
+Get-TeamUser -GroupId 03255d50-a52d-4b1f-a0f6-37379cc13a35    # Succeeds; returns Tyler external admin + six DCE users
 ```
 
 ## Needed access
@@ -69,7 +65,7 @@ Capture read-only evidence for:
 - DCE Operations team properties;
 - standard/private/shared channels;
 - owners;
-- members;
+- members — partially available now via `Get-TeamUser`;
 - private/shared channel members;
 - tabs/apps if readable;
 - connected SharePoint sites/folders;

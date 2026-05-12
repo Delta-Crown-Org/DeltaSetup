@@ -75,7 +75,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 - Evidence: `docs/dce-user-metadata-and-teams-state-verification.md`
 
 **Blocked on Teams read context**
-- `DeltaSetup-4ay` — Provide licensed Teams-readable context, finish Teams/channel inventory, and update consolidated evidence. Current admin context lacks the Teams license/read check Graph requires.
+- `DeltaSetup-4ay` — Provide licensed Teams-readable context or owner attestation, finish Teams/channel inventory, and update consolidated evidence. Current MicrosoftTeams probe can read team members, but team/channel reads still fail the Teams license/read check.
 
 **Owner decisions needed**
 
@@ -106,6 +106,7 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 | What did the audits find? | `docs/delta-crown-*-inventory-summary.md` |
 | Why was ClientServices retired? | `docs/legacy-clientservices-cleanup-register.md` |
 | What's the architecture? | `docs/architecture/decisions/ADR-001..004` |
+| What's the production launch posture? | `docs/production-launch-readiness-report.md` |
 | What's the current showcase narrative? | `docs/team-showcase-readiness-checklist.md` |
 | Onboarding/offboarding model? | `docs/onboarding/` |
 | Open work? | `bd ready` · `bd list --status=open` |
