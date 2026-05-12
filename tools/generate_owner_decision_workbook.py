@@ -1,15 +1,37 @@
 #!/usr/bin/env python3
-"""Generate Delta Crown owner-decision Excel workbook without third-party deps."""
+"""Generate the Delta Crown owner-decision Excel workbook.
+
+Run with:
+    uv run --with openpyxl python tools/generate_owner_decision_workbook.py
+
+Why openpyxl?
+    Excel is picky. Hand-rolled XLSX XML is a crime scene waiting to happen.
+"""
 
 from __future__ import annotations
 
-import html
-import zipfile
+from copy import copy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
+from openpyxl import Workbook, load_workbook
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.utils import get_column_letter
+from openpyxl.worksheet.table import Table, TableStyleInfo
+
 OUT = Path("generated/delta-crown-owner-decision-workbook.xlsx")
+
+TEAL = "0B3D3D"
+GOLD = "C9A227"
+LIGHT_GOLD = "F5E6A8"
+LIGHT_BLUE = "DDEBF7"
+LIGHT_GREEN = "E2F0D9"
+LIGHT_YELLOW = "FFF2CC"
+LIGHT_RED = "FCE4D6"
+WHITE = "FFFFFF"
+DARK = "1F1F1F"
+BORDER = "D9E2F3"
 
 
 @dataclass(frozen=True)
@@ -179,197 +201,242 @@ DECISIONS: tuple[Decision, ...] = (
 )
 
 
-SHEETS = ["Dashboard", "Decision Matrix", "Action Tracker", "Evidence", "Glossary"] + [d.decision_id for d in DECISIONS]
+class Formats:
+    def __init__(self) -> None:
+        thin = Side(style="thin", color=BORDER)
+        self.border = Border(left=thin, right=thin, top=thin, bottom=thin)
+        self.title = Font(name="Aptos Display", size=18, bold=True, color=TEAL)
+        self.subtitle = Font(name="Aptos", size=11, italic=True, color="666666")
+        self.header = Font(name="Aptos", size=11, bold=True, color=WHITE)
+        self.section = Font(name="Aptos", size=13, bold=True, color=TEAL)
+        self.body = Font(name="Aptos", size=11, color=DARK)
+        self.body_bold = Font(name="Aptos", size=11, bold=True, color=DARK)
+        self.white_bold = Font(name="Aptos", size=11, bold=True, color=WHITE)
+        self.fill_header = PatternFill("solid", fgColor=TEAL)
+        self.fill_gold = PatternFill("solid", fgColor=LIGHT_GOLD)
+        self.fill_blue = PatternFill("solid", fgColor=LIGHT_BLUE)
+        self.fill_green = PatternFill("solid", fgColor=LIGHT_GREEN)
+        self.fill_yellow = PatternFill("solid", fgColor=LIGHT_YELLOW)
+        self.fill_red = PatternFill("solid", fgColor=LIGHT_RED)
+        self.center = Alignment(horizontal="center", vertical="top", wrap_text=True)
+        self.top = Alignment(vertical="top", wrap_text=True)
 
 
-def esc(value: object) -> str:
-    return html.escape(str(value), quote=True)
+def write_title(ws, title: str, subtitle: str, fmt: Formats, width: int) -> int:
+    ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=width)
+    ws.cell(1, 1, title).font = fmt.title
+    ws.cell(1, 1).alignment = fmt.top
+    ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=width)
+    ws.cell(2, 1, subtitle).font = fmt.subtitle
+    ws.cell(2, 1).alignment = fmt.top
+    ws.row_dimensions[1].height = 28
+    ws.row_dimensions[2].height = 34
+    return 4
 
 
-def col_name(index: int) -> str:
-    result = ""
-    while index:
-        index, rem = divmod(index - 1, 26)
-        result = chr(65 + rem) + result
-    return result
+def write_table(ws, start_row: int, headers: list[str], rows: Iterable[Iterable[object]], fmt: Formats, table_name: str | None = None) -> int:
+    for col, header in enumerate(headers, start=1):
+        cell = ws.cell(start_row, col, header)
+        cell.font = fmt.header
+        cell.fill = fmt.fill_header
+        cell.alignment = fmt.center
+        cell.border = fmt.border
+    row_num = start_row + 1
+    for row in rows:
+        for col, value in enumerate(row, start=1):
+            cell = ws.cell(row_num, col, value)
+            cell.font = fmt.body
+            cell.alignment = fmt.top
+            cell.border = fmt.border
+        row_num += 1
+    if table_name and row_num > start_row + 1:
+        end_col = get_column_letter(len(headers))
+        ref = f"A{start_row}:{end_col}{row_num - 1}"
+        table = Table(displayName=table_name, ref=ref)
+        table.tableStyleInfo = TableStyleInfo(name="TableStyleMedium2", showRowStripes=True)
+        ws.add_table(table)
+    return row_num + 1
 
 
-def cell_ref(row: int, col: int) -> str:
-    return f"{col_name(col)}{row}"
+def set_widths(ws, widths: list[float]) -> None:
+    for index, width in enumerate(widths, start=1):
+        ws.column_dimensions[get_column_letter(index)].width = width
 
 
-def inline(value: object, style: int | None = None) -> str:
-    s_attr = f' s="{style}"' if style is not None else ""
-    return f'<c{ s_attr } t="inlineStr"><is><t>{esc(value)}</t></is></c>'
+def freeze_and_filter(ws, row: int = 5) -> None:
+    ws.freeze_panes = f"A{row}"
 
 
-def number(value: int | float, style: int | None = None) -> str:
-    s_attr = f' s="{style}"' if style is not None else ""
-    return f'<c{ s_attr }><v>{value}</v></c>'
+def style_status_cells(ws, col: int, fmt: Formats) -> None:
+    for row in range(1, ws.max_row + 1):
+        cell = ws.cell(row, col)
+        value = str(cell.value or "").lower()
+        if "not started" in value or "tbd" in value:
+            cell.fill = fmt.fill_yellow
+        elif "blocked" in value or "no-go" in value:
+            cell.fill = fmt.fill_red
+        elif "pass" in value or "go" in value:
+            cell.fill = fmt.fill_green
 
 
-def row_xml(row_num: int, values: Iterable[object], style: int | None = None) -> str:
-    cells = []
-    for i, value in enumerate(values, start=1):
-        if isinstance(value, (int, float)) and not isinstance(value, bool):
-            cell = number(value, style)
-        else:
-            cell = inline(value, style)
-        cells.append(cell.replace("<c", f'<c r="{cell_ref(row_num, i)}"', 1))
-    return f'<row r="{row_num}">{"".join(cells)}</row>'
-
-
-def sheet_xml(rows: list[list[object]], widths: dict[int, float] | None = None, freeze: str | None = None) -> str:
-    max_col = max((len(r) for r in rows), default=1)
-    max_row = len(rows)
-    cols = ""
-    if widths:
-        cols = "<cols>" + "".join(
-            f'<col min="{c}" max="{c}" width="{w}" customWidth="1"/>' for c, w in widths.items()
-        ) + "</cols>"
-    pane = ""
-    if freeze:
-        pane = (
-            "<sheetViews><sheetView workbookViewId=\"0\">"
-            f"<pane ySplit=\"1\" topLeftCell=\"{freeze}\" activePane=\"bottomLeft\" state=\"frozen\"/>"
-            "</sheetView></sheetViews>"
-        )
-    xml_rows = []
-    for idx, values in enumerate(rows, start=1):
-        style = 1 if idx == 1 else None
-        xml_rows.append(row_xml(idx, values, style))
-    return (
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
-        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
-        f"{pane}<dimension ref=\"A1:{cell_ref(max_row, max_col)}\"/>{cols}"
-        f"<sheetData>{''.join(xml_rows)}</sheetData>"
-        "</worksheet>"
-    )
-
-
-def styles_xml() -> str:
-    return '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
-  <fonts count="2"><font><sz val="11"/><name val="Aptos"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Aptos"/></font></fonts>
-  <fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF0B3D3D"/><bgColor indexed="64"/></patternFill></fill></fills>
-  <borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>
-  <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
-  <cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFill="1" applyFont="1" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf></cellXfs>
-  <cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>
-</styleSheet>'''
-
-
-def workbook_xml() -> str:
-    sheets = "".join(
-        f'<sheet name="{esc(name)}" sheetId="{i}" r:id="rId{i}"/>' for i, name in enumerate(SHEETS, start=1)
-    )
-    return f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>{sheets}</sheets></workbook>'''
-
-
-def workbook_rels() -> str:
-    rels = [
-        f'<Relationship Id="rId{i}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet{i}.xml"/>'
-        for i in range(1, len(SHEETS) + 1)
+def dashboard(wb: Workbook, fmt: Formats) -> None:
+    ws = wb.active
+    ws.title = "Dashboard"
+    row = write_title(ws, "Delta Crown Owner Decision Workbook", "Launch-blocking owner decisions, recommendations, evidence, and follow-up actions", fmt, 5)
+    data = [
+        ("Workbook purpose", "Owner launch decisions", "Converts launch blockers into explicit choices."),
+        ("Decision count", len(DECISIONS), "Six decisions currently block full production-launch claims."),
+        ("Recommended launch posture", "Controlled pilot / owner validation", "Built and hardened, but not full production launch yet."),
+        ("Top technical blocker", "Teams channel read context", "Members readable; team/channel detail still blocked."),
+        ("Top governance blocker", "Named owners + DLP posture", "Needs accountable owners and enforcement decisions."),
     ]
-    rels.append('<Relationship Id="rIdStyles" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>')
-    return f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">{''.join(rels)}</Relationships>'''
-
-
-def content_types() -> str:
-    overrides = [
-        '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>',
-        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>',
+    row = write_table(ws, row, ["Metric", "Value", "Why it matters"], data, fmt, "DashboardTable")
+    ws.cell(row, 1, "How to use this workbook").font = fmt.section
+    instructions = [
+        "1. Start on Decision Matrix and pick a Tyler decision for each row.",
+        "2. Use OD-001 through OD-006 tabs for evidence, risks, options, and recommendation detail.",
+        "3. Use Action Tracker to split approved work into small follow-up change issues.",
+        "4. Do not make tenant-impacting changes from this workbook alone; create tracked change issues first.",
     ]
-    overrides.extend(
-        f'<Override PartName="/xl/worksheets/sheet{i}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
-        for i in range(1, len(SHEETS) + 1)
-    )
-    return f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>{''.join(overrides)}</Types>'''
+    for offset, text in enumerate(instructions, start=1):
+        ws.cell(row + offset, 1, text).alignment = fmt.top
+    set_widths(ws, [26, 34, 72, 20, 20])
+    freeze_and_filter(ws)
 
 
-def root_rels() -> str:
-    return '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'''
-
-
-def build_rows() -> dict[str, list[list[object]]]:
-    rows: dict[str, list[list[object]]] = {}
-    rows["Dashboard"] = [
-        ["Metric", "Value", "Why it matters"],
-        ["Workbook purpose", "Owner launch decisions", "Converts remaining launch blockers into explicit choices."],
-        ["Decisions", len(DECISIONS), "Six decisions block full production-launch claims."],
-        ["Recommended launch posture", "Controlled pilot / owner validation", "Full launch still needs decisions and Teams channel evidence."],
-        ["Top technical blocker", "Teams channel read context", "Members are readable; team/channel detail still blocked."],
-        ["Top governance blocker", "Named owners + DLP posture", "Production claims need accountable owners and enforcement decisions."],
+def decision_matrix(wb: Workbook, fmt: Formats) -> None:
+    ws = wb.create_sheet("Decision Matrix")
+    row = write_title(ws, "Decision Matrix", "One-line view of what Tyler/Megan need to decide", fmt, 9)
+    rows = [
+        [d.decision_id, d.title, d.current_state, d.risk, d.recommendation, d.owner_needed, "TBD", "TBD", ""]
+        for d in DECISIONS
     ]
-    rows["Decision Matrix"] = [["ID", "Decision", "Current state", "Risk", "Recommendation", "Owner needed", "Tyler decision", "Decision date", "Notes"]]
-    for d in DECISIONS:
-        rows["Decision Matrix"].append([d.decision_id, d.title, d.current_state, d.risk, d.recommendation, d.owner_needed, "TBD", "TBD", ""])
-    rows["Action Tracker"] = [["Decision ID", "Follow-up action", "Type", "Owner", "Status", "Target date", "Notes"]]
+    write_table(ws, row, ["ID", "Decision", "Current state", "Risk", "Recommendation", "Owner needed", "Tyler decision", "Decision date", "Notes"], rows, fmt, "DecisionMatrix")
+    set_widths(ws, [11, 30, 46, 44, 50, 24, 22, 16, 34])
+    style_status_cells(ws, 7, fmt)
+    freeze_and_filter(ws)
+
+
+def action_tracker(wb: Workbook, fmt: Formats) -> None:
+    ws = wb.create_sheet("Action Tracker")
+    row = write_title(ws, "Action Tracker", "Follow-up actions after decisions are approved", fmt, 7)
+    rows = []
     for d in DECISIONS:
         for action in d.followups:
-            rows["Action Tracker"].append([d.decision_id, action, "TBD", d.owner_needed, "Not started", "TBD", ""])
-    rows["Evidence"] = [["Decision ID", "Evidence", "Source / context"]]
+            rows.append([d.decision_id, action, "TBD", d.owner_needed, "Not started", "TBD", ""])
+    write_table(ws, row, ["Decision ID", "Follow-up action", "Type", "Owner", "Status", "Target date", "Notes"], rows, fmt, "ActionTracker")
+    set_widths(ws, [13, 62, 18, 28, 18, 16, 36])
+    style_status_cells(ws, 5, fmt)
+    freeze_and_filter(ws)
+
+
+def evidence_sheet(wb: Workbook, fmt: Formats) -> None:
+    ws = wb.create_sheet("Evidence")
+    row = write_title(ws, "Evidence", "Supporting evidence behind recommendations", fmt, 3)
+    rows = []
     for d in DECISIONS:
-        for ev in d.evidence:
-            rows["Evidence"].append([d.decision_id, ev, "See repo docs referenced in owner-decision worksheet."])
-    rows["Glossary"] = [
-        ["Term", "Meaning"],
-        ["DDG", "Dynamic Distribution Group for Exchange mail routing."],
-        ["Dynamic security group", "Entra group whose membership is calculated from user attributes."],
-        ["TestWithNotifications", "DLP policy mode that warns/tests without full enforcement."],
-        ["Brand Resources", "Approved staff-facing reference material, not client records."],
-        ["Brand Assets", "Marketing execution/asset library concept."],
-        ["ClientServices", "Legacy concept/artifacts; not approved client-record storage in M365."],
-        ["Controlled pilot", "Limited validation state before full launch approval."],
+        for evidence in d.evidence:
+            rows.append([d.decision_id, evidence, "See repo docs and owner-decision worksheet."])
+    write_table(ws, row, ["Decision ID", "Evidence", "Source / context"], rows, fmt, "EvidenceTable")
+    set_widths(ws, [14, 88, 46])
+    freeze_and_filter(ws)
+
+
+def glossary(wb: Workbook, fmt: Formats) -> None:
+    ws = wb.create_sheet("Glossary")
+    row = write_title(ws, "Glossary", "Plain-English definitions for decision terms", fmt, 2)
+    rows = [
+        ("DDG", "Dynamic Distribution Group for Exchange mail routing."),
+        ("Dynamic security group", "Entra group whose membership is calculated from user attributes."),
+        ("TestWithNotifications", "DLP policy mode that warns/tests without full enforcement."),
+        ("Brand Resources", "Approved staff-facing reference material, not client records."),
+        ("Brand Assets", "Marketing execution/asset library concept."),
+        ("ClientServices", "Legacy concept/artifacts; not approved client-record storage in M365."),
+        ("Controlled pilot", "Limited validation state before full launch approval."),
     ]
-    for d in DECISIONS:
-        decision_rows = [
-            ["Field", "Detail"],
-            ["Decision ID", d.decision_id],
-            ["Title", d.title],
-            ["Current state", d.current_state],
-            ["Risk", d.risk],
-            ["Recommendation", d.recommendation],
-            ["Owner needed", d.owner_needed],
-            ["Tyler selected option", "TBD"],
-            ["Approval / date", "TBD"],
-            ["Follow-up issue", "TBD"],
-            [],
-            ["Options", "Description", "Pros", "Cons"],
-        ]
-        for opt in d.options:
-            decision_rows.append([opt.key, opt.description, opt.pros, opt.cons])
-        decision_rows.append([])
-        decision_rows.append(["Evidence", "Detail"])
-        for ev in d.evidence:
-            decision_rows.append(["Evidence", ev])
-        decision_rows.append([])
-        decision_rows.append(["Follow-up actions", "Detail"])
-        for action in d.followups:
-            decision_rows.append(["Action", action])
-        rows[d.decision_id] = decision_rows
-    return rows
+    write_table(ws, row, ["Term", "Meaning"], rows, fmt, "GlossaryTable")
+    set_widths(ws, [26, 90])
+    freeze_and_filter(ws)
 
 
-def write_workbook() -> None:
+def decision_detail(wb: Workbook, fmt: Formats, decision: Decision) -> None:
+    ws = wb.create_sheet(decision.decision_id)
+    row = write_title(ws, f"{decision.decision_id} — {decision.title}", "Decision detail, options, evidence, and action prompts", fmt, 4)
+    overview = [
+        ("Current state", decision.current_state),
+        ("Risk", decision.risk),
+        ("Recommendation", decision.recommendation),
+        ("Owner needed", decision.owner_needed),
+        ("Tyler selected option", "TBD"),
+        ("Approval / date", "TBD"),
+        ("Follow-up issue", "TBD"),
+    ]
+    row = write_table(ws, row, ["Field", "Detail"], overview, fmt, f"{decision.decision_id.replace('-', '')}Overview")
+    ws.cell(row, 1, "Options").font = fmt.section
+    row += 1
+    row = write_table(
+        ws,
+        row,
+        ["Option", "Description", "Pros", "Cons"],
+        [[o.key, o.description, o.pros, o.cons] for o in decision.options],
+        fmt,
+        f"{decision.decision_id.replace('-', '')}Options",
+    )
+    ws.cell(row, 1, "Supporting evidence").font = fmt.section
+    row += 1
+    row = write_table(ws, row, ["Evidence", "Detail"], [["Evidence", item] for item in decision.evidence], fmt, None)
+    ws.cell(row, 1, "Follow-up actions").font = fmt.section
+    row += 1
+    write_table(ws, row, ["Action", "Detail"], [["Action", action] for action in decision.followups], fmt, None)
+    set_widths(ws, [24, 70, 50, 50])
+    freeze_and_filter(ws)
+
+
+def apply_global_style(wb: Workbook, fmt: Formats) -> None:
+    for ws in wb.worksheets:
+        ws.sheet_view.showGridLines = False
+        for row in ws.iter_rows():
+            for cell in row:
+                alignment = copy(cell.alignment)
+                alignment.wrap_text = True
+                alignment.vertical = "top"
+                cell.alignment = alignment
+        for row_num in range(1, ws.max_row + 1):
+            ws.row_dimensions[row_num].height = 36
+
+
+def build_workbook() -> Workbook:
+    wb = Workbook()
+    fmt = Formats()
+    dashboard(wb, fmt)
+    decision_matrix(wb, fmt)
+    action_tracker(wb, fmt)
+    evidence_sheet(wb, fmt)
+    glossary(wb, fmt)
+    for decision in DECISIONS:
+        decision_detail(wb, fmt, decision)
+    apply_global_style(wb, fmt)
+    return wb
+
+
+def validate_workbook(path: Path) -> None:
+    loaded = load_workbook(path)
+    expected = {"Dashboard", "Decision Matrix", "Action Tracker", "Evidence", "Glossary"} | {d.decision_id for d in DECISIONS}
+    actual = set(loaded.sheetnames)
+    missing = expected - actual
+    if missing:
+        raise RuntimeError(f"Workbook missing sheets: {sorted(missing)}")
+    if loaded["Decision Matrix"].max_row < len(DECISIONS) + 4:
+        raise RuntimeError("Decision Matrix does not contain expected decision rows")
+
+
+def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    rows_by_sheet = build_rows()
-    widths = {1: 20, 2: 42, 3: 52, 4: 52, 5: 52, 6: 26, 7: 22, 8: 18, 9: 35}
-    with zipfile.ZipFile(OUT, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr("[Content_Types].xml", content_types())
-        zf.writestr("_rels/.rels", root_rels())
-        zf.writestr("xl/workbook.xml", workbook_xml())
-        zf.writestr("xl/_rels/workbook.xml.rels", workbook_rels())
-        zf.writestr("xl/styles.xml", styles_xml())
-        for i, sheet in enumerate(SHEETS, start=1):
-            zf.writestr(f"xl/worksheets/sheet{i}.xml", sheet_xml(rows_by_sheet[sheet], widths, "A2"))
-    print(f"Wrote {OUT} ({OUT.stat().st_size:,} bytes)")
+    wb = build_workbook()
+    wb.save(OUT)
+    validate_workbook(OUT)
+    print(f"Wrote valid workbook: {OUT} ({OUT.stat().st_size:,} bytes)")
 
 
 if __name__ == "__main__":
-    write_workbook()
+    main()
