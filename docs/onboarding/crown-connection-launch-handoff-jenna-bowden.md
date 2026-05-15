@@ -1,9 +1,9 @@
-# Crown Connection — Launch Handoff for Jenna Boden
+# Crown Connection — Launch Handoff for Jenna Bowden
 
 **Date:** 2026-05-15
 **From:** Tyler Granlund
-**To:** Jenna Boden
-**Re:** Owners-only SharePoint site is live; you and the other Owners already have access
+**To:** Jenna Bowden
+**Re:** Crown Connection SharePoint site is live; you're set up as an owner and HTT corporate is already onboarded as members
 
 ---
 
@@ -32,17 +32,34 @@ You should already see Crown Connection listed in:
 
 ## Who already has access
 
-At launch, the five Delta Crown Extension Studio owners are members:
+**Group owners** (full admin rights — can manage members, settings, content):
 
-- Allynn Shepherd
-- Amit Shah
-- Jay Miller
-- Sarah Miller
-- Toni Careccia
+- Tyler Granlund (me)
+- Kristin Kidd
+- Jenna Bowden (you)
 
-I (Tyler) am the group owner / admin. As more studios open and new owners
-are onboarded, they'll get added to the group as part of the normal
-owner-onboarding checklist.
+**Group members** (full read + write + post + collaborate access — 50 people):
+
+1. **The 5 Delta Crown Extension Studio owners:** Allynn Shepherd, Amit Shah, Jay Miller, Sarah Miller, Toni Careccia.
+2. **All 45 currently-synced HTT Brands corporate users** — Meg Roberts, Joe Honkala, Erica Upshur, Daniel Davoodi, Kayla Bramlet, Anna Phillips, Veronica England, Lauren Boucher, Karen Meek, Akilah Lee, Lindsey Nabors, Allison Steimel, Janae Ver Helst, Jennifer Gregory, Hanna Coldiron, Olivia Marshall, Noelle Peter, Crystal Woolsey, Ambrielle Wilkins, Chantel Tolbert, Shelby Kidder, John Babcock, Taylor Hulyksmith, Jessica Burgos, Keith Becker, Julie Jennings, Erik Canfield, Kelli Kline, Samantha Lu, Katie Loerts, Rebecca Riordan, Becca Ruebke, Amber Caley, Tabitha Addison, Donnie Little, Megan Thompson, Patti Rother, Dustin Boyd, Dustin Boyd - Admin, Tyler Granlund (regular), Tyler Granlund - Admin, Kate Fisher, plus 3 service/group accounts.
+
+HTT users sync into the DCE tenant automatically (cross-tenant synchronization is already configured), so they were added by mapping each HTT user to their corresponding DCE Member object.
+
+### Pending — 7 HTT users not synced yet
+
+These 7 HTT licensed users were not yet in the DCE directory when we ran the bulk-add, so they need a follow-up pass (they should sync within ~40 minutes during the normal cross-tenant sync cycle):
+
+- Jamie Baer (Tyler's collaborator — high priority)
+- Lindsey Anarumo
+- Kennedy Dickie
+- MaryJo Ramsbacher
+- Tracey Tomlinson
+- Jill Holderfield
+- Yara Gonzalez Ramirez (older account — needs investigation; should have synced)
+
+These will be added automatically on the next bulk-add re-run (see `tools/expand-crown-connection-htt-corp.py`).
+
+As more DCE studios open and new owners are onboarded, they'll get added to the group as part of the normal owner-onboarding checklist.
 
 ## What's on the site today
 
