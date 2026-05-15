@@ -23,3 +23,5 @@
 {"id":"int-68331b6c","kind":"field_change","created_at":"2026-05-12T20:09:00.272296Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-gf9","extra":{"field":"status","new_value":"in_progress","old_value":"open"}}
 {"id":"int-685ad9e7","kind":"field_change","created_at":"2026-05-12T20:09:00.272713Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-gf9","extra":{"field":"assignee","new_value":"code-puppy-e7999e","old_value":""}}
 {"id":"int-7d6dac60","kind":"field_change","created_at":"2026-05-15T20:49:03.598726Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-9av","extra":{"field":"priority","new_value":"2","old_value":"1"}}
+{"id":"int-728cf1b9","kind":"field_change","created_at":"2026-05-15T21:12:21.998759Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-9av","extra":{"field":"status","new_value":"in_progress","old_value":"open"}}
+{"id":"int-9f0e93e0","kind":"field_change","created_at":"2026-05-15T21:27:48.92473Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-9av","extra":{"field":"status","new_value":"closed","old_value":"in_progress","reason":"Closed"}}
