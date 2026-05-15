@@ -1,7 +1,9 @@
 # DeltaSetup — Delta Crown Extensions
 
 > **Branch:** `gh-pages` · **Live site:** <https://delta-crown-org.github.io/DeltaSetup/>
-> **Tenant:** `deltacrown` (Microsoft 365 Business Premium) · **Last reconciled:** 2026-05-12
+> **Tenant:** `deltacrown` (Microsoft 365 Business Premium) · **Last reconciled:** 2026-05-15
+>
+> **2026-05-15 Friday audit:** read-only Graph + Exchange Online probe re-confirmed tenant state matches the 2026-05-12 reconciled baseline. No drift in identity, SharePoint, or Exchange. One open finding outside DeltaSetup scope: `_fullHTT@httbrands.com` (HTT tenant, `MailUniversalDistributionGroup`) still has `Scot.Cannon` as a hard-coded static member — tracked under `DeltaSetup-9av` for handoff to HTT offboarding tooling. Friday SharePoint hub delivery work is tracked under `DeltaSetup-2dq`. Evidence: `.local/reports/friday-sharepoint-hub-audit/` (local-only).
 
 ---
 

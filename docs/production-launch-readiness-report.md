@@ -1,9 +1,11 @@
 # Delta Crown Production Launch Readiness Report
 
-**Status date:** 2026-05-12  
+**Status date:** 2026-05-12 (re-confirmed 2026-05-15)  
 **Scope:** Delta Crown Extensions (`deltacrown`) Microsoft 365 tenant  
 **Tracking bead:** `DeltaSetup-nge`  
-**Prepared by:** Richard / `code-puppy-e7999e`
+**Prepared by:** Richard / `code-puppy-e7999e` (re-confirmed by `code-puppy-1bc20e`)
+
+> **2026-05-15 re-confirmation note:** Friday read-only Graph + Exchange Online audit re-verified the 2026-05-12 launch posture. No identity, SharePoint, or Exchange drift. Sites collection enumeration was blocked by missing Graph `Sites.Read.All` scope on the audit token (Graph returned 0 sites for both HTT and DCE) — re-audit with Sites scope is queued. `_fullHTT@httbrands.com` Scot Cannon issue triaged in `DeltaSetup-9av` as static-member residue from HTT offboarding; does NOT block DCE dynamic distribution groups (those are real `DynamicDistributionGroup` objects on Company/Department/Title filters and are working). Friday SharePoint hub delivery tracked separately under `DeltaSetup-2dq`. Audit evidence: `.local/reports/friday-sharepoint-hub-audit/`.
 
 ## Executive status
 
