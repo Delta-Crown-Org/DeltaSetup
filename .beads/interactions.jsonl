@@ -26,3 +26,5 @@
 {"id":"int-728cf1b9","kind":"field_change","created_at":"2026-05-15T21:12:21.998759Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-9av","extra":{"field":"status","new_value":"in_progress","old_value":"open"}}
 {"id":"int-9f0e93e0","kind":"field_change","created_at":"2026-05-15T21:27:48.92473Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-9av","extra":{"field":"status","new_value":"closed","old_value":"in_progress","reason":"Closed"}}
 {"id":"int-c5e87cc0","kind":"field_change","created_at":"2026-05-15T21:57:56.69266Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-of8","extra":{"field":"status","new_value":"closed","old_value":"open","reason":"Closed"}}
+{"id":"int-f94b8ec4","kind":"field_change","created_at":"2026-05-15T23:55:03.465454Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-cwn","extra":{"field":"status","new_value":"closed","old_value":"open","reason":"Closed"}}
+{"id":"int-d63d363c","kind":"field_change","created_at":"2026-05-15T23:55:05.454335Z","actor":"Tyler Granlund","issue_id":"DeltaSetup-jch","extra":{"field":"priority","new_value":"2","old_value":"3"}}
