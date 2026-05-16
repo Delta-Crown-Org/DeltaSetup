@@ -407,3 +407,29 @@ Crown Connection launch is COMPLETE for tonight. This doc is the bridge
 between "we shipped a working group" and "we ship a beautiful branded
 SharePoint experience that any team member can extend." Tyler's three
 Phase-0 decisions unblock everything else.
+
+## Companion: the AI agent reference pack
+
+Added 2026-05-15 — a self-contained spec pack designed to be consumed
+by an AI agent (Claude, ChatGPT 5.5 Pro, etc.) to build the
+implementation against:
+
+**`docs/sharepoint-pnp-spec/`** — 26 files:
+
+- `PROMPT-PACK-FOR-AI.md` — the entry-point handoff doc.
+- `EVALUATION-RUBRIC.md` — scoring grid for adversarial model
+  comparison (Puppy vs ChatGPT bake-off).
+- Numbered chapters 00-12 covering context, architecture, identity
+  & audience, design system, content architecture, permissions,
+  PnP tooling, CI/CD, quality gates, deployment, runbooks, and
+  implementation plan.
+- 7 ADRs documenting major decisions.
+- `reference/dce-tokens.json` — canonical Style Dictionary token file
+  derived from this repo's `css/tokens.css`.
+- `reference/existing-assets-inventory.md` — annotated inventory of
+  ALL prior art in `/Users/tygranlund/dev/01-htt-brands/` and this
+  repo so the implementing agent doesn't re-invent.
+
+The spec pack is structured so two competing AI models can produce
+outputs scored on the same rubric. Tyler will run ChatGPT 5.5 Pro
+against it in a parallel session and compare results.

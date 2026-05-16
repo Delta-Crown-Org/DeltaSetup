@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "source": "deltacrown.com/css/tokens.css (commit 6e5c034)",
+    "derivedAt": "2026-05-15",
+    "format": "Style Dictionary v5 source",
+    "wcagAudit": "see 03-design-system.md for full ratings",
+    "_note": "This is THE canonical DCE token source. Do not redefine values elsewhere. Update tokens.css first, then re-derive this file via the Style Dictionary build."
+  },
+
+  "color": {
+    "brand": {
+      "teal":         { "value": "#006B5E",  "type": "color", "description": "Primary brand color. AAA on white (7.07:1)." },
+      "teal-dark":    { "value": "#004D44",  "type": "color", "description": "AAA on white (9.91:1)." },
+      "teal-deeper":  { "value": "#0A1F1C",  "type": "color", "description": "Hero/surface-dark backdrop. AAA on white (18.91:1)." },
+      "teal-light":   { "value": "#4A9B8E",  "type": "color", "description": "Decorative only on white (2.83:1)." },
+      "teal-on-dark": { "value": "#5DB7A9",  "type": "color", "description": "For text/icons on dark surfaces." },
+      "gold":         { "value": "#D4A84B",  "type": "color", "description": "Accent. Background only on white (2.31:1). Use teal-deeper text on gold for AAA (16.55:1)." },
+      "gold-light":   { "value": "#E8C989",  "type": "color", "description": "Soft gold accent." },
+      "gold-dark":    { "value": "#6E4F0E",  "type": "color", "description": "AAA on white (8.27:1) — safe for gold-colored text." },
+      "sage":         { "value": "#7A9B8A",  "type": "color", "description": "Decorative on white (2.86:1)." }
+    },
+    "surface": {
+      "default":     { "value": "#FAFAF7",  "type": "color", "description": "Off-white base." },
+      "dim":         { "value": "#F0EDE8",  "type": "color" },
+      "dark":        { "value": "#0D2925",  "type": "color", "description": "Deep teal for hero overlays." },
+      "card":        { "value": "#FFFFFF",  "type": "color", "description": "Card backgrounds (full white for contrast)." }
+    },
+    "text": {
+      "default":     { "value": "#1A2A3A",  "type": "color", "description": "AAA on white (14.18:1)." },
+      "secondary":   { "value": "#465463",  "type": "color", "description": "AAA on white (7.99:1)." },
+      "muted":       { "value": "#8A96A4",  "type": "color", "description": "AA Large only on white (3.53:1)." },
+      "inverse":     { "value": "#F5F5F3",  "type": "color", "description": "For text on dark surfaces." }
+    },
+    "text-on-dark": {
+      "default":     { "value": "rgba(255, 255, 255, 0.92)", "type": "color", "description": "Primary text on teal-deeper. AAA." },
+      "muted":       { "value": "rgba(255, 255, 255, 0.70)", "type": "color", "description": "Secondary text on teal-deeper. AAA." },
+      "subtle":      { "value": "rgba(255, 255, 255, 0.62)", "type": "color", "description": "Large text only on teal-deeper. AA Large." }
+    },
+    "state": {
+      "success":       { "value": "#66BB6A", "type": "color" },
+      "success-soft":  { "value": "rgba(46, 125, 50, 0.18)", "type": "color" },
+      "danger":        { "value": "#A51C16", "type": "color", "description": "AAA on light surfaces." },
+      "danger-on-dark":{ "value": "#FF8A80", "type": "color", "description": "AAA on teal-deeper/dark surfaces." },
+      "danger-soft":   { "value": "rgba(239, 83, 80, 0.18)", "type": "color" },
+      "warn":          { "value": "#FB8C00", "type": "color" },
+      "warn-soft":     { "value": "rgba(251, 140, 0, 0.18)", "type": "color" },
+      "neutral":       { "value": "#B0BEC5", "type": "color" },
+      "neutral-soft":  { "value": "rgba(120, 144, 156, 0.18)", "type": "color" }
+    }
+  },
+
+  "font": {
+    "family": {
+      "heading":  { "value": "'Playfair Display', Georgia, serif", "type": "fontFamily" },
+      "body":     { "value": "'Tenor Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", "type": "fontFamily" },
+      "system":   { "value": "'Segoe UI Variable', system-ui, sans-serif", "type": "fontFamily", "description": "For SharePoint chrome that we don't override." }
+    },
+    "size": {
+      "xs":   { "value": "0.75rem",  "type": "fontSize", "description": "12px" },
+      "sm":   { "value": "0.875rem", "type": "fontSize", "description": "14px" },
+      "base": { "value": "1rem",     "type": "fontSize", "description": "16px" },
+      "md":   { "value": "1.125rem", "type": "fontSize", "description": "18px" },
+      "lg":   { "value": "1.5rem",   "type": "fontSize", "description": "24px" },
+      "xl":   { "value": "2rem",     "type": "fontSize", "description": "32px" },
+      "2xl":  { "value": "2.5rem",   "type": "fontSize", "description": "40px" },
+      "hero": { "value": "clamp(2.5rem, 5vw, 4rem)", "type": "fontSize", "description": "40-64px responsive" }
+    },
+    "weight": {
+      "regular": { "value": "400", "type": "fontWeight" },
+      "medium":  { "value": "500", "type": "fontWeight" },
+      "bold":    { "value": "700", "type": "fontWeight" }
+    },
+    "lineHeight": {
+      "tight":  { "value": "1.15", "type": "lineHeight" },
+      "normal": { "value": "1.5",  "type": "lineHeight" },
+      "loose":  { "value": "1.7",  "type": "lineHeight" }
+    }
+  },
+
+  "spacing": {
+    "section-pad": { "value": "clamp(80px, 12vh, 140px)", "type": "spacing" },
+    "container":   { "value": "1140px", "type": "spacing", "description": "Max content width" },
+    "gap":         { "value": "clamp(16px, 3vw, 32px)", "type": "spacing" },
+    "scale": {
+      "0":  { "value": "0",     "type": "spacing" },
+      "1":  { "value": "4px",   "type": "spacing" },
+      "2":  { "value": "8px",   "type": "spacing" },
+      "3":  { "value": "12px",  "type": "spacing" },
+      "4":  { "value": "16px",  "type": "spacing" },
+      "5":  { "value": "24px",  "type": "spacing" },
+      "6":  { "value": "32px",  "type": "spacing" },
+      "8":  { "value": "48px",  "type": "spacing" },
+      "12": { "value": "80px",  "type": "spacing" },
+      "16": { "value": "120px", "type": "spacing" }
+    }
+  },
+
+  "motion": {
+    "ease-out":    { "value": "cubic-bezier(0.22, 1, 0.36, 1)",  "type": "cubicBezier" },
+    "ease-spring": { "value": "cubic-bezier(0.34, 1.56, 0.64, 1)", "type": "cubicBezier" },
+    "duration": {
+      "fast":    { "value": "0.2s", "type": "duration", "description": "UI feedback (button press, hover)" },
+      "default": { "value": "0.7s", "type": "duration", "description": "Page transitions, large reveals" }
+    }
+  },
+
+  "breakpoint": {
+    "_note": "CSS media queries can't currently consume custom properties, so any @media rule MUST use these literal pixel values.",
+    "mobile":  { "value": "640px",  "type": "size", "description": "sm: 1-col layouts" },
+    "tablet":  { "value": "1023px", "type": "size", "description": "md: matches sidebar collapse" },
+    "compact": { "value": "1407px", "type": "size", "description": "lg: sidebar-visible but content well <1120px" }
+  }
+}
