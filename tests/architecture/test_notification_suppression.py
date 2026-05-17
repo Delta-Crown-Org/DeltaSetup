@@ -29,18 +29,29 @@ import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-PROVISIONING_GLOBS = [
-    "tools/**/*.ps1",
-    "tools/**/*.py",
-    "tools/**/*.sh",
-    "dce-mockup/ci-cd/scripts/**/*.ps1",
-    "dce-mockup/ci-cd/scripts/**/*.py",
-    "dce-mockup/ci-cd/scripts/**/*.sh",
+# Path × extension matrix. Built defensively per ADR-011 release-gate-arbiter
+# co-sign Tampering addendum #1: every plausible future provisioning-script
+# directory must be covered even if it doesn't exist yet, so a new directory
+# can't ship without triggering the scan.
+_PROVISIONING_ROOTS = [
+    "tools",
+    "scripts",
+    "dce-mockup/ci-cd/scripts",
+    "phase4-migration",
+    "phase4-migration/scripts",
+    "phase2-week1",
+    "phase3-week2",
+    "phase5",  # placeholder — Phase 5 not yet started but reserve the name
+]
+_PROVISIONING_EXTENSIONS = ["ps1", "py", "sh"]
+
+PROVISIONING_GLOBS: list[str] = [
+    f"{root}/**/*.{ext}"
+    for root in _PROVISIONING_ROOTS
+    for ext in _PROVISIONING_EXTENSIONS
+] + [
+    # JSON config files (the Teams channel definitions live here)
     "dce-mockup/ci-cd/teams/**/*.json",
-    "phase4-migration/**/*.ps1",
-    "phase4-migration/**/*.py",
-    "scripts/**/*.ps1",
-    "scripts/**/*.py",
 ]
 
 # Scripts that are intentionally read-only / forensic / inventory-only and
@@ -66,15 +77,29 @@ READ_ONLY_SCRIPT_NAMES = {
 # acceptance criterion of the ADR-011 rollout bd — do not delete an entry
 # unless the corresponding script has been brought into compliance.
 ADR_011_GRACE_PERIOD = {
-    # The HTT-52 culprits — the actual incident scripts
+    # The HTT-52 culprits — the actual incident scripts (tools/)
     "tools/provision-crown-connection.sh",
     "tools/expand-crown-connection-htt-corp.py",
     "tools/invite-htt-users-to-dce.py",
     "tools/offboard-scot-cannon.ps1",
-    # Other historical provisioning scripts that need mode-signal retrofit
+    # CI/CD mockup scripts (dce-mockup/) — to be retrofitted under bd 17i
+    # and migrated to the real Delta-Crown-Org/dce-sharepoint repo.
     "dce-mockup/ci-cd/scripts/provision-teams.ps1",
     "dce-mockup/ci-cd/scripts/deploy-prod.ps1",
+    # Phase 4 migration scripts — retrofitted under bd 17i.
     "phase4-migration/scripts/4.3-Document-Migration.ps1",
+    # Phase 2 + 3 provisioning scripts surfaced by the release-gate-arbiter
+    # Tampering #1 addendum (glob coverage parity). These built the current
+    # tenant state and need retrofit under bd 17i before next invocation.
+    "phase2-week1/scripts/2.1-CorpHub-Provisioning.ps1",
+    "phase2-week1/scripts/2.2-DCEHub-Provisioning.ps1",
+    "phase2-week1/scripts/deploy-phase2-standalone.ps1",  # sibling of phase3 deploy
+    "phase3-week2/scripts/3.1-DCE-Sites-Provisioning.ps1",
+    "phase3-week2/scripts/3.2-Teams-Provisioning.ps1",
+    "phase3-week2/scripts/deploy-teams-now.ps1",
+    "phase3-week2/scripts/deploy-phase3-standalone.ps1",
+    "phase3-week2/scripts/security-hardening-python.py",
+    "phase3-week2/scripts/security-hardening-graph.py",
 }
 
 

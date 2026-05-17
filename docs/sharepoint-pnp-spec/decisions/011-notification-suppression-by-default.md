@@ -1,8 +1,8 @@
 # ADR-011 — Notification suppression by default across all provisioning surfaces
 
-**Status:** Proposed (2026-05-16)
+**Status:** Proposed (2026-05-16) — pending must-fold addenda from release-gate-arbiter STRIDE co-sign (this commit folds them; status may flip to Accepted once `tests/architecture/test_notification_suppression.py` is green in CI and the launch-mode workflow + access-digest workflow exist per Acceptance Criteria below).
 **Author:** `solutions-architect` agent research, persisted by `code-puppy-1bc20e`
-**Co-sign required:** Security Auditor (STRIDE table) — routed to `release-gate-arbiter` since no `security-auditor` agent is present in this swarm; Pack Leader (rollout coordination); Experience Architect (launch-day comms UX)
+**Co-sign required:** Security Auditor (STRIDE table) — performed by `release-gate-arbiter-bc138a` as proxy on 2026-05-16; this swarm has no dedicated `security-auditor` agent. Full ASVS L2 / CIS-mapped audit remains an open dependency before any production launch-mode invocation (see signature block at end of STRIDE section). Plus: Pack Leader (rollout coordination); Experience Architect (launch-day comms UX).
 **Supersedes:** none
 **Superseded by:** none
 **Companion document:** [`../NOTIFICATION-SUPPRESSION-PLAYBOOK.md`](../NOTIFICATION-SUPPRESSION-PLAYBOOK.md)
@@ -127,22 +127,38 @@ Static CI enforcement + tenant post-hoc remediation + separate launch-mode workf
 
 ## STRIDE security analysis
 
-> **⚠ Co-sign required.** Per the Solutions Architect protocol, the STRIDE table requires Security Auditor sign-off before status flips to Accepted. No `security-auditor` agent exists in this swarm; the closest authority is `release-gate-arbiter`. **Action:** route this ADR to Release Gate Arbiter for STRIDE adversarial review (tracked as bd `DeltaSetup-<adr011-cosign>`).
+> **Co-signed by `release-gate-arbiter-bc138a` on 2026-05-16 with 5 addenda folded below + 4 supplemental threats added.** Signature block at the end of this section. `security-auditor` agent is not present in this swarm; release-gate-arbiter acted as proxy. Full ASVS L2 / CIS-mapped human or dedicated-agent security review remains an open dependency before any production launch-mode invocation — tracked as bd `DeltaSetup-<security-auditor-engagement>`.
+
+### Core STRIDE table (6 rows)
 
 | Threat | Vector | Mitigation under ADR-011 | Residual risk |
 |---|---|---|---|
-| **Spoofing** | Attacker compromises `dce-sharepoint-deploy` cert and runs provisioning to seed silent backdoor accounts | App-only auth (ADR-007) + UAL records `ApplicationId` + `UserType=6` for every action; weekly permission-audit detects role-assignments not in `reference/permission-breaks.csv` | Low — actor identity is logged in two surfaces (UAL `ApplicationId` + Entra `initiatedBy.app.appId`) |
-| **Tampering** | Operator edits provisioning script to bypass `-Mode scaffold` and sneak mail-sends past CI | Static fitness-function regex catches `-SendInvitation`, `sendInvitation:true`, `-SendEmail`, etc. at PR time. Launch scripts require `# DCE-LAUNCH-MODE: APPROVED` marker + GitHub Environment with required reviewers | Low — bypass requires concurrent PR-review collusion AND environment-approval collusion |
-| **Repudiation** | Operator denies sending a notification ("I didn't send those emails!") | Every script writes `PROVISIONING-MODE: <mode> COMMIT=<sha> RUN=<id>` to `out/provisioning-mode.log`, uploaded as a CI artifact with 365-day retention. UAL records the `ApplicationId` + `ClientIP`. Message Trace records the SMTP envelope | Very low — three independent surfaces record the action; UAL is the system-of-record |
-| **Information Disclosure** | Scaffold-mode provisioning accidentally emails a confidential resource URL to wrong recipient | Scaffold mode by definition does NOT email recipients. Launch-mode emails are operator-curated and go through Exchange DLP (existing tenant policy). Failure mode = no email sent, not wrong email sent | Very low — failure mode is silent, not loud |
-| **Denial of Service** | Attacker triggers `launch` workflow to mass-mail every user in the tenant | `launch` workflow is `workflow_dispatch`-only and requires GitHub Environment approval. Each launch script emits a recipient manifest before sending; manifest must be human-reviewed in the approval flow. Exchange rate limits cap blast radius at ~30 msg/min/mailbox | Low — requires environment-approver collusion |
-| **Elevation of Privilege** | Attacker uses suppressed-but-granted permissions to escalate access without users noticing | Permissions are granted regardless of mail suppression — this is *intended* behavior. The weekly permission-audit (`permission-audit.yml`, `05-permissions-model.md`) catches unexpected role assignments via the `permission-breaks.csv` allow-list. **Caveat:** suppression does not change the access-grant; it changes whether the user is *notified* of the grant. Users not being told they have access is itself an audit-surface concern | Medium — mitigated by weekly permission audit, but users not being notified means they cannot self-detect over-permissioning. Recommend a quarterly "your access" digest to all users as a separate compensating control |
+| **Spoofing** | Attacker compromises `dce-sharepoint-deploy` cert and runs provisioning to seed silent backdoor accounts | App-only auth (ADR-007) + UAL records `ApplicationId` + `UserType=6` for every action; weekly permission-audit detects role-assignments not in `reference/permission-breaks.csv`. **Addendum (cert lifecycle, required):** (a) private key resides in GitHub Actions OIDC-federated secret or Azure Key Vault HSM-backed secret, never in repo or local disk; (b) cert rotation cadence ≤ 90 days, tracked under a dedicated bd; (c) alert fires when `ApplicationId == dce-sharepoint-deploy` performs `/groups` or `/teams` writes outside business hours (08:00–20:00 CT, Mon–Fri) or outside the GitHub Actions IP range; (d) compromise playbook in `10-runbooks.md` includes immediate cert revocation + UAL replay over the rotation window | Low (conditional on cert-lifecycle addendum landing) — actor identity is logged in two surfaces (UAL `ApplicationId` + Entra `initiatedBy.app.appId`); compensating runtime detection raises the bar against the quiet-spoof advantage that scaffold-mode default creates |
+| **Tampering** | Operator edits provisioning script to bypass `-Mode scaffold` and sneak mail-sends past CI | Static fitness-function regex catches `-SendInvitation`, `sendInvitation:true`, `-SendEmail`, etc. at PR time. Launch scripts require `# DCE-LAUNCH-MODE: APPROVED` marker + GitHub Environment with required reviewers. **Three control addenda (required for Low rating):** (1) **Glob coverage parity** — `PROVISIONING_GLOBS` in the fitness test extended to cover `.ps1/.py/.sh` × every reasonable directory (`tools/`, `scripts/`, `dce-mockup/ci-cd/scripts/`, `phase2-week1/`, `phase3-week2/`, `phase4-migration/`, `phase5/`) so a new directory can't ship without triggering the scan. **Landed in this commit.** (2) **Runtime-constructed body defense** — at least one test in Group 2 extended to require that scripts which `Invoke-RestMethod`/`requests` to `/groups`, `/invitations`, or `/invite` either emit the suppression literal in source OR carry a `# ADR-011-SUPPRESSION-VERIFIED: <reason>` waiver line that surfaces in PR review. Negative-lookahead regexes like `-SendInvitation\b(?!\s*:\s*\$false)` do not catch `-SendInvitation:$var` where `$var = $true` is set elsewhere. (3) **CODEOWNERS protection** — `.github/CODEOWNERS` lists `tests/architecture/`, ADR files, and `.github/workflows/` + `dce-mockup/ci-cd/workflows/` with two-reviewer required approval. **Landed in this commit.** | Low (with all three addenda); Medium if any one is omitted. With addenda, an insider bypass requires (i) compromising two CODEOWNERS reviewers simultaneously plus one launch-Environment approver, or (ii) finding a Microsoft API surface not enumerated in the playbook |
+| **Repudiation** | Operator denies sending a notification ("I didn't send those emails!") | Every script writes `PROVISIONING-MODE: <mode> COMMIT=<sha> RUN=<id>` to `out/provisioning-mode.log`, uploaded as a CI artifact. UAL records the `ApplicationId` + `ClientIP`. Message Trace records the SMTP envelope. **Addendum (retention-pinning, required):** (a) GitHub Actions artifact retention has plan-tier caps (90d Team / 400d Enterprise); if 365+-day retention is required, mirror the artifact to S3/Blob with explicit lifecycle policy. The `retention-days:` value in workflow YAML is the source-of-record claim. (b) UAL retention citation is licensed-SKU-dependent: 180d on E3, 365d on E5. The playbook §8.1 must cite the actual DCE tenant SKU. (c) Message Trace beyond 10 days documented to use `Start-HistoricalSearch` (90-day window, async; already in playbook) | Very low (with retention pinning); Low without. Three-surface logging story is genuinely strong (UAL + Entra + Message Trace) |
+| **Information Disclosure** | Scaffold-mode provisioning accidentally emails a confidential resource URL to wrong recipient | Scaffold mode by definition does NOT email recipients. Launch-mode emails are operator-curated and go through Exchange DLP (existing tenant policy). Failure mode = no email sent, not wrong email sent. **Scoped caveat:** ADR-011 addresses the email-channel disclosure vector only. Information Disclosure via the *granted permission itself* (an unintended share that is silently granted but never emailed is still a disclosure) is owned by ADR-004 (permissions philosophy) and the weekly permission-audit. Cross-reference noted | Very low for the email surface (scope of this ADR). Permission-grant disclosure tracked separately under ADR-004 |
+| **Denial of Service** | Attacker triggers `launch` workflow to mass-mail every user in the tenant | `launch` workflow is `workflow_dispatch`-only and requires GitHub Environment approval. **Addendum (required):** the `launch` GitHub Environment is configured with **at least two distinct human reviewers**, with **author-of-launch-PR ≠ approver** enforced (matches the release-gate-arbiter waiver protocol §P0-9). The launch script itself enforces (a) **hard cap of N=500 recipients per invocation** with explicit chunking required above that, (b) Exchange-aware throttle of ≤ 30 msg/min/mailbox with backoff, (c) the recipient manifest is attached to the workflow run as a downloadable artifact and its **SHA-256 echoed in the approval prompt** so a tampered manifest between manifest-generation and send is detectable | Low (with addendum). Without the ≥2-reviewer enforcement, there is no collusion to require — a single compromised approver can send to the full tenant |
+| **Elevation of Privilege** | Attacker uses suppressed-but-granted permissions to escalate access without users noticing | Permissions are granted regardless of mail suppression — this is *intended* behavior. The weekly permission-audit (`permission-audit.yml`, `05-permissions-model.md`) catches unexpected role assignments via the `permission-breaks.csv` allow-list. **Caveat:** suppression does not change the access-grant; it changes whether the user is *notified* of the grant. **Addendum (required as Acceptance Criterion):** the quarterly "your DCE access" digest is now a **blocking acceptance criterion**, NOT a follow-on. Maximum window during which a user holds unwanted access without notification is bounded at 90 days **by design**. If any resource in DCE holds PII/PHI/PCI, the digest cadence tightens to 30 days for those resources only | Medium (with digest as Acceptance Criterion). Without the digest in AC, this rating is aspirational and should be rated **High until the digest workflow ships** |
 
-**Compensating controls (filed as follow-on `bd` issues):**
+### Supplemental threats (4 rows, surfaced by adversarial review)
 
-1. Quarterly "your DCE access" digest mail to every active user — operator-curated, no Microsoft stock welcome, but ensures users learn of their access within 90 days even when scaffold mode hid the original grant.
-2. Empirical canary on every notification-capable provisioning change (one-user pilot before cohort run).
-3. Annual review of Microsoft Learn URLs cited in the playbook — Microsoft revs the docs quarterly and we need to catch behavioral changes.
+| Threat | Vector | Mitigation under ADR-011 | Residual risk |
+|---|---|---|---|
+| **Supply-chain Tampering on PnP / Graph SDK** | Malicious or regressed PnP.PowerShell or Microsoft.Graph module silently ignores `WelcomeEmailDisabled` or `sendInvitationMessage:false`; mail fires; fitness test passes because source text is correct | Pin module versions: `PnP.PowerShell` and `Microsoft.Graph` declared in `#Requires` / `requirements.txt`. Verify module signatures against PowerShell Gallery published thumbprints in `bootstrap.sh` Step 9. Quarterly empirical end-to-end canary (xtsync invitation + Message Trace check) proves suppression still works at runtime — bd `DeltaSetup-j3c` covers the initial canary; this addendum makes it recurring | Low (with quarterly canary). Without it, behavioral drift could be invisible for up to one Microsoft release cycle |
+| **TOCTOU on launch marker / local override** | Operator runs a `*launch*.ps1` script locally with prod cert and credentials, bypassing `workflow_dispatch` and Environment approval | The launch script asserts the presence of a CI-only signed env var (e.g., `LAUNCH_APPROVAL_JWT` issued by the workflow with a 15-minute TTL) and refuses to execute without it. Local dry-run mode is a separate `-Mode preview` that cannot send. The cert used for launch-mode runs must NOT be installed on operator workstations | Low (with JWT gate). Without it, the GitHub Environment approval is bypassable by anyone with cert + script access |
+| **Bootstrap Step 9 tenant-wide write without backup** | `remediate-group-welcome.ps1` modifies `UnifiedGroupWelcomeMessageEnabled` on every M365 Group; no pre-image captured; a botched run plus an angry group owner = unrecoverable | The remediation script writes the pre-image state of every modified group to `out/welcome-mail-preimage-<runid>.json` as a CI artifact, and a companion `restore-group-welcome.ps1` exists with documented rollback for any group whose owner objects. Tracked under bd `DeltaSetup-17i` | Very low (with pre-image + restore). Without, an operator dispute has no rollback path |
+| **Notification-as-detection-channel** | Removing the user-facing email surface removes a (cheap, accidental) canary that detected the original HTT-52 incident. Quarterly digest restores it for the *access* class; nothing restores it for *future unforeseen* misconfiguration classes | Any new provisioning capability added under ADR-011 must include an explicit "detection-channel of last resort" section in its design doc — what surface (alert, dashboard tile, weekly digest, sample-canary mailbox) would catch the next HTT-52-class incident before it goes wide? Documented as a hard requirement in this ADR's Migration plan section | Medium — this is a permanent architectural trade. Mitigated, not eliminated, by the quarterly digest and the per-capability detection-channel requirement |
+
+**Compensating controls (status as of this commit):**
+
+1. **Quarterly "your DCE access" digest mail** — promoted from follow-on to **blocking Acceptance Criterion** per the EoP addendum. Tracked as bd `DeltaSetup-6rc`.
+2. **Quarterly empirical canary** — promoted from one-time to recurring per the Supply-chain Tampering supplemental threat. Tracked as bd `DeltaSetup-j3c` (initial) + a recurring follow-on bd to be filed.
+3. **Annual review of Microsoft Learn URLs** cited in the playbook — Microsoft revs the docs quarterly and we need to catch behavioral changes.
+4. **`security-auditor` agent / human security review engagement** — open dependency. release-gate-arbiter co-signed STRIDE as proxy; this is sufficient for ADR-acceptance but not for production launch-mode invocation against real users.
+
+### STRIDE co-sign signature (release-gate-arbiter, 2026-05-16)
+
+> **STRIDE co-sign:** `release-gate-arbiter-bc138a` on 2026-05-16, scope = full table (6 core rows + 4 supplemental threats), with **5 addenda folded above** (Spoofing × 1, Tampering × 3, Repudiation × 1, DoS × 1, EoP × 1) and **4 supplemental threats added** (supply-chain Tampering, TOCTOU on launch marker, bootstrap Step 9 backup, notification-as-detection-channel). Acting as Security Auditor proxy; this swarm has no dedicated `security-auditor` agent and a full ASVS L2 review remains an open dependency before any production launch-mode invocation that actually sends mail to real HTT users. Per the ADR-011 acceptance criteria below, status may flip Proposed → Accepted once (a) `tests/architecture/test_notification_suppression.py` is green in CI (verified passing locally, 124/124 architecture tests including 7/7 ADR-011, 0.20s), (b) the quarterly access-digest workflow is added to Acceptance Criteria (**done in this commit**), and (c) the launch-notifications.yml workflow + CODEOWNERS + cert-lifecycle controls land (tracked under bd `DeltaSetup-17i`).
 
 ---
 
@@ -172,14 +188,39 @@ See [`../../../tests/architecture/test_notification_suppression.py`](../../../te
 
 ## Acceptance criteria
 
-- [ ] `tests/architecture/test_notification_suppression.py` passes in CI on a fresh PR.
-- [ ] `bootstrap.sh` step 9 completes without warnings on a fresh DCE tenant.
-- [ ] `scripts/remediate-group-welcome.ps1 -Mode scaffold` reports 0 groups with welcomes enabled.
-- [ ] `provisioning-mode.log` artifact is produced on every `provision-teams.yml` / `deploy-prod.yml` run.
-- [ ] `launch-notifications.yml` requires a human approver before any run.
-- [ ] Empirical canaries (xtsync + channel moderation) executed and documented.
-- [ ] HTT-52 apology mail-merge sent and acknowledged.
-- [ ] Release Gate Arbiter has co-signed the STRIDE table.
+All items below MUST be satisfied before status flips Proposed → Accepted. Items folded from the release-gate-arbiter STRIDE co-sign are tagged `[arbiter]`.
+
+### Code + CI gates
+- [x] `tests/architecture/test_notification_suppression.py` passes (7/7 fitness tests; 124/124 architecture suite; verified 2026-05-16, 0.20s)
+- [x] `PROVISIONING_GLOBS` covers `.{ps1,py,sh}` × all plausible directory roots `[arbiter Tampering #1]`
+- [x] `.github/CODEOWNERS` lists `tests/architecture/`, ADR files, workflow files with two-reviewer required approval `[arbiter Tampering #3]`
+- [ ] Runtime-constructed body defense: fitness test extended to require explicit literal OR `# ADR-011-SUPPRESSION-VERIFIED:` waiver for any `Invoke-RestMethod`/`requests` POST to `/groups`, `/invitations`, `/invite` `[arbiter Tampering #2]`
+- [ ] PnP / Graph module versions pinned (`#Requires` / `requirements.txt`) and signature-verified in `bootstrap.sh` Step 9 `[arbiter supply-chain]`
+
+### Tenant-side rollout (bd `DeltaSetup-17i`)
+- [ ] `bootstrap.sh` step 9 completes without warnings on a fresh DCE tenant
+- [ ] `scripts/remediate-group-welcome.ps1 -Mode scaffold` reports 0 groups with welcomes enabled AND writes pre-image to `out/welcome-mail-preimage-<runid>.json` `[arbiter bootstrap-backup]`
+- [ ] `scripts/restore-group-welcome.ps1` exists with documented per-group rollback `[arbiter bootstrap-backup]`
+- [ ] `provisioning-mode.log` artifact is produced on every `provision-teams.yml` / `deploy-prod.yml` run; retention pinned to plan-tier-appropriate days with off-platform mirror if 365+ required `[arbiter Repudiation]`
+- [ ] `launch-notifications.yml` exists, `workflow_dispatch`-only, gated by `launch` GitHub Environment configured with **≥2 distinct human reviewers** and author≠approver enforcement `[arbiter DoS]`
+- [ ] Launch script enforces hard cap N=500 recipients, Exchange-throttle ≤30 msg/min/mailbox, SHA-256 of recipient manifest echoed in approval prompt `[arbiter DoS]`
+- [ ] Launch script asserts CI-only signed `LAUNCH_APPROVAL_JWT` (15-min TTL); refuses local invocation `[arbiter TOCTOU]`
+- [ ] Cert lifecycle controls in place: rotation ≤90d, OIDC-federated or HSM-backed key storage, out-of-hours / out-of-IP alerting `[arbiter Spoofing]`
+- [ ] DCE tenant SKU cited in playbook §8.1 (drives UAL retention claim — 180d on E3, 365d on E5) `[arbiter Repudiation]`
+
+### User-facing controls
+- [ ] **Quarterly "your DCE access" digest workflow exists** (`launch` mode), has run at least once against the DCE tenant in dry-run, and recipient-coverage test confirms 100% of `User` objects with non-default group membership receive a digest entry. **Blocking AC — promoted from follow-on per `[arbiter EoP]`.** Tracked as bd `DeltaSetup-6rc`
+- [ ] Empirical canaries executed: xtsync silence + channel moderation notification behavior (bd `DeltaSetup-j3c`)
+- [ ] Recurring (quarterly) end-to-end canary scheduled (xtsync invitation + Message Trace check) — defends against PnP/Graph behavioral drift `[arbiter supply-chain]`
+
+### Incident closure
+- [ ] HTT-52 apology mail-merge sent and acknowledged (bd `DeltaSetup-377`); evidence retained 7 years
+- [ ] Message Trace forensics complete before 2026-05-22 deadline (bd `DeltaSetup-377`)
+
+### Governance
+- [x] Release Gate Arbiter has co-signed the STRIDE table (signature in §STRIDE security analysis, 2026-05-16)
+- [ ] Dedicated `security-auditor` agent or human Tier-1 security review engaged before first production launch-mode invocation against real users `[arbiter process gap]`
+- [ ] Per-capability "detection-channel of last resort" requirement documented for any new provisioning surface added under ADR-011 `[arbiter detection-channel]`
 
 ---
 

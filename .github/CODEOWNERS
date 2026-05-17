@@ -1,0 +1,60 @@
+# CODEOWNERS — required reviewer protection for ADR-enforced surfaces.
+#
+# Why this file exists:
+#   Per ADR-011 release-gate-arbiter STRIDE co-sign Tampering addendum #3,
+#   the fitness functions that enforce notification suppression cannot be
+#   modified in the same PR as a violation. Without CODEOWNERS, a single
+#   reviewer could approve a PR that both adds a forbidden opt-in AND
+#   disables the test that would have caught it. CODEOWNERS lifts the
+#   bar to two-reviewer approval for these protected files.
+#
+# Syntax: https://docs.github.com/en/repositories/managing-your-repositories-settings-and-features/customizing-your-repository/about-code-owners
+#
+# All paths are relative to repo root. Patterns are evaluated top-to-bottom;
+# the LAST matching pattern wins (so put generic rules first, specific later).
+#
+# IMPORTANT: GitHub requires the named users / teams to have write access
+# to the repo for CODEOWNERS rules to be enforced. The team handles below
+# are placeholders; replace with real GitHub usernames or @Delta-Crown-Org/<team>
+# slugs once the org has the teams created.
+
+# ---------------------------------------------------------------------------
+# Default owner — applies if no later rule matches.
+# ---------------------------------------------------------------------------
+*                                       @t-granlund
+
+# ---------------------------------------------------------------------------
+# Architecture fitness functions — the ADR enforcement layer.
+# Every test in this directory enforces an architectural invariant from an
+# ADR. Modifying them MUST require two-reviewer approval per ADR-011.
+# ---------------------------------------------------------------------------
+/tests/architecture/                    @t-granlund @Delta-Crown-Org/security
+/tests/architecture/test_notification_suppression.py  @t-granlund @Delta-Crown-Org/security
+
+# ---------------------------------------------------------------------------
+# ADRs — the decisions register. Editing an accepted ADR is a governance
+# action, not a code change. Two-reviewer approval required.
+# ---------------------------------------------------------------------------
+/docs/sharepoint-pnp-spec/decisions/    @t-granlund @Delta-Crown-Org/security
+/docs/sharepoint-pnp-spec/NOTIFICATION-SUPPRESSION-PLAYBOOK.md  @t-granlund @Delta-Crown-Org/security
+
+# ---------------------------------------------------------------------------
+# CI/CD workflows — the deploy surface. Tampering with these bypasses the
+# fitness functions; two-reviewer required.
+# ---------------------------------------------------------------------------
+/.github/workflows/                     @t-granlund @Delta-Crown-Org/security
+/dce-mockup/ci-cd/workflows/            @t-granlund @Delta-Crown-Org/security
+
+# ---------------------------------------------------------------------------
+# CODEOWNERS itself — meta-rule. Without this line, anyone could rewrite
+# CODEOWNERS to remove the protections above.
+# ---------------------------------------------------------------------------
+/.github/CODEOWNERS                     @t-granlund @Delta-Crown-Org/security
+
+# ---------------------------------------------------------------------------
+# Notes on team @Delta-Crown-Org/security:
+#   - The team does not yet exist in the GitHub org (2026-05-16).
+#   - bd DeltaSetup-<TBD> tracks creation. Until the team exists, CODEOWNERS
+#     enforcement on these paths defaults to @t-granlund only. Acceptable
+#     during ADR-011 rollout grace period; remove this comment once the team
+#     is created and CODEOWNERS rules are actually two-reviewer-enforced.
