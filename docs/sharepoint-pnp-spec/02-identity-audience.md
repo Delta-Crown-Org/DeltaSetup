@@ -123,6 +123,64 @@ HTT corporate users appear in DCE with:
 `companyName` or `department` until we audit completeness. If the agent
 needs an attribute filter, default to `mail` suffix.
 
+## Cross-tenant invitation policy guardrail
+
+**The current DCE B2B Collaboration Inbound policy MUST remain scoped to
+`AllUsers` for the HTT partner tenant.** Documented in
+`Convention-Page-Build/AADSTS500213-ROOT-CAUSE-AND-FIX.md`, referenced in
+`dce-mockup/RATIONALE.md` § 3.
+
+### Why this matters
+
+When DCE's cross-tenant B2B Collaboration Inbound policy was previously
+scoped to a dynamic security group (rather than `AllUsers`), every HTT
+user who had not yet been individually invited to DCE hit
+**AADSTS500213** on first authentication:
+
+> *"Tenant scope inbound policy denies access to this resource."*
+
+The failure is a chicken-and-egg trap: the user has no guest object yet
+(no invite has been redeemed) → they can't pass the group-membership
+filter → they can't authenticate → they can't get a guest object. The
+user is silently bricked on first onboarding.
+
+Fixing this requires re-invitation through the admin path for each
+affected user — invisible to the user, painful at scale.
+
+### Operational guardrail
+
+Any change away from `AllUsers` for the DCE↔HTT cross-tenant B2B
+policy MUST satisfy ALL of the following:
+
+1. **Pre-invite every HTT user** who needs DCE access BEFORE the scope
+   change. Use the existing `tools/invite-htt-users-to-dce.py` pattern
+   (already compliant with ADR-011 — sets `sendInvitationMessage: False`).
+2. **PR'd with a runbook entry** in `10-runbooks.md` describing the
+   exact sequence: invite first, redeem-wait, then scope. No drive-by
+   portal changes.
+3. **Be reversible via a fitness function**: add a test that asserts
+   the DCE B2B Inbound policy is `AllUsers` (or that, if not, the
+   group it points at contains every user with an active HTT guest
+   object). The test surfaces drift the next time CI runs.
+4. **Be cited in an ADR.** The reasoning for moving away from
+   `AllUsers` belongs in the decisions/ folder, not in a commit
+   message or a Slack thread.
+
+### Why we don't "just scope it down for security"
+
+The instinct is: `AllUsers` looks loose, group-scoped looks tight,
+group-scoped is the right answer. **It isn't.** The actual security
+boundary is `userType: Member` plus the audience-targeting + permission
+model inside DCE. The B2B Inbound policy is the gate for *getting an
+identity object created at all*; constraining it pre-emptively is
+security theatre that produces a worse outcome (silent onboarding
+failure with cryptic 500213 error code) without meaningfully changing
+the attack surface.
+
+If there is ever a genuine compliance requirement to scope it down
+(e.g., a regulator demands inbound be group-limited), implement the
+four bullet points above before flipping the switch.
+
 ## Audience proliferation guardrails
 
 To avoid the HTT Headquarters cluster pattern:

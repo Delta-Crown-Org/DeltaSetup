@@ -221,6 +221,30 @@ After sprint 1:
 | Token system produces theme JSON SharePoint rejects | Med | Med | Validate against Microsoft's reference theme; minimal palette to start |
 | Tyler unavailable mid-sprint | Med | Med | Megan as Global Admin backup; runbook 10 |
 
+## Rollback matrix
+
+Every change type that can hit the tenant has a documented rollback path
+with a measured MTTR (Mean Time To Recovery). Adaptation is one of the
+four confidence pillars; this matrix is the operational backstop when a
+risk in the table above materializes.
+
+| Change type | Rollback mechanism | MTTR | Runbook |
+|---|---|---|---|
+| **PnP template provisioning** (page, web part, theme) | `Invoke-PnPSiteTemplate -Path backups/<timestamp>/snapshot.xml` against the last-known-good snapshot | ~10 min | `10-runbooks.md` § Runbook 7; mechanism detailed in `09-deployment.md` § "Rollback procedure (concrete)" |
+| **SPFx solution deploy** (web part, App Customizer) | Re-publish the previous `.sppkg` version from the tenant app catalog. The app catalog retains version history; no rebuild needed. | ~5 min | `10-runbooks.md` § Runbook 7 (extend with SPFx-specific steps as part of sprint 2 "Heavy" tier work) |
+| **Permission grant** (role assignment, sharing invite, group add) | Permission-audit job re-run flags the drift; revert via PnP `ResetRoleInheritance` or remove the group/sharing record. Per ADR-011, scaffold-mode means the grant was NOT broadcast to the user, so revert is silent too. | ~15 min | `10-runbooks.md` § Runbook 5; ADR-011 § Compensating controls (the quarterly digest is the audit trail) |
+| **Teams channel moderation** (ADR-009 BETA endpoint) | Teams admin center → channel settings → disable moderation per-channel. CLI alternative: `PATCH /beta/teams/{id}/channels/{id}` with `moderationSettings: null`. | ~2 min per channel | ADR-009; runbook entry to be added once the ADR-011 empirical canary (bd `DeltaSetup-j3c`) confirms moderation PATCH notification behavior |
+| **Page content** (text, image, web part config — no schema change) | SharePoint native page version history restore. Every modern page keeps versions automatically. | ~30 sec | UI flow only — no runbook needed; the editor's "Version history" command is the rollback |
+| **Notification opt-in** (any `-Mode launch` execution that mailed users) | Notifications cannot be un-sent once delivered. Rollback is operational: send a corrective follow-up via the same launch-mode workflow with a curated "please disregard" body. | ~30 min (curate + approve + send) | ADR-011 § Implementation step 5 (apology mailer pattern from the HTT-52 retro) |
+| **M365 Group / Team creation** | Soft-delete via Entra (group goes to recycle bin, recoverable for 30 days). For irreversibly bad creates (e.g., wrong name in the tenant address book), hard-delete with `Remove-MgGroup -Force`. | ~5 min soft / ~15 min hard | `10-runbooks.md` § Runbook 5 (extend with group-delete steps); ADR-008 covers naming-correctness preconditions |
+
+**Rules for any rollback:**
+
+1. **Log the rollback** in the same audit surface as the original change (UAL operation, GitHub Actions run, or runbook execution log).
+2. **File a follow-up bd** capturing what went wrong and what the spec-pack defense should be (a fitness function, an ADR, a runbook addition). Adaptation pillar = every rollback teaches us something.
+3. **Never rollback by direct portal click without leaving an audit trail.** If you must, file the bd immediately after with the click-trail reconstructed from UAL.
+4. **Verify with the same job that detected the issue.** If permission-audit flagged it, re-run permission-audit. If a smoke test flagged it, re-run the smoke test. Don't trust eyes-on-screen as the confirmation.
+
 ## Definition of Done (sprint 1)
 
 - ✅ Dev site at `/sites/dce-hub-dev` loads with DCE theme.
