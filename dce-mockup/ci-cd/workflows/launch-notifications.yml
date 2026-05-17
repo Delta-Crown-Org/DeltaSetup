@@ -1,0 +1,268 @@
+# .github/workflows/launch-notifications.yml
+#
+# DCE SharePoint — operator-curated launch-mode notifications.
+# Companion to ADR-011 (Notification suppression by default).
+#
+# What this workflow IS:
+#   The single sanctioned path by which user-facing notifications leave the
+#   DCE deploy pipeline. All other provisioning workflows run in -Mode
+#   scaffold (no user mail) by ADR-011 invariant; this workflow is the
+#   one place that flips a script to -Mode launch.
+#
+# What this workflow IS NOT:
+#   - Not a deploy. No PnP templates apply here. No groups are created.
+#     The PERMISSIONS were granted by an earlier scaffold-mode run; this
+#     workflow only emits the notifications.
+#   - Not auto-triggered. workflow_dispatch only. There is no on:push,
+#     on:pull_request, on:schedule for this file.
+#
+# STRIDE addenda from release-gate-arbiter co-sign of ADR-011 (folded):
+#   - DoS: launch GitHub Environment requires ≥2 distinct human reviewers,
+#     author-of-launch-PR ≠ approver enforced via the environment config.
+#   - DoS: launch script enforces hard cap N=500 recipients per invocation;
+#     larger cohorts must be chunked across multiple workflow runs.
+#   - DoS: SHA-256 of recipient manifest echoed in the approval prompt so
+#     a tampered manifest between manifest-generation and send is
+#     detectable.
+#   - TOCTOU: launch script asserts CI-only signed LAUNCH_APPROVAL_JWT
+#     with 15-min TTL; refuses local invocation.
+#   - Repudiation: full recipient manifest uploaded as 7-year-retention
+#     artifact (mirrored to long-term storage if GitHub plan caps below).
+#
+# Required GitHub Environment configuration (manual setup, see
+# DeltaSetup-17i item 14 acceptance):
+#   Settings → Environments → "launch":
+#     - Required reviewers: at least 2 distinct named reviewers
+#     - Wait timer: optional (recommend 5 min for last-second abort)
+#     - Deployment branches: main only
+#     - "Prevent self-review" / equivalent: ENABLED (author ≠ approver)
+
+name: launch-notifications
+
+on:
+  workflow_dispatch:
+    inputs:
+      cohort:
+        description: |
+          Recipient cohort. Pre-defined cohorts ONLY — no ad-hoc lists.
+          Cohort definitions live in configs/launch-cohorts/<cohort>.yml
+          and must be merged via PR (CODEOWNERS-protected) before use.
+        required: true
+        type: choice
+        options:
+          - dce-staff-all
+          - htt-corp-crown-connection
+          - dce-owners-only
+          - dce-managers-only
+          - test-canary-mailboxes-only  # for dry-run rehearsal
+      template:
+        description: |
+          Notification template. Lives in configs/launch-templates/<template>.md.
+          Operator-curated; reviewed via PR; CODEOWNERS-protected.
+        required: true
+        type: choice
+        options:
+          - hub-launch-announcement
+          - crown-connection-go-live
+          - quarterly-access-digest
+          - htt-52-apology-mail
+          - test-canary-noop  # for dry-run rehearsal
+      dry_run:
+        description: 'Dry-run? (manifest only, no send.)'
+        required: true
+        type: boolean
+        default: true
+
+# Cancel-in-progress is INTENTIONALLY NOT SET. If two launch runs are
+# queued, we want both to fail-loud-on-the-second rather than silently
+# cancel the first.
+
+permissions:
+  contents: read
+  id-token: write    # for OIDC-based JWT mint
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Job 1: Generate the recipient manifest. Always runs. Outputs the
+  # SHA-256 of the manifest so the approver can verify integrity at
+  # approval time.
+  # ---------------------------------------------------------------------------
+  manifest:
+    name: Generate recipient manifest
+    runs-on: ubuntu-latest
+    outputs:
+      manifest_sha256: ${{ steps.hash.outputs.sha256 }}
+      recipient_count: ${{ steps.count.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve cohort to recipient list
+        env:
+          DCE_DEPLOY_CLIENT_ID: ${{ secrets.DCE_DEPLOY_CLIENT_ID }}
+          DCE_DEPLOY_CERT_THUMBPRINT: ${{ secrets.DCE_DEPLOY_CERT_THUMBPRINT }}
+          DCE_TENANT_DOMAIN: ${{ secrets.DCE_TENANT_DOMAIN }}
+        run: |
+          node tooling/resolve-cohort.js \
+            --cohort "${{ inputs.cohort }}" \
+            --out out/recipient-manifest.json
+          # ADR-011 STRIDE DoS addendum: hard cap 500 recipients/invocation.
+          COUNT=$(jq 'length' out/recipient-manifest.json)
+          if [ "$COUNT" -gt 500 ]; then
+            echo "::error::Cohort '${{ inputs.cohort }}' resolved to $COUNT recipients — exceeds hard cap of 500. Chunk into multiple invocations."
+            exit 1
+          fi
+          echo "Cohort '${{ inputs.cohort }}' resolved to $COUNT recipients."
+
+      - id: count
+        run: |
+          echo "count=$(jq 'length' out/recipient-manifest.json)" >> "$GITHUB_OUTPUT"
+
+      - id: hash
+        name: SHA-256 of manifest
+        run: |
+          HASH=$(sha256sum out/recipient-manifest.json | awk '{print $1}')
+          echo "sha256=$HASH" >> "$GITHUB_OUTPUT"
+          echo "Manifest SHA-256: $HASH"
+
+      - name: Render template (preview, no recipient interpolation yet)
+        run: |
+          node tooling/render-template.js \
+            --template "${{ inputs.template }}" \
+            --preview \
+            --out out/template-preview.md
+
+      - name: Upload manifest + preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: launch-manifest-${{ github.run_id }}
+          path: |
+            out/recipient-manifest.json
+            out/template-preview.md
+          retention-days: 90   # GitHub Team plan max; mirror to long-term off-platform per ADR-011 Repudiation addendum
+
+      - name: Echo approval prompt (visible in workflow summary)
+        run: |
+          cat <<EOF >> "$GITHUB_STEP_SUMMARY"
+          ## Approval prompt — verify BEFORE clicking Approve in the next job
+
+          - **Cohort:** \`${{ inputs.cohort }}\`
+          - **Template:** \`${{ inputs.template }}\`
+          - **Dry-run:** \`${{ inputs.dry_run }}\`
+          - **Recipient count:** **${{ steps.count.outputs.count }}** (hard cap: 500)
+          - **Manifest SHA-256:** \`${{ steps.hash.outputs.sha256 }}\`
+
+          To verify the manifest matches what you expect:
+          1. Download \`launch-manifest-${{ github.run_id }}.zip\` from this run's artifacts.
+          2. \`sha256sum recipient-manifest.json\` — compare to the SHA above.
+          3. \`jq '.[] | .smtp' recipient-manifest.json | head -20\` — eyeball the recipients.
+
+          If the SHA-256 here doesn't match what you compute locally, **DO NOT APPROVE**.
+          Cancel this run and investigate.
+          EOF
+
+  # ---------------------------------------------------------------------------
+  # Job 2: Send. Gated by the `launch` GitHub Environment which is
+  # configured to require ≥2 distinct human reviewers + author≠approver.
+  # The approver verifies the SHA-256 from job 1 before clicking Approve.
+  # ---------------------------------------------------------------------------
+  send:
+    name: Send notifications (gated)
+    needs: manifest
+    runs-on: ubuntu-latest
+    environment: launch    # ← this is the gate; configured in repo settings
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download manifest from job 1
+        uses: actions/download-artifact@v4
+        with:
+          name: launch-manifest-${{ github.run_id }}
+          path: out/
+
+      - name: Verify manifest SHA-256 matches job 1
+        run: |
+          ACTUAL=$(sha256sum out/recipient-manifest.json | awk '{print $1}')
+          EXPECTED="${{ needs.manifest.outputs.manifest_sha256 }}"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "::error::Manifest SHA-256 mismatch! Expected=$EXPECTED Actual=$ACTUAL"
+            exit 1
+          fi
+          echo "✓ Manifest SHA-256 verified: $ACTUAL"
+
+      - name: Mint LAUNCH_APPROVAL_JWT (TOCTOU defense)
+        id: jwt
+        run: |
+          # STRIDE TOCTOU addendum: short-lived (15-min) signed token that
+          # the send script verifies. Bound to this workflow run.
+          # In production: replace with OIDC-federated cosign minting.
+          JWT=$(node tooling/mint-launch-jwt.js \
+            --runid "${{ github.run_id }}" \
+            --ttl 900 \
+            --cohort "${{ inputs.cohort }}" \
+            --template "${{ inputs.template }}" \
+            --manifest-sha256 "${{ needs.manifest.outputs.manifest_sha256 }}")
+          echo "::add-mask::$JWT"
+          echo "jwt=$JWT" >> "$GITHUB_OUTPUT"
+
+      - name: Send (or dry-run)
+        env:
+          DCE_DEPLOY_CLIENT_ID: ${{ secrets.DCE_DEPLOY_CLIENT_ID }}
+          DCE_DEPLOY_CERT_THUMBPRINT: ${{ secrets.DCE_DEPLOY_CERT_THUMBPRINT }}
+          DCE_TENANT_DOMAIN: ${{ secrets.DCE_TENANT_DOMAIN }}
+          LAUNCH_APPROVAL_JWT: ${{ steps.jwt.outputs.jwt }}
+        run: |
+          MODE_FLAG="launch"
+          DRY_FLAG=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            DRY_FLAG="--dry-run"
+            echo "DRY-RUN MODE: manifest verified, JWT minted, no mail will be sent."
+          fi
+          # The send script's name MUST match the launch-marker pattern
+          # so the ADR-011 fitness test recognizes it. Throttle per
+          # STRIDE DoS addendum: ≤30 msg/min/mailbox.
+          node tooling/send-launch-notifications.js \
+            --mode "$MODE_FLAG" \
+            --manifest out/recipient-manifest.json \
+            --template "${{ inputs.template }}" \
+            --throttle 30 \
+            $DRY_FLAG
+
+      - name: Upload send log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: launch-send-log-${{ github.run_id }}
+          path: |
+            out/send-log.json
+            out/provisioning-mode.log
+          retention-days: 90
+
+      - name: Audit summary
+        if: always()
+        run: |
+          cat <<EOF >> "$GITHUB_STEP_SUMMARY"
+          ## Send job complete
+
+          - **Cohort:** \`${{ inputs.cohort }}\`
+          - **Template:** \`${{ inputs.template }}\`
+          - **Dry-run:** \`${{ inputs.dry_run }}\`
+          - **Manifest SHA-256:** \`${{ needs.manifest.outputs.manifest_sha256 }}\`
+          - **Approver:** see this run's approval history
+          - **Artifacts:** \`launch-manifest-${{ github.run_id }}\`, \`launch-send-log-${{ github.run_id }}\`
+          EOF

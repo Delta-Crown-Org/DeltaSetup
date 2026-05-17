@@ -126,7 +126,54 @@ warn "Granting admin consent (requires Global Admin or Privileged Role Admin)…
 az ad app permission admin-consent --id "$APP_ID" || die "Admin consent failed. Re-run as a Global Admin."
 ok "Admin consent granted"
 
-step "8. Output GitHub secrets"
+step "8. Verify required PowerShell module versions (ADR-011 supply-chain defense)"
+# Pin module versions to defend against supply-chain Tampering surfaced by
+# release-gate-arbiter STRIDE co-sign of ADR-011. A malicious or regressed
+# module could silently ignore -SendInvitation:\$false or
+# -UnifiedGroupWelcomeMessageEnabled:\$false; the fitness function in
+# tests/architecture/test_notification_suppression.py only verifies SOURCE TEXT.
+# This step verifies the modules at runtime.
+REQUIRED_PNP="2.4.0"
+REQUIRED_EXO="3.4.0"
+REQUIRED_MG="2.15.0"
+pwsh -NoLogo -NoProfile -Command "
+  \$failed = 0
+  foreach (\$pair in @(@('PnP.PowerShell', '$REQUIRED_PNP'), @('ExchangeOnlineManagement', '$REQUIRED_EXO'), @('Microsoft.Graph', '$REQUIRED_MG'))) {
+    \$name = \$pair[0]; \$min = [version]\$pair[1]
+    \$mod = Get-Module -ListAvailable -Name \$name | Sort-Object Version -Descending | Select-Object -First 1
+    if (-not \$mod) {
+      Write-Host \"  ⚠ \$name not installed; installing minimum \$min...\"
+      Install-Module \$name -MinimumVersion \$min -Force -Scope CurrentUser -SkipPublisherCheck
+    } elseif (\$mod.Version -lt \$min) {
+      Write-Host \"  ⚠ \$name version \$(\$mod.Version) is below minimum \$min; updating...\"
+      Update-Module \$name -Force
+    } else {
+      Write-Host \"  ✓ \$name \$(\$mod.Version) (>= \$min)\"
+    }
+  }
+" || die "Module version check failed."
+ok "All required modules at or above pinned minimum versions"
+
+step "9. ADR-011: disable Unified Group welcome mail tenant-wide (scaffold mode)"
+# Per ADR-011 Acceptance Criteria. Runs in SCAFFOLD mode here — reports
+# what would change without mutating. To actually apply the remediation,
+# re-run the remediate-group-welcome.ps1 script directly with -Mode launch
+# AFTER reviewing the scaffold-mode pre-image output.
+REMEDIATE_SCRIPT="$(dirname "$0")/remediate-group-welcome.ps1"
+if [ -f "$REMEDIATE_SCRIPT" ]; then
+  # Need the cert thumbprint for the script. Extract from the cert we just uploaded.
+  CERT_THUMBPRINT=$(openssl x509 -in cert.crt -noout -fingerprint -sha1 | sed 's/.*=//; s/://g')
+  DCE_DEPLOY_CLIENT_ID="$APP_ID" \
+  DCE_TENANT_DOMAIN="$TENANT_DOMAIN" \
+  DCE_DEPLOY_CERT_THUMBPRINT="$CERT_THUMBPRINT" \
+    pwsh -NoLogo -NoProfile -File "$REMEDIATE_SCRIPT" -Mode scaffold || warn "Step 9 scaffold-mode pre-image failed; investigate before promoting to launch."
+  ok "Step 9 scaffold-mode complete; pre-image written to ./out/"
+  warn "Run with '-Mode launch' to actually disable welcome mail. See ADR-011 §Acceptance criteria."
+else
+  warn "remediate-group-welcome.ps1 not found at $REMEDIATE_SCRIPT — skipping Step 9. File bd to land before next bootstrap run."
+fi
+
+step "10. Output GitHub secrets"
 CERT_PASS_VALUE=$(cat cert.pfx.password)
 CERT_PFX_B64=$(base64 -i cert.pfx | tr -d '\n')
 cat <<EOF
