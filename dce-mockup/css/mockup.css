@@ -1,0 +1,294 @@
+/*
+ * mockup.css — chrome that exists only in the Tier-B mockup
+ * (role-switcher, identity badge, SharePoint suite-bar simulation).
+ * NONE of this ships to SPFx. Strip on port.
+ */
+
+/* SharePoint chrome simulation — top suite bar */
+
+.sp-suitebar {
+  background: var(--_dce-teal-deeper);
+  color: var(--color-text-on-dark);
+  padding: 0 var(--space-4);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.sp-suitebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sp-suitebar__app-icon {
+  width: 24px;
+  height: 24px;
+  background: var(--color-text-inverse);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--_dce-teal-deeper);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
+}
+
+.sp-suitebar__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.sp-suitebar__search {
+  flex: 1;
+  max-width: 480px;
+  margin: 0 var(--space-5);
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  padding: 0 var(--space-3);
+  height: 32px;
+  color: var(--color-text-on-dark-subtle);
+  font-size: var(--font-size-sm);
+}
+
+.sp-suitebar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sp-suitebar__identity-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--identity-badge-bg);
+  border: 1px solid var(--identity-badge-border);
+  border-radius: 16px;
+  font-size: var(--font-size-xs);
+  color: var(--identity-badge-text);
+  cursor: pointer;
+}
+
+.sp-suitebar__identity-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--_dce-teal) 0%, var(--_dce-teal-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-inverse);
+  flex-shrink: 0;
+}
+
+.sp-suitebar__org-pill {
+  font-size: 10px;
+  background: var(--identity-badge-accent);
+  color: var(--_dce-teal-deeper);
+  padding: 1px var(--space-2);
+  border-radius: 8px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* SharePoint site title bar */
+
+.sp-titlebar {
+  background: var(--color-surface-card);
+  border-bottom: 1px solid var(--color-border-default);
+  padding: var(--space-3) 0;
+}
+
+.sp-titlebar__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.sp-titlebar__site-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--color-brand-secondary);
+  color: var(--_dce-teal-deeper);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-bold);
+}
+
+.sp-titlebar__site-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-md);
+  color: var(--color-text-heading);
+  margin: 0;
+}
+
+.sp-titlebar__site-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.sp-titlebar__nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.sp-titlebar__nav a {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  border-radius: 4px;
+  position: relative;
+}
+
+.sp-titlebar__nav a[aria-current="page"] {
+  color: var(--color-text-heading);
+  font-weight: var(--font-weight-bold);
+}
+
+.sp-titlebar__nav a[aria-current="page"]::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: var(--space-3);
+  right: var(--space-3);
+  height: 2px;
+  background: var(--nav-active-underline);
+}
+
+/* Role-switcher overlay */
+
+.role-switcher {
+  position: fixed;
+  bottom: var(--space-5);
+  right: var(--space-5);
+  z-index: 60;
+  background: var(--color-surface-card);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(10, 31, 28, 0.24);
+  border-top: 4px solid var(--color-brand-secondary);
+  padding: var(--space-4);
+  max-width: 360px;
+  font-family: var(--font-family-body);
+}
+
+.role-switcher__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-md);
+  color: var(--color-text-heading);
+  margin: 0 0 var(--space-1);
+}
+
+.role-switcher__subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.role-switcher__select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border-default);
+  border-radius: 4px;
+  background: var(--color-surface-card);
+  color: var(--color-text-default);
+  margin-bottom: var(--space-3);
+  min-height: 44px;
+}
+
+.role-switcher__details {
+  background: var(--color-surface-dim);
+  padding: var(--space-3);
+  border-radius: 4px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-3);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  line-height: var(--line-height-normal);
+  word-break: break-word;
+}
+
+.role-switcher__details span {
+  color: var(--color-brand-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.role-switcher__toggle-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.role-switcher__toggle-row input { margin: 0; }
+
+.role-switcher.collapsed {
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+.role-switcher.collapsed .role-switcher__body {
+  display: none;
+}
+
+.role-switcher__collapse-btn {
+  background: none;
+  border: 0;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+.role-switcher__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.role-switcher__title-row {
+  flex: 1;
+}
+
+/* Identity flow hint banner — explains the cross-tenant context */
+
+.identity-hint-banner {
+  background: var(--color-surface-dim);
+  border-left: 4px solid var(--color-brand-secondary);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.identity-hint-banner strong { color: var(--color-text-default); }
+
+@media (max-width: 640px) {
+  .role-switcher {
+    bottom: var(--space-3);
+    right: var(--space-3);
+    left: var(--space-3);
+    max-width: none;
+  }
+}

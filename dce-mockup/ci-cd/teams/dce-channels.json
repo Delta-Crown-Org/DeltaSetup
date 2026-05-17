@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "description": "DCE Teams + channel moderation config consumed by ci-cd/scripts/provision-teams.ps1. Channel IDs are placeholders — fill in after the Teams are created.",
+    "graphSpec": "https://learn.microsoft.com/graph/api/resources/channelmoderationsettings",
+    "_CRITICAL_BETA_ONLY_2026_05": "channelModerationSettings is currently BETA-only in Microsoft Graph. Verified by Tyler's solutions-architect-e9372f research (ADR-006 final, 2026-05-16). Teams PowerShell v7.7.0 and teams-js SDK v2.53.0 also lack moderation support. Production implementation uses /beta endpoint with a v1.0 promotion monitor. Track changelog: https://developer.microsoft.com/en-us/graph/changelog",
+    "modes": {
+      "userNewMessageRestriction": ["everyone", "everyoneExceptGuests", "moderators", "unknownFutureValue"],
+      "replyRestriction": ["everyone", "authorAndModerators", "unknownFutureValue"]
+    }
+  },
+  "teams": [
+    {
+      "displayName": "Crown Connection",
+      "id": "11e4f2da-c468-4b81-9a18-46d883099a62",
+      "_note": "Group/team id from docs/sharepoint-pnp-spec/00-context.md. Backs /sites/CrownConnection.",
+      "channels": [
+        {
+          "displayName": "General",
+          "id": "REPLACE_WITH_CHANNEL_ID_AFTER_PROVISION",
+          "moderationSettings": {
+            "userNewMessageRestriction": "moderators",
+            "replyRestriction": "everyone",
+            "allowNewMessageFromBots": true,
+            "allowNewMessageFromConnectors": true
+          },
+          "_purpose": "Pinned franchisor announcements. Owners + leadership only post; everyone replies."
+        },
+        {
+          "displayName": "Ops",
+          "id": "REPLACE_WITH_CHANNEL_ID_AFTER_PROVISION",
+          "moderationSettings": {
+            "userNewMessageRestriction": "everyoneExceptGuests",
+            "replyRestriction": "everyone",
+            "allowNewMessageFromBots": true,
+            "allowNewMessageFromConnectors": false
+          },
+          "_purpose": "Daily ops chatter. Members post; HTT corp guests do not start threads."
+        },
+        {
+          "displayName": "Brand",
+          "id": "REPLACE_WITH_CHANNEL_ID_AFTER_PROVISION",
+          "moderationSettings": {
+            "userNewMessageRestriction": "everyone",
+            "replyRestriction": "everyone",
+            "allowNewMessageFromBots": true,
+            "allowNewMessageFromConnectors": true
+          },
+          "_purpose": "Brand updates from Jenna. Open."
+        },
+        {
+          "displayName": "Owner-only",
+          "id": "REPLACE_WITH_CHANNEL_ID_AFTER_PROVISION",
+          "_channelType": "private",
+          "moderationSettings": {
+            "userNewMessageRestriction": "everyone",
+            "replyRestriction": "everyone",
+            "allowNewMessageFromBots": false,
+            "allowNewMessageFromConnectors": false
+          },
+          "_purpose": "Private channel restricted to DCE Franchise Owners. Backing SharePoint site inherits sensitivity label from the parent team."
+        }
+      ]
+    }
+  ]
+}

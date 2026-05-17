@@ -1,0 +1,83 @@
+# .github/workflows/pr-validation.yml
+#
+# DCE SharePoint — PR validation pipeline.
+# Mirrors docs/sharepoint-pnp-spec/07-ci-cd-pipeline.md § Workflow 1.
+#
+# What this validates on every PR to main:
+#   - Token JSON / Style Dictionary build succeeds
+#   - PnP provisioning templates parse without error
+#   - The site map / page templates are schema-valid
+#   - Playwright smoke test against the dev site
+#   - axe-core a11y audit (WCAG 2.2 AA, AAA aspirations on text-heavy zones)
+#   - Visual regression diff
+#
+# No deployment happens on PR. Merge to main triggers deploy-prod.yml.
+
+name: PR validation
+
+on:
+  pull_request:
+    branches: [main]
+
+# Cancel an in-flight run if a newer commit lands on the same PR.
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build design tokens
+        run: npx style-dictionary build
+
+      - name: Validate PnP templates
+        shell: pwsh
+        run: |
+          Install-Module PnP.PowerShell -Force -SkipPublisherCheck
+          $errors = @()
+          Get-ChildItem templates -Recurse -Filter *.xml | ForEach-Object {
+            try { Test-PnPSiteTemplate -Path $_.FullName }
+            catch { $errors += "$($_.FullName): $($_.Exception.Message)" }
+          }
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_ }
+            exit 1
+          }
+
+      - name: Validate page JSON schemas
+        run: node tooling/validate-pages.js
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke test (dev site)
+        env:
+          DEV_SITE_URL: ${{ secrets.DCE_DEV_SITE_URL }}
+          DEV_USER: ${{ secrets.DCE_DEV_USER }}
+          DEV_PASS: ${{ secrets.DCE_DEV_PASS }}
+        run: npx playwright test --project=chromium tests/playwright/smoke.spec.ts
+
+      - name: Accessibility audit (axe-core)
+        run: npx pa11y-ci --config tests/accessibility/pa11y-ci.json
+
+      - name: Visual regression
+        run: npx playwright test tests/visual --update-snapshots=false
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ github.run_id }}
+          path: playwright-report/
+          retention-days: 14

@@ -1,0 +1,182 @@
+/*
+ * DCE Design Tokens — derived from docs/sharepoint-pnp-spec/reference/dce-tokens.json
+ * Source of truth: deltacrown.com/css/tokens.css (WCAG-audited)
+ *
+ * 3-tier token system (per docs/sharepoint-pnp-spec/03-design-system.md):
+ *   Tier 1 — Raw / Reference (private, prefixed with _dce-)
+ *   Tier 2 — Semantic / Alias (used by components)
+ *   Tier 3 — Component (per-component overrides)
+ *
+ * Update protocol: change values in deltacrown.com/css/tokens.css FIRST,
+ * then re-derive dce-tokens.json via Style Dictionary, then this file.
+ * Component CSS must NEVER hardcode hex outside :root.
+ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────
+     Tier 1 — Raw reference (private)
+     ───────────────────────────────────────────────────────────────── */
+  --_dce-teal:         #006B5E;  /* AAA on white 7.07:1 */
+  --_dce-teal-dark:    #004D44;  /* AAA on white 9.91:1 */
+  --_dce-teal-deeper:  #0A1F1C;  /* AAA on white 18.91:1 — hero backdrop */
+  --_dce-teal-light:   #4A9B8E;  /* Decorative only on white 2.83:1 */
+  --_dce-teal-on-dark: #5DB7A9;  /* Text/icons on dark surfaces */
+  --_dce-gold:         #D4A84B;  /* Background only on white 2.31:1 */
+  --_dce-gold-light:   #E8C989;
+  --_dce-gold-dark:    #6E4F0E;  /* AAA on white 8.27:1 — safe for gold text */
+  --_dce-sage:         #7A9B8A;  /* Decorative 2.86:1 */
+
+  --_dce-surface-default: #FAFAF7;  /* Off-white base */
+  --_dce-surface-dim:     #F0EDE8;
+  --_dce-surface-dark:    #0D2925;  /* Deep teal hero overlay */
+  --_dce-surface-card:    #FFFFFF;
+
+  --_dce-text:           #1A2A3A;   /* AAA on white 14.18:1 */
+  --_dce-text-secondary: #465463;   /* AAA on white 7.99:1 */
+  --_dce-text-muted:     #8A96A4;   /* AA Large only on white 3.53:1 */
+  --_dce-text-inverse:   #F5F5F3;
+
+  --_dce-success: #66BB6A;
+  --_dce-danger:  #A51C16;  /* AAA on light surfaces */
+  --_dce-warn:    #FB8C00;
+  --_dce-neutral: #B0BEC5;
+
+  /* ─────────────────────────────────────────────────────────────────
+     Tier 2 — Semantic / Alias
+     ───────────────────────────────────────────────────────────────── */
+  --color-brand-primary:        var(--_dce-teal);
+  --color-brand-primary-hover:  var(--_dce-teal-dark);
+  --color-brand-primary-active: var(--_dce-teal-deeper);
+  --color-brand-secondary:      var(--_dce-gold);
+  --color-brand-secondary-text: var(--_dce-gold-dark);
+
+  --color-text-default:    var(--_dce-text);
+  --color-text-secondary:  var(--_dce-text-secondary);
+  --color-text-muted:      var(--_dce-text-muted);
+  --color-text-heading:    var(--_dce-teal);
+  --color-text-link:       var(--_dce-teal);
+  --color-text-link-hover: var(--_dce-teal-dark);
+  --color-text-inverse:    var(--_dce-text-inverse);
+
+  --color-text-on-dark:        rgba(255, 255, 255, 0.92);  /* AAA on teal-deeper */
+  --color-text-on-dark-muted:  rgba(255, 255, 255, 0.70);  /* AAA on teal-deeper */
+  --color-text-on-dark-subtle: rgba(255, 255, 255, 0.62);  /* AA Large only */
+
+  --color-surface-page:    var(--_dce-surface-default);
+  --color-surface-card:    var(--_dce-surface-card);
+  --color-surface-dim:     var(--_dce-surface-dim);
+  --color-surface-hero:    var(--_dce-teal-deeper);
+  --color-surface-accent:  var(--_dce-gold);
+
+  --color-border-default:  rgba(10, 31, 28, 0.12);
+  --color-border-strong:   rgba(10, 31, 28, 0.24);
+  --color-border-accent:   var(--_dce-gold);
+
+  --color-state-success:   var(--_dce-success);
+  --color-state-danger:    var(--_dce-danger);
+  --color-state-warn:      var(--_dce-warn);
+  --color-state-neutral:   var(--_dce-neutral);
+
+  --color-focus-ring: var(--_dce-gold-dark);  /* AAA contrast ring */
+
+  /* ─────────────────────────────────────────────────────────────────
+     Typography
+     ───────────────────────────────────────────────────────────────── */
+  --font-family-heading: 'Playfair Display', Georgia, serif;
+  --font-family-body:    'Tenor Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-system:  'Segoe UI Variable', system-ui, sans-serif;
+
+  --font-size-xs:   0.75rem;   /* 12px */
+  --font-size-sm:   0.875rem;  /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-md:   1.125rem;  /* 18px */
+  --font-size-lg:   1.5rem;    /* 24px */
+  --font-size-xl:   2rem;      /* 32px */
+  --font-size-2xl:  2.5rem;    /* 40px */
+  --font-size-hero: clamp(2.5rem, 5vw, 4rem);
+
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-bold:    700;
+
+  --line-height-tight:  1.15;
+  --line-height-normal: 1.5;
+  --line-height-loose:  1.7;
+
+  /* ─────────────────────────────────────────────────────────────────
+     Spacing
+     ───────────────────────────────────────────────────────────────── */
+  --space-0:   0;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   24px;
+  --space-6:   32px;
+  --space-8:   48px;
+  --space-12:  80px;
+  --space-16:  120px;
+
+  --space-section-pad: clamp(80px, 12vh, 140px);
+  --space-container:   1140px;
+  --space-gap:         clamp(16px, 3vw, 32px);
+
+  /* ─────────────────────────────────────────────────────────────────
+     Motion
+     ───────────────────────────────────────────────────────────────── */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast:    0.2s;
+  --duration-default: 0.7s;
+
+  /* ─────────────────────────────────────────────────────────────────
+     Tier 3 — Component tokens
+     ───────────────────────────────────────────────────────────────── */
+  --hero-bg:                 var(--color-surface-hero);
+  --hero-text:               var(--color-text-on-dark);
+  --hero-eyebrow:            var(--color-brand-secondary);
+  --hero-accent-line:        var(--color-brand-secondary);
+
+  --card-bg:                 var(--color-surface-card);
+  --card-border:             var(--color-border-default);
+  --card-border-top-accent:  var(--color-brand-primary);
+  --card-shadow:             0 4px 16px rgba(10, 31, 28, 0.08);
+  --card-shadow-hover:       0 8px 24px rgba(10, 31, 28, 0.14);
+  --card-radius:             8px;
+
+  --kpi-tile-bg:             var(--color-surface-card);
+  --kpi-tile-stat-color:     var(--color-brand-primary);
+  --kpi-tile-trend-up:       var(--color-state-success);
+  --kpi-tile-trend-down:     var(--color-state-danger);
+
+  --nav-active-underline:    var(--color-brand-secondary);
+  --nav-link-color:          var(--color-text-on-dark);
+  --nav-link-hover:          var(--color-brand-secondary);
+
+  --button-primary-bg:       var(--color-brand-primary);
+  --button-primary-text:     var(--color-text-inverse);
+  --button-primary-hover:    var(--color-brand-primary-hover);
+
+  --identity-badge-bg:       rgba(255, 255, 255, 0.08);
+  --identity-badge-border:   rgba(255, 255, 255, 0.16);
+  --identity-badge-text:     var(--color-text-on-dark);
+  --identity-badge-accent:   var(--color-brand-secondary);
+}
+
+/*
+ * Breakpoint reference (CSS custom properties can't be used in @media):
+ *   --breakpoint-mobile:  640px
+ *   --breakpoint-tablet:  1023px
+ *   --breakpoint-compact: 1407px
+ *
+ * Components must use these literal values in @media rules.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

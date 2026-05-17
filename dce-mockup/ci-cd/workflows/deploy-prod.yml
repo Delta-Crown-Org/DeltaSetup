@@ -1,0 +1,100 @@
+# .github/workflows/deploy-prod.yml
+#
+# DCE SharePoint — production deploy.
+# Triggered by push to main (after PR approval) or manual workflow_dispatch.
+#
+# Per ADR-007: cert-based app-only auth (not client secret). The cert is
+# stored base64-encoded in repo secret DCE_DEPLOY_PFX and restored to disk
+# at deploy time. The matching public .cer is uploaded to the Entra app
+# registration `dce-sharepoint-deploy` (Graph + SharePoint application
+# permissions; admin-consented).
+
+name: Deploy to PROD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Only one prod deploy at a time. Don't cancel — let it finish to avoid
+# half-applied templates.
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # GitHub Environment "prod" should have required-reviewers set
+    # (gate prod merges on a second human approval).
+    environment:
+      name: prod
+      url: https://deltacrown.sharepoint.com/sites/dce-hub
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build design tokens
+        run: npx style-dictionary build
+
+      - name: Restore deployment certificate
+        shell: pwsh
+        env:
+          DCE_DEPLOY_PFX: ${{ secrets.DCE_DEPLOY_PFX }}
+        run: |
+          $bytes = [Convert]::FromBase64String($env:DCE_DEPLOY_PFX)
+          [IO.File]::WriteAllBytes('./cert.pfx', $bytes)
+
+      - name: Pre-deploy site snapshot (rollback artifact)
+        shell: pwsh
+        env:
+          CLIENT_ID:  ${{ secrets.DCE_DEPLOY_CLIENT_ID }}
+          TENANT:     ${{ secrets.DCE_TENANT_DOMAIN }}
+          CERT_PASS:  ${{ secrets.DCE_DEPLOY_PFX_PASSWORD }}
+        run: |
+          Install-Module PnP.PowerShell -Force -SkipPublisherCheck
+          ./scripts/snapshot-site.ps1 -OutputDir ./backups
+
+      - name: Apply PnP templates
+        shell: pwsh
+        env:
+          CLIENT_ID:  ${{ secrets.DCE_DEPLOY_CLIENT_ID }}
+          TENANT:     ${{ secrets.DCE_TENANT_DOMAIN }}
+          CERT_PASS:  ${{ secrets.DCE_DEPLOY_PFX_PASSWORD }}
+        run: ./scripts/deploy-prod.ps1
+
+      - name: Post-deploy smoke test
+        run: |
+          npx playwright install --with-deps chromium
+          npx playwright test --project=chromium tests/playwright/smoke.spec.ts
+        env:
+          PROD_SITE_URL: https://deltacrown.sharepoint.com/sites/dce-hub
+
+      - name: Upload pre-deploy snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-deploy-snapshot-${{ github.run_id }}
+          path: backups/
+          retention-days: 90
+
+      - name: Notify Teams
+        if: always()
+        uses: aliencube/microsoft-teams-actions@v0.8.0
+        with:
+          webhook_uri: ${{ secrets.TEAMS_DEPLOY_WEBHOOK }}
+          title: "DCE SharePoint deploy ${{ job.status }}"
+          summary: |
+            main → PROD deploy completed: **${{ job.status }}**
+            Run: ${{ github.run_id }}
+            Commit: ${{ github.sha }}
+            Workflow: ${{ github.workflow }}

@@ -1,0 +1,73 @@
+# .github/workflows/provision-teams.yml
+#
+# DCE Teams provisioning — creates/updates the Teams that back each
+# spoke site, applies channelModerationSettings per the spec's
+# moderation matrix.
+#
+# CORRECTION 2026-05-16: channelModerationSettings is BETA-ONLY in
+# Microsoft Graph as of May 2026. Verified by solutions-architect-e9372f
+# research (ADR-006 final). Teams PowerShell v7.7.0 has zero moderation
+# parameters; teams-js SDK v2.53.0 is client-side only.
+#
+# This workflow calls Graph /beta. Microsoft v1.0 promotion is on the
+# roadmap; when it lands, update scripts/provision-teams.ps1 (single
+# string change: /beta → /v1.0) and update the fitness test.
+#
+# Reference: https://learn.microsoft.com/graph/api/channel-patch?view=graph-rest-beta
+# Changelog monitor: https://developer.microsoft.com/en-us/graph/changelog
+#
+# Also: there is NO first-party web part that renders a moderated Teams
+# channel inside SharePoint — the production implementation deep-links
+# from SharePoint pages to the Teams channel.
+#
+# This workflow runs on push to main when files under teams/ change,
+# OR manually via workflow_dispatch.
+
+name: Provision Teams + channel moderation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'teams/**'
+      - 'scripts/provision-teams.ps1'
+      - '.github/workflows/provision-teams.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: provision-teams
+  cancel-in-progress: false
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore deployment certificate
+        shell: pwsh
+        env:
+          DCE_DEPLOY_PFX: ${{ secrets.DCE_DEPLOY_PFX }}
+        run: |
+          $bytes = [Convert]::FromBase64String($env:DCE_DEPLOY_PFX)
+          [IO.File]::WriteAllBytes('./cert.pfx', $bytes)
+
+      - name: Apply Teams + channel moderation
+        shell: pwsh
+        env:
+          CLIENT_ID:  ${{ secrets.DCE_DEPLOY_CLIENT_ID }}
+          TENANT:     ${{ secrets.DCE_TENANT_DOMAIN }}
+          CERT_PASS:  ${{ secrets.DCE_DEPLOY_PFX_PASSWORD }}
+        run: |
+          Install-Module Microsoft.Graph -Force -SkipPublisherCheck
+          ./scripts/provision-teams.ps1 -ConfigPath ./teams/dce-channels.json
+
+      - name: Verify moderation settings
+        shell: pwsh
+        env:
+          CLIENT_ID: ${{ secrets.DCE_DEPLOY_CLIENT_ID }}
+          TENANT:    ${{ secrets.DCE_TENANT_DOMAIN }}
+          CERT_PASS: ${{ secrets.DCE_DEPLOY_PFX_PASSWORD }}
+        run: ./scripts/verify-channel-moderation.ps1

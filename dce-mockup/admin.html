@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — DCE Hub</title>
+  <meta name="description" content="DCE Hub admin page mockup — page-level audience-targeted to R1 Global Admins and R2 Franchisor Leadership only." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Tenor+Sans&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/mockup.css" />
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="sp-suitebar" role="banner">
+  <div class="sp-suitebar__brand">
+    <div class="sp-suitebar__app-icon" aria-hidden="true">SP</div>
+    <div class="sp-suitebar__title">SharePoint — Delta Crown Extensions</div>
+  </div>
+  <div class="sp-suitebar__search" role="search">
+    <span aria-hidden="true" style="margin-right:8px;">🔍</span>
+    Search across sites
+  </div>
+  <div class="sp-suitebar__actions">
+    <div class="sp-suitebar__identity-badge" id="identityBadge" tabindex="0" role="button" aria-label="Account info"></div>
+  </div>
+</header>
+
+<div class="sp-titlebar">
+  <div class="dce-container sp-titlebar__inner">
+    <div class="sp-titlebar__site-icon" aria-hidden="true">DC</div>
+    <div>
+      <h2 class="sp-titlebar__site-title">DCE Hub</h2>
+      <div class="sp-titlebar__site-subtitle">Communication site · /sites/dce-hub</div>
+    </div>
+    <nav class="sp-titlebar__nav" aria-label="Hub navigation">
+      <a href="index.html">Home</a>
+      <a href="#">About</a>
+      <a href="#">People</a>
+      <a href="#">Resources</a>
+      <a href="crown-connection.html">Owner Connect</a>
+      <a href="admin.html" aria-current="page" data-audience="DCE-Site-Owners|Tenant Global Admins|DCE-Franchisor-Leadership">Admin</a>
+    </nav>
+  </div>
+</div>
+
+<aside class="identity-hint-banner" id="identityHintBanner" role="region" aria-label="Identity context"></aside>
+
+<!-- Page-level audience gate: the whole page is targeted at R1 + R2.
+     When a non-audience persona is selected via the role-switcher,
+     the .page-content div is hidden and a "no access" banner is shown.
+     This mirrors SharePoint's page-level audience targeting + permission break for the Admin page. -->
+<main id="main">
+
+  <div
+    id="pageContent"
+    class="page-content"
+    data-audience="Tenant Global Admins|DCE-Site-Owners|DCE-Franchisor-Leadership"
+  >
+    <div class="dce-audience-body">
+
+      <section class="dce-hero" data-component="dce-hero" data-audience="*" style="min-height: 280px;">
+        <div class="dce-container dce-hero__inner">
+          <div class="dce-hero__eyebrow">Administrative · R1/R2 only</div>
+          <h1 class="dce-hero__title">Hub administration</h1>
+          <p class="dce-hero__subtitle">
+            Permission drift, user-onboarding status, site health. Page-level
+            audience-targeted; not visible in search to non-audience.
+          </p>
+        </div>
+      </section>
+
+      <!-- Permission audit dashboard (sample of permission-audit.py output) -->
+      <section class="dce-section" data-component="dce-card-grid" data-audience="*" style="padding-top: var(--space-8);">
+        <div class="dce-container">
+          <header class="dce-section-header">
+            <div class="dce-section-header__eyebrow">Weekly audit · last run Mon May 11 06:00 UTC</div>
+            <h2 class="dce-section-header__title">Permission audit</h2>
+            <p class="dce-section-header__description">Runs on a cron schedule from <code>.github/workflows/permission-audit.yml</code>. Detects sites/libraries with <code>HasUniqueRoleAssignments = true</code> that aren't in <code>reference/permission-breaks.csv</code>. Source: wraps <code>sharepointagent/audit_folder_permissions.py</code>.</p>
+          </header>
+          <div class="dce-card-grid">
+            <article class="dce-kpi-tile">
+              <div class="dce-kpi-tile__label">Sites scanned</div>
+              <div class="dce-kpi-tile__stat">3</div>
+              <div class="dce-kpi-tile__trend">DCE Hub · Crown Connection · Brand Center</div>
+            </article>
+            <article class="dce-kpi-tile">
+              <div class="dce-kpi-tile__label">Permission breaks</div>
+              <div class="dce-kpi-tile__stat">1</div>
+              <div class="dce-kpi-tile__trend dce-kpi-tile__trend--up">All documented</div>
+            </article>
+            <article class="dce-kpi-tile">
+              <div class="dce-kpi-tile__label">Drift detected</div>
+              <div class="dce-kpi-tile__stat">0</div>
+              <div class="dce-kpi-tile__trend dce-kpi-tile__trend--up">No undocumented breaks</div>
+            </article>
+          </div>
+
+          <div style="margin-top: var(--space-6); overflow-x: auto;">
+            <table style="width:100%; border-collapse: collapse; background: var(--color-surface-card); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow);">
+              <thead>
+                <tr style="background: var(--color-surface-hero); color: var(--color-text-on-dark);">
+                  <th style="text-align:left; padding: var(--space-3);">SiteUrl</th>
+                  <th style="text-align:left; padding: var(--space-3);">Path</th>
+                  <th style="text-align:left; padding: var(--space-3);">Type</th>
+                  <th style="text-align:left; padding: var(--space-3);">Unique ACL</th>
+                  <th style="text-align:left; padding: var(--space-3);">Documented</th>
+                  <th style="text-align:left; padding: var(--space-3);">Drift</th>
+                </tr>
+              </thead>
+              <tbody style="font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: var(--font-size-sm);">
+                <tr style="border-bottom: 1px solid var(--color-border-default);">
+                  <td style="padding: var(--space-3);">/sites/dce-hub</td>
+                  <td style="padding: var(--space-3);">/Documents</td>
+                  <td style="padding: var(--space-3);">Library</td>
+                  <td style="padding: var(--space-3);">false</td>
+                  <td style="padding: var(--space-3);">n/a</td>
+                  <td style="padding: var(--space-3); color: var(--color-state-success); font-weight: 700;">OK</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--color-border-default);">
+                  <td style="padding: var(--space-3);">/sites/CrownConnection</td>
+                  <td style="padding: var(--space-3);">/Documents/Owner-only library</td>
+                  <td style="padding: var(--space-3);">Library</td>
+                  <td style="padding: var(--space-3);">true</td>
+                  <td style="padding: var(--space-3);">YES (DOC-001)</td>
+                  <td style="padding: var(--space-3); color: var(--color-state-success); font-weight: 700;">OK</td>
+                </tr>
+                <tr>
+                  <td style="padding: var(--space-3);">/sites/CrownConnection</td>
+                  <td style="padding: var(--space-3);">/Documents/Marketing</td>
+                  <td style="padding: var(--space-3);">Folder</td>
+                  <td style="padding: var(--space-3);">false</td>
+                  <td style="padding: var(--space-3);">n/a</td>
+                  <td style="padding: var(--space-3); color: var(--color-state-success); font-weight: 700;">OK</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- User onboarding status -->
+      <section class="dce-section" data-component="dce-card-grid" data-audience="*" style="padding-top: var(--space-2); background: var(--color-surface-dim);">
+        <div class="dce-container">
+          <header class="dce-section-header">
+            <div class="dce-section-header__eyebrow">Cross-tenant sync · HTT → DCE</div>
+            <h2 class="dce-section-header__title">User onboarding status</h2>
+            <p class="dce-section-header__description">Sync app <code>HTT-to-DCE-User-Sync</code> runs every 40 minutes. Gate group: <code>SG-DCE-Sync-Users</code> (dynamic; rule matches enabled <code>@httbrands.com</code> users).</p>
+          </header>
+          <div class="dce-card-grid">
+            <article class="dce-kpi-tile">
+              <div class="dce-kpi-tile__label">Sync schedule</div>
+              <div class="dce-kpi-tile__stat" style="font-size: var(--font-size-xl);">PT40M</div>
+              <div class="dce-kpi-tile__trend">Last run: 14 min ago · State: Active</div>
+            </article>
+            <article class="dce-kpi-tile">
+              <div class="dce-kpi-tile__label">HTT users in DCE</div>
+              <div class="dce-kpi-tile__stat">52</div>
+              <div class="dce-kpi-tile__trend dce-kpi-tile__trend--up">All Member type, none Guest</div>
+            </article>
+            <article class="dce-kpi-tile">
+              <div class="dce-kpi-tile__label">DCE-native users</div>
+              <div class="dce-kpi-tile__stat">5</div>
+              <div class="dce-kpi-tile__trend">Owners only (Allynn, Amit, Jay, Sarah, Toni)</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent admin actions -->
+      <section class="dce-section" data-component="dce-news-feed" data-audience="*" style="padding-top: var(--space-6); padding-bottom: var(--space-12);">
+        <div class="dce-container">
+          <header class="dce-section-header">
+            <div class="dce-section-header__eyebrow">Audit trail · sourced from Microsoft Purview</div>
+            <h2 class="dce-section-header__title">Recent admin actions</h2>
+          </header>
+          <div class="dce-news-feed">
+            <article class="dce-news-item">
+              <div class="dce-news-item__date">May 15 · 10:14 AM</div>
+              <div>
+                <h3 class="dce-news-item__title">Site associated · Crown Connection ↔ DCE Hub</h3>
+                <p class="dce-news-item__summary"><code>Add-PnPHubSiteAssociation</code> · theme + nav propagated. Triggered by deploy-prod workflow run #143.</p>
+                <div class="dce-news-item__author">tyler.granlund@deltacrown.com (CI)</div>
+              </div>
+            </article>
+            <article class="dce-news-item">
+              <div class="dce-news-item__date">May 15 · 09:02 AM</div>
+              <div>
+                <h3 class="dce-news-item__title">PnP template applied · v002-add-people-page.xml</h3>
+                <p class="dce-news-item__summary">Idempotent re-apply. 2 web parts updated, 0 created, 0 errors.</p>
+                <div class="dce-news-item__author">deploy-prod workflow</div>
+              </div>
+            </article>
+            <article class="dce-news-item">
+              <div class="dce-news-item__date">May 11 · 06:00 UTC</div>
+              <div>
+                <h3 class="dce-news-item__title">Permission audit · weekly run · drift = 0</h3>
+                <p class="dce-news-item__summary">3 sites scanned, 1 documented break, 0 drift. Artifact uploaded.</p>
+                <div class="dce-news-item__author">permission-audit workflow</div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Empty-slot shown when persona lacks audience -->
+    <div class="dce-empty-slot" style="padding: var(--space-12);">
+      <div class="dce-container">
+        <div class="dce-empty-slot__hint" style="padding: var(--space-8);">
+          🔒 Admin page hidden. This page is audience-targeted to Tenant Global Admins, DCE Site Owners, and DCE Franchisor Leadership only. Your current persona is not in those groups.
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="dce-brand-footer" data-audience="*">
+  <div class="dce-container">
+    <div class="dce-brand-footer__inner">
+      <div>
+        <img class="dce-brand-footer__logo" src="assets/logo-dce-white.svg" alt="Delta Crown Extensions" />
+        <p>DCE Hub administration · audience-gated page</p>
+      </div>
+      <div>
+        <div class="dce-brand-footer__col-title">Admin tools</div>
+        <ul>
+          <li><a href="#">Permission audit</a></li>
+          <li><a href="#">User onboarding status</a></li>
+          <li><a href="#">Site health</a></li>
+        </ul>
+      </div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="dce-brand-footer__bottom">
+      <div>© 2026 Delta Crown Extensions · Internal</div>
+      <div>SharePoint Online · deltacrown.sharepoint.com/sites/dce-hub/SitePages/Admin.aspx</div>
+    </div>
+  </div>
+</footer>
+
+<aside id="roleSwitcher" class="role-switcher" aria-label="Persona role switcher"></aside>
+
+<script src="js/identity.js"></script>
+<script src="js/audience-targeting.js"></script>
+<script src="js/mockup-controls.js"></script>
+</body>
+</html>

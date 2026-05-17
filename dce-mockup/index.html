@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DCE Hub — Delta Crown Extensions Operations Hub</title>
+  <meta name="description" content="DCE Hub mockup demonstrating SharePoint hub-and-spoke topology with role-based audience targeting and cross-tenant identity flow." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Tenor+Sans&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/mockup.css" />
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- ====================================================================
+     Mock SharePoint suite bar
+     Simulates the M365 chrome a real user sees. The identity badge
+     reflects the current persona; the org-pill shows tenant context.
+     Not ported to SPFx.
+     ==================================================================== -->
+<header class="sp-suitebar" role="banner">
+  <div class="sp-suitebar__brand">
+    <div class="sp-suitebar__app-icon" aria-hidden="true">SP</div>
+    <div class="sp-suitebar__title">SharePoint — Delta Crown Extensions</div>
+  </div>
+  <div class="sp-suitebar__search" aria-label="Search across sites" role="search">
+    <span aria-hidden="true" style="margin-right:8px;">🔍</span>
+    Search across sites
+  </div>
+  <div class="sp-suitebar__actions">
+    <div class="sp-suitebar__identity-badge" id="identityBadge" tabindex="0" role="button" aria-label="Account info"></div>
+  </div>
+</header>
+
+<!-- ====================================================================
+     Site title bar + hub mega-nav
+     ==================================================================== -->
+<div class="sp-titlebar">
+  <div class="dce-container sp-titlebar__inner">
+    <div class="sp-titlebar__site-icon" aria-hidden="true">DC</div>
+    <div>
+      <h2 class="sp-titlebar__site-title">DCE Hub</h2>
+      <div class="sp-titlebar__site-subtitle">Communication site · /sites/dce-hub</div>
+    </div>
+    <nav class="sp-titlebar__nav" aria-label="Hub navigation">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="#about">About</a>
+      <a href="#people">People</a>
+      <a href="#resources">Resources</a>
+      <a href="crown-connection.html">Owner Connect</a>
+      <a href="admin.html" data-audience="DCE-Site-Owners|Tenant Global Admins|DCE-Franchisor-Leadership">Admin</a>
+    </nav>
+  </div>
+</div>
+
+<!-- Cross-tenant identity hint banner — explains the context to first-time viewers -->
+<aside class="identity-hint-banner" id="identityHintBanner" role="region" aria-label="Identity context"></aside>
+
+<main id="main">
+
+  <!-- ================================================================
+       SECTION 1 — Hero (data-component=dce-hero)
+       Audience: ALL (no filtering)
+       Maps to: DceHeroBanner SPFx web part
+       ================================================================ -->
+  <section class="dce-hero" data-component="dce-hero" data-audience="*">
+    <div class="dce-container dce-hero__inner">
+      <img class="dce-hero__logo" src="assets/logo-dce-white.svg" alt="Delta Crown Extensions" />
+      <div class="dce-hero__eyebrow">Delta Crown Extensions · Operations Hub</div>
+      <h1 class="dce-hero__title">Everything you need to run your day.</h1>
+      <p class="dce-hero__subtitle">
+        Brand, operations, and people — one place. Audience-aware,
+        cross-tenant-ready, and built on the DCE design system.
+      </p>
+      <div class="dce-hero__cta-row">
+        <a href="#kpis" class="dce-btn dce-btn--primary">View today's priorities</a>
+        <a href="crown-connection.html" class="dce-btn dce-btn--ghost">Open Crown Connection →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 2 — Quick links strip (data-component=dce-quicklink-strip)
+       Audience: ALL
+       Maps to: DceQuicklinks SPFx web part
+       ================================================================ -->
+  <section class="dce-section" data-component="dce-quicklink-strip" data-audience="*" style="padding-top: var(--space-8);">
+    <div class="dce-container">
+      <nav class="dce-quicklink-strip" aria-label="Quick links">
+        <a href="#" class="dce-quicklink">
+          <svg class="dce-quicklink__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 7V3M16 7V3M3.5 11h17M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg>
+          <span class="dce-quicklink__label">My Schedule</span>
+        </a>
+        <a href="#" class="dce-quicklink">
+          <svg class="dce-quicklink__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span class="dce-quicklink__label">Submit Ticket</span>
+        </a>
+        <a href="#" class="dce-quicklink">
+          <svg class="dce-quicklink__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span class="dce-quicklink__label">Brand Assets</span>
+        </a>
+        <a href="#" class="dce-quicklink">
+          <svg class="dce-quicklink__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span class="dce-quicklink__label">Calendar</span>
+        </a>
+        <a href="#" class="dce-quicklink">
+          <svg class="dce-quicklink__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+          <span class="dce-quicklink__label">People</span>
+        </a>
+        <a href="#" class="dce-quicklink">
+          <svg class="dce-quicklink__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span class="dce-quicklink__label">Help</span>
+        </a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 3 — KPI tiles (data-component=dce-kpi-tile)
+       Audience: R1 + R2 + R3 + R4 only (no front-line staff or HTT corp)
+       Maps to: DceKpiBlock SPFx web part
+       ================================================================ -->
+  <section
+    id="kpis"
+    class="dce-section"
+    data-component="dce-kpi-tile"
+    data-audience="DCE-Site-Owners|DCE-Franchisor-Leadership|DCE-Franchise-Owners|DCE-Managers|Tenant Global Admins"
+    style="padding-top: var(--space-6);"
+  >
+    <div class="dce-container">
+      <header class="dce-section-header">
+        <div class="dce-section-header__eyebrow">Today's snapshot</div>
+        <h2 class="dce-section-header__title">Operations at a glance</h2>
+        <p class="dce-section-header__description">Live metrics across all studios. Visible to owners, managers, leadership, and admins only.</p>
+      </header>
+      <div class="dce-audience-body">
+        <div class="dce-kpi-row">
+          <article class="dce-kpi-tile">
+            <div class="dce-kpi-tile__label">Active owners</div>
+            <div class="dce-kpi-tile__stat">5</div>
+            <div class="dce-kpi-tile__trend dce-kpi-tile__trend--up">▲ +1 this month</div>
+          </article>
+          <article class="dce-kpi-tile">
+            <div class="dce-kpi-tile__label">Today's bookings</div>
+            <div class="dce-kpi-tile__stat">94</div>
+            <div class="dce-kpi-tile__trend dce-kpi-tile__trend--up">▲ 12% WoW</div>
+          </article>
+          <article class="dce-kpi-tile">
+            <div class="dce-kpi-tile__label">Open tickets</div>
+            <div class="dce-kpi-tile__stat">3</div>
+            <div class="dce-kpi-tile__trend dce-kpi-tile__trend--down">▼ 5 from yesterday</div>
+          </article>
+          <article class="dce-kpi-tile">
+            <div class="dce-kpi-tile__label">This week's NPS</div>
+            <div class="dce-kpi-tile__stat">72</div>
+            <div class="dce-kpi-tile__trend dce-kpi-tile__trend--up">▲ +4 pts</div>
+          </article>
+        </div>
+      </div>
+      <!-- Diagnostic placeholder shown when role lacks audience -->
+      <div class="dce-empty-slot">
+        <div class="dce-empty-slot__hint">KPI tiles hidden — this persona is not in the targeted audience.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 4 — Latest news (data-component=dce-news-feed)
+       Audience: ALL
+       Maps to: DceNewsList SPFx web part
+       ================================================================ -->
+  <section class="dce-section" data-component="dce-news-feed" data-audience="*" style="padding-top: var(--space-6); background: var(--color-surface-dim);">
+    <div class="dce-container">
+      <header class="dce-section-header">
+        <div class="dce-section-header__eyebrow">Latest from the brand</div>
+        <h2 class="dce-section-header__title">News</h2>
+      </header>
+      <div class="dce-news-feed">
+        <article class="dce-news-item">
+          <div class="dce-news-item__date">May 14, 2026</div>
+          <div>
+            <h3 class="dce-news-item__title">Summer Volume Promo — Now Live</h3>
+            <p class="dce-news-item__summary">Bundled add-on pricing for May/June. Co-marketing assets in Brand Center, owner FAQ in Crown Connection.</p>
+            <div class="dce-news-item__author">Jenna Bowden · Brand Director</div>
+          </div>
+          <a class="dce-card__link" href="#">Read →</a>
+        </article>
+        <article class="dce-news-item dce-news-item--pinned">
+          <div class="dce-news-item__date">May 12, 2026</div>
+          <div>
+            <h3 class="dce-news-item__title"><span class="dce-news-item__pin">Pinned</span> Welcome to the DCE Hub</h3>
+            <p class="dce-news-item__summary">The Hub replaces the old shared OneDrive folder. New here? Start with the Resources page and the SOP library.</p>
+            <div class="dce-news-item__author">Tyler Granlund · IT Director</div>
+          </div>
+          <a class="dce-card__link" href="#">Read →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 5 — Owner spotlight (data-component=dce-people-spotlight)
+       Audience: ALL
+       Maps to: DcePersonCard SPFx web part
+       ================================================================ -->
+  <section class="dce-section" data-component="dce-people-spotlight" data-audience="*" style="padding-top: var(--space-6);">
+    <div class="dce-container">
+      <header class="dce-section-header">
+        <div class="dce-section-header__eyebrow">Monthly rotation · curated by Jenna</div>
+        <h2 class="dce-section-header__title">Owner spotlight</h2>
+      </header>
+      <article class="dce-people-spotlight">
+        <div class="dce-people-spotlight__photo" aria-hidden="true">AS</div>
+        <div>
+          <div class="dce-people-spotlight__role">May 2026 · Owner of the Month</div>
+          <h3 class="dce-people-spotlight__name">Allynn Shepherd</h3>
+          <p class="dce-people-spotlight__bio">Allynn opened DCE's flagship in Q4 2025 and led the brand's first
+            five-figure booking month. Known for ridiculously clean operations and a
+            no-shortcut take on training. If you're in Central, request a shift with Allynn.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 6 — Upcoming events (data-component=dce-event-list)
+       Audience: ALL
+       Maps to: DceEventTiles SPFx web part
+       ================================================================ -->
+  <section class="dce-section" data-component="dce-event-list" data-audience="*" style="padding-top: var(--space-6);">
+    <div class="dce-container">
+      <header class="dce-section-header">
+        <div class="dce-section-header__eyebrow">Calendar</div>
+        <h2 class="dce-section-header__title">Upcoming events</h2>
+      </header>
+      <div class="dce-event-list">
+        <article class="dce-event">
+          <div class="dce-event__date">
+            <span class="dce-event__date-month">May</span>
+            <span class="dce-event__date-day">22</span>
+          </div>
+          <div>
+            <h3 class="dce-event__title">Owner Roundtable — Q2 review</h3>
+            <p class="dce-event__meta">Virtual · 3:00 PM CT · Crown Connection</p>
+          </div>
+        </article>
+        <article class="dce-event">
+          <div class="dce-event__date">
+            <span class="dce-event__date-month">Jun</span>
+            <span class="dce-event__date-day">04</span>
+          </div>
+          <div>
+            <h3 class="dce-event__title">Color-Match Certification Cohort</h3>
+            <p class="dce-event__meta">Atlanta studio · 2 days · Open to Lead Extensionistas</p>
+          </div>
+        </article>
+        <article class="dce-event">
+          <div class="dce-event__date">
+            <span class="dce-event__date-month">Jun</span>
+            <span class="dce-event__date-day">12</span>
+          </div>
+          <div>
+            <h3 class="dce-event__title">Mid-year Brand Strategy</h3>
+            <p class="dce-event__meta">HTT Brands HQ · Leadership + Owners</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 7 — Operations alerts (data-component=dce-news-feed filtered to operations)
+       Audience: R4 + R5 only (managers and front-line staff)
+       Owners + corp see a gap in the layout (acceptable per design).
+       Maps to: DceNewsList SPFx web part (operations category filter)
+       ================================================================ -->
+  <section class="dce-section" data-component="dce-news-feed-ops" data-audience="DCE-Managers|DCE-AllStaff" style="padding-top: var(--space-6); background: var(--color-surface-dim);">
+    <div class="dce-container">
+      <header class="dce-section-header">
+        <div class="dce-section-header__eyebrow">Operations · shift-relevant</div>
+        <h2 class="dce-section-header__title">Operations alerts</h2>
+        <p class="dce-section-header__description">Managers and front-line staff only. Owners and HTT Corp do not see this section by design.</p>
+      </header>
+      <div class="dce-audience-body">
+        <div class="dce-news-feed">
+          <article class="dce-news-item dce-news-item--ops">
+            <div class="dce-news-item__date">Today · 9:14 AM</div>
+            <div>
+              <h3 class="dce-news-item__title">Shift swap requested — Riverside, May 17 PM</h3>
+              <p class="dce-news-item__summary">Jamie posted a swap request. Pick it up in Teams ops channel or via the swap form.</p>
+              <div class="dce-news-item__author">Posted by Jamie Reyes</div>
+            </div>
+            <a class="dce-card__link" href="#">Claim →</a>
+          </article>
+        </div>
+      </div>
+      <div class="dce-empty-slot">
+        <div class="dce-empty-slot__hint">Operations alerts hidden — only DCE Managers and DCE Staff see this section.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 8 — Brand resources tile (data-component=dce-card-grid)
+       Audience: ALL
+       Maps to: DceCardGrid SPFx web part
+       ================================================================ -->
+  <section id="resources" class="dce-section" data-component="dce-card-grid" data-audience="*" style="padding-top: var(--space-6);">
+    <div class="dce-container">
+      <header class="dce-section-header">
+        <div class="dce-section-header__eyebrow">From the Brand Center</div>
+        <h2 class="dce-section-header__title">Brand resources</h2>
+      </header>
+      <div class="dce-card-grid">
+        <article class="dce-card">
+          <svg class="dce-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2a10 10 0 1 0 8 18l-1-1c-2 2-7-1-5-4 1-1-1-3-2-2"/></svg>
+          <h3 class="dce-card__title">Brand Center</h3>
+          <p class="dce-card__description">Logos, color tokens, fonts, photography, voice guide. Single source of truth for everything brand-related.</p>
+          <a class="dce-card__link" href="#">Open Brand Center →</a>
+        </article>
+        <article class="dce-card">
+          <svg class="dce-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <h3 class="dce-card__title">Logo pack</h3>
+          <p class="dce-card__description">Horizontal logo in royal-gold + white. SVG + PNG, sized for SharePoint, Teams, web, print.</p>
+          <a class="dce-card__link" href="#">Download →</a>
+        </article>
+        <article class="dce-card">
+          <svg class="dce-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <h3 class="dce-card__title">Style guide</h3>
+          <p class="dce-card__description">Typography, spacing scale, motion, and WCAG-2.2 AAA contrast rules. Mirrors deltacrown.com/css/tokens.css.</p>
+          <a class="dce-card__link" href="#">Read style guide →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ====================================================================
+     Footer (data-component=dce-brand-footer)
+     Audience: ALL
+     Maps to: DceFooter Application Customizer (global chrome)
+     ==================================================================== -->
+<footer class="dce-brand-footer" data-component="dce-brand-footer" data-audience="*">
+  <div class="dce-container">
+    <div class="dce-brand-footer__inner">
+      <div>
+        <img class="dce-brand-footer__logo" src="assets/logo-dce-white.svg" alt="Delta Crown Extensions" />
+        <p>Delta Crown Extensions Hair Extensions — a multi-brand franchise tenant operated under HTT Brands.</p>
+      </div>
+      <div>
+        <div class="dce-brand-footer__col-title">Resources</div>
+        <ul>
+          <li><a href="#">Brand Center</a></li>
+          <li><a href="#">SOP Library</a></li>
+          <li><a href="#">Training</a></li>
+          <li><a href="#">Forms &amp; Templates</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="dce-brand-footer__col-title">Owner Connect</div>
+        <ul>
+          <li><a href="crown-connection.html">Crown Connection</a></li>
+          <li><a href="#">Ask the Franchisor</a></li>
+          <li><a href="#">HTT Corporate Resources</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="dce-brand-footer__col-title">Admin</div>
+        <ul>
+          <li><a href="admin.html">Permission Audit</a></li>
+          <li><a href="#">User Status</a></li>
+          <li><a href="#">Site Health</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="dce-brand-footer__bottom">
+      <div>© 2026 Delta Crown Extensions</div>
+      <div>SharePoint Online · deltacrown.sharepoint.com/sites/dce-hub</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Role-switcher overlay (mockup-only chrome) -->
+<aside id="roleSwitcher" class="role-switcher" aria-label="Persona role switcher"></aside>
+
+<script src="js/identity.js"></script>
+<script src="js/audience-targeting.js"></script>
+<script src="js/mockup-controls.js"></script>
+</body>
+</html>

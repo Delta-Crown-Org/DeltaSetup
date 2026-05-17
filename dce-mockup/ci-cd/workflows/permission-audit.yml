@@ -1,0 +1,72 @@
+# .github/workflows/permission-audit.yml
+#
+# Weekly permission audit — detects undocumented breaks of inheritance.
+# Wraps sharepointagent/audit_folder_permissions.py
+# (/Users/tygranlund/dev/01-htt-brands/sharepointagent/) per 05-permissions-model.md.
+#
+# Output: out/permission-audit-<timestamp>.csv (always)
+#         out/drift-detected.txt (only when drift is found)
+#
+# Behavior matches the audit philosophy in 05-permissions-model.md:
+#   Inherit unless documented. Drift = an item with HasUniqueRoleAssignments=true
+#   that is NOT in reference/permission-breaks.csv.
+
+name: Permission audit
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # Mondays 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests msal cryptography
+
+      - name: Run permission audit
+        env:
+          DCE_DEPLOY_CLIENT_ID:    ${{ secrets.DCE_DEPLOY_CLIENT_ID }}
+          DCE_DEPLOY_PFX_BASE64:   ${{ secrets.DCE_DEPLOY_PFX }}
+          DCE_DEPLOY_PFX_PASSWORD: ${{ secrets.DCE_DEPLOY_PFX_PASSWORD }}
+          DCE_TENANT_DOMAIN:       ${{ secrets.DCE_TENANT_DOMAIN }}
+          DCE_TENANT_ID:           ce62e17d-2feb-4e67-a115-8ea4af68da30
+        run: python scripts/permission-audit.py --output-dir ./out
+
+      - name: Upload audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: permission-audit-${{ github.run_id }}
+          path: out/
+          retention-days: 365   # SOX-aligned retention
+
+      - name: Post to Teams if drift detected
+        if: hashFiles('out/drift-detected.txt') != ''
+        uses: aliencube/microsoft-teams-actions@v0.8.0
+        with:
+          webhook_uri: ${{ secrets.TEAMS_DEPLOY_WEBHOOK }}
+          title: "⚠️ Permission drift detected"
+          summary: |
+            Undocumented broken inheritance was found in the weekly audit.
+            See artifact `permission-audit-${{ github.run_id }}` and contact Tyler.
+
+      - name: Email Tyler on 3+ consecutive failures
+        if: failure() && github.run_attempt >= 3
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "DCE permission audit: 3+ consecutive failures"
+          body: "The DCE permission audit has failed for 3+ consecutive runs. Investigate."
+          to: tyler.granlund@httbrands.com
+          from: DCE Audit Bot <noreply@deltacrown.com>
