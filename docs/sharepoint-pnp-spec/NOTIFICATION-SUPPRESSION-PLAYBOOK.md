@@ -348,6 +348,38 @@ Detailed YAML/PowerShell patches are tracked in bd `DeltaSetup-<TBD-suppression-
 
 **🔴 Time-critical: `Get-MessageTrace` retention is 10 days.** Incident window opened 2026-05-12. Hard forensic deadline = **2026-05-22**. Run §8.1 today.
 
+### 8.0 Tenant SKU and retention budgets (READ FIRST)
+
+Per release-gate-arbiter STRIDE co-sign of ADR-011 (Repudiation row addendum, 2026-05-16): every retention claim in this playbook MUST be pinned to the actual tenant SKU rather than asserted in the abstract. The §8.1–§8.5 queries below depend on these budgets being accurate.
+
+**Tenant of record:** `deltacrown` — **Microsoft 365 Business Premium**.
+
+_Authoritative source: `README.md` line 4, `DEPLOYMENT-RUNBOOK.md` line 189, and the public marketing page (`index.html`). The license-inventory document (`docs/delta-crown-security-apps-licenses-inventory-summary.md`) notes the seat-count detail (6 consumed Business Basic-style licenses on top of the Business Premium subscription); for retention budgets, the relevant fact is that the tenant is non-E5._
+
+**Retention budget table:**
+
+| Surface | Retention on Business Premium | Source / how to verify |
+|---|---|---|
+| `Get-MessageTrace` (Exchange Online) | **10 days** synchronous; **90 days** async via `Start-HistoricalSearch` | Microsoft Purview / EXO docs — universal across all SKUs |
+| Unified Audit Log (UAL) | **180 days** default | Non-E5 SKUs (Business Premium, Business Standard, E3) get 180d; E5 gets 365d; E5 + Audit Premium add-on gets 10 years. Verify in Purview portal → Audit → Search audit log retention policies |
+| Entra ID sign-in / audit logs | **30 days** (Free / P1); **30 days** also on P2 unless exported | Business Premium includes Entra ID P1 by default; one P2 license is provisioned and available |
+| Microsoft Purview Content Search | **No expiry** while the search exists; exports retained until manually deleted | HTT-tenant-owned in this incident |
+| GitHub Actions workflow artifacts | **90 days** (Team plan); **400 days** (Enterprise) — set per artifact via `retention-days:` | GitHub plan-dependent; verify org plan tier in `Settings → Billing` |
+| `provisioning-mode.log` artifact retention | **90 days** in CI; **off-platform mirror to S3/Blob required** for the ADR-011 long-term audit retention claim | See ADR-011 §STRIDE Repudiation addendum |
+
+**What this means for the §8.1–§8.5 queries:**
+
+- **§8.1 (Message Trace) is hard-bounded at 10 days from incident date.** Incident opened 2026-05-12, so the synchronous-query deadline is 2026-05-22. After that, the **same data is still recoverable** via `Start-HistoricalSearch` (90-day window, results delivered async as a CSV) — meaning the absolute hard deadline for any Message Trace recovery is **2026-08-12**.
+- **§8.2 (UAL) gives us until 2026-11-12** (180 days from 2026-05-15, the last UAL-visible day of the incident). After that, this incident's UAL evidence is permanently lost.
+- **§8.3 (Purview Content Search) has no time pressure on its own** — but it depends on the recipient mailboxes still being licensed and intact in the HTT tenant. If an HTT user is offboarded and their mailbox purged before the search runs, the bodies are gone regardless of Purview retention.
+- **`provisioning-mode.log` artifacts** uploaded by `provision-teams.yml` and `deploy-prod.yml` runs from the incident window age out of GitHub at **2026-08-10** (90 days from the 2026-05-12 run date). If you need them after that, retrieve and mirror them off-platform before the 90-day mark.
+
+**Action items derived from this section** (filed as ADR-011 Acceptance Criteria under bd `DeltaSetup-17i`):
+
+- [ ] Decide whether the ADR-011 365-day retention claim for `provisioning-mode.log` is satisfied by 90-day artifact + permanent off-platform mirror, or whether the GitHub org plan must be upgraded to Enterprise (400-day artifact retention).
+- [ ] Schedule a Q3 2026 sweep to export and mirror any 2026-05 UAL evidence before the 180-day mark expires (≈2026-11-12).
+- [ ] If DCE ever holds PII/PHI/PCI, this section is revisited and the SKU may need to move to E5 + Audit Premium for the 10-year audit retention.
+
 ### 8.1 Pull the smoking gun (Message Trace) — TODAY
 
 ```powershell

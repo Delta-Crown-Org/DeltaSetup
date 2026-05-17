@@ -35,6 +35,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ADR-011 §2.2: emit a PROVISIONING-MODE audit log line at workflow
+      # start so the run is unambiguously categorized in the GitHub Actions
+      # log AND in the artifact. This complements the script-level audit
+      # line emitted by deploy-prod.ps1.
+      - name: Audit — emit PROVISIONING-MODE marker (workflow level)
+        run: |
+          MARKER="PROVISIONING-MODE: launch COMMIT=${GITHUB_SHA:0:7} RUN=${GITHUB_RUN_ID} WORKFLOW=deploy-prod.yml ACTOR=${GITHUB_ACTOR}"
+          echo "$MARKER"
+          mkdir -p out
+          echo "$MARKER" >> out/provisioning-mode.log
+          # Also surface in the run summary so reviewers can confirm at a glance.
+          echo "### Audit marker" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`$MARKER\`" >> "$GITHUB_STEP_SUMMARY"
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -64,13 +78,16 @@ jobs:
           Install-Module PnP.PowerShell -Force -SkipPublisherCheck
           ./scripts/snapshot-site.ps1 -OutputDir ./backups
 
-      - name: Apply PnP templates
+      - name: Apply PnP templates (launch mode)
         shell: pwsh
         env:
           CLIENT_ID:  ${{ secrets.DCE_DEPLOY_CLIENT_ID }}
           TENANT:     ${{ secrets.DCE_TENANT_DOMAIN }}
           CERT_PASS:  ${{ secrets.DCE_DEPLOY_PFX_PASSWORD }}
-        run: ./scripts/deploy-prod.ps1
+        # ADR-011: explicit -Mode launch. This is the production deploy
+        # path; the workflow itself is the gate (push-to-main + 'prod'
+        # environment with required reviewers).
+        run: ./scripts/deploy-prod.ps1 -Mode launch
 
       - name: Post-deploy smoke test
         run: |
@@ -85,6 +102,14 @@ jobs:
         with:
           name: pre-deploy-snapshot-${{ github.run_id }}
           path: backups/
+          retention-days: 90
+
+      - name: Upload provisioning-mode audit log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: provisioning-mode-log-${{ github.run_id }}
+          path: out/provisioning-mode.log
           retention-days: 90
 
       - name: Notify Teams

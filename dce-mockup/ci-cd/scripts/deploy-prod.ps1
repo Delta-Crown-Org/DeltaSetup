@@ -24,11 +24,26 @@
 
 param(
   [ValidateSet('dev', 'prod')]
-  [string]$TargetEnv = 'prod'
+  [string]$TargetEnv = 'prod',
+
+  # ADR-011 §2.1: every provisioning script declares -Mode with scaffold
+  # default. PnP template apply does NOT send user notifications, but the
+  # mode contract is uniform — and scaffold mode lets us validate templates
+  # parse without touching the live site (useful for PR review).
+  [ValidateSet('scaffold', 'launch')]
+  [string]$Mode = 'scaffold'
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+# ADR-011 §2.2: audit log line at startup. First stdout line of every run.
+$commitSha = if ($env:GITHUB_SHA) { $env:GITHUB_SHA.Substring(0, 7) } else { 'local' }
+$runId     = if ($env:GITHUB_RUN_ID) { $env:GITHUB_RUN_ID } else { Get-Date -Format 'yyyyMMdd-HHmmss' }
+$auditLine = "PROVISIONING-MODE: $Mode COMMIT=$commitSha RUN=$runId SCRIPT=deploy-prod.ps1 TARGET_ENV=$TargetEnv"
+Write-Host $auditLine
+if (-not (Test-Path 'out')) { New-Item -ItemType Directory -Path 'out' | Out-Null }
+"$auditLine`n" | Out-File -FilePath 'out/provisioning-mode.log' -Append -Encoding utf8
 
 $ClientId   = $env:CLIENT_ID
 $TenantDom  = $env:TENANT
@@ -62,27 +77,41 @@ OK "Web title: $($web.Title)"
 Step "3. Apply numbered PnP templates (idempotent, forward-only)"
 $templates = Get-ChildItem -Path 'templates/hub' -Filter '*.xml' | Sort-Object Name
 foreach ($t in $templates) {
-  Write-Host "    Applying $($t.Name)…" -ForegroundColor Gray
-  Invoke-PnPSiteTemplate -Path $t.FullName -ClearNavigation:$false
-  OK "$($t.Name) applied"
+  if ($Mode -eq 'scaffold') {
+    Write-Host "    [scaffold] WOULD apply $($t.Name) (Test-PnPSiteTemplate only)" -ForegroundColor Yellow
+    Test-PnPSiteTemplate -Path $t.FullName -ErrorAction Stop
+    OK "$($t.Name) parsed clean (no mutation)"
+  } else {
+    Write-Host "    Applying $($t.Name)…" -ForegroundColor Gray
+    Invoke-PnPSiteTemplate -Path $t.FullName -ClearNavigation:$false
+    OK "$($t.Name) applied"
+  }
 }
 
 Step "4. Apply page JSON definitions"
 $pages = Get-ChildItem -Path 'pages' -Filter '*.json' | Sort-Object Name
 foreach ($p in $pages) {
   $name = [System.IO.Path]::GetFileNameWithoutExtension($p.Name)
-  Write-Host "    Applying page $name…" -ForegroundColor Gray
-  # Custom logic: parse JSON, Add-PnPPage if missing, Set-PnPPage if exists
-  & ./scripts/apply-page.ps1 -Path $p.FullName
+  if ($Mode -eq 'scaffold') {
+    Write-Host "    [scaffold] WOULD apply page $name" -ForegroundColor Yellow
+  } else {
+    Write-Host "    Applying page $name…" -ForegroundColor Gray
+    # Custom logic: parse JSON, Add-PnPPage if missing, Set-PnPPage if exists
+    & ./scripts/apply-page.ps1 -Path $p.FullName
+  }
 }
-OK "$($pages.Count) page(s) applied"
+OK "$($pages.Count) page(s) processed (mode=$Mode)"
 
 Step "5. Ensure hub association (spokes)"
-$hub = Get-PnPHubSite -Identity $siteUrl
-if ($null -ne $hub.SiteId) {
-  Add-PnPHubSiteAssociation -Site 'https://deltacrown.sharepoint.com/sites/CrownConnection' `
-                            -HubSite $siteUrl -ErrorAction SilentlyContinue
-  OK "Crown Connection associated"
+if ($Mode -eq 'scaffold') {
+  Write-Host "    [scaffold] WOULD verify hub association for Crown Connection" -ForegroundColor Yellow
+} else {
+  $hub = Get-PnPHubSite -Identity $siteUrl
+  if ($null -ne $hub.SiteId) {
+    Add-PnPHubSiteAssociation -Site 'https://deltacrown.sharepoint.com/sites/CrownConnection' `
+                              -HubSite $siteUrl -ErrorAction SilentlyContinue
+    OK "Crown Connection associated"
+  }
 }
 
 Step "6. Disconnect"

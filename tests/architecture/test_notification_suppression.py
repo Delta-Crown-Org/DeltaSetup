@@ -77,17 +77,18 @@ READ_ONLY_SCRIPT_NAMES = {
 # acceptance criterion of the ADR-011 rollout bd — do not delete an entry
 # unless the corresponding script has been brought into compliance.
 ADR_011_GRACE_PERIOD = {
-    # The HTT-52 culprits — the actual incident scripts (tools/)
+    # The HTT-52 culprits — the actual incident scripts (tools/).
+    # Live-tenant scripts; retrofit deferred to Tyler-supervised session per bd 17i.
     "tools/provision-crown-connection.sh",
     "tools/expand-crown-connection-htt-corp.py",
     "tools/invite-htt-users-to-dce.py",
     "tools/offboard-scot-cannon.ps1",
-    # CI/CD mockup scripts (dce-mockup/) — to be retrofitted under bd 17i
-    # and migrated to the real Delta-Crown-Org/dce-sharepoint repo.
-    "dce-mockup/ci-cd/scripts/provision-teams.ps1",
-    "dce-mockup/ci-cd/scripts/deploy-prod.ps1",
-    # Phase 4 migration scripts — retrofitted under bd 17i.
-    "phase4-migration/scripts/4.3-Document-Migration.ps1",
+    # NOTE: dce-mockup/ci-cd/scripts/provision-teams.ps1,
+    # dce-mockup/ci-cd/scripts/deploy-prod.ps1, and
+    # phase4-migration/scripts/4.3-Document-Migration.ps1 were REMOVED from
+    # this grace period after the 17i autonomous-retrofit landed (mode-aware
+    # + audit log; verified by the fitness tests below). See git log for
+    # the commit.
     # Phase 2 + 3 provisioning scripts surfaced by the release-gate-arbiter
     # Tampering #1 addendum (glob coverage parity). These built the current
     # tenant state and need retrofit under bd 17i before next invocation.
@@ -206,6 +207,81 @@ def test_no_forbidden_opt_ins():
     assert not violations, (
         "ADR-011 violations — notification opt-ins detected in scaffold-mode files:\n\n"
         + "\n\n".join(violations)
+    )
+
+
+# ============================================================================
+# Group 1b — runtime-body defense (ADR-011 STRIDE Tampering addendum #2)
+# ============================================================================
+
+
+def test_runtime_body_defense():
+    """Scripts that make runtime Graph/REST calls to risky endpoints
+    (/groups, /invitations, /invite, /teams, /members, /channels) must
+    either contain an explicit suppression literal in source OR carry
+    an ``ADR-011-SUPPRESSION-VERIFIED:<reason>`` waiver comment.
+
+    Per release-gate-arbiter STRIDE co-sign Tampering addendum #2:
+    negative-lookahead regexes don't catch runtime-constructed bodies
+    like ``-SendInvitation:$var`` where ``$var = $true`` six lines up.
+    This test catches that class of bypass by requiring an affirmative
+    statement of intent for any runtime call to a notification-capable
+    endpoint.
+    """
+    runtime_call_patterns = [
+        re.compile(r"Invoke-(?:MgGraph|Web|Rest)(?:Method|Request)", re.IGNORECASE),
+        re.compile(r"requests\.(?:post|patch|put)\s*\(", re.IGNORECASE),
+        re.compile(r"\bcurl\b\s+(?:-X\s+)?(?:POST|PATCH|PUT)\b", re.IGNORECASE),
+    ]
+    risky_endpoint = re.compile(
+        r"/(?:groups|invitations|invite|teams|members|channels)\b",
+        re.IGNORECASE,
+    )
+    suppression_or_waiver = re.compile(
+        r"WelcomeEmailDisabled|"
+        r"sendInvitationMessage[^a-zA-Z0-9]*(?:false|False|\$false)|"
+        r"ADR-011-SUPPRESSION-VERIFIED",
+        re.IGNORECASE,
+    )
+
+    violations: list[str] = []
+    for path in _provisioning_files():
+        if _is_in_grace_period(path):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+
+        # Find any runtime call whose surrounding 700-char window mentions
+        # a notification-capable Graph/REST endpoint. The window must be
+        # wide enough to cover PowerShell line-continuation backticks and
+        # multi-line hashtable parameter blocks.
+        has_risky_runtime_call = False
+        for pat in runtime_call_patterns:
+            for m in pat.finditer(text):
+                window_start = max(0, m.start() - 200)
+                window_end = min(len(text), m.end() + 500)
+                window = text[window_start:window_end]
+                if risky_endpoint.search(window):
+                    has_risky_runtime_call = True
+                    break
+            if has_risky_runtime_call:
+                break
+
+        if has_risky_runtime_call and not suppression_or_waiver.search(text):
+            rel = path.relative_to(REPO_ROOT)
+            violations.append(
+                f"{rel}: makes a runtime Graph/REST call to a notification-"
+                f"capable endpoint without an explicit suppression literal or "
+                f"'# ADR-011-SUPPRESSION-VERIFIED: <reason>' waiver comment. "
+                f"See ADR-011 §STRIDE supplemental Tampering addendum #2."
+            )
+
+    assert not violations, (
+        "ADR-011 STRIDE Tampering #2 violations — runtime Graph/REST calls "
+        "to notification-capable endpoints without explicit suppression or "
+        "waiver:\n\n" + "\n\n".join(violations)
     )
 
 

@@ -90,11 +90,35 @@ param(
     [string]$SourceTenant = $(if ($env:HTT_TENANT_ID) { $env:HTT_TENANT_ID } else { "httbrands.onmicrosoft.com" }),
 
     [Parameter()]
-    [switch]$AllowSkippedDocumentMigration
+    [switch]$AllowSkippedDocumentMigration,
+
+    # ADR-011 §2.1: every provisioning script declares -Mode with scaffold
+    # default. For this script, scaffold mode implies -WhatIf (no file
+    # mutations). Launch mode performs actual copies, gated by the
+    # existing -AllowSkippedDocumentMigration guard.
+    [Parameter()]
+    [ValidateSet('scaffold', 'launch')]
+    [string]$Mode = 'scaffold'
 )
+
+# ADR-011 §2.2: audit log line at startup. First stdout line of every run.
+$commitSha = if ($env:GITHUB_SHA) { $env:GITHUB_SHA.Substring(0, 7) } else { 'local' }
+$runId     = if ($env:GITHUB_RUN_ID) { $env:GITHUB_RUN_ID } else { Get-Date -Format 'yyyyMMdd-HHmmss' }
+$auditLine = "PROVISIONING-MODE: $Mode COMMIT=$commitSha RUN=$runId SCRIPT=4.3-Document-Migration.ps1 ENV=$Environment"
+Write-Host $auditLine
+$auditOutDir = Join-Path $PSScriptRoot "..\out"
+if (-not (Test-Path $auditOutDir)) { New-Item -ItemType Directory -Path $auditOutDir -Force | Out-Null }
+"$auditLine`n" | Out-File -FilePath (Join-Path $auditOutDir 'provisioning-mode.log') -Append -Encoding utf8
 
 if (-not $AllowSkippedDocumentMigration) {
     throw "HTTHQ document migration is skipped for this rollout. Do not run this script for production cutover. Use -AllowSkippedDocumentMigration only for intentional historical/testing work."
+}
+
+# Scaffold mode implies -WhatIf for this script: existing dry-run path
+# is the right semantic match.
+if ($Mode -eq 'scaffold' -and -not $WhatIfPreference) {
+    Write-Host "  [scaffold] Forcing -WhatIf (no file mutations). Use -Mode launch to actually copy." -ForegroundColor Yellow
+    $WhatIfPreference = $true
 }
 
 # ============================================================================

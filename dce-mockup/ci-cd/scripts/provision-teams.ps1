@@ -25,11 +25,27 @@
 
 param(
   [Parameter(Mandatory = $true)]
-  [string]$ConfigPath
+  [string]$ConfigPath,
+
+  # ADR-011 §2.1: every provisioning script declares -Mode with scaffold
+  # default. This script's mutations (Graph PATCH on channel moderation
+  # settings) do not send user notifications, but the mode-aware contract
+  # is uniform across all provisioning scripts to keep the fitness function
+  # simple and the audit trail consistent.
+  [ValidateSet('scaffold', 'launch')]
+  [string]$Mode = 'scaffold'
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+# ADR-011 §2.2: audit log line at startup. First stdout line of every run.
+$commitSha = if ($env:GITHUB_SHA) { $env:GITHUB_SHA.Substring(0, 7) } else { 'local' }
+$runId     = if ($env:GITHUB_RUN_ID) { $env:GITHUB_RUN_ID } else { Get-Date -Format 'yyyyMMdd-HHmmss' }
+$auditLine = "PROVISIONING-MODE: $Mode COMMIT=$commitSha RUN=$runId SCRIPT=provision-teams.ps1"
+Write-Host $auditLine
+if (-not (Test-Path 'out')) { New-Item -ItemType Directory -Path 'out' | Out-Null }
+"$auditLine`n" | Out-File -FilePath 'out/provisioning-mode.log' -Append -Encoding utf8
 
 # Connect via cert (same path as deploy-prod.ps1)
 $ClientId  = $env:CLIENT_ID
@@ -69,11 +85,26 @@ foreach ($team in $config.teams) {
       moderationSettings = $channel.moderationSettings
     } | ConvertTo-Json -Depth 5
 
-    Invoke-MgGraphRequest `
-      -Method PATCH `
-      -Uri "/beta/teams/$teamId/channels/$($channel.id)" `
-      -Body $body
-    Write-Host "    ✓ moderationSettings applied (via /beta)" -ForegroundColor Green
+    if ($Mode -eq 'scaffold') {
+      # Scaffold mode: report what WOULD change, don't PATCH.
+      Write-Host "    [scaffold] WOULD PATCH /beta/teams/$teamId/channels/$($channel.id)" -ForegroundColor Yellow
+      Write-Host "      body: $body" -ForegroundColor DarkGray
+    } else {
+      # ADR-011-SUPPRESSION-VERIFIED: PATCH /beta/teams/{id}/channels/{id}
+      # with body { moderationSettings: {...} } updates channel-level
+      # moderation rules only and does NOT trigger any user-facing
+      # notification per Microsoft Graph reference
+      # (https://learn.microsoft.com/graph/api/channel-patch?view=graph-rest-beta).
+      # No notification-capable endpoints (group creates, B2B invites,
+      # sharing invites) are reached by this script; the runtime-body-
+      # defense test flags the appearance of the channels URI and this
+      # comment is the affirmative waiver.
+      Invoke-MgGraphRequest `
+        -Method PATCH `
+        -Uri "/beta/teams/$teamId/channels/$($channel.id)" `
+        -Body $body
+      Write-Host "    ✓ moderationSettings applied (via /beta)" -ForegroundColor Green
+    }
   }
 }
 
