@@ -5,6 +5,28 @@
 >
 > **2026-05-15 Friday audit:** read-only Graph + Exchange Online probe re-confirmed tenant state matches the 2026-05-12 reconciled baseline. No drift in identity, SharePoint, or Exchange. One open finding outside DeltaSetup scope: `_fullHTT@httbrands.com` (HTT tenant, `MailUniversalDistributionGroup`) still has `Scot.Cannon` as a hard-coded static member — tracked under `DeltaSetup-9av` for handoff to HTT offboarding tooling. Friday SharePoint hub delivery work is tracked under `DeltaSetup-2dq`. Evidence: `.local/reports/friday-sharepoint-hub-audit/` (local-only).
 
+## 🎯 SharePoint hub-and-spoke initiative — sprint-1 deliverables (2026-05-16)
+
+The SharePoint hub-and-spoke workstream produced a complete spec pack,
+an interactive Tier-B mockup, an SPFx skeleton, a CI/CD scaffold, and a
+reconciled research delta. Start here:
+
+| Artifact | What it is |
+|---|---|
+| 🏠 **[`docs/README.md`](docs/README.md)** | Doc index — navigate everything in `docs/` |
+| 🎯 **[`docs/sharepoint-pnp-spec/SPRINT-1-KICKOFF.md`](docs/sharepoint-pnp-spec/SPRINT-1-KICKOFF.md)** | Single-page entry point linking the spec → mockup → future `dce-sharepoint` repo |
+| 📋 **[`docs/sharepoint-pnp-spec/`](docs/sharepoint-pnp-spec/)** | 26-file spec pack: 13 chapters, 9 ADRs, evaluation rubric, reference tokens |
+| 🖱️ **[`dce-mockup/`](dce-mockup/)** | Interactive HTML mockup with role-switcher (Owner / Manager / HTT Corp), audience-targeted sections, Teams channel mock, SPFx skeleton |
+| 🔬 **[`dce-mockup/RATIONALE.md`](dce-mockup/RATIONALE.md)** | Rubric self-score + identified spec defects + head-to-head vs. ChatGPT-side research |
+| ⚖️ **[`dce-mockup/RESEARCH-DELTAS.md`](dce-mockup/RESEARCH-DELTAS.md)** | Corrections from the ADR-006 final review (Teams moderation = BETA-only, audience-targeting Group Owners gotcha) |
+| 🛠️ **[`dce-mockup/ci-cd/`](dce-mockup/ci-cd/)** | GitHub Actions + bootstrap.sh + scripts — copy into the future `Delta-Crown-Org/dce-sharepoint` repo |
+| 🧪 **[`dce-mockup/tests/architecture/`](dce-mockup/tests/architecture/)** | 12 pytest fitness functions enforcing the identity / audience / Teams-moderation contract — all passing |
+| 🔍 **[`docs/sharepoint-research/`](docs/sharepoint-research/)** | Comparative AI/consultant research (ChatGPT 5.5 Pro HTT guide) |
+
+To run the mockup locally: `cd dce-mockup && python3 -m http.server 8080`,
+then open <http://localhost:8080/>. Use the role-switcher in the
+bottom-right to swap personas live.
+
 ---
 
 ## What's built and what remains
