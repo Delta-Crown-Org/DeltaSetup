@@ -113,12 +113,42 @@ body {
 .msp-brief-page {
   background:
     linear-gradient(135deg, rgba(6, 43, 40, 0.98), rgba(6, 43, 40, 0.88)),
-    var(--brand-photo-msp) center / cover fixed;
+    var(--brand-photo-msp) center / cover;
 }
 
 .msp-hero::before {
   right: -120px;
   top: 80px;
+}
+
+.msp-hero__title {
+  font-size: clamp(3.4rem, 6.6vw, 6.5rem);
+  letter-spacing: -0.052em;
+  line-height: 0.94;
+  max-width: 780px;
+}
+
+.section--dark,
+.section--teal,
+.msp-brief-page {
+  color: var(--text-on-dark);
+}
+
+.section--dark p,
+.section--teal p,
+.msp-card p,
+.msp-card li,
+.msp-status__note,
+.msp-section-heading p {
+  color: var(--text-on-dark-muted);
+}
+
+.section--dark h2,
+.section--dark h3,
+.section--teal h2,
+.section--teal h3,
+.msp-card h3 {
+  color: var(--text-on-dark);
 }
 
 .msp-brief-card {
@@ -182,7 +212,59 @@ body {
 
   .project-hero .hero__content,
   .op-hero .hero__content {
-    padding-top: 92px;
+    padding: 56px 20px 52px;
+  }
+
+  .project-hero .hero__logo {
+    margin-bottom: 24px;
+    width: clamp(150px, 46vw, 210px);
+  }
+
+  .project-hero .hero__title,
+  .op-hero .hero__title {
+    font-size: clamp(2.45rem, 12vw, 3.7rem);
+    letter-spacing: -0.04em;
+    line-height: 1.03;
+  }
+
+  .project-hero::before,
+  .op-hero::before,
+  .msp-hero::before {
+    display: none;
+  }
+
+  .msp-hero {
+    min-height: auto;
+    overflow: visible;
+    padding-block: 56px 48px;
+  }
+
+  .msp-hero__grid {
+    gap: 28px;
+    grid-template-columns: 1fr;
+  }
+
+  .msp-hero__title {
+    font-size: clamp(2.35rem, 13vw, 3.6rem);
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    max-width: 10ch;
+  }
+
+  .msp-hero__lede {
+    font-size: 1rem;
+    line-height: 1.62;
+    margin-top: 20px;
+  }
+
+  .msp-hero__actions {
+    gap: 10px;
+  }
+
+  .msp-button {
+    justify-content: center;
+    min-height: 44px;
+    width: 100%;
   }
 
   .brand-photo-strip {

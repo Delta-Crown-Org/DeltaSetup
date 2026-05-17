@@ -25,11 +25,14 @@
   <a href="#main-content" class="skip-link">Skip to content</a>
 
   <button class="sidebar__toggle" type="button" aria-controls="sidebar" aria-expanded="false" data-sidebar-toggle>
-    <span aria-hidden="true" class="material-symbols-outlined">menu</span>Menu
+    <span aria-hidden="true" class="material-symbols-outlined" data-sidebar-toggle-icon>menu</span><span data-sidebar-toggle-label>Menu</span>
   </button>
   <div class="sidebar__backdrop" data-sidebar-backdrop aria-hidden="true"></div>
 
   <div class="sidebar" id="sidebar">
+    <button class="sidebar__close" type="button" data-sidebar-close aria-label="Close menu">
+      <span aria-hidden="true" class="material-symbols-outlined">close</span>
+    </button>
     <div class="sidebar__brand">
       <a href="#hero" aria-label="Delta Crown Extensions MSP brief — top of page">
         <img src="./assets/logos/primary-logo-horizontal-without-tag-delta-crown-hair-extensions-dce_white.png" alt="Delta Crown Extensions">

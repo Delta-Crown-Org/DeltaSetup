@@ -8,6 +8,7 @@
 /* --- Layout grid: sidebar on left, content on right --- */
 :root {
   --sidebar-width: 288px;
+  --mobile-topbar-height: 64px;
   --sidebar-bg: #0A1F1C;
   --sidebar-bg-elev: rgba(255, 255, 255, 0.075);
   --sidebar-border: rgba(255, 255, 255, 0.16);
@@ -55,11 +56,13 @@ body.has-sidebar {
 }
 
 .sidebar__brand-tag {
+  color: var(--gold);
+  display: block;
   font-family: var(--font-body);
   font-size: 0.68rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
   text-transform: uppercase;
-  color: var(--gold);
 }
 
 /* --- View switcher (Project / Ops / MSP Brief) --- */
@@ -86,6 +89,7 @@ body.has-sidebar {
   text-align: center;
   text-transform: uppercase;
   transition: background 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out), transform 200ms var(--ease-out);
+  white-space: nowrap;
 }
 
 .sidebar__view:hover {
@@ -113,16 +117,18 @@ body.has-sidebar {
 }
 
 .sidebar__chapter-label {
-  display: flex;
   align-items: center;
-  gap: 8px;
+  color: var(--sidebar-text-muted);
+  display: flex;
   font-family: var(--font-body);
   font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--sidebar-text-muted);
+  gap: 8px;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
   margin-bottom: 8px;
+  min-width: 0;
+  text-transform: uppercase;
 }
 
 .sidebar__chapter-label .material-symbols-outlined {
@@ -136,11 +142,13 @@ body.has-sidebar {
 }
 
 .sidebar__link {
-  position: relative;
-  display: flex;
   align-items: center;
+  display: grid;
   gap: 10px;
-  padding: 9px 24px 9px 28px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+  padding: 9px 20px 9px 28px;
+  position: relative;
   color: var(--sidebar-text);
   font-family: var(--font-body);
   font-size: 0.9rem;
@@ -162,7 +170,6 @@ body.has-sidebar {
 }
 
 .sidebar__link-tag {
-  margin-left: auto;
   font-family: var(--font-body);
   font-size: 0.6rem;
   font-weight: 700;
@@ -211,28 +218,45 @@ body.has-sidebar {
 
 /* --- Mobile menu button --- */
 .sidebar__toggle {
-  display: none;
-  position: fixed;
-  top: 14px;
-  left: 14px;
-  z-index: 1100;
+  align-items: center;
   background: rgba(10, 31, 28, 0.92);
   backdrop-filter: blur(8px);
   border: 1px solid var(--sidebar-border);
-  border-radius: 12px;
-  padding: 9px 12px;
+  border-radius: 999px;
   color: #FFF;
+  cursor: pointer;
+  display: none;
   font-family: var(--font-body);
   font-size: 0.78rem;
+  gap: 4px;
+  left: 14px;
   letter-spacing: 0.1em;
+  min-height: 44px;
+  padding: 10px 14px;
+  position: fixed;
   text-transform: uppercase;
-  cursor: pointer;
+  top: 10px;
+  z-index: 1100;
 }
 
 .sidebar__toggle .material-symbols-outlined {
   font-size: 18px;
-  vertical-align: middle;
-  margin-right: 4px;
+}
+
+.sidebar__close {
+  display: none;
+}
+
+.sidebar__toggle:focus-visible,
+.sidebar__close:focus-visible,
+.sidebar__view:focus-visible,
+.sidebar__link:focus-visible {
+  outline: 3px solid var(--gold-light);
+  outline-offset: 3px;
+}
+
+.sidebar abbr {
+  text-decoration: none;
 }
 
 .sidebar__backdrop {
@@ -246,24 +270,53 @@ body.has-sidebar {
 
 /* --- Responsive --- */
 @media (max-width: 1023px) {
-  body.has-sidebar { margin-left: 0; }
+  body.has-sidebar {
+    margin-left: 0;
+    padding-top: var(--mobile-topbar-height);
+  }
 
-  /* WCAG 2.4.11 Focus Not Obscured: anchored jumps land below the floating Menu button */
-  html { scroll-padding-top: 72px; }
+  /* WCAG 2.4.11 Focus Not Obscured: anchored jumps land below fixed controls. */
+  html { scroll-padding-top: calc(var(--mobile-topbar-height) + 16px); }
 
   .sidebar {
     transform: translateX(-100%);
     transition: transform 280ms var(--ease-out);
-    width: min(320px, 86vw);
+    width: min(320px, calc(100vw - 48px));
+  }
+
+  .sidebar__brand {
+    padding-right: 76px;
+  }
+
+  .sidebar__close {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    color: #FFF;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    z-index: 2;
   }
 
   body.sidebar-open .sidebar { transform: translateX(0); }
   body.sidebar-open .sidebar__backdrop { display: block; }
 
-  .sidebar__toggle { display: inline-flex; align-items: center; }
+  .sidebar__toggle { display: inline-flex; }
 
-  /* Push hero down so the floating menu button doesn't collide with the logo */
-  .hero { padding-top: 88px; }
+  body.sidebar-open .sidebar__toggle {
+    background: rgba(216, 165, 98, 0.96);
+    color: var(--teal-deeper);
+  }
+
+  /* Body padding reserves mobile topbar space; no extra hero collision pad needed. */
+  .hero { padding-top: 56px; }
 }
 
 /* --- Hide the old top nav when sidebar is active --- */

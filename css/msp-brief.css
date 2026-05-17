@@ -447,8 +447,27 @@
   }
 
   .msp-raci-wrap {
-    margin-left: -16px;
-    margin-right: -16px;
     border-radius: 18px;
+    margin-left: 0;
+    margin-right: 0;
+    overflow-x: hidden;
+    padding: 12px;
+  }
+
+  .msp-raci-table {
+    min-width: 0;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .msp-raci-table th,
+  .msp-raci-table td {
+    font-size: 0.74rem;
+    overflow-wrap: anywhere;
+    padding: 10px 7px;
+  }
+
+  .msp-raci-table tbody th {
+    width: auto;
   }
 }
