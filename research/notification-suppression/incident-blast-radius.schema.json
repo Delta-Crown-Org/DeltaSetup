@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deltacrown.local/schemas/incident-blast-radius.json",
+  "title": "DCE Notification Incident Blast Radius",
+  "description": "Per-recipient evidence record for an unsolicited-notification incident. One row per (recipient × outbound email). Designed to be both a mail-merge feed for apology messaging and a permanent forensic artefact.",
+  "type": "object",
+  "required": ["incident", "automation_identity", "triggering_changes", "queries_run", "events"],
+  "properties": {
+    "incident": {
+      "type": "object",
+      "required": ["id", "severity", "opened_utc", "discovered_utc", "summary"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^INC-\\d{4}-\\d{2}-\\d{2}-[A-Z0-9-]+$" },
+        "severity": { "enum": ["P0", "P1", "P2", "P3"] },
+        "opened_utc": { "type": "string", "format": "date-time" },
+        "discovered_utc": { "type": "string", "format": "date-time" },
+        "closed_utc": { "type": ["string", "null"], "format": "date-time" },
+        "summary": { "type": "string" },
+        "tenants_affected": { "type": "array", "items": { "type": "string" } },
+        "tenants_origin":   { "type": "array", "items": { "type": "string" } },
+        "estimated_recipient_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "automation_identity": {
+      "type": "object",
+      "required": ["tenant", "app_display_name", "app_id", "auth_mode"],
+      "properties": {
+        "tenant": { "type": "string" },
+        "app_display_name": { "type": "string" },
+        "app_id": { "type": "string", "format": "uuid" },
+        "service_principal_object_id": { "type": "string", "format": "uuid" },
+        "auth_mode": { "enum": ["app-only (certificate)", "app-only (secret)", "delegated", "managed-identity"] },
+        "expected_actor_in_audit": {
+          "type": "object",
+          "properties": {
+            "sharepoint_workload_UserId":   { "const": "app@sharepoint" },
+            "all_workloads_ApplicationId":  { "type": "string", "format": "uuid" },
+            "all_workloads_UserType_enum":  { "enum": [5, 6] },
+            "entra_initiatedBy_app_appId":  { "type": "string", "format": "uuid" }
+          }
+        }
+      }
+    },
+    "triggering_changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["commit", "timestamp_utc"],
+        "properties": {
+          "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+          "timestamp_utc": { "type": "string", "format": "date-time" },
+          "author": { "type": "string" },
+          "scripts": { "type": "array", "items": { "type": "string" } },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    "queries_run": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["surface", "cmd", "ran_utc"],
+        "properties": {
+          "surface": { "enum": [
+            "EXO MessageTrace",
+            "EXO HistoricalSearch",
+            "Purview UAL",
+            "Purview UAL (SP)",
+            "Purview UAL (Group)",
+            "Purview UAL (Teams)",
+            "Purview UAL (Entra)",
+            "Entra audit (Graph)",
+            "Entra audit (B2B)",
+            "Entra sign-in",
+            "Purview Content search"
+          ]},
+          "cmd": { "type": "string" },
+          "ran_utc": { "type": "string", "format": "date-time" },
+          "ran_by": { "type": "string" },
+          "rows_returned": { "type": "integer", "minimum": 0 },
+          "items_previewed": { "type": "integer", "minimum": 0 },
+          "items_exported":  { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "description": "One element per (recipient × outbound message). This is the mail-merge unit.",
+      "items": {
+        "type": "object",
+        "required": [
+          "recipient_upn",
+          "email_sent_at_utc",
+          "envelope_sender",
+          "email_class",
+          "trigger_audit_operation",
+          "trigger_audit_workload",
+          "actor_app_id"
+        ],
+        "properties": {
+          "recipient_upn":           { "type": "string", "format": "email" },
+          "recipient_display_name":  { "type": "string" },
+          "email_sent_at_utc":       { "type": "string", "format": "date-time" },
+          "envelope_sender":         { "type": "string", "format": "email" },
+          "subject":                 { "type": "string" },
+          "message_trace_id":        { "type": "string", "format": "uuid" },
+          "email_class": {
+            "enum": [
+              "sp_sharing",
+              "sp_secure_link",
+              "sp_anonymous_link",
+              "m365_group_welcome",
+              "b2b_invite",
+              "teams_added_to_team",
+              "teams_added_to_channel",
+              "other"
+            ]
+          },
+          "trigger_audit_event_id":  { "type": "string" },
+          "trigger_audit_operation": { "type": "string" },
+          "trigger_audit_workload":  { "enum": ["SharePoint","OneDrive","AzureActiveDirectory","Exchange","MicrosoftTeams","Other"] },
+          "trigger_object_id":       { "type": "string" },
+          "actor_app_id":            { "type": "string", "format": "uuid" },
+          "actor_app_display_name":  { "type": "string" },
+          "actor_sp_object_id":      { "type": "string", "format": "uuid" },
+          "provisioning_commit_sha": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+          "provisioning_run_id":     { "type": "string" },
+          "apology_sent_at_utc":     { "type": ["string","null"], "format": "date-time" },
+          "apology_message_id":      { "type": ["string","null"] },
+          "evidence_redacted":       { "type": "boolean", "default": false },
+          "notes":                   { "type": "string" }
+        }
+      }
+    }
+  }
+}
