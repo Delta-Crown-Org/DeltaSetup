@@ -18,15 +18,22 @@ ul { list-style: none; }
 
 /* --- Custom Properties --- */
 :root {
-  /* Brand */
-  --teal:        #006B5E;
-  --teal-dark:   #004D44;
-  --teal-deeper: #0A1F1C;
-  --teal-light:  #4A9B8E;
-  --teal-on-dark:#5DB7A9;
-  --gold:        #D4A84B;
-  --gold-light:  #E8C989;
-  --gold-dark:   #6E4F0E;
+  /* Brand — sourced from Delta Crown SVG asset set pulled from HTTHQ
+     SharePoint Brand folders (2026-05-17). Keep legacy teal/gold aliases
+     because the component CSS predates the formal DCE palette. */
+  --dce-emerald:      #03534D;
+  --dce-gold:         #D8A562;
+  --dce-almost-black: #231F20;
+  --dce-ivory:        #FAFAF7;
+
+  --teal:        var(--dce-emerald);
+  --teal-dark:   #02423D;
+  --teal-deeper: #062B28;
+  --teal-light:  #3D817B;
+  --teal-on-dark:#75C7BE;
+  --gold:        var(--dce-gold);
+  --gold-light:  #F0D7B4;
+  --gold-dark:   #6F4A1E;
   --sage:        #7A9B8A;
 
   /* Surfaces */

@@ -1,0 +1,191 @@
+/* ============================================================
+   brand-visuals.css
+   -----------------
+   Final brand-presentation layer sourced from HTTHQ SharePoint
+   Master DCE brand folders. Loaded last on public/deck pages.
+   ============================================================ */
+
+:root {
+  --brand-photo-hero: url('../assets/photography/dce/salon-consultation.jpg');
+  --brand-photo-ops: url('../assets/photography/dce/salon-service-space.jpg');
+  --brand-photo-msp: url('../assets/photography/dce/bts-stylist-work.jpg');
+  --brand-photo-detail: url('../assets/photography/dce/salon-interior-detail.jpg');
+  --brand-mark-gold: url('../assets/logos/dce/logomark-royal-gold.svg');
+  --brand-stamp-gold: url('../assets/logos/dce/crown-society/stamp-royal-gold.svg');
+}
+
+body {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(216, 165, 98, 0.12), transparent 28%),
+    radial-gradient(circle at 90% 8%, rgba(3, 83, 77, 0.14), transparent 30%),
+    var(--surface);
+}
+
+.sidebar {
+  background:
+    linear-gradient(180deg, rgba(6, 43, 40, 0.96), rgba(6, 43, 40, 0.98)),
+    var(--brand-photo-detail) center / cover;
+}
+
+.sidebar::after {
+  background: linear-gradient(90deg, transparent, rgba(216, 165, 98, 0.88), transparent);
+}
+
+.sidebar__brand img {
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.34));
+}
+
+.hero.project-hero,
+.hero.op-hero {
+  background:
+    linear-gradient(90deg, rgba(6, 43, 40, 0.94) 0%, rgba(6, 43, 40, 0.82) 42%, rgba(6, 43, 40, 0.54) 100%),
+    var(--brand-photo-hero) center 42% / cover;
+}
+
+.hero.op-hero {
+  background:
+    linear-gradient(90deg, rgba(6, 43, 40, 0.96) 0%, rgba(6, 43, 40, 0.84) 50%, rgba(6, 43, 40, 0.60) 100%),
+    var(--brand-photo-ops) center 46% / cover;
+}
+
+.project-hero .hero__content,
+.op-hero .hero__content {
+  max-width: 1040px;
+  padding: 112px clamp(20px, 5vw, 64px) 96px;
+}
+
+.project-hero .hero__logo {
+  width: clamp(170px, 20vw, 260px);
+  margin-bottom: 36px;
+}
+
+.project-hero .hero__title,
+.op-hero .hero__title,
+.msp-hero__title {
+  text-shadow: 0 18px 44px rgba(0, 0, 0, 0.36);
+}
+
+.project-hero .hero__subtitle,
+.op-hero .op-kicker,
+.msp-eyebrow {
+  color: var(--gold-light);
+}
+
+.project-hero::before,
+.op-hero::before,
+.msp-hero::before {
+  background:
+    var(--brand-mark-gold) center / contain no-repeat,
+    radial-gradient(circle, rgba(216, 165, 98, 0.18), transparent 60%);
+  content: '';
+  filter: none;
+  height: clamp(260px, 40vw, 620px);
+  left: auto;
+  opacity: 0.10;
+  right: clamp(-260px, -14vw, -140px);
+  top: clamp(96px, 18vh, 180px);
+  transform: rotate(-2deg);
+  width: clamp(220px, 32vw, 480px);
+}
+
+.hero-system,
+.op-system,
+.msp-card,
+.msp-brief-card,
+.audit-hero__card {
+  border-color: rgba(216, 165, 98, 0.24);
+  box-shadow: 0 24px 70px rgba(6, 43, 40, 0.18);
+}
+
+.hero-system,
+.op-system {
+  background: rgba(6, 43, 40, 0.58);
+  backdrop-filter: blur(10px);
+}
+
+.hero-system--primary,
+.op-command__panel--gold,
+.audit-hero__card--tenant,
+.msp-button--primary {
+  border-color: rgba(216, 165, 98, 0.62);
+}
+
+.msp-brief-page {
+  background:
+    linear-gradient(135deg, rgba(6, 43, 40, 0.98), rgba(6, 43, 40, 0.88)),
+    var(--brand-photo-msp) center / cover fixed;
+}
+
+.msp-hero::before {
+  right: -120px;
+  top: 80px;
+}
+
+.msp-brief-card {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(250, 250, 247, 0.92)),
+    var(--brand-stamp-gold) right -80px bottom -120px / 280px no-repeat;
+}
+
+.msp-brief-card h2,
+.msp-brief-card p,
+.msp-brief-card .msp-brief-card__topline,
+.msp-status__value,
+.op-command__big {
+  color: var(--dce-almost-black);
+}
+
+.msp-brief-card .msp-fact {
+  background: rgba(6, 43, 40, 0.78);
+  color: #fff;
+}
+
+.msp-brief-card .msp-fact strong,
+.msp-brief-card .msp-fact span:last-child {
+  color: #fff;
+}
+
+.section--dark {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(216, 165, 98, 0.14), transparent 34%),
+    linear-gradient(160deg, #031916, var(--teal-deeper));
+}
+
+.brand-photo-strip {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 36px;
+}
+
+.brand-photo-strip img {
+  aspect-ratio: 4 / 3;
+  border: 1px solid rgba(216, 165, 98, 0.28);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(6, 43, 40, 0.18);
+  object-fit: cover;
+}
+
+@media (max-width: 640px) {
+  .hero.project-hero,
+  .hero.op-hero {
+    background:
+      linear-gradient(180deg, rgba(6, 43, 40, 0.97), rgba(6, 43, 40, 0.80)),
+      var(--brand-photo-hero) center / cover;
+  }
+
+  .hero.op-hero {
+    background:
+      linear-gradient(180deg, rgba(6, 43, 40, 0.97), rgba(6, 43, 40, 0.80)),
+      var(--brand-photo-ops) center / cover;
+  }
+
+  .project-hero .hero__content,
+  .op-hero .hero__content {
+    padding-top: 92px;
+  }
+
+  .brand-photo-strip {
+    grid-template-columns: 1fr;
+  }
+}
