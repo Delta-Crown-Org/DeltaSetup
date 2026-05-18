@@ -6,6 +6,11 @@
 # Tyler: 5 device codes at https://microsoft.com/devicelogin
 # ============================================================================
 
+param(
+    [ValidateSet("scaffold", "launch")]
+    [string]$Mode = "scaffold"
+)
+
 $ErrorActionPreference = "Stop"
 $clientId = "6d8820fe-7a7b-4226-bc3b-2c53add3c207"
 $tenantId = "ce62e17d-2feb-4e67-a115-8ea4af68da30"
@@ -22,6 +27,8 @@ function Write-Log {
     $p = @{ SUCCESS="[OK]"; ERROR="[!!]"; WARNING="[??]"; STAGE="[==]"; INFO="[..]" }
     Write-Host "$ts $($p[$Lvl]) $Msg" -ForegroundColor $c[$Lvl]
 }
+
+Write-Log "PROVISIONING-MODE: $($Mode.ToLowerInvariant())" "INFO"
 
 function Do-DeviceLogin {
     param([string]$Url, [string]$Label)

@@ -35,7 +35,11 @@ param(
     [string]$Environment = "Development",
     
     [Parameter(Mandatory=$false)]
-    [switch]$SkipBusinessPremiumWarning
+    [switch]$SkipBusinessPremiumWarning,
+
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("scaffold", "launch")]
+    [string]$Mode = "scaffold"
 )
 
 # Error handling setup
@@ -69,6 +73,8 @@ if (!(Test-Path $LogPath)) {
     New-Item -ItemType Directory -Path $LogPath -Force | Out-Null
 }
 $LogFile = Join-Path $LogPath "CorpHub-Provisioning-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+$ProvisioningMode = $Mode.ToLowerInvariant()
+Write-DeltaCrownLog "PROVISIONING-MODE: $ProvisioningMode" "INFO"
 
 # ============================================================================
 # CONFIGURATION

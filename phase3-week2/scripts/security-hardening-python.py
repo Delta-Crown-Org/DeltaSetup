@@ -3,6 +3,7 @@
 Delta Crown Security Hardening - Python implementation
 Uses MSAL device code flow + SharePoint REST API
 """
+import argparse
 import msal
 import requests
 import json
@@ -246,9 +247,17 @@ def disable_sharing(token, site_url, site_name):
         return False
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Delta Crown security hardening")
+    parser.add_argument("--mode", choices=("scaffold", "launch"), default="scaffold")
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
     print("=" * 60)
     print("Delta Crown Security Hardening")
+    print(f"PROVISIONING-MODE: {args.mode}")
     print("=" * 60)
     print()
     

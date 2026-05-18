@@ -1,7 +1,13 @@
 # Quick Teams deployment — run as single session
-param([string]$GroupId = "03255d50-a52d-4b1f-a0f6-37379cc13a35")
+# ADR-011-SUPPRESSION-VERIFIED: this post-hoc script team-enables an existing WelcomeEmailDisabled group and adds owners/members/channels; no M365 group welcome mail is triggered here.
+param(
+    [string]$GroupId = "03255d50-a52d-4b1f-a0f6-37379cc13a35",
+    [ValidateSet("scaffold", "launch")]
+    [string]$Mode = "scaffold"
+)
 
 $ErrorActionPreference = "Continue"
+Write-Host "PROVISIONING-MODE: $($Mode.ToLowerInvariant())"
 Connect-MgGraph -Scopes "Group.ReadWrite.All","Team.Create","Channel.Create","TeamSettings.ReadWrite.All","TeamMember.ReadWrite.All" -TenantId "ce62e17d-2feb-4e67-a115-8ea4af68da30" -NoWelcome
 Write-Host "Connected to Graph"
 

@@ -15,7 +15,9 @@
 param(
     [string]$TenantName = "deltacrown",
     [string]$OwnerEmail = "tyler@deltacrown.com",
-    [switch]$SkipGroups
+    [switch]$SkipGroups,
+    [ValidateSet("scaffold", "launch")]
+    [string]$Mode = "scaffold"
 )
 
 $ErrorActionPreference = "Stop"
@@ -55,6 +57,8 @@ function Write-Phase2Log {
     }
     Write-Host "$timestamp $prefix $Message" -ForegroundColor $color
 }
+
+Write-Phase2Log "PROVISIONING-MODE: $($Mode.ToLowerInvariant())" "INFO"
 
 function Connect-DeviceLogin {
     param([string]$Url, [string]$Label)

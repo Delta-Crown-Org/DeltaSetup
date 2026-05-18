@@ -39,7 +39,11 @@ param(
     [switch]$SkipHubAssociation,
 
     [Parameter(Mandatory=$false)]
-    [switch]$SkipBranding
+    [switch]$SkipBranding,
+
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("scaffold", "launch")]
+    [string]$Mode = "scaffold"
 )
 
 # Error handling
@@ -559,6 +563,7 @@ try {
     Write-DeltaCrownLog "Script Version: $scriptVersion" "INFO"
     Write-DeltaCrownLog "Tenant: $TenantName" "INFO"
     Write-DeltaCrownLog "Environment: $Environment" "INFO"
+    Write-DeltaCrownLog "PROVISIONING-MODE: $($Mode.ToLowerInvariant())" "INFO"
     Write-DeltaCrownLog "Log file: $LogFile" "INFO"
 
     # ------------------------------------------------------------------

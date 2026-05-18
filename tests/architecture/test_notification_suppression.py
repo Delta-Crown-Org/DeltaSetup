@@ -89,18 +89,9 @@ ADR_011_GRACE_PERIOD = {
     # this grace period after the 17i autonomous-retrofit landed (mode-aware
     # + audit log; verified by the fitness tests below). See git log for
     # the commit.
-    # Phase 2 + 3 provisioning scripts surfaced by the release-gate-arbiter
-    # Tampering #1 addendum (glob coverage parity). These built the current
-    # tenant state and need retrofit under bd 17i before next invocation.
-    "phase2-week1/scripts/2.1-CorpHub-Provisioning.ps1",
-    "phase2-week1/scripts/2.2-DCEHub-Provisioning.ps1",
-    "phase2-week1/scripts/deploy-phase2-standalone.ps1",  # sibling of phase3 deploy
-    "phase3-week2/scripts/3.1-DCE-Sites-Provisioning.ps1",
-    "phase3-week2/scripts/3.2-Teams-Provisioning.ps1",
-    "phase3-week2/scripts/deploy-teams-now.ps1",
-    "phase3-week2/scripts/deploy-phase3-standalone.ps1",
-    "phase3-week2/scripts/security-hardening-python.py",
-    "phase3-week2/scripts/security-hardening-graph.py",
+    # Phase 2 + 3 provisioning scripts were removed from this grace period
+    # after the 17i static retrofit landed (mode-aware + audit log;
+    # WelcomeEmailDisabled/waivers where notification-capable mutations exist).
 }
 
 

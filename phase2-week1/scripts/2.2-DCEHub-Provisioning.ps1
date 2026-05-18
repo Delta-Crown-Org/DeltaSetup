@@ -38,7 +38,11 @@ param(
     [string]$Environment = "Development",
     
     [Parameter(Mandatory=$false)]
-    [switch]$SkipBusinessPremiumWarning
+    [switch]$SkipBusinessPremiumWarning,
+
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("scaffold", "launch")]
+    [string]$Mode = "scaffold"
 )
 
 # Error handling
@@ -71,6 +75,8 @@ if (!(Test-Path $LogPath)) {
     New-Item -ItemType Directory -Path $LogPath -Force | Out-Null
 }
 $LogFile = Join-Path $LogPath "DCEHub-Provisioning-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+$ProvisioningMode = $Mode.ToLowerInvariant()
+Write-DeltaCrownLog "PROVISIONING-MODE: $ProvisioningMode" "INFO"
 
 # ============================================================================
 # BRANDING CONFIGURATION

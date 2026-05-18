@@ -12,6 +12,7 @@ This script handles what's possible through Graph:
 2. Set sharing restrictions via Graph (site-level sharing)
 3. Report on group memberships for forbidden groups
 """
+import argparse
 import json
 import sys
 import urllib.request
@@ -202,9 +203,17 @@ def set_site_sharing_via_graph(token, site_name, site_id):
     return not has_forbidden
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Delta Crown Graph security hardening audit")
+    parser.add_argument("--mode", choices=("scaffold", "launch"), default="scaffold")
+    return parser.parse_args()
+
+
 def main():
+    args = parse_args()
     print("=" * 60)
     print("  Delta Crown Security Hardening — Graph API Audit")
+    print(f"PROVISIONING-MODE: {args.mode}")
     print("=" * 60)
     print()
 

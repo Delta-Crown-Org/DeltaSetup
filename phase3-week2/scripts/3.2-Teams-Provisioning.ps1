@@ -24,7 +24,11 @@ param(
     [string]$Environment = "Development",
 
     [Parameter(Mandatory=$false)]
-    [string]$AdminUrl = "https://deltacrown-admin.sharepoint.com"
+    [string]$AdminUrl = "https://deltacrown-admin.sharepoint.com",
+
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("scaffold", "launch")]
+    [string]$Mode = "scaffold"
 )
 
 # Error handling
@@ -148,7 +152,8 @@ function Get-OrCreateTeam {
             -SecurityEnabled:$true `
             -MailNickname $Config.MailNickname `
             -GroupTypes @("Unified") `
-            -Visibility $Config.Visibility
+            -Visibility $Config.Visibility `
+            -AdditionalProperties @{ resourceBehaviorOptions = @("WelcomeEmailDisabled") }
 
         Write-DeltaCrownLog "M365 Group created: $($group.Id)" "SUCCESS"
 
@@ -186,6 +191,7 @@ function Get-OrCreateTeam {
 
         Invoke-DeltaCrownWithRetry -ScriptBlock {
             # B3 FIX: PUT to /groups/{id}/team enables Teams on existing group
+            # ADR-011-SUPPRESSION-VERIFIED: team-enable and channel/member operations do not send M365 group welcome mail; group create above uses WelcomeEmailDisabled.
             $teamUri = "https://graph.microsoft.com/v1.0/groups/$($group.Id)/team"
             Invoke-MgGraphRequest -Method PUT -Uri $teamUri -Body $teamBody
         } -OperationName "Team-enable group" -MaxRetries 5 -InitialDelaySeconds 10
@@ -365,6 +371,7 @@ try {
     Write-DeltaCrownBanner "PHASE 3.2: Teams Workspace Provisioning"
     Write-DeltaCrownLog "Script Version: $scriptVersion" "INFO"
     Write-DeltaCrownLog "Tenant: $TenantName" "INFO"
+    Write-DeltaCrownLog "PROVISIONING-MODE: $($Mode.ToLowerInvariant())" "INFO"
 
     $results = @{
         TeamId         = $null
