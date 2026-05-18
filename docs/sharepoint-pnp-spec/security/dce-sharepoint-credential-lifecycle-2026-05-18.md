@@ -38,14 +38,13 @@ long-term production launch credential model.
 
 Production launch-mode must not depend on an unmanaged 1-year local PFX.
 
-Before any production launch-mode workflow is activated, one of these must be
-true:
+Before any production launch-mode workflow is activated, GitHub OIDC / federated
+identity must exist so launch/deploy jobs exchange short-lived tokens without
+storing a long-lived private key.
 
-1. **Preferred:** GitHub OIDC / federated identity path exists and launch/deploy
-   jobs exchange short-lived tokens without storing a long-lived private key.
-2. **Acceptable interim:** certificate-based app-only auth remains, but with a
-   documented 90-day rotation ceremony, app ownership, expiry alerting, and
-   unusual-use monitoring.
+Tyler selected **Require OIDC first** via questionnaire TUI on 2026-05-18.
+Certificate-based app-only auth remains acceptable only for controlled DEV and
+scaffold work unless a later named risk decision supersedes this posture.
 
 ## Minimum interim controls
 
@@ -77,13 +76,26 @@ If the certificate model remains for sprint-1/sprint-2:
 Current posture is acceptable for controlled DEV/scaffold work, but not for
 production launch-mode. The key has a 1-year lifetime and two explicit app
 owners now exist: Tyler Granlund - Admin and Dustin Boyd - Admin. Production
-launch-mode still requires monitoring controls and either the 90-day rotation
-ceremony or an accepted OIDC/certificate exception.
+launch-mode requires OIDC/federated identity first, plus monitoring controls for
+any remaining certificate-based DEV/scaffold use.
 
 ## Follow-up work
 
-- Implement a credential expiry inventory/check in `dce-sharepoint` CI or a
-  scheduled operator script.
-- Implement OIDC/federated identity path (`DeltaSetup-du9`) or document a
-  certificate exception.
-- Define and test the 90-day rotation ceremony.
+- Activate the credential monitoring workflow template after secrets approval:
+  `ci-cd/workflows/credential-monitoring.yml`.
+- Implement OIDC/federated identity path (`DeltaSetup-du9`) before production
+  launch-mode.
+- Define the first 90-day rotation target date or record a named risk acceptance
+  for any continued certificate-based DEV/scaffold use.
+
+## 2026-05-18 update
+
+Read-only live verification re-run by `code-puppy-73a4b6`:
+
+- Owners: Tyler Granlund - Admin; Dustin Boyd - Admin.
+- Password credentials: zero.
+- Active key: `c4660d2e-a48f-4f2a-9015-25881d3299b2`.
+- Expiry: `2027-05-18T03:22:11Z` (~365 days remaining).
+- `check-app-credential-expiry.ps1 -WarnWithinDays 90` passed.
+- Added `docs/certificate-exception-2026-05-18.md` and inactive monitoring
+  template `ci-cd/workflows/credential-monitoring.yml` in `dce-sharepoint`.
