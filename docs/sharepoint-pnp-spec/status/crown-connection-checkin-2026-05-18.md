@@ -33,6 +33,7 @@ Current owners:
 - Tyler Granlund - Admin — `tyler.granlund-admin@httbrands.com`
 - Kristin Kidd — `Kristin.Kidd@httbrands.com`
 - Jenna Bowden — `Jenna.Bowden@httbrands.com`
+- Jamie Baer — `jamie.baer@httbrands.com`
 
 Current access posture:
 
@@ -76,6 +77,6 @@ Things we are competent to keep doing next:
 "Crown Connection is live at
 `https://deltacrown.sharepoint.com/sites/CrownConnection`. Access is in place on
 the private Microsoft 365 Group-backed site: 57 current members, with Tyler,
-Kristin Kidd, and Jenna Bowden as owners. The page is not built out yet, but the
-site and access are ready for use while we continue the branded home page and
-pipeline hardening work."
+Kristin Kidd, Jenna Bowden, and Jamie Baer as owners. The page is not built out
+yet, but the site and access are ready for use while we continue the branded
+home page and pipeline hardening work."
