@@ -72,6 +72,7 @@ $startedAt = Get-Date
 # must always be the first stdout line.
 # ----------------------------------------------------------------------------
 $commitSha = if ($env:GITHUB_SHA) { $env:GITHUB_SHA.Substring(0, 7) } else { 'local' }
+if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir | Out-Null }
 $auditLine = "PROVISIONING-MODE: $Mode COMMIT=$commitSha RUN=$RunId SCRIPT=remediate-group-welcome.ps1"
 Write-Host $auditLine
 "$auditLine`n" | Out-File -FilePath (Join-Path $OutputDir 'provisioning-mode.log') -Append -Encoding utf8
@@ -82,8 +83,6 @@ Write-Host $auditLine
 if (-not $AppId)                 { throw "AppId is required (set DCE_DEPLOY_CLIENT_ID env var)." }
 if (-not $Organization)          { throw "Organization is required (set DCE_TENANT_DOMAIN env var)." }
 if (-not $CertificateThumbprint) { throw "CertificateThumbprint is required (set DCE_DEPLOY_CERT_THUMBPRINT env var)." }
-
-if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir | Out-Null }
 
 # ----------------------------------------------------------------------------
 # Connect to Exchange Online with app-only cert auth (ADR-007)
