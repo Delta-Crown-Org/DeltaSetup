@@ -16,6 +16,7 @@ sequentially, status-tagged.
 | [007](decisions/007-auth-model.md) | Cert-based app-only auth for CI | Accepted |
 | [008](decisions/008-dce-htt-corp-sync-group-name.md) | DCE-side HTT corporate sync group name | Proposed |
 | [009](decisions/009-teams-moderation-beta-only.md) | Teams channel moderation uses Graph BETA endpoint | Accepted |
+| [010](decisions/010-fluent-ui-version-lock.md) | SPFx components use Fluent UI v8 | Accepted |
 
 ## ADR template
 

@@ -11,7 +11,7 @@ project:
    "minimal" template, React framework, TypeScript.
 2. Replace the generated web part class with `DceHubHomeWebPart.ts`.
 3. Copy `theme/` and `audience/` and `components/` into `src/`.
-4. Add the Fluent UI v9 dependency: `npm i @fluentui/react-components`.
+4. Add the Fluent UI v8 dependency: `npm i @fluentui/react@8.121.0`.
 5. Add `@microsoft/sp-http` (already present in SPFx 1.22 scaffolds).
 6. Build with the **Convention-Page-Build/spfx** pattern — Heft, not gulp.
 
@@ -25,7 +25,7 @@ project:
 | `/Users/tygranlund/dev/01-htt-brands/Convention-Page-Build/spfx/src/webparts/conventionHero/ConventionHero.tsx` | Structural template for `components/DceHero.tsx` |
 | `docs/sharepoint-pnp-spec/reference/dce-tokens.json` | Source of truth for all color/typography/spacing |
 
-## Version pins (ADR-006 final, 2026-05-16, evidence-verified)
+## Version pins (ADR-010, 2026-05-18, accepted)
 
 ```json
 "engines": { "node": ">=22.14.0 <23.0.0" },
@@ -63,7 +63,7 @@ project:
 - ✅ **DceHero** — full implementation, structurally matches the mockup.
 - ✅ **DceKpiTile** — full implementation.
 - ✅ **AudienceGate + useAudience hook** — wired to Graph `/me/transitiveMemberOf`.
-- ✅ **Fluent UI v9 theme** generated from DCE tokens.
+- ✅ **Fluent UI v8 theme** generated from DCE tokens.
 - ⏳ **DceQuicklinks, DceNewsFeed, DcePeopleSpotlight, DceEventList, DceCardGrid** — left
   as todo to keep the skeleton readable. Same import + style pattern as the two
   implemented components.

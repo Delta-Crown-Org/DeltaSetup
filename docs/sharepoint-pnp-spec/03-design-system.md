@@ -143,27 +143,31 @@ each is a CSS class with a strict naming convention.
 
 ## Fluent UI integration
 
-We layer DCE tokens on top of Fluent UI v9 (`@fluentui/react-components`).
-Process:
+Per ADR-010, SPFx custom components use Fluent UI v8
+(`@fluentui/react` 8.121.0). Process:
 
 1. Style Dictionary builds `fluentui-theme-dce.json` from
-   `dce-tokens.json`. Format matches Fluent UI's `Theme` interface.
-2. SPFx web parts wrap their content in `<FluentProvider theme={dceTheme}>`.
-3. SharePoint Admin Center receives the same theme as an
+   `dce-tokens.json`. Format matches Fluent UI v8's `ITheme` shape.
+2. SPFx web parts wrap their content in `<ThemeProvider theme={dceTheme}>`.
+3. SharePoint Admin Center receives the same token source as an
    upload-themed JSON file. This gives us themed chrome.
 
-Example Fluent UI theme map (subset):
+Example Fluent UI v8 theme map (subset):
 
 ```json
 {
-  "colorBrandBackground": "#006B5E",
-  "colorBrandBackgroundHover": "#004D44",
-  "colorBrandBackgroundPressed": "#0A1F1C",
-  "colorBrandForeground1": "#006B5E",
-  "colorBrandForeground2": "#004D44",
-  "colorBrandStroke1": "#006B5E",
-  "fontFamilyBase": "'Tenor Sans', -apple-system, BlinkMacSystemFont, sans-serif",
-  "fontFamilyMonospace": "Consolas, monospace"
+  "palette": {
+    "themePrimary": "#006B5E",
+    "themeDarkAlt": "#005A50",
+    "themeDark": "#004D44",
+    "themeDarker": "#0A1F1C",
+    "themeLighterAlt": "#F0FDFC"
+  },
+  "fonts": {
+    "medium": {
+      "fontFamily": "'Tenor Sans', -apple-system, BlinkMacSystemFont, sans-serif"
+    }
+  }
 }
 ```
 

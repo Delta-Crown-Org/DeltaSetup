@@ -26,13 +26,13 @@ Recommended sequence:
 | Layer | Source of truth / evidence | Current alignment |
 |---|---|---|
 | Strategic roadmap | `docs/architecture/dce-sharepoint-design-roadmap.md` | Aligned: Medium PnP-first, Heavy SPFx later if justified. |
-| Sprint plan | `docs/sharepoint-pnp-spec/12-implementation-plan.md` | Mostly aligned; depends on repo + Fluent/UI/toolchain fixes. |
-| Tooling spec | `docs/sharepoint-pnp-spec/06-tooling-pnp.md` | Needs Fluent UI correction once ADR-010 lands. |
-| CI/CD spec | `docs/sharepoint-pnp-spec/07-ci-cd-pipeline.md` | Needs Heft-vs-gulp correction. |
-| Design system | `docs/sharepoint-pnp-spec/03-design-system.md` | Needs Fluent UI correction; token model is otherwise strong. |
-| ADRs | `docs/sharepoint-pnp-spec/decisions/` | Repo placement accepted in content but file status still says Proposed. Fluent lock ADR-010 missing. |
+| Sprint plan | `docs/sharepoint-pnp-spec/12-implementation-plan.md` | Mostly aligned; depends on repo creation + tenant prerequisites. |
+| Tooling spec | `docs/sharepoint-pnp-spec/06-tooling-pnp.md` | Aligned to ADR-010 Fluent UI v8. |
+| CI/CD spec | `docs/sharepoint-pnp-spec/07-ci-cd-pipeline.md` | Aligned to Heft-only SPFx build guidance. |
+| Design system | `docs/sharepoint-pnp-spec/03-design-system.md` | Aligned to ADR-010; token model is otherwise strong. |
+| ADRs | `docs/sharepoint-pnp-spec/decisions/` | ADR-006, ADR-009, and ADR-010 accepted. |
 | Mockup | `dce-mockup/` | Strong prototype; not itself the production repo. |
-| SPFx portability proof | `dce-mockup/spfx-skeleton/` | Useful, but currently internally inconsistent: README says ADR-006 picked Fluent UI v8 while code/theme still use v9 imports. |
+| SPFx portability proof | `dce-mockup/spfx-skeleton/` | Aligned to Fluent UI v8 imports/theme provider. |
 | Research deltas | `dce-mockup/RESEARCH-DELTAS.md` | Critical correction log; should be treated as blocking context. |
 | External mega-guide | `docs/sharepoint-research/chatgpt-5.5-pro/htt-sharepoint-infrastructure-development-guide.md` | Useful background; some YAML examples still show gulp and must not override project-specific Heft decision. |
 | bd database | `bd ready`, `bd show DeltaSetup-*` | Correctly captures the blocker chain. |
@@ -110,27 +110,20 @@ Remaining grace-period scripts are historical `tools/` incident scripts, not the
 
 ## Blocking alignment gaps
 
-### Gap A — Fluent UI version lock is unresolved
+### Gap A — Fluent UI version lock is resolved
 
 **bd:** `DeltaSetup-7bm`  
-**Blocked by:** `DeltaSetup-jn4`
+**Resolution:** ADR-010 accepted; SPFx custom components use Fluent UI v8
+(`@fluentui/react` 8.121.0).
 
-Current contradiction:
+Implemented alignment:
 
-- `03-design-system.md` and `06-tooling-pnp.md` say Fluent UI v9 / `@fluentui/react-components`.
-- `dce-mockup/spfx-skeleton/README.md` says ADR-006 final picked Fluent UI v8.
-- `dce-mockup/spfx-skeleton/theme/fluentui-theme-dce.ts` still imports v9 APIs:
+- `03-design-system.md` describes a Fluent UI v8 `ITheme` token map.
+- `06-tooling-pnp.md` pins `@fluentui/react` 8.121.0.
+- `dce-mockup/spfx-skeleton/` imports `ThemeProvider`, `createTheme`, and
+  `ITheme` from `@fluentui/react`.
 
-```ts
-import { BrandVariants, createLightTheme, Theme } from '@fluentui/react-components';
-```
-
-Decision required before production SPFx scaffold:
-
-1. Accept v8 and update docs/skeleton accordingly, or
-2. Accept v9 and explicitly plan the scaffold migration from existing Convention patterns.
-
-Project notes currently imply **v8 is the likely lock** after ADR-006, but `DeltaSetup-7bm` says this is not done until ADR-010 exists and relevant docs are updated.
+A future migration to Fluent UI v9 requires a superseding ADR.
 
 ### Gap B — CI/CD samples need Heft alignment
 
@@ -257,8 +250,8 @@ SPFx enters when one of ADR-005 triggers happens:
 
 ## Implementation guardrails
 
-1. **No Fluent UI work until ADR-010 exists.**
-2. **No SPFx dependency copying until the Fluent lock is final.**
+1. **Fluent UI work follows ADR-010: v8 only unless superseded.**
+2. **No SPFx dependency copying outside the ADR-010 pins.**
 3. **No gulp commands in production CI unless ADR explicitly reverses the Heft decision.**
 4. **No notification-capable provisioning script without `-Mode scaffold|launch` and `PROVISIONING-MODE:` logging.**
 5. **No direct-user audience targeting. Use groups only.**
@@ -273,9 +266,9 @@ SPFx enters when one of ADR-005 triggers happens:
 Everything is directionally aligned, but the next real work is not “build pages immediately.” It is:
 
 ```text
-ADR-006 cosign
-  → ADR-010 Fluent lock
-  → Heft CI doc correction
+ADR-006 accepted
+  → ADR-010 Fluent lock accepted
+  → Heft CI doc correction complete
   → dce-sharepoint repo creation
   → token/theme foundation
   → DCE Hub home

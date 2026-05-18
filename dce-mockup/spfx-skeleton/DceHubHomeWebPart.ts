@@ -13,7 +13,7 @@
  *   8. Brand resources    → <DceCardGrid />                (TODO)
  *   9. Footer             → handled by Application Customizer, not this web part
  *
- * Reuse note: gulp/heft build pipeline, deploy-spfx.ps1, package.json
+ * Reuse note: Heft build pipeline, deploy-spfx.ps1, package.json
  * pins all come from Convention-Page-Build/spfx/. Strip HTT-specific
  * tokens, replace with the import from ./theme/dce-tokens.
  */
@@ -22,7 +22,7 @@ import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { FluentProvider } from '@fluentui/react-components';
+import { ThemeProvider } from '@fluentui/react';
 
 import { dceTheme } from './theme/fluentui-theme-dce';
 import { DceHero } from './components/DceHero';
@@ -38,7 +38,7 @@ export interface IDceHubHomeWebPartProps {
 export default class DceHubHomeWebPart extends BaseClientSideWebPart<IDceHubHomeWebPartProps> {
 
   public render(): void {
-    const element = React.createElement(FluentProvider, { theme: dceTheme },
+    const element = React.createElement(ThemeProvider, { theme: dceTheme },
       React.createElement(React.Fragment, null,
 
         // Section 1 — Hero (audience: all)

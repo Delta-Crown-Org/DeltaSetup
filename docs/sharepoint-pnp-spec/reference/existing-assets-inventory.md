@@ -23,9 +23,9 @@ machine. Paths assume macOS (the agent's working environment).
 - `sharepoint/` — packaged `.sppkg` outputs
 - `release/` — production builds
 - `scripts/` — deploy automation
-- `gulpfile.js` — build pipeline
+- Heft/SPFx build config — build pipeline
 - `webpack.config.js` — webpack override
-- `package.json` — Node 22, React 17.0.1, TypeScript 5.3.3, Fluent UI v9, PnP.js
+- `package.json` — Node 22, React 17.0.1, TypeScript 5.3.3, Fluent UI v8, PnP.js
 - `deploy-spfx.ps1` — PowerShell deploy script
 - `tsconfig.json`
 

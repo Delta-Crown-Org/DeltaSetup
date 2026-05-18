@@ -77,7 +77,7 @@ ChatGPT 5.5 Pro guide.
 - Region- and store-level group decomposition (per Perplexity blueprint).
 - OIDC federated identity for the deploy app (replaces cert-auth from bootstrap.sh).
 - Brand template parameterization for Bishops, Frenchies, TLL (Phase 5+).
-- The 3 spec defects in `dce-mockup/RATIONALE.md` § 3:
-  - Fluent UI v8 vs v9 (ADR-006 final picked v8; spec still says v9).
-  - Gulp vs Heft (spec YAML samples use gulp; scaffold uses Heft).
+- Remaining post-ADR-010 follow-ups from `dce-mockup/RATIONALE.md` § 3:
   - Define `DCE-HTT-Corporate-Sync` group (ADR-008 above; pending creation).
+  - Monitor Heft/SPFx build behavior when the real repo is scaffolded.
+  - Revisit Fluent UI only through a superseding ADR if Microsoft/SPFx guidance changes.

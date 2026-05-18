@@ -186,6 +186,27 @@ jobs:
           summary: "main → PROD deploy completed: ${{ job.status }}"
 ```
 
+### SPFx build rule — Heft, not gulp
+
+If/when `webparts/` is added, the SPFx package must follow ADR-010 and the
+SPFx 1.22.2 scaffold pattern: **Heft is the build entrypoint**. Do not add
+legacy `gulp bundle --ship` or `gulp package-solution --ship` snippets.
+
+Recommended conditional workflow step:
+
+```yaml
+      - name: Build SPFx webparts
+        if: hashFiles('webparts/**/package.json') != ''
+        working-directory: webparts/dce-hub-home
+        run: |
+          npm ci
+          npx heft build --production
+```
+
+Packaging should be exposed as an npm script in the generated SPFx project
+once that repo exists, so CI calls the project contract instead of hardcoding
+old toolchain details.
+
 ### Workflow 3 — Permission audit (`.github/workflows/permission-audit.yml`)
 
 ```yaml

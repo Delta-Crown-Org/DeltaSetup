@@ -7,7 +7,7 @@
 | Site provisioning | **PnP.PowerShell** | 3.x latest | Microsoft-supported; covers 95% of provisioning needs without SPFx. |
 | Page authoring | PnP provisioning templates (XML or JSON) | n/a | Versioned, idempotent, diff-able. |
 | Token pipeline | **Style Dictionary** | 5.3.3 | Already adopted by mega brief; generates CSS, SCSS, JSON, TS. |
-| Component library | **Fluent UI v9** | `@fluentui/react-components` latest | Microsoft's design system; SharePoint-native. |
+| Component library | **Fluent UI v8** | `@fluentui/react` 8.121.0 | ADR-010 lock; matches the reusable SPFx 1.22.2 scaffold. |
 | SPFx | **1.22.2** (deferred) | n/a | Heavy tier; use only when Medium can't paint the picture. |
 | SPFx runtime | Node 22 LTS, React 17.0.1, TypeScript 5.3.3 | exact pins | Per mega brief; deviation will break builds. |
 | Testing — UI | **Playwright** | 1.58.x | Multi-browser; same as `deltacrown.com` test stack. |
