@@ -1,0 +1,18 @@
+# Sources and credibility
+
+| Source | Tier | Evidence used | Currency |
+|---|---:|---|---|
+| OWASP ASVS project — https://owasp.org/www-project-application-security-verification-standard/ | 1 | ASVS provides a basis for testing application technical security controls and secure development requirements; latest stable 5.0.0. | ASVS 5.0.0 released 2025-05-30 per page. |
+| OWASP SAMM Verification / Security Testing — https://owaspsamm.org/model/verification/security-testing/stream-b/ | 1 | Automated tools cannot replace expert manual review; stakeholders review security test results and accept release risks; continuous security tests should be integrated into development. | OWASP project page, accessed 2026-05-18. |
+| Microsoft Graph invitation resource — https://learn.microsoft.com/en-us/graph/api/resources/invitation?view=graph-rest-1.0 | 1 | `sendInvitationMessage` indicates whether email is sent; default is `false`; redemption URL can be sent through another channel. | Last updated 2024-06-05. |
+| Microsoft Graph M365 group behaviors — https://learn.microsoft.com/en-us/graph/group-set-options | 1 | `resourceBehaviorOptions` can be set only on group creation; `WelcomeEmailDisabled` means welcome emails are not sent; `HideGroupInOutlook` hides group in Outlook. | Last updated 2025-10-09. |
+| Exchange `Set-UnifiedGroup` — https://learn.microsoft.com/en-us/powershell/module/exchange/set-unifiedgroup?view=exchange-ps#-autosubscribenewmembers | 1 | `AutoSubscribeNewMembers` only evaluated for internal members; guest accounts are always subscribed when added. | Microsoft Learn current page. |
+| Microsoft Purview audit retention — https://learn.microsoft.com/en-us/purview/audit-log-retention-policies?view=o365-worldwide | 1 | Audit Standard changed from 90 to 180 days; Premium default one-year retention for E5/add-on users for Exchange/SharePoint/OneDrive/Entra; 10-year retention requires add-on. | Last updated 2026-02-18. |
+| GitHub environments — https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments | 1 | Environment secrets are only available after configured rules pass; required reviewers can be up to six people/teams; plan/visibility limits apply. | GitHub Docs current page. |
+| GitHub OIDC — https://docs.github.com/en/actions/concepts/security/openid-connect | 1 | OIDC avoids duplicating long-lived cloud credentials as GitHub secrets and uses short-lived tokens valid for a single job. | GitHub Docs current page. |
+| Microsoft Entra expiring app credentials recommendation — https://learn.microsoft.com/en-us/entra/identity/monitoring-health/recommendation-renew-expiring-application-credential | 1 | Recommendation appears when app registration credentials expire within 30 days; action plan rotates cert/secret, validates sign-in logs, removes old credential. | Last updated 2025-04-09. |
+| CIS Microsoft 365 Benchmark landing/catalog — https://www.cisecurity.org/benchmark/microsoft_365 | 2 | Benchmark concepts to map: administrative roles, audit logging, external collaboration/sharing, app consent, conditional access/MFA, data protection. | CIS official benchmark catalog; exact benchmark requires CIS download/current version review. |
+
+## Notes on validation
+
+Primary sources are official OWASP, Microsoft Learn, GitHub Docs, and CIS catalog. CIS detail-level control text should be confirmed from the licensed/current benchmark PDF or CIS WorkBench before claiming compliance.
