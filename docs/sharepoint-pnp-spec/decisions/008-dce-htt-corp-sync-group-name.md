@@ -62,6 +62,7 @@ Created in the DCE tenant on 2026-05-18:
 | Processing state | `On` |
 | Resource behavior | `WelcomeEmailDisabled` |
 | Initial owner | Tyler Granlund - Admin (`tyler.granlund-admin_httbrands.com#EXT#@deltacrown.onmicrosoft.com`) |
+| Verified member count | `79` on 2026-05-18; this matches the active mail-domain rule. The older `52` expectation is stale or narrower than the chosen rule. |
 
 Naming rationale:
 
@@ -80,10 +81,12 @@ evaluates group **membership**, not ownership. The dynamic rule above
 ensures every synced HTT user becomes a member automatically. No manual
 "add as member" step is required.
 
-Tyler Granlund is the initial owner. A second DCE-side delegate should be
-added after owner confirmation. Dynamic groups do not support hand-adding
-static members; owner visibility for SharePoint audience-targeted content
-comes from matching the dynamic rule or from separate admin/audit groups.
+Tyler Granlund is the initial owner. On 2026-05-18, Tyler approved keeping
+Tyler as the only owner for now through the question TUI. A second DCE-side
+delegate remains a follow-up resilience task. Dynamic groups do not support
+hand-adding static members; owner visibility for SharePoint audience-targeted
+content comes from matching the dynamic rule or from separate admin/audit
+groups.
 
 ## Alternatives considered
 
@@ -136,6 +139,6 @@ attribute-only filters because they bypass the group audit mechanism.
 2. Add the dynamic rule. ✅
 3. Update 02-identity-audience.md role taxonomy table to populate the
    R6 "Primary group" column with `DCE-HTT-Corporate-Sync`. ✅
-4. Wait for first sync evaluation (≤24 h). ⏳
-5. Verify membership matches expected count (52 today). ⏳
+4. Wait for first sync evaluation (≤24 h). ✅
+5. Verify membership count. ✅ — `79` members on 2026-05-18; accepted via TUI.
 6. Add a second owner/delegate after Tyler confirms the person. ⏳

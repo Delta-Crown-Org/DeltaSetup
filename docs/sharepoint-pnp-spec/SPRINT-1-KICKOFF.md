@@ -78,6 +78,6 @@ ChatGPT 5.5 Pro guide.
 - OIDC federated identity for the deploy app (replaces cert-auth from bootstrap.sh).
 - Brand template parameterization for Bishops, Frenchies, TLL (Phase 5+).
 - Remaining post-ADR-010 follow-ups from `dce-mockup/RATIONALE.md` § 3:
-  - Verify `DCE-HTT-Corporate-Sync` membership after Entra dynamic evaluation completes.
+  - Add a second owner/delegate to `DCE-HTT-Corporate-Sync` after Tyler confirms the person.
   - Monitor Heft/SPFx build behavior when the real repo is scaffolded.
   - Revisit Fluent UI only through a superseding ADR if Microsoft/SPFx guidance changes.
