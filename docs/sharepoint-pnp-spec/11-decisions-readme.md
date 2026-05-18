@@ -14,7 +14,7 @@ sequentially, status-tagged.
 | [005](decisions/005-defer-spfx-custom-webparts.md) | Defer SPFx custom web parts to sprint 2+ | Accepted |
 | [006](decisions/006-repo-placement.md) | New repo `Delta-Crown-Org/dce-sharepoint` | Accepted |
 | [007](decisions/007-auth-model.md) | Cert-based app-only auth for CI | Accepted |
-| [008](decisions/008-dce-htt-corp-sync-group-name.md) | DCE-side HTT corporate sync group name | Proposed |
+| [008](decisions/008-dce-htt-corp-sync-group-name.md) | DCE-side HTT corporate sync group name | Accepted |
 | [009](decisions/009-teams-moderation-beta-only.md) | Teams channel moderation uses Graph BETA endpoint | Accepted |
 | [010](decisions/010-fluent-ui-version-lock.md) | SPFx components use Fluent UI v8 | Accepted |
 

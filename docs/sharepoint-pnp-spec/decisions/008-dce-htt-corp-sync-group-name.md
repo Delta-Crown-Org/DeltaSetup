@@ -1,6 +1,6 @@
 # ADR-008 — Name the DCE-side group representing the HTT corporate synced cohort
 
-**Status:** Proposed (2026-05-16)
+**Status:** Accepted (2026-05-18)
 **Author:** Surfaced from `dce-mockup/RATIONALE.md` § 3 during the bake-off implementation
 **Supersedes:** none
 **Superseded by:** none
@@ -52,6 +52,17 @@ with the membership rule:
 This group is the canonical DCE-side R6 audience for all SharePoint
 audience targeting that needs to address "all HTT corp users."
 
+Created in the DCE tenant on 2026-05-18:
+
+| Field | Value |
+|---|---|
+| Group id | `ebbd0644-edd3-441f-9857-88864c24dc5f` |
+| Primary SMTP | `DCEHTTCorporateSync@deltacrown.onmicrosoft.com` |
+| Group types | `Unified`, `DynamicMembership` |
+| Processing state | `On` |
+| Resource behavior | `WelcomeEmailDisabled` |
+| Initial owner | Tyler Granlund - Admin (`tyler.granlund-admin_httbrands.com#EXT#@deltacrown.onmicrosoft.com`) |
+
 Naming rationale:
 
 - **`DCE-`** prefix matches the DCE-side role-group naming convention
@@ -69,9 +80,10 @@ evaluates group **membership**, not ownership. The dynamic rule above
 ensures every synced HTT user becomes a member automatically. No manual
 "add as member" step is required.
 
-Group owners (Tyler Granlund and one DCE-side delegate) are listed as
-owners AND members for resilience (in case audience-targeted content
-needs to be visible to owners during incident response).
+Tyler Granlund is the initial owner. A second DCE-side delegate should be
+added after owner confirmation. Dynamic groups do not support hand-adding
+static members; owner visibility for SharePoint audience-targeted content
+comes from matching the dynamic rule or from separate admin/audit groups.
 
 ## Alternatives considered
 
@@ -120,10 +132,10 @@ attribute-only filters because they bypass the group audit mechanism.
 
 ## Implementation order
 
-1. Create the group via PnP PowerShell (one-time, manual).
-2. Add the dynamic rule.
-3. Wait for first sync evaluation (≤24 h).
-4. Verify membership matches expected count (52 today).
-5. Update 02-identity-audience.md role taxonomy table to populate the
-   R6 "Primary group" column with `DCE-HTT-Corporate-Sync`.
-6. Mark this ADR Accepted.
+1. Create the group via Microsoft Graph in the DCE tenant. ✅
+2. Add the dynamic rule. ✅
+3. Update 02-identity-audience.md role taxonomy table to populate the
+   R6 "Primary group" column with `DCE-HTT-Corporate-Sync`. ✅
+4. Wait for first sync evaluation (≤24 h). ⏳
+5. Verify membership matches expected count (52 today). ⏳
+6. Add a second owner/delegate after Tyler confirms the person. ⏳

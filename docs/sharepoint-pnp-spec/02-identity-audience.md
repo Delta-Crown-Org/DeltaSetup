@@ -24,7 +24,7 @@ ADR.
 | **R3 — DCE Franchise Owner** | DCE-native franchise owners (5 today) | Existing: members of `Crown Connection` minus HTT corp + leadership | Currently manual; future: dynamic filter by `companyName == "Delta Crown Extensions"` |
 | **R4 — DCE Manager / Lead Extensionista** | Mid-tier staff with edit rights to operational content | (future) `DCE-Managers` | Hand-curated; eventually dynamic on `jobTitle` |
 | **R5 — DCE Staff (Extensionista / Concierge)** | Front-line staff; primarily content consumers | (future) `DCE-AllStaff` | Existing `DeltaCrownAllStaff` once cleaned up |
-| **R6 — HTT Corporate** | All synced HTT corp users (the 52 we discovered tonight) | Existing dynamic group via cross-tenant sync | Auto: `SG-DCE-Sync-Users` rule (HTT side) → cross-tenant sync → DCE |
+| **R6 — HTT Corporate** | All synced HTT corp users (the 52 we discovered tonight) | `DCE-HTT-Corporate-Sync` (DCE group id `ebbd0644-edd3-441f-9857-88864c24dc5f`) | Auto: `SG-DCE-Sync-Users` rule (HTT side) → cross-tenant sync → DCE; DCE dynamic rule `(user.userType -eq "Member") and (user.mail -match ".*@httbrands\\.com$")` |
 
 ## Group naming convention
 
