@@ -1,6 +1,6 @@
 /*
  * DCE Design Tokens — derived from docs/sharepoint-pnp-spec/reference/dce-tokens.json
- * Source of truth: deltacrown.com/css/tokens.css (WCAG-audited)
+ * Source of truth: docs/dce-visual-system.md + css/tokens.css (WCAG-audited)
  *
  * 3-tier token system (per docs/sharepoint-pnp-spec/03-design-system.md):
  *   Tier 1 — Raw / Reference (private, prefixed with _dce-)
@@ -16,22 +16,22 @@
   /* ─────────────────────────────────────────────────────────────────
      Tier 1 — Raw reference (private)
      ───────────────────────────────────────────────────────────────── */
-  --_dce-teal:         #006B5E;  /* AAA on white 7.07:1 */
-  --_dce-teal-dark:    #004D44;  /* AAA on white 9.91:1 */
-  --_dce-teal-deeper:  #0A1F1C;  /* AAA on white 18.91:1 — hero backdrop */
-  --_dce-teal-light:   #4A9B8E;  /* Decorative only on white 2.83:1 */
-  --_dce-teal-on-dark: #5DB7A9;  /* Text/icons on dark surfaces */
-  --_dce-gold:         #D4A84B;  /* Background only on white 2.31:1 */
-  --_dce-gold-light:   #E8C989;
-  --_dce-gold-dark:    #6E4F0E;  /* AAA on white 8.27:1 — safe for gold text */
+  --_dce-teal:         #03534D;  /* Official emerald; AAA on white 8.94:1 */
+  --_dce-teal-dark:    #02423D;  /* Darker emerald for hover/active states */
+  --_dce-teal-deeper:  #062B28;  /* Deep emerald hero backdrop */
+  --_dce-teal-light:   #3D817B;  /* Decorative only on white */
+  --_dce-teal-on-dark: #75C7BE;  /* Text/icons on dark surfaces */
+  --_dce-gold:         #D8A562;  /* Official royal gold; decorative on white */
+  --_dce-gold-light:   #F0D7B4;
+  --_dce-gold-dark:    #6F4A1E;  /* Dark gold for text/focus on light surfaces */
   --_dce-sage:         #7A9B8A;  /* Decorative 2.86:1 */
 
   --_dce-surface-default: #FAFAF7;  /* Off-white base */
   --_dce-surface-dim:     #F0EDE8;
-  --_dce-surface-dark:    #0D2925;  /* Deep teal hero overlay */
+  --_dce-surface-dark:    #231F20;  /* Official almost-black dark surface */
   --_dce-surface-card:    #FFFFFF;
 
-  --_dce-text:           #1A2A3A;   /* AAA on white 14.18:1 */
+  --_dce-text:           #231F20;   /* Official almost-black; AAA on white/ivory */
   --_dce-text-secondary: #465463;   /* AAA on white 7.99:1 */
   --_dce-text-muted:     #8A96A4;   /* AA Large only on white 3.53:1 */
   --_dce-text-inverse:   #F5F5F3;

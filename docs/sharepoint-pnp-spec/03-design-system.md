@@ -2,9 +2,10 @@
 
 ## Source of truth
 
-`reference/dce-tokens.json` is the canonical token file. It is
-derived from `deltacrown.com/css/tokens.css` (WCAG-audited public
-site). All themes, components, and styles must trace back to it.
+`reference/dce-tokens.json` is the SharePoint/spec-pack token file. It must
+stay aligned with the canonical visual-system note in `../dce-visual-system.md`
+and the public-page token root in `../../css/tokens.css`. All themes,
+components, and styles must trace back to those values.
 
 Update protocol: tokens are changed in `tokens.css` first (which is
 governed by this repo's `gh-pages` quality gates). Then the agent
@@ -18,11 +19,12 @@ We use the same 3-tier system spec'd in `DESIGN_SYSTEM_MEGA_BRIEF.md`
 
 ```
 Tier 1 — Raw / Reference tokens (private; never used in components):
-  --_dce-teal:         #006B5E
-  --_dce-teal-dark:    #004D44
-  --_dce-teal-deeper:  #0A1F1C
-  --_dce-gold:         #D4A84B
-  --_dce-gold-dark:    #6E4F0E
+  --_dce-teal:         #03534D  /* official emerald */
+  --_dce-teal-dark:    #02423D
+  --_dce-teal-deeper:  #062B28
+  --_dce-gold:         #D8A562  /* official royal gold */
+  --_dce-gold-dark:    #6F4A1E
+  --_dce-almost-black: #231F20
   --_dce-sage:         #7A9B8A
 
 Tier 2 — Semantic / Alias tokens (used everywhere):
@@ -52,11 +54,11 @@ Filling in DCE values that the HTT mega brief omitted:
 
 | Name | Hex | Ratio vs white | WCAG |
 |---|---|---|---|
-| `--_dce-teal` | `#006B5E` | 7.07:1 | AAA ✅ |
-| `--_dce-teal-dark` | `#004D44` | 9.91:1 | AAA ✅ |
-| `--_dce-teal-deeper` | `#0A1F1C` | 18.91:1 | AAA ✅ |
-| `--_dce-gold-dark` | `#6E4F0E` | 8.27:1 | AAA ✅ |
-| `--text` | `#1A2A3A` | 14.18:1 | AAA ✅ |
+| `--_dce-teal` | `#03534D` | 8.94:1 | AAA ✅ |
+| `--_dce-teal-dark` | `#02423D` | >10:1 | AAA ✅ |
+| `--_dce-teal-deeper` | `#062B28` | >13:1 | AAA ✅ |
+| `--_dce-gold-dark` | `#6F4A1E` | AAA | AAA ✅ |
+| `--text` | `#231F20` | 16.30:1 | AAA ✅ |
 | `--text-secondary` | `#465463` | 7.99:1 | AAA ✅ |
 | `--text-muted` | `#8A96A4` | 3.53:1 | AA Large only |
 
@@ -64,13 +66,13 @@ Filling in DCE values that the HTT mega brief omitted:
 
 | Name | Hex | Ratio vs white | Use |
 |---|---|---|---|
-| `--_dce-gold` | `#D4A84B` | 2.31:1 | Backgrounds, icons; NEVER text. Use with `--_dce-teal-deeper` text for AAA (16.55:1). |
+| `--_dce-gold` | `#D8A562` | 2.22:1 | Backgrounds, icons, premium accents; NEVER normal text on white/ivory. Passes AAA as text on almost-black. |
 | `--_dce-sage` | `#7A9B8A` | 2.86:1 | Accent fills, illustration. |
 | `--_dce-teal-light` | `#4A9B8E` | 2.83:1 | Decorative; pair with dark backgrounds. |
 
 ### Text-on-dark ramp
 
-For text on `--_dce-teal-deeper` (`#0A1F1C`):
+For text on `--_dce-teal-deeper` (`#062B28`) or almost-black (`#231F20`):
 
 | Token | Value | Ratio | WCAG |
 |---|---|---|---|
@@ -157,11 +159,11 @@ Example Fluent UI v8 theme map (subset):
 ```json
 {
   "palette": {
-    "themePrimary": "#006B5E",
-    "themeDarkAlt": "#005A50",
-    "themeDark": "#004D44",
-    "themeDarker": "#0A1F1C",
-    "themeLighterAlt": "#F0FDFC"
+    "themePrimary": "#03534D",
+    "themeDarkAlt": "#034A45",
+    "themeDark": "#02423D",
+    "themeDarker": "#062B28",
+    "themeLighterAlt": "#F0FBFA"
   },
   "fonts": {
     "medium": {

@@ -11,6 +11,7 @@ SharePoint hub-and-spoke initiative.
 - 📋 **[Spec pack README](sharepoint-pnp-spec/README.md)** — the 26-file SharePoint hub-and-spoke spec.
 - 🧪 **[Evaluation rubric](sharepoint-pnp-spec/EVALUATION-RUBRIC.md)** — how we score implementations.
 - 🏗️ **[Tier-B mockup](../dce-mockup/README.md)** — interactive HTML mockup at `/dce-mockup/`.
+- 🎨 **[DCE visual system](dce-visual-system.md)** — canonical palette, asset provenance, and logo/Crown Society rules.
 - 🔬 **[Research deltas](../dce-mockup/RESEARCH-DELTAS.md)** — corrections from the ADR-006 final review (2026-05-16).
 
 ## Folder map
@@ -76,6 +77,7 @@ Operational playbooks for joiner/mover/leaver and per-role checklists.
 | File | Purpose |
 |---|---|
 | `brand-resources-target-model.md` | Brand asset organization |
+| `dce-visual-system.md` | Canonical DCE palette, asset provenance, logo usage, and Crown Society rules |
 | `clientservices-to-brand-resources-transition-plan.md` | Migration plan |
 | `dce-user-metadata-and-teams-state-verification.md` | Verification procedures |
 | `delta-crown-compliance-inventory-summary.md` | Compliance audit |

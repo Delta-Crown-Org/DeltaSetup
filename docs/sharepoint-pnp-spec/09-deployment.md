@@ -179,21 +179,22 @@ site-specific.
 
 ```powershell
 # Configure DCE theme tenant-wide
-Connect-PnPOnline -Url https://deltacrown-admin.sharepoint.com `
-                  -ClientId $env:CLIENT_ID -Tenant $env:TENANT `
-                  -CertificatePath ./cert.pfx -CertificatePassword $securePass
+Connect-PnPOnline -Url https://deltacrown-admin.sharepoint.com -AzureADWorkloadIdentity
 
 $dceTheme = @{
-  "themePrimary"   = "#006B5E"
-  "themeLighterAlt" = "#f0f9f8"
-  "themeLighter"   = "#c5e9e4"
-  "themeLight"     = "#9dd8d0"
-  "themeTertiary"  = "#5db7a9"
-  "themeSecondary" = "#2a9286"
-  "themeDarkAlt"   = "#006057"
-  "themeDark"      = "#00524a"
-  "themeDarker"    = "#003c36"
-  "neutralLighterAlt" = "#fafaf7"
+  "themePrimary"   = "#03534D"
+  "themeLighterAlt" = "#F0FBFA"
+  "themeLighter"    = "#CFEDEA"
+  "themeLight"      = "#99D1CB"
+  "themeTertiary"   = "#3D817B"
+  "themeSecondary"  = "#75C7BE"
+  "themeDarkAlt"    = "#034A45"
+  "themeDark"       = "#02423D"
+  "themeDarker"     = "#062B28"
+  "neutralDark"     = "#231F20"
+  "black"           = "#231F20"
+  "accent"          = "#D8A562"
+  "neutralLighterAlt" = "#FAFAF7"
   # ... full palette ...
 }
 
@@ -216,11 +217,11 @@ during v1) is paged via Teams.
 
 ## Maintenance / lifecycle
 
-### Certificate rotation (annual)
+### OIDC credential review
 
-Calendar reminder + GitHub Actions workflow that warns 30 days
-before cert expiry. Procedure: generate new cert, upload to Entra app
-(keep old as fallback for 7 days), update GitHub secret, redeploy.
+Deployment uses GitHub OIDC workload identity. Do not restore certificate auth
+without a named risk decision. Review federated credentials and environment gates
+quarterly.
 
 ### Permission audit (weekly cron)
 

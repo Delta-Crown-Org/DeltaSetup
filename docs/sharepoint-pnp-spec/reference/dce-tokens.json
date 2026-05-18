@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "source": "deltacrown.com/css/tokens.css (commit 6e5c034)",
-    "derivedAt": "2026-05-15",
+    "source": "DeltaSetup/css/tokens.css + curated DCE SharePoint brand assets",
+    "derivedAt": "2026-05-18",
     "format": "Style Dictionary v5 source",
     "wcagAudit": "see 03-design-system.md for full ratings",
     "_note": "This is THE canonical DCE token source. Do not redefine values elsewhere. Update tokens.css first, then re-derive this file via the Style Dictionary build."
@@ -9,32 +9,32 @@
 
   "color": {
     "brand": {
-      "teal":         { "value": "#006B5E",  "type": "color", "description": "Primary brand color. AAA on white (7.07:1)." },
-      "teal-dark":    { "value": "#004D44",  "type": "color", "description": "AAA on white (9.91:1)." },
-      "teal-deeper":  { "value": "#0A1F1C",  "type": "color", "description": "Hero/surface-dark backdrop. AAA on white (18.91:1)." },
-      "teal-light":   { "value": "#4A9B8E",  "type": "color", "description": "Decorative only on white (2.83:1)." },
-      "teal-on-dark": { "value": "#5DB7A9",  "type": "color", "description": "For text/icons on dark surfaces." },
-      "gold":         { "value": "#D4A84B",  "type": "color", "description": "Accent. Background only on white (2.31:1). Use teal-deeper text on gold for AAA (16.55:1)." },
-      "gold-light":   { "value": "#E8C989",  "type": "color", "description": "Soft gold accent." },
-      "gold-dark":    { "value": "#6E4F0E",  "type": "color", "description": "AAA on white (8.27:1) — safe for gold-colored text." },
+      "teal":         { "value": "#03534D",  "type": "color", "description": "Official DCE emerald. AAA on white (8.94:1)." },
+      "teal-dark":    { "value": "#02423D",  "type": "color", "description": "Darker emerald for hover/active states. AAA on white." },
+      "teal-deeper":  { "value": "#062B28",  "type": "color", "description": "Deep emerald hero/surface-dark backdrop. AAA on white." },
+      "teal-light":   { "value": "#3D817B",  "type": "color", "description": "Decorative only on white; use on dark surfaces or as non-text accent." },
+      "teal-on-dark": { "value": "#75C7BE",  "type": "color", "description": "Text/icons on dark emerald/almost-black surfaces." },
+      "gold":         { "value": "#D8A562",  "type": "color", "description": "Official DCE royal gold. Decorative on white; AAA as text on almost-black." },
+      "gold-light":   { "value": "#F0D7B4",  "type": "color", "description": "Soft gold accent." },
+      "gold-dark":    { "value": "#6F4A1E",  "type": "color", "description": "Dark gold for text/focus on light surfaces." },
       "sage":         { "value": "#7A9B8A",  "type": "color", "description": "Decorative on white (2.86:1)." }
     },
     "surface": {
       "default":     { "value": "#FAFAF7",  "type": "color", "description": "Off-white base." },
       "dim":         { "value": "#F0EDE8",  "type": "color" },
-      "dark":        { "value": "#0D2925",  "type": "color", "description": "Deep teal for hero overlays." },
+      "dark":        { "value": "#231F20",  "type": "color", "description": "Official DCE almost-black dark surface." },
       "card":        { "value": "#FFFFFF",  "type": "color", "description": "Card backgrounds (full white for contrast)." }
     },
     "text": {
-      "default":     { "value": "#1A2A3A",  "type": "color", "description": "AAA on white (14.18:1)." },
+      "default":     { "value": "#231F20",  "type": "color", "description": "Official DCE almost-black. AAA on white/ivory." },
       "secondary":   { "value": "#465463",  "type": "color", "description": "AAA on white (7.99:1)." },
       "muted":       { "value": "#8A96A4",  "type": "color", "description": "AA Large only on white (3.53:1)." },
       "inverse":     { "value": "#F5F5F3",  "type": "color", "description": "For text on dark surfaces." }
     },
     "text-on-dark": {
-      "default":     { "value": "rgba(255, 255, 255, 0.92)", "type": "color", "description": "Primary text on teal-deeper. AAA." },
-      "muted":       { "value": "rgba(255, 255, 255, 0.70)", "type": "color", "description": "Secondary text on teal-deeper. AAA." },
-      "subtle":      { "value": "rgba(255, 255, 255, 0.62)", "type": "color", "description": "Large text only on teal-deeper. AA Large." }
+      "default":     { "value": "rgba(255, 255, 255, 0.92)", "type": "color", "description": "Primary text on dark emerald/almost-black. AAA." },
+      "muted":       { "value": "rgba(255, 255, 255, 0.70)", "type": "color", "description": "Secondary text on dark emerald/almost-black. AAA." },
+      "subtle":      { "value": "rgba(255, 255, 255, 0.62)", "type": "color", "description": "Large text only on dark emerald/almost-black." }
     },
     "state": {
       "success":       { "value": "#66BB6A", "type": "color" },

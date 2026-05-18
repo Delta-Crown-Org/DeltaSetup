@@ -13,24 +13,24 @@
 export const tokens = {
   color: {
     brand: {
-      teal:         '#006B5E',  // AAA on white 7.07:1
-      tealDark:     '#004D44',  // AAA on white 9.91:1
-      tealDeeper:   '#0A1F1C',  // Hero backdrop · AAA on white 18.91:1
-      tealLight:    '#4A9B8E',  // Decorative only on white 2.83:1
-      tealOnDark:   '#5DB7A9',  // Text/icons on dark surfaces
-      gold:         '#D4A84B',  // Background only on white 2.31:1
-      goldLight:    '#E8C989',
-      goldDark:     '#6E4F0E',  // AAA on white 8.27:1 — safe for gold text
+      teal:         '#03534D',  // Official emerald · AAA on white 8.94:1
+      tealDark:     '#02423D',  // Darker emerald for hover/active states
+      tealDeeper:   '#062B28',  // Deep emerald hero backdrop
+      tealLight:    '#3D817B',  // Decorative only on white
+      tealOnDark:   '#75C7BE',  // Text/icons on dark surfaces
+      gold:         '#D8A562',  // Official royal gold · decorative on white
+      goldLight:    '#F0D7B4',
+      goldDark:     '#6F4A1E',  // Dark gold for text/focus on light surfaces
       sage:         '#7A9B8A',  // Decorative
     },
     surface: {
       default: '#FAFAF7',
       dim:     '#F0EDE8',
-      dark:    '#0D2925',
+      dark:    '#231F20',
       card:    '#FFFFFF',
     },
     text: {
-      default:   '#1A2A3A',   // AAA on white 14.18:1
+      default:   '#231F20',   // Official almost-black · AAA on white/ivory
       secondary: '#465463',   // AAA on white 7.99:1
       muted:     '#8A96A4',   // AA Large only on white 3.53:1
       inverse:   '#F5F5F3',
