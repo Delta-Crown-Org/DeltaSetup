@@ -20,7 +20,7 @@ Read-only Graph evidence collected 2026-05-18:
 | Key ID | `c4660d2e-a48f-4f2a-9015-25881d3299b2` |
 | Key start | `2026-05-18T03:22:13Z` |
 | Key expiry | `2027-05-18T03:22:11Z` |
-| Explicit app owners | Initially none returned by Graph owner query; Tyler Granlund - Admin added by TUI approval on 2026-05-18. |
+| Explicit app owners | Initially none returned by Graph owner query; Tyler Granlund - Admin added by TUI approval on 2026-05-18; Dustin Boyd - Admin added by Tyler request on 2026-05-18. |
 
 Local development files observed in `dce-sharepoint/` are ignored by git:
 
@@ -75,14 +75,13 @@ If the certificate model remains for sprint-1/sprint-2:
 ## Current risk statement
 
 Current posture is acceptable for controlled DEV/scaffold work, but not for
-production launch-mode. The key has a 1-year lifetime and only Tyler has been
-added as an explicit owner so far. That still violates the ADR-011
-cert-lifecycle resilience target until a second owner, rotation ceremony, and
-monitoring controls land.
+production launch-mode. The key has a 1-year lifetime and two explicit app
+owners now exist: Tyler Granlund - Admin and Dustin Boyd - Admin. Production
+launch-mode still requires monitoring controls and either the 90-day rotation
+ceremony or an accepted OIDC/certificate exception.
 
 ## Follow-up work
 
-- Add a second explicit app owner after Tyler confirms the delegate.
 - Implement a credential expiry inventory/check in `dce-sharepoint` CI or a
   scheduled operator script.
 - Implement OIDC/federated identity path (`DeltaSetup-du9`) or document a
