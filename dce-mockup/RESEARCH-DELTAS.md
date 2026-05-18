@@ -202,7 +202,26 @@ ownership gotcha (2), Teams moderation BETA-only (3), Token faithfulness (1).
 
 ---
 
-## 6. What changes for sprint-1
+## 6. ADR-006 / ADR-009 sign-off update
+
+2026-05-18: Tyler approved ADR-006 repo placement and ADR-009 Teams
+moderation BETA endpoint through the question TUI. The release-gate-arbiter
+advisory preflight refused to proxy-sign as a fake security auditor, but its
+pre-sign blockers were addressed in ADR-006: dev-first invariant,
+ADR-011 communication suppression constraints, rollback commands, and a
+sign-off checklist. Production SPFx remains blocked until ADR-010 locks
+Fluent UI and the Heft CI correction lands.
+
+Fresh evidence at sign-off:
+
+```text
+pytest tests/architecture/test_notification_suppression.py dce-mockup/tests/architecture/test_audience_targeting.py -v
+20 passed in 0.31s
+```
+
+---
+
+## 7. What changes for sprint-1
 
 Nothing in the deliverable list shifts. The mockup ships as planned; the
 corrections are confined to:

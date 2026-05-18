@@ -1,6 +1,6 @@
 # ADR-009 — Teams channel moderation runs against the Graph BETA endpoint
 
-**Status:** Proposed (2026-05-16)
+**Status:** Accepted (2026-05-18)
 **Author:** Surfaced from solutions-architect-e9372f ADR-006 final + `dce-mockup/RESEARCH-DELTAS.md` § 1.1
 **Supersedes:** none
 **Superseded by:** none

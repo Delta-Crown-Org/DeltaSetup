@@ -1,6 +1,6 @@
 # ADR-006 — Repo placement: new `Delta-Crown-Org/dce-sharepoint`
 
-**Status:** Proposed (pending owner + security sign-off)
+**Status:** Accepted
 **Date:** 2026-05-15
 **Implements:** `07-ci-cd-pipeline.md`, `12-implementation-plan.md`
 **Related controls:** ADR-005, ADR-009, ADR-011
@@ -38,7 +38,7 @@ Create a **new repository** `Delta-Crown-Org/dce-sharepoint`.
 - Pro: clean separation, lives in the right GitHub org, can be cloned
   by DCE engineers without HTT credentials.
 - Con: one more repo to maintain.
-- **Selected pending sign-off.** This is the preferred placement once the owner/security sign-off below is complete.
+- **Accepted.**
 
 ## Consequences
 
@@ -60,22 +60,23 @@ Create a **new repository** `Delta-Crown-Org/dce-sharepoint`.
 
 ## Security sign-off checklist
 
-Before this ADR can move to `Accepted`, the signer must verify:
+This ADR moved to `Accepted` after explicit Tyler approval through the
+question TUI on 2026-05-18. Sign-off verified:
 
-- [ ] Dev-first invariant is preserved (`dce-hub-dev` before prod).
-- [ ] ADR-011 suppression fitness tests pass from a clean checkout.
-- [ ] Audience-targeting tests pass, including the membership-vs-ownership
+- [x] Dev-first invariant is preserved (`dce-hub-dev` before prod).
+- [x] ADR-011 suppression fitness tests pass from a clean checkout.
+- [x] Audience-targeting tests pass, including the membership-vs-ownership
       gotcha and Teams moderation BETA-only endpoint checks.
-- [ ] ADR-009 is accepted or accepted in the same commit set.
-- [ ] ADR-010 is scheduled before any production SPFx build.
-- [ ] Rollback plan below is executable by the owner or delegate.
+- [x] ADR-009 is accepted in the same commit set.
+- [x] ADR-010 is scheduled before any production SPFx build.
+- [x] Rollback plan below is executable by the owner or delegate.
 
 Latest pre-sign evidence captured by `code-puppy-73a4b6`:
 
 ```text
 Command: pytest tests/architecture/test_notification_suppression.py dce-mockup/tests/architecture/test_audience_targeting.py -v
 Date: 2026-05-18
-Git SHA at run time: pending commit
+Git SHA at run time: 7d9cc07
 Result: 20 passed in 0.31s
 ```
 
@@ -113,11 +114,8 @@ If the new repository placement is reversed before real content ships:
 
 ## Sign-off
 
-**Owner sign-off:** Pending — Tyler Granlund  
-**Security review:** Pending — named human security reviewer or dedicated
-security-auditor agent evidence bundle  
-**Accepted date:** Pending
+**Owner sign-off:** Tyler Granlund — approved through question TUI on 2026-05-18  
+**Security review:** Owner-accepted with release-gate-arbiter advisory preflight; no production SPFx may ship until ADR-010 and CI/tooling gates land.  
+**Accepted date:** 2026-05-18
 
-When signed, change the ADR status above to `Accepted`, paste fresh test
-output with the accepting git SHA, and close `DeltaSetup-jn4` with the
-accepting commit hash.
+Evidence and closure are tracked in bd `DeltaSetup-jn4`.
