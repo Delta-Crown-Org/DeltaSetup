@@ -1,0 +1,60 @@
+name: DCE SyncFabric bridge drift dry-run
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_failure:
+        description: "Generate a synthetic failed-check payload without changing tenant state"
+        required: false
+        default: "false"
+  schedule:
+    # Dry-run evidence only. Live alerting is gated by DeltaSetup-6wf.
+    - cron: "17 14 * * 1"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  bridge-drift-dry-run:
+    name: Generate bridge drift dry-run payload
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate dry-run payload
+        run: |
+          mkdir -p out/observability
+          python3 tools/check-dce-syncfabric-bridge.py > out/observability/dce-syncfabric-bridge-drift-dry-run.json
+          cat out/observability/dce-syncfabric-bridge-drift-dry-run.json
+
+      - name: Generate synthetic failure payload when requested
+        if: ${{ github.event.inputs.force_failure == 'true' }}
+        run: |
+          mkdir -p out/observability
+          cat > out/observability/synthetic-failure.json <<'JSON'
+          {
+            "class": "dce-syncfabric-bridge-drift",
+            "severity": "high",
+            "status": "synthetic_failure",
+            "dryRun": true,
+            "recommendedAction": "Synthetic failure requested for alert-path validation. No tenant state was changed."
+          }
+          JSON
+          cat out/observability/synthetic-failure.json
+          exit 1
+
+      - name: Upload dry-run evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dce-syncfabric-bridge-drift-dry-run
+          path: out/observability/*.json
+          if-no-files-found: error
+          retention-days: 90
