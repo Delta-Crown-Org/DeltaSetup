@@ -82,50 +82,43 @@ admin guest unentitled and soft-deleted it.
    status: Paused
    ```
 
-## Required manual/source-tenant remediation
+## Source-tenant remediation completed
 
-Before resuming `CTSync-HTT-to-DCE`, an HTT admin with effective group-write
-permission must add the HTT admin source account to the sync scope group:
-
-```text
-Group: SG-DCE-Sync-Users
-Add member: tyler.granlund-admin@httbrands.com
-```
-
-Portal path:
+Temporary bridge fix completed in HTT: directly assigned the HTT admin source
+account to the sync application.
 
 ```text
-HTT Entra admin center
-Identity > Groups > All groups > SG-DCE-Sync-Users > Members > Add members
+User: tyler.granlund-admin@httbrands.com
+Principal ID: e1dfb17f-b695-4dad-92c0-20e26ce069ab
+Application: CTSync-HTT-to-DCE
+Resource ID: 1f074621-8bcd-4d9e-b27e-4470afeedba1
+App role: f6c6d802-6e08-48ef-89a8-79b4dd1c346e
+Created: 2026-05-18T23:53:23.7393052Z
 ```
 
-Add:
+This bypasses the stale dynamic group evaluator while still making the account
+explicitly entitled for the Azure2Azure sync app.
+
+DCE target-side audit after the direct assignment showed SyncFabric restoring
+the target user:
 
 ```text
-Tyler Granlund - Admin / tyler.granlund-admin@httbrands.com
+2026-05-18T23:53:41.8769887Z
+activity: Restore user
+initiatedBy.app.displayName: Microsoft.Azure.SyncFabric
+result: success
+objectId: 13023522-0166-4e0d-b588-b89fa092aaca
 ```
 
-Then verify the DCE sync job can be resumed safely.
+A following `Update user` audit row reported
+`Microsoft.Online.Workflows.EmailDomainValidationException`, but the object was
+confirmed active afterward and Global Administrator membership remained intact.
 
-## Resume command after membership is fixed
+Current sync state after bridge fix:
 
-Only after the admin account is confirmed in `SG-DCE-Sync-Users`:
-
-```bash
-az account set --subscription HTT-CORE
-az rest \
-  --method POST \
-  --url "https://graph.microsoft.com/v1.0/servicePrincipals/1f074621-8bcd-4d9e-b27e-4470afeedba1/synchronization/jobs/Azure2Azure.0c0e35dc188a4eb3b8ba61752154b407.9c8934a1-658d-4bab-b7a1-a1a11593a203/start"
-```
-
-Then verify:
-
-```bash
-az rest \
-  --method GET \
-  --url "https://graph.microsoft.com/v1.0/servicePrincipals/1f074621-8bcd-4d9e-b27e-4470afeedba1/synchronization/jobs/Azure2Azure.0c0e35dc188a4eb3b8ba61752154b407.9c8934a1-658d-4bab-b7a1-a1a11593a203" \
-  --query '{schedule:schedule,status:status.code,lastExecution:status.lastExecution}' \
-  -o json
+```text
+CTSync-HTT-to-DCE schedule.state: Active
+CTSync-HTT-to-DCE status: Active
 ```
 
 ## Other impacted users requiring owner decision
