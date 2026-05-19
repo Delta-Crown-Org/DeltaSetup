@@ -101,3 +101,200 @@ All four pre-flagged Section D gaps either resolved or routed:
 ### What next-session-Richard should pick up
 - Run `bd ready` / `bd list` and choose between production launch validation, Teams read-context resolution, or owner-decision cleanup.
 - For the GitHub Pages accuracy pass, verify live page copy against `README.md`, `DEPLOYMENT-STATUS.md`, and the inventory docs after GitHub Pages finishes deploying the latest `gh-pages` push.
+
+---
+
+## 2026-05-19 — DCE SyncFabric recovery + SharePoint page build prep (code-puppy-73a4b6 / Richard)
+
+### Branch / repo state
+
+- Working branch: `gh-pages`.
+- Remote: `origin/gh-pages`.
+- All session commits were pushed during the session.
+- No public HTML/CSS/JS files were changed in this work wave; public-page accessibility/browser/axe gates were not required.
+
+### Critical identity recovery completed
+
+DCE SyncFabric admin-guest deletion was investigated and stabilized.
+
+Root cause identified:
+
+- HTT source-side Azure2Azure sync app: `CTSync-HTT-to-DCE`.
+- Target tenant: Delta Crown Extensions.
+- Sync scope is assignment-based (`SyncAll=false`).
+- Admin accounts that were not entitled to the sync app were treated as out-of-scope and soft-deleted in DCE by Microsoft.Azure.SyncFabric.
+
+Tyler admin recovery:
+
+- Tyler's DCE admin target object was restored.
+- Tyler retained DCE Global Administrator.
+- Tyler's HTT admin source account was directly assigned to `CTSync-HTT-to-DCE` as a bridge entitlement.
+- Sync job is active again.
+
+Dustin owner recovery:
+
+- Tyler chose `dustin.boyd-admin@httbrands.com` as second owner for `DCE-HTT-Corporate-Sync`.
+- Dustin's DCE admin target object was also found soft-deleted by the same SyncFabric incident.
+- Safe order completed:
+  1. Created HTT direct app assignment bridge for Dustin admin to `CTSync-HTT-to-DCE`.
+  2. Restored Dustin's DCE target object.
+  3. Added Dustin as owner of `DCE-HTT-Corporate-Sync`.
+- Verified final `DCE-HTT-Corporate-Sync` owners:
+  - Tyler Granlund - Admin
+  - Dustin Boyd - Admin
+- Dustin is **not** a DCE Global Administrator; no GA assignment was made.
+
+Closed:
+
+- `DeltaSetup-3ke` — Tyler DCE admin auth failure resolved.
+- `DeltaSetup-0gv` — second owner added to `DCE-HTT-Corporate-Sync`.
+
+Still open/in-progress:
+
+- `DeltaSetup-b2i` — broader SyncFabric remediation remains open because direct assignments are bridge controls until permanent sync-scope policy is decided.
+
+### New/updated incident and planning docs
+
+Created/updated:
+
+- `docs/dce-syncfabric-incident-2026-05-18.md`
+- `docs/next-execution-lanes-2026-05-19.md`
+- `docs/friday-hub-basics-handoff-2026-05-19.md`
+- `docs/sharepoint-page-build-next-steps-2026-05-19.md`
+
+Important guardrails now documented:
+
+- Do not remove the temporary HTT-to-DCE direct app assignment bridge as routine cleanup.
+- Keep concrete identity/app IDs out of broad public planning docs.
+- Keep raw tenant evidence under `.local/` or private evidence stores.
+- Maintain a DCE-native, cloud-only break-glass Global Administrator outside HTT cross-tenant sync.
+
+### SharePoint page build artifacts drafted
+
+Content/readiness artifacts created. These are **drafts only**, not production approval evidence.
+
+DCE Hub:
+
+- `docs/sharepoint-content/dce-hub-home-content-spec.md`
+- Extracts production-safe DCE Hub Home copy from the mockup.
+- Flags KPI tiles, owner spotlight, and events as approval-gated.
+- Lists production-readiness checks.
+
+Crown Connection:
+
+- `docs/sharepoint-content/crown-connection-content-spec.md`
+- Converts mockup content into owner-page sections.
+- Flags Teams embed/moderation and HTT corporate collateral as gated.
+- Live Crown Connection must not be used as sandbox.
+
+Jamie/content input:
+
+- `docs/sharepoint-content/jamie-content-input-packet.md`
+- Table for final copy, destinations, owners, audiences, and approval status.
+
+Promotion readiness:
+
+- `docs/promotion-readiness/dce-hub-production-promotion-checklist.md`
+- `docs/promotion-readiness/crown-connection-promotion-checklist.md`
+
+Viva / template / audit:
+
+- `docs/viva-dashboard-card-plan-dce.md`
+- `docs/sharepoint-page-template-parameters.md`
+- `docs/cross-brand-owner-site-audit-2026-05-19.md`
+
+### Observability and canary scaffolding
+
+Created/updated:
+
+- `docs/observability/deploy-failure-audit-drift-alerting.md`
+- `tools/check-dce-syncfabric-bridge.py`
+- `.github/workflows/dce-syncfabric-bridge-drift-dry-run.yml`
+- `docs/observability/github-actions-hardening-notes.md`
+- `research/notification-suppression/canary-runbook.md`
+
+Current workflow state:
+
+- Dry-run only.
+- No tenant mutation.
+- No secrets.
+- `contents: read` only.
+- Weekly schedule + manual dispatch.
+- Explicit concurrency group added.
+
+Remaining before live alerting:
+
+- Choose approved alert recipients.
+- Choose out-of-tenant critical alert channel.
+- Wire real Graph checks via private env/secrets.
+- Run synthetic failure test.
+- Pin GitHub Actions to immutable SHAs before secret-backed/live alerting.
+- Make CODEOWNERS security-team enforcement real.
+
+Promotion gate added:
+
+- `DeltaSetup-b0f` and `DeltaSetup-3vu` must not promote production content until Class 3 DCE SyncFabric bridge drift alerting is live, not dry-run.
+
+### SharePoint build next steps
+
+Best next workstream when session resumes:
+
+1. Confirm SharePoint location decision:
+   - DCE primary
+   - HTT duplicate
+   - Hybrid
+   - Recommendation documented: DCE primary, HTT light landing only if needed.
+2. Get Jamie/Tyler content inputs from `docs/sharepoint-content/jamie-content-input-packet.md`.
+3. Convert approved inputs into final DCE Hub Home candidate content.
+4. Convert approved inputs into Crown Connection final candidate content.
+5. Make Class 3 bridge drift alerting live.
+6. Only after approval + live alerting, promote DCE Hub or Crown Connection.
+
+### Current blockers / questions for Tyler/Jamie
+
+Use questionnaire in the latest assistant response if continuing interactively. Key blockers:
+
+- DCE primary vs HTT duplicate vs hybrid.
+- Final DCE Hub hero wording.
+- Quick-link destinations for Brand Resources, Operations, Training, Submit Request, People/Directory, Crown Connection.
+- Whether to defer KPI tiles.
+- Crown Connection visibility from DCE Hub.
+- Ask-the-Franchisor intake route.
+- Whether Crown Connection should link to Teams, remove Teams, or keep Teams as future placeholder.
+- Viva v1 card set.
+- DCE Hub production approver.
+- Crown Connection promotion approver.
+- Out-of-tenant critical alert channel.
+- Next brand to audit when auth is available.
+
+### Recent commits in this work wave
+
+- `f76d3c5` — Plan parallel DeltaSetup execution lanes
+- `342cade` — Add DeltaSetup promotion and canary scaffolds
+- `5947115` — Add Dustin as DCE sync co-owner
+- `6cd5485` — Define SharePoint page build next steps
+- `403271c` — Draft SharePoint page content specs
+- `af2297b` — Harden bridge drift dry-run workflow
+
+### Quality checks run during work wave
+
+- `python3 tools/check-dce-syncfabric-bridge.py`
+- `python3 -m py_compile tools/check-dce-syncfabric-bridge.py`
+- Ruby stdlib YAML parse for `.github/workflows/dce-syncfabric-bridge-drift-dry-run.yml`
+- Sensitive identifier scans against new broad docs/workflows/runbooks
+- Line-count checks for new docs/tools
+
+### Resume command checklist
+
+```bash
+cd /Users/tygranlund/dev/04-other-orgs/DeltaSetup
+bd sync
+bd ready --limit 20
+git status -sb
+```
+
+Start with either:
+
+- content decisions / DCE Hub final candidate copy; or
+- live Class 3 bridge drift alerting implementation; or
+- Teams read-context blocker if access is available.
