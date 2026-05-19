@@ -18,7 +18,7 @@ Do **not** remove the direct app assignment or refactor DCE sync scope during th
 
 Bridge survivability requirements:
 
-- Name a second owner for DCE sync ownership by 2026-05-26 or pause promotion work.
+- Second owner for DCE sync ownership added: Dustin Boyd - Admin, 2026-05-19.
 - Maintain a DCE-native, cloud-only break-glass Global Administrator that is not sourced from HTT cross-tenant sync.
 - Keep the specific break-glass account details outside public docs.
 
@@ -70,16 +70,18 @@ Human gate:
 Approval-safe work:
 
 - Verify current owners of the DCE sync ownership group.
-- Prepare owner-add command template.
 - Confirm break-glass admin existence through a private/local evidence record.
 
-Human gate:
+Completed:
 
-- Tyler must confirm the delegate owner by 2026-05-26. Candidates previously discussed: Jenna Bowden or Jamie Baer.
+- Tyler confirmed Dustin Boyd admin as second owner.
+- Dustin Boyd admin was restored in DCE because his target object was soft-deleted by the same SyncFabric incident.
+- Dustin Boyd admin was directly assigned to the HTT-to-DCE sync application before owner assignment to prevent immediate re-deletion.
+- DCE sync ownership group now has Tyler admin and Dustin admin as owners.
 
 Guardrail:
 
-- Add owner only. Do not change members, dynamic rules, app assignments, or sync configuration.
+- No group members, dynamic rules, or production content were changed. The only app assignment change was Dustin's direct HTT-to-DCE sync entitlement bridge, needed to make the restored owner durable.
 
 ## Lane D — Observability
 
