@@ -220,7 +220,7 @@ function Build-Summary {
         [object[]]$RecipientPermissions
     )
 
-    $expectedShared = @("operations@deltacrown.com", "bookings@deltacrown.com", "info@deltacrown.com")
+    $expectedShared = @("operations@deltacrown.com", "help@deltacrown.com", "info@deltacrown.com")
     $mailboxAddresses = @($Mailboxes | ForEach-Object { ([string]$_.PrimarySmtpAddress).ToLowerInvariant() })
     $sharedMailboxes = @($Mailboxes | Where-Object { [string]$_.RecipientTypeDetails -eq "SharedMailbox" })
     $userMailboxes = @($Mailboxes | Where-Object { [string]$_.RecipientTypeDetails -eq "UserMailbox" })

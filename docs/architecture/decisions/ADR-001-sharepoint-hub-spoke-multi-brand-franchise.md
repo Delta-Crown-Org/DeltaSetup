@@ -480,7 +480,7 @@ Tier 4: DLP Policies
 □ Configure brand-specific email addresses:
   ├── operations@deltacrown.com (shared mailbox)
   ├── info@deltacrown.com (shared mailbox)
-  └── bookings@deltacrown.com (shared mailbox)
+  └── help@deltacrown.com (shared mailbox)
 □ Verify SPF/DKIM/DMARC for deltacrown.com (should be done)
 □ Configure email signatures with DCE branding
 □ Test email flow: send/receive from all brand addresses

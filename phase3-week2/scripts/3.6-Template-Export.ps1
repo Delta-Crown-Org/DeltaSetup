@@ -214,7 +214,7 @@ try {
 
     Mailboxes = @(
         @{ Name = "{BrandPrefix} Operations"; Email = "operations@{BrandDomain}" }
-        @{ Name = "{BrandPrefix} Bookings";   Email = "bookings@{BrandDomain}" }
+        @{ Name = "{BrandPrefix} Help";   Email = "help@{BrandDomain}" }
         @{ Name = "{BrandPrefix} Info";        Email = "info@{BrandDomain}" }
     )
 

@@ -145,7 +145,7 @@ Mailbox permissions should follow stable role groups.
 
 Current documented pattern already supports:
 - `operations@deltacrown.com`
-- `bookings@deltacrown.com`
+- `help@deltacrown.com`
 - `info@deltacrown.com`
 
 Keep mailbox access group-based.

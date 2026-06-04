@@ -65,9 +65,9 @@ The hub-and-spoke Microsoft 365 architecture is **deployed, security-hardened, a
 
 **Exchange Online**
 - `deltacrown.com` authoritative accepted domain
-- 3 shared mailboxes: `operations@`, `bookings@`, `info@`
+- 3 shared mailboxes: `operations@`, `help@`, `info@
 - 4 dynamic distribution groups: `allstaff@`, `managers@`, `stylists@`, `franchise_owners@`
-- Auto-replies enabled on `bookings@` and `info@`
+- Auto-replies enabled on `help@` and `info@
 
 **Security & Compliance**
 - Tenant locked down: `existingExternalUserSharingOnly`, legacy auth disabled, anonymous resharing disabled

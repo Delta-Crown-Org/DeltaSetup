@@ -142,11 +142,11 @@
 | **Auto-Reply** | Off |
 | **Teams Integration** | Forward to General channel email |
 
-### Mailbox 2: bookings@deltacrown.com
+### Mailbox 2: help@deltacrown.com
 | Property | Value |
 |----------|-------|
 | **Display Name** | DCE Bookings |
-| **Email** | bookings@deltacrown.com |
+| **Email** | help@deltacrown.com |
 | **Send-As Permissions** | AllStaff |
 | **Full Access** | AllStaff |
 | **Auto-Reply** | "Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours." |

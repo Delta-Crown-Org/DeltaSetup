@@ -191,7 +191,7 @@ Do not create location groups for decoration. Only do it where access really dif
 | Mailbox | Send-As | Full Access | Notes |
 |---|---|---|---|
 | `operations@deltacrown.com` | `AllStaff` | `Managers` | current documented model |
-| `bookings@deltacrown.com` | `AllStaff` | `AllStaff` | current documented model |
+| `help@deltacrown.com` | `AllStaff` | `AllStaff` | support intake mailbox |
 | `info@deltacrown.com` | `AllStaff` | `Managers` | current documented model |
 
 Future refinement option:

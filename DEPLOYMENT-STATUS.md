@@ -110,9 +110,9 @@ Tyler explicitly decided on 2026-04-29 that **no HTTHQ document migration will b
 ### Verified live state
 - ✅ `deltacrown.com` is the authoritative accepted domain
 - ✅ DNS: SPF, DKIM, DMARC verified for `deltacrown.com`
-- ✅ 3 shared mailboxes exist: `operations@`, `bookings@`, `info@deltacrown.com`
+-  3 shared mailboxes exist: `operations@`, `help@`, `info@deltacrown.com`
 - ✅ 4 dynamic distribution groups exist: `allstaff@`, `managers@`, `stylists@`, `franchise_owners@deltacrown.com`
-- ✅ Auto-replies enabled on `bookings@` and `info@`
+-  Auto-replies enabled on `help@` and `info@
 - ⏳ Auto-reply copy owner review pending
 - ⏳ Trustee permission review pending (raw rows local-only)
 
@@ -139,7 +139,7 @@ Further changes (mail flow rules, connectors, etc.) are out of scope for the cur
 | Mailbox | Email | Send-As | Full Access | Auto-Reply |
 |---------|-------|---------|-------------|------------|
 | DCE Operations | operations@deltacrown.com | AllStaff | Managers | None |
-| DCE Bookings | bookings@deltacrown.com | AllStaff | AllStaff | 24hr confirmation |
+| DCE Help | help@deltacrown.com | AllStaff | AllStaff | 24hr support ack |
 | DCE Info | info@deltacrown.com | AllStaff | Managers | 48hr response |
 
 ### Architecture Note

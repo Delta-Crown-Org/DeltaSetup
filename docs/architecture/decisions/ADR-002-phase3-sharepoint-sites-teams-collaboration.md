@@ -317,7 +317,7 @@ DCE Hub (Communication Site)
 
 **Shared Mailbox Integration**:
 - `operations@deltacrown.com` → Connected to General channel (via connector or forwarding rule)
-- `bookings@deltacrown.com` → Connected to Bookings channel
+- `help@deltacrown.com` → Support intake (Freshdesk-bound)
 - `info@deltacrown.com` → General team mailbox
 
 **Guest Access Policy**:
@@ -441,7 +441,7 @@ DCE Hub (Communication Site)
 | Leadership Group | Managers | SG-`{BrandPrefix}`-Leadership |
 | Marketing Group | Marketing | SG-`{BrandPrefix}`-Marketing |
 | Operations Email | operations@deltacrown.com | operations@`{BrandDomain}` |
-| Bookings Email | bookings@deltacrown.com | bookings@`{BrandDomain}` |
+| Help Email | help@deltacrown.com | help@`{BrandDomain}` |
 | Location Choices | (brand-specific locations) | `{LocationChoices}` |
 
 #### Template Export Procedure
@@ -563,7 +563,7 @@ Phase3 = @{
     }
     SharedMailboxes = @(
         @{ Name = "DCE Operations"; Email = "operations"; Domain = "deltacrown.com" }
-        @{ Name = "DCE Bookings"; Email = "bookings"; Domain = "deltacrown.com" }
+        @{ Name = "DCE Help"; Email = "help"; Domain = "deltacrown.com" }
         @{ Name = "DCE Info"; Email = "info"; Domain = "deltacrown.com" }
     )
     DLPPolicies = @(
@@ -711,7 +711,7 @@ Phase3 = @{
   └── Leadership: Client Records tab, Docs & Policies tab
 □ Associate Leadership channel SPO site with DCE Hub
 □ Execute 3.5-Shared-Mailboxes.ps1
-□ Create shared mailboxes (operations@, bookings@, info@)
+□ Create shared mailboxes (operations@, help@, info@)
 □ Configure mailbox forwarding rules to Teams channels
 □ Verify Teams ↔ SharePoint file sync
 □ Test channel messaging and file upload

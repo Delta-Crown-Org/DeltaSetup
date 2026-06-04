@@ -73,7 +73,7 @@ TEAMS_VISIBILITY = "Private"
 # Shared Mailboxes
 REQUIRED_SHARED_MAILBOXES = [
     "operations@deltacrown.com",
-    "bookings@deltacrown.com",
+    "help@deltacrown.com",
     "info@deltacrown.com",
 ]
 

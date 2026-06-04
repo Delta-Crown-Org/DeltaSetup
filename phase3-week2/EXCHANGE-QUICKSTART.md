@@ -137,7 +137,7 @@ pwsh -File ./5.1-Exchange-Setup.ps1
 | **Step 2** | Connects to Microsoft Graph (browser auth prompt) | ~10s |
 | **Step 3** | Creates 4 Dynamic Distribution Groups | ~15s |
 | **Step 4** | Creates 3 Shared Mailboxes + sets permissions (Send-As & Full Access) | ~45s (includes 10s provisioning wait per mailbox) |
-| **Step 5** | Configures auto-replies on `bookings@` and `info@` | ~10s |
+| **Step 5** | Configures auto-replies on `help@` and `info@` | ~10s |
 | **Step 6** | Runs a verification sweep of everything just created | ~15s |
 
 **Total expected runtime: ~2–3 minutes**
@@ -160,7 +160,7 @@ Both connect cross-tenant to the deltacrown.com organization.
 
 **3 Shared Mailboxes:**
 - `operations@deltacrown.com` — Send-As: AllStaff, Full Access: Managers
-- `bookings@deltacrown.com` — Send-As: AllStaff, Full Access: AllStaff, auto-reply enabled
+- `help@deltacrown.com` — Send-As: AllStaff, Full Access: AllStaff, auto-reply enabled
 - `info@deltacrown.com` — Send-As: AllStaff, Full Access: Managers, auto-reply enabled
 
 ### Dry Run (WhatIf)
@@ -201,7 +201,7 @@ Get-Recipient -RecipientPreviewFilter $ddg.RecipientFilter | Format-Table Displa
 Get-Mailbox -RecipientTypeDetails SharedMailbox | Format-Table DisplayName, PrimarySmtpAddress -AutoSize
 
 # Check permissions on each mailbox
-@("operations@deltacrown.com", "bookings@deltacrown.com", "info@deltacrown.com") | ForEach-Object {
+@("operations@deltacrown.com", "help@deltacrown.com", "info@deltacrown.com") | ForEach-Object {
     Write-Host "`n=== $_ ===" -ForegroundColor Cyan
 
     Write-Host "Send-As:" -ForegroundColor Yellow
@@ -219,7 +219,7 @@ Get-Mailbox -RecipientTypeDetails SharedMailbox | Format-Table DisplayName, Prim
 ### Verify Auto-Replies
 
 ```powershell
-@("bookings@deltacrown.com", "info@deltacrown.com") | ForEach-Object {
+@("help@deltacrown.com", "info@deltacrown.com") | ForEach-Object {
     Write-Host "`n=== $_ ===" -ForegroundColor Cyan
     Get-MailboxAutoReplyConfiguration -Identity $_ |
         Format-List AutoReplyState, InternalMessage, ExternalMessage
@@ -227,7 +227,7 @@ Get-Mailbox -RecipientTypeDetails SharedMailbox | Format-Table DisplayName, Prim
 ```
 
 **Expected auto-replies:**
-- `bookings@` → _"Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours."_
+- `help@` → _"Thank you for contacting Delta Crown Extensions Support. Your request has been received and routed to the appropriate team. We aim to respond within 24 hours."_
 - `info@` → _"Thank you for contacting Delta Crown Extensions. We will respond within 48 hours."_
 - `operations@` → No auto-reply (by design)
 
@@ -269,7 +269,7 @@ Get-Mailbox -RecipientTypeDetails SharedMailbox | Format-Table DisplayName, Prim
 | Name | Email | Send-As | Full Access | Auto-Reply |
 |------|-------|---------|-------------|------------|
 | DCE Operations | `operations@deltacrown.com` | AllStaff | Managers | None |
-| DCE Bookings | `bookings@deltacrown.com` | AllStaff | AllStaff | _"...confirm your booking within 24 hours."_ |
+| DCE Help | `help@deltacrown.com` | AllStaff | AllStaff | _"...respond within 24 hours."_ |
 | DCE Info | `info@deltacrown.com` | AllStaff | Managers | _"...respond within 48 hours."_ |
 
 ### Native Users (4)

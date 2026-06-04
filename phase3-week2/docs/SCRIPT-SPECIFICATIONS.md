@@ -176,7 +176,7 @@ Phase 2 Complete ✅
 | Mailbox | Email | Auto-Reply | Teams Channel |
 |---------|-------|------------|---------------|
 | DCE Operations | operations@deltacrown.com | Off | General |
-| DCE Bookings | bookings@deltacrown.com | On | Bookings |
+| DCE Help | help@deltacrown.com | On | Support |
 | DCE Info | info@deltacrown.com | On | Group mailbox |
 
 **Steps**:

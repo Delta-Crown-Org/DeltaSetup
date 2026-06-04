@@ -60,12 +60,12 @@ $SharedMailboxes = @(
         ForwardTo     = $null  # Will be set to General channel email
     },
     @{
-        Name          = "DCE Bookings"
-        Email         = "bookings@$BrandDomain"
+        Name          = "DCE Help"
+        Email         = "help@$BrandDomain"
         SendAs        = "AllStaff"
         FullAccess    = "AllStaff"
-        AutoReply     = "Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours."
-        ForwardTo     = $null  # Will be set to Bookings channel email
+        AutoReply     = "Thank you for contacting Delta Crown Extensions Support. Your request has been received and routed to the appropriate team. We aim to respond within 24 hours."
+        ForwardTo     = $null  # Will be set to Freshdesk intake
     },
     @{
         Name          = "DCE Info"

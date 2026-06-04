@@ -180,7 +180,7 @@ EXCHANGE ONLINE SHARED MAILBOXES
 ├── operations@deltacrown.com
 │   └── → Forwarding rule → General channel email address
 │
-├── bookings@deltacrown.com
+├── help@deltacrown.com
 │   └── → Forwarding rule → Bookings channel email address
 │
 └── info@deltacrown.com

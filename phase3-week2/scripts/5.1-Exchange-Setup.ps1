@@ -129,11 +129,11 @@ $SharedMailboxes = @(
         AutoReply  = $null
     },
     @{
-        Name       = "DCE Bookings"
-        Email      = "bookings@$Organization"
+        Name       = "DCE Help"
+        Email      = "help@$Organization"
         SendAs     = "AllStaff"
         FullAccess = "AllStaff"
-        AutoReply  = "Thank you for contacting Delta Crown Extensions. We will confirm your booking within 24 hours."
+        AutoReply  = "Thank you for contacting Delta Crown Extensions Support. Your request has been received and routed to the appropriate team. We aim to respond within 24 hours."
     },
     @{
         Name       = "DCE Info"

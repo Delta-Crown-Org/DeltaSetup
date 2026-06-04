@@ -87,7 +87,7 @@ The three expected shared mailboxes exist and are shared mailboxes:
 | Mailbox | Present | Type | Hidden from address lists | Auto-reply |
 |---|---|---|---|---|
 | `operations@deltacrown.com` | Yes | SharedMailbox | No | Disabled |
-| `bookings@deltacrown.com` | Yes | SharedMailbox | No | Enabled |
+| `help@deltacrown.com` | Yes | SharedMailbox | No | Enabled |
 | `info@deltacrown.com` | Yes | SharedMailbox | No | Enabled |
 
 Permission rows were captured locally only:
@@ -127,7 +127,7 @@ Important difference from Entra dynamic groups:
 
 1. Exchange Online is active for the Delta Crown tenant.
 2. The expected shared mailboxes exist.
-3. `bookings@` and `info@` auto-replies are enabled; `operations@` is disabled.
+3. `help@` and `info@` auto-replies are enabled; `operations@` is disabled.
 4. Shared mailbox permission rows exist, but trustee details are local-only and should be reviewed before public/team-showcase claims.
 5. Dynamic distribution groups exist; franchise-owner routing now resolves to five owner mailboxes after validated metadata cleanup.
 6. No mail flow rules or connectors were found, so there is no obvious custom routing layer in this inventory.
