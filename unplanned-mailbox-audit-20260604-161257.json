@@ -1,0 +1,78 @@
+{
+  "GeneratedUtc": "2026-06-04T21:12:57Z",
+  "Mailboxes": [
+    {
+      "Email": "careers@deltacrown.com",
+      "DisplayName": "Delta Crown Careers",
+      "Type": "SharedMailbox",
+      "Hidden": false,
+      "Created": "2026-06-04T09:28:49-05:00",
+      "Modified": "2026-06-04T09:29:51-05:00",
+      "Alias": "careers",
+      "Size": {
+        "IsUnlimited": false,
+        "Value": {}
+      },
+      "ItemCount": 4,
+      "LastLogon": null,
+      "Forwarding": "smtp:Help@deltacrown.com",
+      "ForwardAndDeliver": true,
+      "AutoReply": "Disabled",
+      "FullAccess": "",
+      "SendAs": "",
+      "EmailAddresses": "smtp:careers@deltacrown.onmicrosoft.com; SMTP:careers@deltacrown.com"
+    },
+    {
+      "Email": "noreply@deltacrown.com",
+      "DisplayName": "No Reply - DCE",
+      "Type": "SharedMailbox",
+      "Hidden": false,
+      "Created": "2026-06-03T16:13:35-05:00",
+      "Modified": "2026-06-03T16:14:01-05:00",
+      "Alias": "noreply",
+      "Size": {
+        "IsUnlimited": false,
+        "Value": {}
+      },
+      "ItemCount": 4,
+      "LastLogon": null,
+      "Forwarding": "None",
+      "ForwardAndDeliver": false,
+      "AutoReply": "Disabled",
+      "FullAccess": "",
+      "SendAs": "",
+      "EmailAddresses": "smtp:noreply@deltacrown.onmicrosoft.com; SMTP:noreply@deltacrown.com"
+    },
+    {
+      "Email": "ColoradoSprings@deltacrown.com",
+      "DisplayName": "Delta Crown Colorado Springs",
+      "Type": "UserMailbox",
+      "Hidden": false,
+      "Created": "2026-06-01T13:54:20-05:00",
+      "Modified": "2026-06-01T13:58:49-05:00",
+      "Alias": "ColoradoSprings",
+      "Size": {
+        "IsUnlimited": false,
+        "Value": {}
+      },
+      "ItemCount": 6,
+      "LastLogon": "2026-06-01T19:18:03.4127566-05:00",
+      "Forwarding": "None",
+      "ForwardAndDeliver": false,
+      "AutoReply": "Disabled",
+      "FullAccess": "",
+      "SendAs": "",
+      "EmailAddresses": "SIP:coloradosprings@deltacrown.com; SMTP:ColoradoSprings@deltacrown.com"
+    }
+  ],
+  "TransportRule": {
+    "Name": "No Reply Mailbox Blocker",
+    "State": "Disabled",
+    "Priority": 0,
+    "Description": "If the message:\r\n\tIs sent to 'noreply@deltacrown.com'\r\nTake the following actions:\r\n\treject the message and include the explanation 'This mailbox does not receive messages.' with the status code: '5.7.1'\r\n",
+    "WhenCreated": null,
+    "WhenChanged": "2026-06-03T16:22:46-05:00",
+    "Conditions": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.SentToPredicate",
+    "Actions": "Microsoft.Exchange.MessagingPolicies.Rules.Tasks.RejectMessageAction"
+  }
+}
