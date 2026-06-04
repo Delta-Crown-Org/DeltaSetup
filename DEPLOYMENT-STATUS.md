@@ -107,14 +107,18 @@ Tyler explicitly decided on 2026-04-29 that **no HTTHQ document migration will b
 
 > Verified live by `docs/delta-crown-exchange-inventory-summary.md` (read-only ExchangeOnlineManagement audit). Exchange Online is active for the `deltacrown` tenant.
 
-### Verified live state
-- ✅ `deltacrown.com` is the authoritative accepted domain
-- ✅ DNS: SPF, DKIM, DMARC verified for `deltacrown.com`
--  3 shared mailboxes exist: `operations@`, `help@`, `info@deltacrown.com`
-- ✅ 4 dynamic distribution groups exist: `allstaff@`, `managers@`, `stylists@`, `franchise_owners@deltacrown.com`
--  Auto-replies enabled on `help@` and `info@
+### Verified live state (refreshed 2026-06-04)
+-  `deltacrown.com` is the authoritative accepted domain
+-  DNS: SPF, DKIM, DMARC verified for `deltacrown.com`
+-  6 shared mailboxes exist: `operations@`, `help@`, `info@`, `bookings@` (deprecated), `careers@`, `noreply@deltacrown.com`
+-  7 user mailboxes: Allynn Shepherd, Amit Shah, Jay Miller, Lindy Sturgill, Sarah Miller, Toni Careccia, ColoradoSprings
+-  4 dynamic distribution groups exist: `allstaff@`, `managers@`, `stylists@`, `franchise_owners@deltacrown.com`
+-  Auto-replies enabled on `help@` and `info@`
+-  `help@` converted from UserMailbox to SharedMailbox (free, no license) 2026-06-04
+-  `bookings@` deprecated — hidden from GAL, permissions stripped, auto-reply disabled 2026-06-04
+-  Transport rule discovered: "No Reply Mailbox Blocker" (DISABLED) — purpose unknown
 - ⏳ Auto-reply copy owner review pending
-- ⏳ Trustee permission review pending (raw rows local-only)
+- ⏳ careers@ and noreply@ intent unknown — need owner decision
 
 ### Re-run / verify
 ```powershell

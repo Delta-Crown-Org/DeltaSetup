@@ -1,0 +1,17 @@
+{
+  "BookingsExists": true,
+  "HelpExists": true,
+  "BookingsType": "SharedMailbox",
+  "HelpType": "UserMailbox",
+  "BookingsHidden": false,
+  "ActionsTaken": [
+    "Send-As: AllStaff → help@",
+    "FullAccess: AllStaff → help@",
+    "Auto-reply enabled on help@",
+    "Hidden bookings@ from GAL",
+    "Removed Send-As: a9ffb580-88d8-46cc-9d61-6b84c16a3256 from bookings@",
+    "Removed FullAccess: AllStaff from bookings@",
+    "Disabled auto-reply on bookings@"
+  ],
+  "Errors": []
+}

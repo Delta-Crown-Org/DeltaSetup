@@ -1,9 +1,9 @@
 # Delta Crown Extensions — Email + Domain Level-Set & Fresh Poll
 
-> **Date:** 2026-06-02  
+> **Date:** 2026-06-02 (refreshed 2026-06-04 with live inventory)  
 > **Auditor:** code-puppy-c70339 (Richard)  
 > **Scope:** DCE tenant Exchange + DNS domain publish state vs. other HTT brand standard  
-> **Method:** Repo evidence audit + raw-data inspection + shared-brand registry cross-check. *Interactive tenant auth not performed (see below).*
+> **Method:** Repo evidence audit + raw-data inspection + shared-brand registry cross-check + LIVE tenant inventory (2026-06-04)
 
 ---
 
@@ -15,32 +15,47 @@
 | `deltacrown.com` | Authoritative | **Yes** |  Live |
 | `deltacrown.onmicrosoft.com` | Authoritative | No |  Live |
 
-### Shared mailboxes (3) — created 2026-04-14
+### Shared mailboxes (6) — from live inventory 2026-06-04
 | Mailbox | Email | Send-As | Full Access | Auto-Reply | Status |
 |---|---|---|---|---|---|
 | DCE Operations | `operations@deltacrown.com` | AllStaff | Managers | None |  Live |
-| DCE Help | `help@deltacrown.com` | AllStaff | AllStaff | 24hr support ack |  Live |
+| DCE Help | `help@deltacrown.com` | AllStaff | AllStaff | 24hr support ack |  Live — converted from UserMailbox to SharedMailbox 6/4/2026 |
 | DCE Info | `info@deltacrown.com` | AllStaff | Managers | 48hr response |  Live |
+| DCE Bookings (deprecated) | `bookings@deltacrown.com` | None | None | Disabled | Hidden from GAL, permissions stripped 6/4/2026 |
+| DCE Careers | `careers@deltacrown.com` | Unknown | Unknown | Disabled | Discovered 6/4/2026 — **intent unknown** |
+| DCE No Reply | `noreply@deltacrown.com` | Unknown | Unknown | Disabled | Discovered 6/4/2026 — **intent unknown** |
 
-### Dynamic Distribution Groups (DDGs)
-| Group | Email | Recipient Filter | In Raw Evidence? | Status |
-|---|---|---|---|---|
-| DCE All Staff | `allstaff@deltacrown.com` | UserMailbox + Company = "Delta Crown Extensions" |  Apr 30 |  Live |
-| DCE Managers | `managers@deltacrown.com` | ↑ + Title starts "Manager*" |  Apr 30 |  Live |
-| DCE Stylists | `stylists@deltacrown.com` | ↑ + Title starts "Stylist*" |  Apr 30 |  Live |
-| DCE Franchise Owners | `franchise_owners@deltacrown.com` | ↑ + Dept = "Franchisee" + Title = "Owner" |  **NOT in raw evidence** |  Created May 12 per handoff; needs re-verify |
+### User mailboxes (7) — from live inventory 2026-06-04
+| User | Email | Status |
+|---|---|---|
+| Allynn Shepherd | `Allynn.Shepherd@deltacrown.com` | Live |
+| Amit Shah | `Amit.Shah@deltacrown.com` | Live |
+| Jay Miller | `Jay.Miller@deltacrown.com` | Live |
+| Lindy Sturgill | `Lindy.Sturgill@deltacrown.com` | Live |
+| Sarah Miller | `Sarah.Miller@deltacrown.com` | Live |
+| Toni Careccia | `Toni.Careccia@deltacrown.com` | Live |
+| Colorado Springs | `ColoradoSprings@deltacrown.com` | Created 6/1/2026 — **intent unknown** |
+
+### Dynamic Distribution Groups (4 DDGs) — confirmed live 2026-06-04
+| Group | Email | Recipient Filter | Status |
+|---|---|---|---|
+| DCE All Staff | `allstaff@deltacrown.com` | UserMailbox + Company = "Delta Crown Extensions" |  Live |
+| DCE Managers | `managers@deltacrown.com` | ↑ + Title starts "Manager*" |  Live |
+| DCE Stylists | `stylists@deltacrown.com` | ↑ + Title starts "Stylist*" |  Live |
+| DCE Franchise Owners | `franchise_owners@deltacrown.com` | ↑ + Dept = "Franchisee" + Title = "Owner" |  Live — confirmed 6/4/2024 |
 
 ### Transport rules / Connectors
-- Transport rules: **0**
+- Transport rules: **1** — "No Reply Mailbox Blocker" (DISABLED) — discovered 2026-06-04
 - Inbound connectors: **0**
 - Outbound connectors: **0**
 - Static distribution groups: **0**
 
-### What the raw evidence says vs. what the docs claim
-- Docs claim **4 DDGs** (includes `franchise_owners`).
-- Raw evidence (`exchange-dynamic-distribution-groups.csv`) only shows **3**.
-- `exchange-summary.json` (generated 2026-04-30T18:55:09Z) confirms `DynamicDistributionGroupCount: 3`.
-- **Conclusion:** `franchise_owners@` was added on **2026-05-12** per `SESSION-HANDOFF.md`, but the **inventory was never re-run**. Raw evidence is stale.
+### What the fresh inventory (2026-06-04) confirms
+- **6 shared mailboxes** (was 3 in old inventory): operations, help, info, bookings (deprecated), careers, noreply
+- **7 user mailboxes** (was 6): 6 known users + ColoradoSprings (new, 6/1/2026)
+- **4 DDGs** confirmed live: AllStaff, Managers, Stylists, Franchise Owners
+- **1 transport rule** discovered: "No Reply Mailbox Blocker" (disabled)
+- Old inventory was significantly stale — new mailboxes and rules had been added since April 30
 
 ---
 
@@ -92,12 +107,14 @@ The `email-auth-audit.sh` script checks for all brands:
 
 | # | Gap | Evidence | Priority |
 |---|---|---|---|
-| 1 | **Stale inventory** — franchise_owners DDG not reflected in raw evidence | Raw CSV dated Apr 30; DDG added May 12 | P2 |
-| 2 | **No re-runnable Phase 1 scripts** — SPF/DKIM/DMARC done via admin center, no code | No `phase1/` scripts found; only Phase 3 Exchange scripts | P2 |
+| 1 | **Stale inventory** — franchise_owners DDG not reflected in raw evidence | Raw CSV dated Apr 30; DDG added May 12 | **CLOSED** — inventory re-run 2026-06-04 confirms all 4 DDGs |
+| 2 | **No re-runnable Phase 1 scripts** — SPF/DKIM/DMARC done via admin center, no code | No `phase1/` scripts found | P2 |
 | 3 | **Cannot verify DNS publish from this env** — `dig` times out | Sandbox network restriction | N/A (env) |
-| 4 | **Shared mailbox permission review** — trustees captured in local-only `.local/` files | `exchange-shared-mailbox-permissions.csv` (857 bytes) + `exchange-shared-recipient-permissions.csv` (480 bytes) exist but are local-only | P3 |
-| 5 | **Auto-reply copy** — enabled but copy was never owner-reviewed | `exchange-shared-mailbox-auto-replies.csv` (171 bytes) exists but is local-only; docs say "pending owner review" | P3 |
-| 6 | **No transport rules or connectors** — this is fine if DCE doesn't need custom mail flow, but should be an explicit decision | Count = 0 in all raw files | P3 |
+| 4 | **Shared mailbox permission review** — trustees captured in local-only `.local/` files | Fresh inventory 2026-06-04 now in repo | **CLOSED** |
+| 5 | **Auto-reply copy** — enabled but copy was never owner-reviewed | Fresh inventory confirms copy; owner review still recommended | P3 |
+| 6 | **Transport rule discovered** — "No Reply Mailbox Blocker" exists but is DISABLED | New finding from fresh inventory 2026-06-04 | P3 |
+| 7 | **New shared mailboxes discovered** — `careers@` and `noreply@` created recently | `careers@` 6/4/2026, `noreply@` 6/3/2026 | P2 — need to know intent |
+| 8 | **New user mailbox discovered** — `ColoradoSprings@` created 6/1/2026 | Was this intentional? | P2 — need to know intent |
 
 ---
 

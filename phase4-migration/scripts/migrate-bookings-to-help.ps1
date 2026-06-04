@@ -15,12 +15,11 @@
 #Requires -Version 5.1
 #Requires -Modules @{ModuleName="ExchangeOnlineManagement";ModuleVersion="3.0.0"}
 
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding(SupportsShouldProcess=$true)]
 param(
     [string]$AdminUPN = "tyler.granlund-admin@httbrands.com",
     [string]$Organization = "deltacrown.com",
-    [switch]$RemoveBookings,      # Actually remove the bookings@ mailbox (destructive)
-    [switch]$WhatIf               # Preview changes without applying
+    [switch]$RemoveBookings       # Actually remove the bookings@ mailbox (destructive)
 )
 
 $ErrorActionPreference = "Stop"
