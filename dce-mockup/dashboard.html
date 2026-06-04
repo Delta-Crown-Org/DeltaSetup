@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DCE Tenant Dashboard — Live State & Owner Validation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Tenor+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    :root { --dash-sidebar: 260px; }
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      font-family: var(--font-family-body);
+      background: var(--color-surface-page);
+      color: var(--color-text-default);
+      line-height: var(--line-height-normal);
+    }
+    .dash-layout {
+      display: grid;
+      grid-template-columns: var(--dash-sidebar) 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 1023px) {
+      .dash-layout { grid-template-columns: 1fr; }
+      .dash-sidebar { display: none; }
+    }
+    .dash-sidebar {
+      background: var(--_dce-teal-deeper);
+      color: var(--color-text-on-dark);
+      padding: var(--space-6);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .dash-sidebar__brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .dash-sidebar__brand img { width: 40px; height: 40px; }
+    .dash-sidebar__brand h1 {
+      font-family: var(--font-family-heading);
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .dash-sidebar__brand span {
+      font-size: var(--font-size-xs);
+      opacity: 0.7;
+      display: block;
+    }
+    .dash-nav a {
+      display: block;
+      color: var(--color-text-on-dark);
+      text-decoration: none;
+      padding: var(--space-3) var(--space-4);
+      border-radius: 6px;
+      margin-bottom: 4px;
+      font-size: var(--font-size-sm);
+      transition: background var(--duration-fast);
+    }
+    .dash-nav a:hover, .dash-nav a.active {
+      background: rgba(255,255,255,0.1);
+    }
+    .dash-nav a.active {
+      border-left: 3px solid var(--_dce-gold);
+      padding-left: calc(var(--space-4) - 3px);
+    }
+    .dash-main { padding: var(--space-6) var(--space-8); }
+    @media (max-width: 640px) {
+      .dash-main { padding: var(--space-4); }
+    }
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--color-border-default);
+    }
+    .dash-header h2 {
+      font-family: var(--font-family-heading);
+      font-size: var(--font-size-xl);
+      color: var(--_dce-teal-deeper);
+    }
+    .dash-header__meta {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+    }
+    .dash-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+    .dash-kpi {
+      background: var(--color-surface-card);
+      border-radius: var(--card-radius);
+      padding: var(--space-5);
+      box-shadow: var(--card-shadow);
+      border-top: 4px solid var(--color-brand-primary);
+    }
+    .dash-kpi--warn { border-top-color: var(--color-state-warn); }
+    .dash-kpi--danger { border-top-color: var(--color-state-danger); }
+    .dash-kpi--gold { border-top-color: var(--color-brand-secondary); }
+    .dash-kpi__label {
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-2);
+    }
+    .dash-kpi__value {
+      font-family: var(--font-family-heading);
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      color: var(--color-text-heading);
+      line-height: 1;
+    }
+    .dash-kpi__sub {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin-top: var(--space-2);
+    }
+    .dash-kpi__flag {
+      display: inline-block;
+      background: var(--color-state-warn);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-top: var(--space-2);
+    }
+    .dash-section {
+      background: var(--color-surface-card);
+      border-radius: var(--card-radius);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+      box-shadow: var(--card-shadow);
+    }
+    .dash-section h3 {
+      font-family: var(--font-family-heading);
+      font-size: var(--font-size-lg);
+      color: var(--_dce-teal-deeper);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--color-border-default);
+    }
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-size-sm);
+    }
+    .dash-table th {
+      text-align: left;
+      padding: var(--space-3) var(--space-4);
+      color: var(--color-text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      border-bottom: 2px solid var(--color-border-default);
+    }
+    .dash-table td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--color-border-default);
+    }
+    .dash-table tr:hover { background: var(--color-surface-dim); }
+    .dash-table tr.flag-row { background: rgba(251, 140, 0, 0.06); }
+    .dash-table tr.flag-row:hover { background: rgba(251, 140, 0, 0.12); }
+    .dash-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .dash-badge--ok { background: rgba(102,187,106,0.15); color: #2e7d32; }
+    .dash-badge--warn { background: rgba(251,140,0,0.15); color: #e65100; }
+    .dash-badge--danger { background: rgba(165,28,22,0.12); color: #c62828; }
+    .dash-badge--info { background: rgba(3,83,77,0.1); color: var(--_dce-teal); }
+    .dash-badge--free { background: rgba(102,187,106,0.15); color: #2e7d32; }
+    .dash-badge--paid { background: rgba(165,28,22,0.12); color: #c62828; }
+    .dash-timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+    .dash-timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: var(--color-border-default);
+    }
+    .dash-timeline__item {
+      position: relative;
+      margin-bottom: var(--space-4);
+      padding-left: var(--space-4);
+    }
+    .dash-timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -22px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--color-brand-primary);
+      border: 2px solid var(--color-surface-card);
+    }
+    .dash-timeline__item--warn::before { background: var(--color-state-warn); }
+    .dash-timeline__item--us::before { background: var(--color-state-success); }
+    .dash-timeline__date {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      font-weight: 500;
+    }
+    .dash-timeline__text { font-size: var(--font-size-sm); }
+    .dash-callout {
+      background: var(--_dce-teal-deeper);
+      color: var(--color-text-on-dark);
+      border-radius: var(--card-radius);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+    .dash-callout h3 {
+      color: var(--_dce-gold);
+      border: none;
+      padding: 0;
+      margin-bottom: var(--space-3);
+    }
+    .dash-callout p { margin-bottom: var(--space-3); }
+    .dash-callout a {
+      color: var(--_dce-gold);
+      text-decoration: underline;
+    }
+    .dash-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    @media (max-width: 640px) {
+      .dash-grid-2 { grid-template-columns: 1fr; }
+    }
+    .dash-hub-tree {
+      font-family: var(--font-family-system);
+      font-size: var(--font-size-sm);
+      line-height: 1.8;
+    }
+    .dash-hub-tree ul { list-style: none; padding-left: 24px; }
+    .dash-hub-tree li { position: relative; }
+    .dash-hub-tree li::before {
+      content: '';
+      position: absolute;
+      left: -16px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--color-border-default);
+    }
+    .dash-hub-tree li:last-child::before { bottom: auto; height: 12px; }
+    .dash-hub-tree li::after {
+      content: '';
+      position: absolute;
+      left: -16px;
+      top: 11px;
+      width: 10px;
+      height: 1px;
+      background: var(--color-border-default);
+    }
+    .dash-hub-tree__hub {
+      font-weight: 700;
+      color: var(--_dce-teal);
+    }
+    .dash-hub-tree__spoke { color: var(--color-text-secondary); }
+    .dash-hub-tree__spoke--legacy { color: var(--color-state-warn); }
+  </style>
+</head>
+<body>
+<div class="dash-layout">
+
+<!-- Sidebar -->
+<aside class="dash-sidebar">
+  <div class="dash-sidebar__brand">
+    <img src="assets/logo-dce-white.svg" alt="DCE">
+    <div>
+      <h1>Delta Crown<br>Extensions</h1>
+      <span>Tenant Dashboard</span>
+    </div>
+  </div>
+  <nav class="dash-nav" aria-label="Dashboard sections">
+    <a href="#overview" class="active">Overview</a>
+    <a href="#owners">Owners &amp; People</a>
+    <a href="#mailboxes">Mailboxes</a>
+    <a href="#sharepoint">SharePoint Hub</a>
+    <a href="#exchange">Exchange &amp; DDGs</a>
+    <a href="#timeline">What Changed</a>
+    <a href="#dustin">Dustin's Question</a>
+    <a href="#next">Next Steps</a>
+  </nav>
+</aside>
+
+<!-- Main -->
+<main class="dash-main">
+
+  <div class="dash-header" id="overview">
+    <div>
+      <h2>DCE Tenant — Live State</h2>
+      <div class="dash-header__meta">Inventory refreshed 2026-06-04 &middot; deltacrown.com &middot; ce62e17d-2feb-4e67-a115-8ea4af68da30</div>
+    </div>
+    <div class="dash-header__meta">Prepared for Dustin Boyd &amp; KK</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="dash-kpi-grid">
+    <div class="dash-kpi dash-kpi--gold">
+      <div class="dash-kpi__label">Franchise Owners</div>
+      <div class="dash-kpi__value">5</div>
+      <div class="dash-kpi__sub">Confirmed in tenant</div>
+    </div>
+    <div class="dash-kpi">
+      <div class="dash-kpi__label">Shared Mailboxes</div>
+      <div class="dash-kpi__value">6</div>
+      <div class="dash-kpi__sub">All free — no licenses</div>
+    </div>
+    <div class="dash-kpi dash-kpi--warn">
+      <div class="dash-kpi__label">User Mailboxes</div>
+      <div class="dash-kpi__value">7</div>
+      <div class="dash-kpi__sub">6 people + 1 flagged</div>
+      <span class="dash-kpi__flag">Review needed</span>
+    </div>
+    <div class="dash-kpi">
+      <div class="dash-kpi__label">SharePoint Sites</div>
+      <div class="dash-kpi__value">15</div>
+      <div class="dash-kpi__sub">2 hubs + 13 spokes</div>
+    </div>
+    <div class="dash-kpi">
+      <div class="dash-kpi__label">Dynamic Groups</div>
+      <div class="dash-kpi__value">4</div>
+      <div class="dash-kpi__sub">AllStaff, Managers, Stylists, Franchise Owners</div>
+    </div>
+    <div class="dash-kpi dash-kpi--danger">
+      <div class="dash-kpi__label">Monthly License Cost</div>
+      <div class="dash-kpi__value">$62.50</div>
+      <div class="dash-kpi__sub">Should be $48 if CS is shared</div>
+      <span class="dash-kpi__flag">$174/yr savings</span>
+    </div>
+  </div>
+
+  <!-- Owners -->
+  <section class="dash-section" id="owners">
+    <h3>Owners &amp; People — Dustin's List Validated</h3>
+    <table class="dash-table">
+      <thead>
+        <tr><th>Person</th><th>Location</th><th>Role</th><th>Type</th><th>License</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Allynn Shepherd</strong></td>
+          <td>Livonia, Michigan</td>
+          <td>Franchise Owner</td>
+          <td>UserMailbox</td>
+          <td><span class="dash-badge dash-badge--paid">Basic $8</span></td>
+          <td><span class="dash-badge dash-badge--ok">Confirmed</span></td>
+        </tr>
+        <tr>
+          <td><strong>Amit Shah</strong></td>
+          <td>Pittsburgh, Pennsylvania</td>
+          <td>Franchise Owner</td>
+          <td>UserMailbox</td>
+          <td><span class="dash-badge dash-badge--paid">Basic $8</span></td>
+          <td><span class="dash-badge dash-badge--ok">Confirmed</span></td>
+        </tr>
+        <tr>
+          <td><strong>Toni Careccia</strong></td>
+          <td>Pittsburgh, Pennsylvania</td>
+          <td>Franchise Owner</td>
+          <td>UserMailbox</td>
+          <td><span class="dash-badge dash-badge--paid">Basic $8</span></td>
+          <td><span class="dash-badge dash-badge--ok">Confirmed</span></td>
+        </tr>
+        <tr>
+          <td><strong>Jay Miller</strong></td>
+          <td>Lexington, Ohio</td>
+          <td>Franchise Owner</td>
+          <td>UserMailbox</td>
+          <td><span class="dash-badge dash-badge--paid">Basic $8</span></td>
+          <td><span class="dash-badge dash-badge--ok">Confirmed</span></td>
+        </tr>
+        <tr>
+          <td><strong>Sarah Miller</strong></td>
+          <td>Lexington, Ohio</td>
+          <td>Franchise Owner</td>
+          <td>UserMailbox</td>
+          <td><span class="dash-badge dash-badge--paid">Basic $8</span></td>
+          <td><span class="dash-badge dash-badge--ok">Confirmed</span></td>
+        </tr>
+        <tr>
+          <td><strong>Lindy Sturgill</strong></td>
+          <td>Colorado Springs, Colorado</td>
+          <td>Salon Manager</td>
+          <td>UserMailbox</td>
+          <td><span class="dash-badge dash-badge--paid">Basic $8</span></td>
+          <td><span class="dash-badge dash-badge--info">Not an owner</span></td>
+        </tr>
+        <tr class="flag-row">
+          <td><strong>Colorado Springs</strong></td>
+          <td>Colorado Springs, Colorado</td>
+          <td>Unknown / Studio</td>
+          <td>UserMailbox</td>
+          <td><span class="dash-badge dash-badge--paid">Standard $14.50</span></td>
+          <td><span class="dash-badge dash-badge--warn">FLAG</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Mailboxes -->
+  <section class="dash-section" id="mailboxes">
+    <h3>Mailbox Inventory</h3>
+    <table class="dash-table">
+      <thead>
+        <tr><th>Mailbox</th><th>Type</th><th>License</th><th>Auto-Reply</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>operations@</td>
+          <td><span class="dash-badge dash-badge--info">SharedMailbox</span></td>
+          <td><span class="dash-badge dash-badge--free">$0</span></td>
+          <td>—</td>
+          <td>Normal</td>
+        </tr>
+        <tr>
+          <td>help@</td>
+          <td><span class="dash-badge dash-badge--info">SharedMailbox</span></td>
+          <td><span class="dash-badge dash-badge--free">$0</span></td>
+          <td>Enabled</td>
+          <td>Converted from UserMailbox 6/4/2026 — now free</td>
+        </tr>
+        <tr>
+          <td>info@</td>
+          <td><span class="dash-badge dash-badge--info">SharedMailbox</span></td>
+          <td><span class="dash-badge dash-badge--free">$0</span></td>
+          <td>Enabled</td>
+          <td>Normal</td>
+        </tr>
+        <tr>
+          <td>bookings@</td>
+          <td><span class="dash-badge dash-badge--info">SharedMailbox</span></td>
+          <td><span class="dash-badge dash-badge--free">$0</span></td>
+          <td>Disabled</td>
+          <td>Deprecated — hidden from GAL 6/4/2026</td>
+        </tr>
+        <tr class="flag-row">
+          <td>careers@</td>
+          <td><span class="dash-badge dash-badge--info">SharedMailbox</span></td>
+          <td><span class="dash-badge dash-badge--free">$0</span></td>
+          <td>Disabled</td>
+          <td>Unplanned — forwards to help@, created 6/4</td>
+        </tr>
+        <tr class="flag-row">
+          <td>noreply@</td>
+          <td><span class="dash-badge dash-badge--info">SharedMailbox</span></td>
+          <td><span class="dash-badge dash-badge--free">$0</span></td>
+          <td>Disabled</td>
+          <td>Unplanned — blocking rule exists but disabled, created 6/3</td>
+        </tr>
+        <tr class="flag-row">
+          <td>ColoradoSprings@</td>
+          <td><span class="dash-badge dash-badge--warn">UserMailbox</span></td>
+          <td><span class="dash-badge dash-badge--paid">Standard $14.50</span></td>
+          <td>Disabled</td>
+          <td>Created 6/1, last logon 6/1, 6 items — is this a person or a shared resource?</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SharePoint -->
+  <section class="dash-section" id="sharepoint">
+    <h3>SharePoint Hub &amp; Spoke Architecture</h3>
+    <div class="dash-grid-2">
+      <div class="dash-hub-tree">
+        <div class="dash-hub-tree__hub">Corp Hub (deltacrown.sharepoint.com/sites/corp-hub)</div>
+        <ul>
+          <li class="dash-hub-tree__spoke">corp-hr</li>
+          <li class="dash-hub-tree__spoke">corp-it</li>
+          <li class="dash-hub-tree__spoke">corp-finance</li>
+          <li class="dash-hub-tree__spoke">corp-training</li>
+        </ul>
+      </div>
+      <div class="dash-hub-tree">
+        <div class="dash-hub-tree__hub">DCE Hub (deltacrown.sharepoint.com/sites/dce-hub)</div>
+        <ul>
+          <li class="dash-hub-tree__spoke">dce-operations</li>
+          <li class="dash-hub-tree__spoke dash-hub-tree__spoke--legacy">dce-clientservices (legacy — cleanup pending)</li>
+          <li class="dash-hub-tree__spoke">dce-marketing</li>
+          <li class="dash-hub-tree__spoke">dce-docs</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:var(--space-4); font-size:var(--font-size-sm); color:var(--color-text-muted);">
+      15 total sites inventoried. 4 group-connected sites also exist (Delta Crown Operations, Delta Crown Extensions x2, All Company).
+    </p>
+  </section>
+
+  <!-- Exchange -->
+  <section class="dash-section" id="exchange">
+    <h3>Exchange Online &amp; Dynamic Distribution Groups</h3>
+    <table class="dash-table">
+      <thead>
+        <tr><th>DDG</th><th>Email</th><th>Filter</th><th>Members</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DCE All Staff</td>
+          <td>allstaff@deltacrown.com</td>
+          <td>Company = "Delta Crown Extensions"</td>
+          <td>6</td>
+          <td><span class="dash-badge dash-badge--ok">Live</span></td>
+        </tr>
+        <tr>
+          <td>DCE Managers</td>
+          <td>managers@deltacrown.com</td>
+          <td>Company + Title starts "Manager*"</td>
+          <td>1</td>
+          <td><span class="dash-badge dash-badge--ok">Live</span></td>
+        </tr>
+        <tr>
+          <td>DCE Stylists</td>
+          <td>stylists@deltacrown.com</td>
+          <td>Company + Title starts "Stylist*"</td>
+          <td>0</td>
+          <td><span class="dash-badge dash-badge--info">No matches yet</span></td>
+        </tr>
+        <tr>
+          <td>DCE Franchise Owners</td>
+          <td>franchise_owners@deltacrown.com</td>
+          <td>Company + Dept = "Franchisee" + Title = "Owner"</td>
+          <td>5</td>
+          <td><span class="dash-badge dash-badge--ok">Live</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:var(--space-4); font-size:var(--font-size-sm); color:var(--color-text-muted);">
+      Transport rule: "No Reply Mailbox Blocker" exists but is DISABLED. Associated with noreply@.
+    </p>
+  </section>
+
+  <!-- Timeline -->
+  <section class="dash-section" id="timeline">
+    <h3>What Changed — Last 4 Days</h3>
+    <div class="dash-timeline">
+      <div class="dash-timeline__item">
+        <div class="dash-timeline__date">2026-06-01 &middot; 1:54 PM CT</div>
+        <div class="dash-timeline__text"><strong>ColoradoSprings@</strong> user mailbox created. Someone logged in 5 hours later.</div>
+      </div>
+      <div class="dash-timeline__item dash-timeline__item--warn">
+        <div class="dash-timeline__date">2026-06-03 &middot; 4:13 PM CT</div>
+        <div class="dash-timeline__text"><strong>noreply@</strong> shared mailbox created. Blocking transport rule added 9 minutes later (currently disabled).</div>
+      </div>
+      <div class="dash-timeline__item dash-timeline__item--warn">
+        <div class="dash-timeline__date">2026-06-04 &middot; 9:28 AM CT</div>
+        <div class="dash-timeline__text"><strong>careers@</strong> shared mailbox created. Forwarding to help@ configured immediately.</div>
+      </div>
+      <div class="dash-timeline__item dash-timeline__item--us">
+        <div class="dash-timeline__date">2026-06-04 &middot; 3:53 PM CT</div>
+        <div class="dash-timeline__text">Our migration: <strong>bookings@ deprecated</strong> (hidden, stripped, disabled). <strong>help@ converted to SharedMailbox</strong> (now free).</div>
+      </div>
+      <div class="dash-timeline__item dash-timeline__item--us">
+        <div class="dash-timeline__date">2026-06-04 &middot; 4:05 PM CT</div>
+        <div class="dash-timeline__text">Full tenant inventory re-run. Fresh evidence captured.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dustin's Question -->
+  <section class="dash-callout" id="dustin">
+    <h3>Dustin's Question — Answered</h3>
+    <p><strong>"Does this look correct? I assumed we'd be charging the owners for shared mailboxes."</strong></p>
+    <p><strong>Owner list:</strong> Correct. 5 franchise owners match the live tenant exactly.</p>
+    <p><strong>Lindy:</strong> Correctly classified as Salon Manager (not an owner). Good.</p>
+    <p><strong>Shared mailboxes are free.</strong> operations@, help@, info@, careers@, noreply@, and bookings@ do not need licenses. Do not assign Standard ($14.50) or Basic ($8) licenses to them.</p>
+    <p><strong>Colorado Springs:</strong> This is the only flag. If it's a shared mailbox, remove the $14.50 license and save $174/yr. If it's a real person's mailbox, keep the license but assign an owner.</p>
+    <p><strong>Current correct baseline:</strong> 5 owners ($40) + Lindy ($8) = <strong>$48/mo</strong>. Colorado Springs is either $0 (shared) or $14.50 with an owner (user).</p>
+  </section>
+
+  <!-- Next Steps -->
+  <section class="dash-section" id="next">
+    <h3>Next Steps</h3>
+    <table class="dash-table">
+      <thead>
+        <tr><th>Priority</th><th>Item</th><th>Status</th><th>Owner</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dash-badge dash-badge--danger">P1</span></td>
+          <td>Freshdesk brand portal setup</td>
+          <td>In progress</td>
+          <td>Tyler</td>
+        </tr>
+        <tr>
+          <td><span class="dash-badge dash-badge--danger">P1</span></td>
+          <td>Entra SSO app registration</td>
+          <td>In progress</td>
+          <td>Tyler</td>
+        </tr>
+        <tr>
+          <td><span class="dash-badge dash-badge--warn">P2</span></td>
+          <td>Colorado Springs mailbox classification</td>
+          <td>Needs decision</td>
+          <td>Dustin / DCE team</td>
+        </tr>
+        <tr>
+          <td><span class="dash-badge dash-badge--warn">P2</span></td>
+          <td>careers@ and noreply@ intent</td>
+          <td>Needs decision</td>
+          <td>DCE team</td>
+        </tr>
+        <tr>
+          <td><span class="dash-badge dash-badge--info">P3</span></td>
+          <td>dce-clientservices site cleanup</td>
+          <td>Deferred</td>
+          <td>DCE team</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer style="text-align:center; padding:var(--space-8) 0; color:var(--color-text-muted); font-size:var(--font-size-sm);">
+    Prepared by Richard (code-puppy-c70339) &middot; Delta Crown Extensions Tenant Dashboard &middot; 2026-06-04
+  </footer>
+
+</main>
+</div>
+</body>
+</html>
