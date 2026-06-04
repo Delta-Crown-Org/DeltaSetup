@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DCE Tenant Dashboard — Live State & Owner Validation</title>
+  <meta name="description" content="Delta Crown Extensions tenant dashboard showing live mailbox inventory, owner validation, SharePoint hub state, and Exchange dynamic distribution groups. Updated 2026-06-04.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Tenor+Sans&display=swap" rel="stylesheet">
@@ -66,8 +67,10 @@
       font-size: var(--font-size-sm);
       transition: background var(--duration-fast);
     }
-    .dash-nav a:hover, .dash-nav a.active {
+    .dash-nav a:hover, .dash-nav a:focus-visible, .dash-nav a.active {
       background: rgba(255,255,255,0.1);
+      outline: 2px solid var(--_dce-gold);
+      outline-offset: -2px;
     }
     .dash-nav a.active {
       border-left: 3px solid var(--_dce-gold);
@@ -85,7 +88,7 @@
       padding-bottom: var(--space-4);
       border-bottom: 1px solid var(--color-border-default);
     }
-    .dash-header h2 {
+    .dash-header h1, .dash-header h2 {
       font-family: var(--font-family-heading);
       font-size: var(--font-size-xl);
       color: var(--_dce-teal-deeper);
@@ -93,6 +96,68 @@
     .dash-header__meta {
       font-size: var(--font-size-sm);
       color: var(--color-text-muted);
+    }
+    .dash-mobile-header {
+      display: none;
+      background: var(--_dce-teal-deeper);
+      color: var(--color-text-on-dark);
+      padding: var(--space-3) var(--space-4);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    @media (max-width: 1023px) {
+      .dash-mobile-header { display: flex; align-items: center; justify-content: space-between; }
+    }
+    .dash-mobile-header__brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-family-heading);
+      font-weight: 700;
+    }
+    .dash-mobile-header__brand img { width: 32px; height: 32px; }
+    .dash-mobile-header__menu-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--color-text-on-dark);
+      padding: var(--space-2) var(--space-3);
+      border-radius: 4px;
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+    }
+    .dash-mobile-header__menu-btn:focus-visible {
+      outline: 2px solid var(--_dce-gold);
+      outline-offset: 2px;
+    }
+    .dash-mobile-nav {
+      display: none;
+      background: var(--_dce-teal-deeper);
+      padding: var(--space-3) var(--space-4);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .dash-mobile-nav a {
+      display: block;
+      color: var(--color-text-on-dark);
+      text-decoration: none;
+      padding: var(--space-3) 0;
+      font-size: var(--font-size-sm);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .dash-mobile-nav a:focus-visible {
+      outline: 2px solid var(--_dce-gold);
+      outline-offset: 2px;
+    }
+    .dash-mobile-nav.open { display: block; }
+    .dash-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-left: calc(-1 * var(--space-4));
+      margin-right: calc(-1 * var(--space-4));
+      padding-left: var(--space-4);
+      padding-right: var(--space-4);
     }
     .dash-kpi-grid {
       display: grid;
@@ -175,6 +240,7 @@
       border-bottom: 1px solid var(--color-border-default);
     }
     .dash-table tr:hover { background: var(--color-surface-dim); }
+    .dash-table tr:focus-within { background: var(--color-surface-dim); outline: 2px solid var(--color-focus-ring); outline-offset: -2px; }
     .dash-table tr.flag-row { background: rgba(251, 140, 0, 0.06); }
     .dash-table tr.flag-row:hover { background: rgba(251, 140, 0, 0.12); }
     .dash-badge {
@@ -185,12 +251,12 @@
       font-weight: 600;
       text-transform: uppercase;
     }
-    .dash-badge--ok { background: rgba(102,187,106,0.15); color: #2e7d32; }
-    .dash-badge--warn { background: rgba(251,140,0,0.15); color: #e65100; }
-    .dash-badge--danger { background: rgba(165,28,22,0.12); color: #c62828; }
-    .dash-badge--info { background: rgba(3,83,77,0.1); color: var(--_dce-teal); }
-    .dash-badge--free { background: rgba(102,187,106,0.15); color: #2e7d32; }
-    .dash-badge--paid { background: rgba(165,28,22,0.12); color: #c62828; }
+    .dash-badge--ok { background: rgba(102,187,106,0.2); color: #1b5e20; }
+    .dash-badge--warn { background: rgba(251,140,0,0.2); color: #bf360c; }
+    .dash-badge--danger { background: rgba(165,28,22,0.18); color: #b71c1c; }
+    .dash-badge--info { background: rgba(3,83,77,0.15); color: #02423d; }
+    .dash-badge--free { background: rgba(102,187,106,0.2); color: #1b5e20; }
+    .dash-badge--paid { background: rgba(165,28,22,0.18); color: #b71c1c; }
     .dash-timeline {
       position: relative;
       padding-left: 24px;
@@ -202,7 +268,7 @@
       top: 4px;
       bottom: 4px;
       width: 2px;
-      background: var(--color-border-default);
+      background: var(--color-border-strong);
     }
     .dash-timeline__item {
       position: relative;
@@ -286,15 +352,26 @@
     }
     .dash-hub-tree__spoke { color: var(--color-text-secondary); }
     .dash-hub-tree__spoke--legacy { color: var(--color-state-warn); }
+    @media print {
+      .dash-sidebar { display: none; }
+      .dash-mobile-header { display: none; }
+      .dash-main { padding: 24px; max-width: 100%; }
+      .dash-kpi-grid { grid-template-columns: repeat(3, 1fr); }
+      .dash-section { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+      .dash-callout { background: #f5f5f5; color: #231F20; }
+      .dash-callout h3 { color: #6F4A1E; }
+      body { background: #fff; }
+    }
   </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 <div class="dash-layout">
 
 <!-- Sidebar -->
 <aside class="dash-sidebar">
   <div class="dash-sidebar__brand">
-    <img src="assets/logo-dce-white.svg" alt="DCE">
+    <img src="assets/logo-dce-white.svg" alt="Delta Crown Extensions">
     <div>
       <h1>Delta Crown<br>Extensions</h1>
       <span>Tenant Dashboard</span>
@@ -312,12 +389,31 @@
   </nav>
 </aside>
 
+<!-- Mobile Header -->
+<header class="dash-mobile-header" aria-label="Mobile navigation">
+  <div class="dash-mobile-header__brand">
+    <img src="assets/logo-dce-white.svg" alt="Delta Crown Extensions logo">
+    <span>DCE Dashboard</span>
+  </div>
+  <button class="dash-mobile-header__menu-btn" aria-expanded="false" aria-controls="mobileNav" id="mobileMenuBtn">Menu</button>
+</header>
+<nav class="dash-mobile-nav" id="mobileNav" aria-label="Mobile sections">
+  <a href="#overview">Overview</a>
+  <a href="#owners">Owners &amp; People</a>
+  <a href="#mailboxes">Mailboxes</a>
+  <a href="#sharepoint">SharePoint Hub</a>
+  <a href="#exchange">Exchange &amp; DDGs</a>
+  <a href="#timeline">What Changed</a>
+  <a href="#dustin">Dustin's Question</a>
+  <a href="#next">Next Steps</a>
+</nav>
+
 <!-- Main -->
-<main class="dash-main">
+<main class="dash-main" id="main-content">
 
   <div class="dash-header" id="overview">
     <div>
-      <h2>DCE Tenant — Live State</h2>
+      <h1>DCE Tenant — Live State</h1>
       <div class="dash-header__meta">Inventory refreshed 2026-06-04 &middot; deltacrown.com &middot; ce62e17d-2feb-4e67-a115-8ea4af68da30</div>
     </div>
     <div class="dash-header__meta">Prepared for Dustin Boyd &amp; KK</div>
@@ -362,9 +458,10 @@
   <!-- Owners -->
   <section class="dash-section" id="owners">
     <h3>Owners &amp; People — Dustin's List Validated</h3>
+    <div class="dash-table-wrap">
     <table class="dash-table">
       <thead>
-        <tr><th>Person</th><th>Location</th><th>Role</th><th>Type</th><th>License</th><th>Status</th></tr>
+        <tr><th scope="col">Person</th><th scope="col">Location</th><th scope="col">Role</th><th scope="col">Type</th><th scope="col">License</th><th scope="col">Status</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -421,18 +518,20 @@
           <td>Unknown / Studio</td>
           <td>UserMailbox</td>
           <td><span class="dash-badge dash-badge--paid">Standard $14.50</span></td>
-          <td><span class="dash-badge dash-badge--warn">FLAG</span></td>
+          <td><span class="dash-badge dash-badge--warn">! FLAG</span></td>
         </tr>
       </tbody>
     </table>
+    </div>
   </section>
 
   <!-- Mailboxes -->
   <section class="dash-section" id="mailboxes">
     <h3>Mailbox Inventory</h3>
+    <div class="dash-table-wrap">
     <table class="dash-table">
       <thead>
-        <tr><th>Mailbox</th><th>Type</th><th>License</th><th>Auto-Reply</th><th>Notes</th></tr>
+        <tr><th scope="col">Mailbox</th><th scope="col">Type</th><th scope="col">License</th><th scope="col">Auto-Reply</th><th scope="col">Notes</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -486,6 +585,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </section>
 
   <!-- SharePoint -->
@@ -519,9 +619,10 @@
   <!-- Exchange -->
   <section class="dash-section" id="exchange">
     <h3>Exchange Online &amp; Dynamic Distribution Groups</h3>
+    <div class="dash-table-wrap">
     <table class="dash-table">
       <thead>
-        <tr><th>DDG</th><th>Email</th><th>Filter</th><th>Members</th><th>Status</th></tr>
+        <tr><th scope="col">DDG</th><th scope="col">Email</th><th scope="col">Filter</th><th scope="col">Members</th><th scope="col">Status</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -557,6 +658,7 @@
     <p style="margin-top:var(--space-4); font-size:var(--font-size-sm); color:var(--color-text-muted);">
       Transport rule: "No Reply Mailbox Blocker" exists but is DISABLED. Associated with noreply@.
     </p>
+    </div>
   </section>
 
   <!-- Timeline -->
@@ -600,9 +702,10 @@
   <!-- Next Steps -->
   <section class="dash-section" id="next">
     <h3>Next Steps</h3>
+    <div class="dash-table-wrap">
     <table class="dash-table">
       <thead>
-        <tr><th>Priority</th><th>Item</th><th>Status</th><th>Owner</th></tr>
+        <tr><th scope="col">Priority</th><th scope="col">Item</th><th scope="col">Status</th><th scope="col">Owner</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -637,13 +740,33 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </section>
 
   <footer style="text-align:center; padding:var(--space-8) 0; color:var(--color-text-muted); font-size:var(--font-size-sm);">
-    Prepared by Richard (code-puppy-c70339) &middot; Delta Crown Extensions Tenant Dashboard &middot; 2026-06-04
+    <p>Prepared by Richard (code-puppy-c70339) &middot; Delta Crown Extensions Tenant Dashboard &middot; 2026-06-04</p>
+    <p style="margin-top:var(--space-3);"><a href="#overview" style="color:var(--color-text-muted); text-decoration:underline;">Back to top</a></p>
   </footer>
 
 </main>
 </div>
+<script>
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileNav = document.getElementById('mobileNav');
+  if (mobileMenuBtn && mobileNav) {
+    mobileMenuBtn.addEventListener('click', function() {
+      const isOpen = mobileNav.classList.toggle('open');
+      mobileMenuBtn.setAttribute('aria-expanded', isOpen);
+      mobileMenuBtn.textContent = isOpen ? 'Close' : 'Menu';
+    });
+    mobileNav.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        mobileNav.classList.remove('open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.textContent = 'Menu';
+      });
+    });
+  }
+</script>
 </body>
 </html>

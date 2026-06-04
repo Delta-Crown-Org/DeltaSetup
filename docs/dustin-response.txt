@@ -1,0 +1,9 @@
+Owner list looks right — 5 owners match what we have in the tenant.
+
+Lindy is correctly classified as Salon Manager, not an owner. Good.
+
+One flag on Colorado Springs: if it's truly a shared mailbox, it doesn't need a $14.50 Standard license — shared mailboxes are free. If it's meant to be a real person's mailbox (UserMailbox), then it does need a license but it also needs an assigned owner, not "Unknown Owner." Right now it's burning $14.50/mo potentially for no reason.
+
+Shared mailboxes (operations@, help@, info@, careers@, noreply@) should all be $0 unless you specifically need archiving or litigation hold on them.
+
+Current monthly cost should be 5 owners + Lindy at Basic = $48/mo. CS is either $0 (shared) or $14.50 with an owner assigned (user).
