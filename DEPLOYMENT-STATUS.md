@@ -128,6 +128,28 @@ pwsh -File ./5.1-Exchange-Setup.ps1 -VerifyOnly
 
 Further changes (mail flow rules, connectors, etc.) are out of scope for the current readiness pass.
 
+### Zenoti Sender Authentication
+
+**Status:** LIVE — verified 2026-06-10
+
+DCE is now Zenoti-authenticated under `deltacrown.com`. DNS records confirmed via `dig`:
+
+| Record | CNAME target | Status |
+|--------|-------------|--------|
+| `s1._domainkey.deltacrown.com` | `s1.domainkey.u2534942.wl193.sendgrid.net` | LIVE |
+| `s2._domainkey.deltacrown.com` | `s2.domainkey.u2534942.wl193.sendgrid.net` | LIVE |
+| `em8326.deltacrown.com` | `u2534942.wl193.sendgrid.net` | LIVE |
+| `em6613.deltacrown.com` | (removed) | REMOVED |
+
+DCE shares Sendgrid subuser `u2534942 / wl193` with Bishops (BCC).
+HTT Corporate uses the separate `u52361448 / wl199` pool.
+
+Zenoti-side verification (in-app domain confirm click) is a **Tyler manual step** — see
+`docs/zenoti-dce-sender-authentication.md`.
+
+COS Business Details contact email: **pending Tyler decision** (options A/B/C in
+`docs/zenoti-dce-sender-authentication.md`).
+
 ### Dynamic Distribution Groups
 
 **Live inventory:** 4 DDGs currently confirmed.

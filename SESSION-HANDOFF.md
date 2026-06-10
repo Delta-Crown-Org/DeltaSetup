@@ -1,5 +1,139 @@
 
 
+## 2026-06-10 — Dustin Boyd billing thread + DCE owner-of-record source of truth (code-puppy-30de1e / Richard)
+
+### What this session closed
+
+This session answers Dustin Boyd's June 9 email about Delta Crown email licenses per owner,
+closes the Jenna Bowden identity gap, validates the May 19 38-row metadata consistency,
+confirms all Zenoti DNS records are live, and produces a Dustin-ready billing CSV.
+
+### No live tenant writes this session
+
+All guardrails respected. Zero Entra or Exchange mutations. All outputs are static/scaffold.
+
+---
+
+### Track 1 — Owner-of-record source of truth
+
+**New artifacts:**
+- `tools/dce_owners_catalog.py` — static data catalog (centers, owners, open questions)
+- `tools/generate_dce_franchise_owners_report.py` — idempotent report generator
+- `generated/dce-franchise-owners-report.csv` — Dustin's billing CSV (refresh monthly)
+- `generated/dce-franchise-owners-report.md` — human-readable owners map
+- `docs/dce-franchise-owner-identity-pattern.md` — Jenna Bowden extensionAttribute1 proposal
+- `docs/dustin-billing-handoff-2026-06-09.md` — Dustin peer doc
+
+**38-row consistency check:** PASS (offline data-validator run; 0 errors, 2 expected warnings
+about Megan Myrand DCE blank record)
+
+**Billing gap confirmed:**
+- Jenna Bowden (COS owner, confirmed by Jamie Baer) has NO @deltacrown.com mailbox.
+  She is NOT in franchise_owners@ DDG and NOT in any dynamic security group by design.
+  The billing CSV is the only system that correctly reflects her as COS owner.
+
+**New billing concern surfaced:**
+- `ColoradoSprings@deltacrown.com` is a LICENSED USER MAILBOX per 2026-06-04 inventory.
+  If it is a center alias it should be a SharedMailbox (free). Bead: DeltaSetup-1ke.
+
+**Megan Myrand open question:**
+- Two records exist (DCE + HTT, both blank). Tyler must confirm same vs distinct identity.
+  Bead: DeltaSetup-k1n.
+
+**15 manual-review rows — 1 resolved, 13 still blocked:**
+- Amber Caley: BCC Zenoti data confirms `department=Operations, jobTitle=Corporate Admin`.
+  Proposed (no live write yet). All 13 remaining need HR input or Tyler confirmation.
+
+**Location disputes (Jamie's questions) — both still open:**
+- Sarah/Jay Miller: Entra says Lexington, OH. Jamie flagged Columbus, OH.
+- Allynn Shepherd: Entra says Livonia, MI. Jamie flagged Birmingham, MI.
+  Both tracked in DeltaSetup-de3.
+
+---
+
+### Track 2 — Zenoti DNS / sender-ID
+
+**DNS verified clean (2026-06-10 `dig` output):**
+- `s1._domainkey.deltacrown.com` CNAME -> `s1.domainkey.u2534942.wl193.sendgrid.net` LIVE
+- `s2._domainkey.deltacrown.com` CNAME -> `s2.domainkey.u2534942.wl193.sendgrid.net` LIVE
+- `em8326.deltacrown.com` CNAME -> `u2534942.wl193.sendgrid.net` LIVE
+- `em6613.deltacrown.com` -> REMOVED (no record)
+
+**Zenoti-side verification: TYLER MANUAL STEP**
+  Log into Zenoti > Settings > Communications > Email Settings > verify deltacrown.com domain.
+  Requires a Zenoti admin role. See `docs/zenoti-dce-sender-authentication.md`.
+
+**COS contact email: OPEN QUESTION (OQ-004)**
+  Options A/B/C documented in `docs/zenoti-dce-sender-authentication.md`.
+  Recommendation: Option C (ColoradoSprings@deltacrown.com alias) if approved by Jenna/Jamie.
+  But see OQ-006 — that mailbox is currently a licensed seat.
+
+**Namita Singh Zenoti role request: BEAD DeltaSetup-1o9**
+  Template request documented in `docs/zenoti-dce-sender-authentication.md`.
+  Tyler must send; Richard cannot impersonate.
+
+**DEPLOYMENT-STATUS.md updated** with Zenoti sender-auth section.
+
+---
+
+### Track 3 — Discovery
+
+| Finding | Bead | Impact |
+|---------|------|--------|
+| Jenna Bowden billing gap | DeltaSetup-dez | COS potentially under-billed |
+| ColoradoSprings@ licensed user mailbox | DeltaSetup-1ke | One unnecessary licensed seat |
+| Megan Myrand dual identity | DeltaSetup-k1n | May be missing a center from billing |
+| 2 location disputes (Lexington/Livonia) | DeltaSetup-de3 | Entra accuracy; no billing impact |
+| `friday-re-audit.ps1` requires interactive auth | (none) | Cannot run agentlessly; Tyler action |
+
+**Note on `friday-re-audit.ps1`:** That script audits SharePoint/Graph sites + HTT Exchange
+(_fullHTT group + Scot Cannon state) using device-code interactive auth. It cannot run
+without Tyler present. An offline data-consistency validator was run instead (PASS).
+
+---
+
+### New beads created this session
+
+| Bead | Title | Status |
+|------|-------|--------|
+| DeltaSetup-de3 | Track 1: owners-of-record + Dustin billing deliverable | in_progress |
+| DeltaSetup-dez | Jenna Bowden: extensionAttribute1 managed attribute | in_progress |
+| DeltaSetup-k1n | Megan Myrand: confirm single vs dual identity | in_progress |
+| DeltaSetup-g0q | Track 2: Zenoti sender-auth / COS contact email | in_progress |
+| DeltaSetup-1o9 | Namita Singh Zenoti role request | open |
+| DeltaSetup-1ke | ColoradoSprings@ mailbox intent + conversion | open |
+
+---
+
+### What Tyler needs to do before next billing cycle
+
+1. **Jenna Bowden extensionAttribute1** (DeltaSetup-dez) — arm an approval file;
+   Richard will execute the PS command. Scaffold in `docs/dce-franchise-owner-identity-pattern.md`.
+2. **Megan Myrand** (DeltaSetup-k1n) — confirm same vs distinct identity.
+3. **Location ground truth** (DeltaSetup-de3 OQ-002/003) — ask Jamie: Columbus or Lexington?
+   Birmingham or Livonia?
+4. **COS contact email** (DeltaSetup-g0q OQ-004) — choose A/B/C; Jenna or Jamie sign-off.
+5. **ColoradoSprings@ mailbox** (DeltaSetup-1ke) — keep as user mailbox, convert to shared, or delete?
+6. **Zenoti domain verification** (DeltaSetup-g0q) — log into Zenoti and click Verify Domain.
+7. **Amber Caley proposed update** (DeltaSetup-de3) — approve or reject the Operations/Corporate Admin proposal.
+8. **13 remaining manual-review rows** (DeltaSetup-de3 OQ-007) — HR input needed.
+
+---
+
+### Resume command checklist
+
+```bash
+cd /Users/tygranlund/dev/04-other-orgs/DeltaSetup
+bd sync
+bd list --status=in_progress
+git status -sb
+# Dustin's billing file:
+python3 tools/generate_dce_franchise_owners_report.py
+cat generated/dce-franchise-owners-report.csv
+```
+
+---
+
 ## Security Hardening Status — TENANT LOCKED DOWN ✅
 
 ### Breakthrough: Graph Beta SharePointTenantSettings.ReadWrite.All
