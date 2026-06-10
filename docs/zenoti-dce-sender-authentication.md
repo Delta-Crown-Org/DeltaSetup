@@ -42,26 +42,27 @@ significantly or if reputation issues emerge.
 
 ---
 
-## Zenoti-Side Verification (MANUAL STEP — Tyler)
+## Zenoti-Side Verification (DCE OPERATIONS TEAM ACTION)
 
-DNS records are live, but Zenoti itself must confirm domain ownership from within
-the Zenoti admin interface. This is a UI click that only a Zenoti admin can perform.
+DNS records are live and propagated. The DCE operations team can complete domain
+verification directly in the Zenoti admin portal — no IT involvement needed.
 
-**What Tyler (or Jamie/Lindy) needs to do in Zenoti:**
+**What the DCE operations team does in Zenoti:**
 
 1. Log into the Zenoti admin panel for Delta Crown Extensions.
 2. Navigate to **Settings > Communications > Email Settings** (or equivalent).
 3. Find the domain verification section — look for `deltacrown.com`.
 4. Click **Verify Domain** (or equivalent button).
-5. Zenoti will perform a DNS lookup against the CNAME records above to confirm ownership.
-6. Once verified, Zenoti-sent emails (booking confirmations, reminders, etc.) will
-   send from the `deltacrown.com` domain with Sendgrid authentication.
+5. Zenoti will confirm ownership by checking the CNAME records (already live — see above).
+6. Done. Zenoti-sent emails (booking confirmations, reminders, etc.) will now
+   authenticate under `deltacrown.com` via Sendgrid.
+
+**This is not a Tyler/IT action.** The DNS side is complete. The Zenoti click
+is a routine operations task — hand it to whoever manages the Zenoti tenant.
 
 **Role required in Zenoti:**
-A Zenoti admin with access to Communications/Email settings at the tenant level
-(not just a center-level role) is needed for this step.
-
-If neither Tyler nor Jamie has this role, see the Namita Singh request below.
+A Zenoti admin with access to Communications/Email settings at the tenant level.
+If the ops team does not have this access, see the Namita Singh request below.
 
 ---
 

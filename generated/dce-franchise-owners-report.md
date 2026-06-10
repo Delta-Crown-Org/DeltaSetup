@@ -113,18 +113,19 @@ No live writes until Tyler approves.
 
 ## Open Questions -- Tyler Input Required
 
-### OQ-001 -- Megan Myrand — dual identity (DCE + HTT)
+### OQ-001 -- Megan Myrand — confirm DCE account type and admin-role scope
 
 **Bead:** `DeltaSetup-k1n`  
-**Needs:** Tyler to confirm same vs distinct identity.
+**Needs:** Tyler to confirm DCE account admin role is scoped correctly for MSP.
 
-Two Megan Myrand records exist: (1) Megan.Myrand@deltacrown.com (DCE-native, object 651c4252) —
-blank companyName/dept/title/location; action=UPDATE MEDIUM in May 19 CSV. (2)
-megan.myrand@httbrands.com (HTT corp guest, object 971e0f08) — also fully blank; needs_manual=YES in
-canonical CSV. UNKNOWN: same human or two distinct people? If SAME: populate DCE record with
-center/location, add her to the center catalog. If DIFFERENT: document intentional split; populate
-both records separately. Tyler must confirm before any write. Do not merge without explicit sign-
-off.
+Megan Myrand is the Managed Service Provider (MSP) helping manage user licensing and occasional
+Microsoft 365 issues for the DCE tenant (confirmed by Tyler). Two records exist: (1)
+Megan.Myrand@deltacrown.com (DCE-native cloud account, object 651c4252) — blank metadata; NOT a
+franchisee. This is her MSP working identity in DCE. No #EXT# suffix = separately provisioned cloud-
+native account, NOT inherited via SyncFabric from HTT. (2) megan.myrand@httbrands.com (HTT corp
+guest in DCE, object 971e0f08) — her HTT corporate identity showing up as a cross-tenant guest.
+Action needed: confirm DCE account admin role is correct for MSP scope, and exclude the HTT guest
+row from any bulk metadata population (she is not a DCE employee or franchisee).
 
 ### OQ-002 -- Location ground truth — Lexington OH vs Columbus OH
 
@@ -156,14 +157,18 @@ ColoradoSprings@deltacrown.com (center alias — ALREADY EXISTS as a licensed us
 2026-06-04 Exchange inventory; should be a shared mailbox). Note: option C may be accruing
 unnecessary license cost — see OQ-006. Default to option C if Jenna or Jamie approve. Ask Tyler.
 
-### OQ-005 -- Jenna Bowden — extensionAttribute1 write approval
+### OQ-005 -- Jenna Bowden — provision jenna.bowden@deltacrown.com SharedMailbox + Send As
 
 **Bead:** `DeltaSetup-dez`  
-**Needs:** Tyler to arm approval file; then Richard runs the PS command.
+**Needs:** Tyler to arm approval file; then Richard runs the provision scaffold.
 
-Proposed: set extensionAttribute1='DCE Owner of Record | Center: Colorado Springs' on Jenna's DCE
-guest record (object 26e9afa6). Dry-run scaffold is in docs/dce-franchise-owner-identity-pattern.md.
-BLOCKED: requires Tyler to arm an approval file before any Entra write.
+Jenna needs to be able to send FROM jenna.bowden@deltacrown.com even though her primary mailbox
+lives at HTT (jenna.bowden@httbrands.com). Recommended approach: (1) Create
+jenna.bowden@deltacrown.com as a SharedMailbox in DCE Exchange (no license). (2) Grant Jenna's DCE
+guest object Full Access + Send As on that mailbox. (3) Jenna opens the shared mailbox in Outlook
+and selects it as her FROM address. Dry-run scaffold in tools/provision-jenna-dce-mailbox.ps1.
+BLOCKED: requires Tyler to arm an approval file before any Exchange write. Note: extensionAttribute1
+pattern is still useful for Entra visibility but the SharedMailbox provision is the primary ask.
 
 ### OQ-006 -- ColoradoSprings@deltacrown.com — licensed user mailbox (billing concern)
 
