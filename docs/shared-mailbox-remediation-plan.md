@@ -10,9 +10,13 @@
 ## The Short Version
 
 We found a licensed user mailbox that should be a shared mailbox.
-Converting it takes less than five minutes.
+Converting it takes less than five minutes, frees a paid license, and stays
+fully compliant with Microsoft licensing terms.
 It does not require any user action or workflow change.
-If anything below is incorrect, just let us know.
+
+**This is a proposal, not a done deal.** Nothing has been changed. We are
+asking you to confirm the access list and a couple of facts (below) before
+we run the conversion.
 
 ---
 
@@ -47,6 +51,23 @@ pattern we have seen cause problems at The Lash Lounge — where multiple "share
 are each burning a Business Premium license that should not exist. The right tool for
 a shared team inbox is always a Shared Mailbox, full stop.
 
+**Why a generalized address must not stay tied to a license:** a Microsoft 365
+Business Premium license is meant to be assigned to a *named human* — one license,
+one person. A generic, role-based address like `ColoradoSprings@deltacrown.com`
+represents a *function*, not a person, and is meant to be shared by whoever staffs
+that function over time. Pinning a per-user license to a shared role address is:
+
+- **A licensing-compliance problem** — Microsoft's terms tie a user license to a
+  single individual, not a shared/role identity.
+- **A security problem** — shared credentials on a licensed user account mean shared
+  passwords and weaker accountability (who actually sent that mail?).
+- **A cost problem** — you pay ~$22/month for a mailbox that, as a Shared Mailbox,
+  would cost nothing.
+
+A Shared Mailbox solves all three at once: no license, native multi-delegate access
+with individual sign-in (each person uses their *own* account to open it), and a
+clean audit trail of who sent what.
+
 ---
 
 ## What We Plan to Do
@@ -55,7 +76,7 @@ Convert `ColoradoSprings@deltacrown.com` from a User Mailbox to a Shared Mailbox
 
 **Steps:**
 1. Identify who currently has access to `ColoradoSprings@deltacrown.com`
-   (Full Access delegations — likely Lindy Sturgill and/or the center team).
+   (existing Full Access delegations — captured by the dry-run below before we touch anything).
 2. Convert the mailbox type from `UserMailbox` to `SharedMailbox` via Exchange Online.
 3. Remove the Business Premium license from the account (it is no longer needed).
 4. Re-grant Full Access and Send As permissions to the same people as before
@@ -108,7 +129,9 @@ Before we convert, please confirm:
 
 1. **Who should have access to `ColoradoSprings@deltacrown.com`?**
    (Names or email addresses — we will grant them Full Access and Send As after conversion.)
-   Our current assumption is: Lindy Sturgill and/or Jenna Bowden.
+   Our current assumption is **Jenna Bowden (COS owner of record)** and **possibly Jamie Baer**,
+   if she needs visibility into the center inbox. Add or remove names as needed —
+   a Shared Mailbox supports as many delegates as you want, at no extra cost.
 
 2. **Is `ColoradoSprings@deltacrown.com` actively used as a real inbox today,
    or is it dormant?**

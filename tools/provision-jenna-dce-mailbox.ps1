@@ -21,9 +21,10 @@
 .PARAMETER DryRun
     Show what WOULD happen. No changes made. Default: true.
 
-.PARAMETER Confirm
-    Actually execute the changes. Requires approval file at:
+.PARAMETER Apply
+    Actually execute the changes (live). Requires approval file at:
     approvals/exchange-jenna-dce-mailbox.txt
+    Omit this switch to dry-run (default).
 
 .NOTES
     Approval gate: create approvals/exchange-jenna-dce-mailbox.txt containing:
@@ -35,13 +36,17 @@
     This script follows the same dry-run-by-default convention.
 #>
 
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding()]
 param(
-    [switch]$DryRun = $true,
-    [switch]$Confirm
+    # Dry-run is the default. Pass -Apply to actually execute live writes.
+    [switch]$Apply
 )
 
 $ErrorActionPreference = 'Stop'
+
+# Single source of truth for run mode. DryRun unless -Apply was passed.
+$DryRun = -not $Apply.IsPresent
+$isLive = $Apply.IsPresent
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -60,8 +65,6 @@ $JennaDceGuestUpn = 'Jenna.Bowden_httbrands.com#EXT#@deltacrown.onmicrosoft.com'
 # ---------------------------------------------------------------------------
 # Approval gate
 # ---------------------------------------------------------------------------
-
-$isLive = $Confirm.IsPresent -and -not $DryRun.IsPresent
 
 if ($isLive) {
     if (-not (Test-Path $ApprovalFile)) {
@@ -82,7 +85,7 @@ Create that file containing:
     Write-Host "[APPROVAL] Approval file verified: $ApprovalFile" -ForegroundColor Green
 }
 else {
-    Write-Host "[DRY-RUN] No changes will be made. Pass -Confirm to execute." -ForegroundColor Yellow
+    Write-Host "[DRY-RUN] No changes will be made. Pass -Apply to execute." -ForegroundColor Yellow
 }
 
 # ---------------------------------------------------------------------------
@@ -257,7 +260,7 @@ if ($isLive) {
 }
 else {
     Write-Host "=== DRY-RUN COMPLETE — no changes made ===" -ForegroundColor Yellow
-    Write-Host "  Review the commands above, then run with -Confirm to execute."
+    Write-Host "  Review the commands above, then run with -Apply to execute."
     Write-Host "  Remember to create the approval file first:"
     Write-Host "  $ApprovalFile"
 }
